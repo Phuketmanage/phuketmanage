@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
-  get 'pages/index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
+    get '/:locale' , to: 'pages#index'
+    # devise_for :users
+    devise_for :users, :controllers => { :registrations => "users/registrations" }
+  end
+  namespace :admin do
+    resources :users
+    # get 'users', to: 'users#index'
+  end
 
   root to: 'pages#index'
-
 end
