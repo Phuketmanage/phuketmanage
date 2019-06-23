@@ -9,9 +9,9 @@ class Ability
     if user.role? :admin
       can :manage, :all
     elsif user.role? :manager
-      can :manage, [ Asset ]
+      can :read, [ User ]
     elsif user.role? :owner
-      can :read, [ Asset ]
+      # can :read, [ Asset ]
       # # manage products, assets he owns
       # can :manage, Product do | product |
       #   product.try( :owner ) == user

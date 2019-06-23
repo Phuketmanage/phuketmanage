@@ -23,9 +23,15 @@
   </div>
 
   <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
+    Role:
+    <%= f.collection_check_boxes :role_ids, Role.all, :id, :name do |c| %>
+        <div class="form-check form-check-inline">
+          <%= c.check_box(class: "form-check-input") %>
+          <%= c.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
   </div>
+
 
   <div class="actions">
     <%= f.submit "Update" %>
