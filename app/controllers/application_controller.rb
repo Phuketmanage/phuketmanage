@@ -23,8 +23,9 @@ class ApplicationController < ActionController::Base
 
   protected
     def authenticate_inviter!
-      if !user_signed_in? || !current_user.role?(:admin)
-        redirect_to root_path, alert: 'You are not authorized to access this page.'
+      unless user_signed_in? && current_user.role?(:admin)
+        redirect_to root_path, alert: 'You are not authorized to access this page.' and return
       end
+      super
     end
 end
