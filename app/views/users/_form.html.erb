@@ -1,6 +1,6 @@
 <%= form_with(model: user, local: true) do |f| %>
   <% if user.errors.any? %>
-    <%= render 'shared/error_messages', object: form.object %>
+    <%= render 'shared/error_messages', object: f.object %>
   <% end %>
 
   <div class="field">
