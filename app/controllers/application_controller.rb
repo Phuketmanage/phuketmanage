@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
 
   protected
     def authenticate_inviter!
+      # byebug
       unless user_signed_in? && current_user.role?(:admin)
         redirect_to root_path, alert: 'You are not authorized to access this page.' and return
       end

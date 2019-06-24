@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Phuketmanage</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <title><%= full_title(yield(:title)) %></title>
+    <%= render 'layouts/rails_default' %>
+    <%= render 'layouts/shim' %>
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= "#{current_user.email} #{current_user.roles.map{|role| role.name}}" if current_user %>
-    <%= yield %>
+    <%= render 'layouts/header' %>
+    <div class="container">
+      <%= render 'shared/flash' unless flash.empty? %>
+      <%= yield %>
+      <%= debug(params) if Rails.env.development? %>
+    </div>
+
+
   </body>
 </html>

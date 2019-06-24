@@ -1,5 +1,6 @@
+<%= provide(:title,  'Users') %>
 <h1>Admin::User#index</h1>
 <%= render @users %>
 
-<%= link_to 'Create new user', new_user_registration_path, { class: "nav-link" } %>
+<%= link_to 'Create new user', new_user_path, { class: "nav-link" } %>
 <%= link_to 'Invite new user', new_user_invitation_path, { class: "nav-link" } %>
