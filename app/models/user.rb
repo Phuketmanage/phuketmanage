@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   has_and_belongs_to_many :roles
+  has_many :houses, foreign_key: 'owner_id'
+  has_many :bookings, foreign_key: 'tenant_id'
+  scope :who_is, ->(role) { includes(:roles).where(roles: {name: role}) }
 
   def role?( role )
     !roles.find_by_name( role.to_s.camelize ).nil?
