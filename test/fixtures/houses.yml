@@ -1,15 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title_en: MyString
-  title_ru: MyString
-  description_en: MyText
-  description_ru: MyText
-  owner: owner
-
-two:
-  title_en: MyString
-  title_ru: MyString
-  description_en: MyText
-  description_ru: MyText
-  owner: owner
+# villa 1 - LP65/119
+# villa 2 - W45
+# villa 3 - BT06
+<% 3.times do |i| %>
+  villa_<%= i+1 %>:
+    title_en: Villa <%= i+1 %>
+    title_ru: Вилла <%= i+1 %>
+    description_en: Description
+    description_ru: Описание
+    owner: owner
+<% end %>

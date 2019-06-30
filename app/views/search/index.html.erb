@@ -3,7 +3,7 @@
 <% @houses.each do |h| %>
   <div class="row">
     <div class="col-md-2 house"><%= h.send("title_#{I18n.locale}") %></div>
-    <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]}" %></div>
+    <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
     <div class="col-md-2 select"></div>
   </div>
 <% end %>

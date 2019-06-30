@@ -1,13 +1,328 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  house: one
+# LP65/119
+_1:
+  house: villa_1
   season_id: 1
   duration_id: 1
-  amount: 1
+  amount: 3000
 
-two:
-  house: two
-  season_id: 1
+_2:
+  house: villa_1
+  season_id: 2
   duration_id: 1
-  amount: 1
+  amount: 4000
+
+_3:
+  house: villa_1
+  season_id: 3
+  duration_id: 1
+  amount: 7500
+
+_4:
+  house: villa_1
+  season_id: 4
+  duration_id: 1
+  amount: 10000
+
+_5:
+  house: villa_1
+  season_id: 5
+  duration_id: 1
+  amount: 7500
+
+_6:
+  house: villa_1
+  season_id: 6
+  duration_id: 1
+  amount: 4000
+
+_7:
+  house: villa_1
+  season_id: 1
+  duration_id: 2
+  amount: 2550
+
+_8:
+  house: villa_1
+  season_id: 2
+  duration_id: 2
+  amount: 3400
+
+_9:
+  house: villa_1
+  season_id: 3
+  duration_id: 2
+  amount: 6375
+
+_10:
+  house: villa_1
+  season_id: 4
+  duration_id: 2
+  amount: 8500
+
+_11:
+  house: villa_1
+  season_id: 5
+  duration_id: 2
+  amount: 6375
+
+_12:
+  house: villa_1
+  season_id: 6
+  duration_id: 2
+  amount: 3400
+
+_13:
+  house: villa_1
+  season_id: 1
+  duration_id: 3
+  amount: 2100
+
+_14:
+  house: villa_1
+  season_id: 2
+  duration_id: 3
+  amount: 2800
+
+_15:
+  house: villa_1
+  season_id: 3
+  duration_id: 3
+  amount: 5250
+
+_16:
+  house: villa_1
+  season_id: 4
+  duration_id: 3
+  amount: 7000
+
+_17:
+  house: villa_1
+  season_id: 5
+  duration_id: 3
+  amount: 5250
+
+_18:
+  house: villa_1
+  season_id: 6
+  duration_id: 3
+  amount: 2800
+
+# W45
+_19:
+  house: villa_2
+  season_id: 7
+  duration_id: 4
+  amount: 3800
+
+_20:
+  house: villa_2
+  season_id: 8
+  duration_id: 4
+  amount: 5400
+
+_21:
+  house: villa_2
+  season_id: 9
+  duration_id: 4
+  amount: 7500
+
+_22:
+  house: villa_2
+  season_id: 10
+  duration_id: 4
+  amount: 10000
+
+_23:
+  house: villa_2
+  season_id: 11
+  duration_id: 4
+  amount: 7500
+
+_24:
+  house: villa_2
+  season_id: 12
+  duration_id: 4
+  amount: 4000
+
+_25:
+  house: villa_2
+  season_id: 7
+  duration_id: 5
+  amount: 2550
+
+_26:
+  house: villa_2
+  season_id: 8
+  duration_id: 5
+  amount: 3400
+
+_27:
+  house: villa_2
+  season_id: 9
+  duration_id: 5
+  amount: 6375
+
+_28:
+  house: villa_2
+  season_id: 10
+  duration_id: 5
+  amount: 8500
+
+_29:
+  house: villa_2
+  season_id: 11
+  duration_id: 5
+  amount: 6375
+
+_30:
+  house: villa_2
+  season_id: 12
+  duration_id: 5
+  amount: 3400
+
+_31:
+  house: villa_2
+  season_id: 7
+  duration_id: 6
+  amount: 2100
+
+_32:
+  house: villa_2
+  season_id: 8
+  duration_id: 6
+  amount: 2800
+
+_33:
+  house: villa_2
+  season_id: 9
+  duration_id: 6
+  amount: 5250
+
+_34:
+  house: villa_2
+  season_id: 10
+  duration_id: 6
+  amount: 7000
+
+_35:
+  house: villa_2
+  season_id: 11
+  duration_id: 6
+  amount: 5250
+
+_36:
+  house: villa_2
+  season_id: 12
+  duration_id: 6
+  amount: 2800
+
+# BT06
+_37:
+  house: villa_3
+  season_id: 13
+  duration_id: 7
+  amount: 6400
+
+_38:
+  house: villa_3
+  season_id: 14
+  duration_id: 7
+  amount: 9400
+
+_39:
+  house: villa_3
+  season_id: 15
+  duration_id: 7
+  amount: 12400
+
+_40:
+  house: villa_3
+  season_id: 16
+  duration_id: 7
+  amount: 17500
+
+_41:
+  house: villa_3
+  season_id: 17
+  duration_id: 7
+  amount: 12400
+
+_42:
+  house: villa_3
+  season_id: 18
+  duration_id: 7
+  amount: 9400
+
+_43:
+  house: villa_3
+  season_id: 13
+  duration_id: 8
+  amount: 5440
+
+_44:
+  house: villa_3
+  season_id: 14
+  duration_id: 8
+  amount: 7990
+
+_45:
+  house: villa_3
+  season_id: 15
+  duration_id: 8
+  amount: 10540
+
+_46:
+  house: villa_3
+  season_id: 16
+  duration_id: 8
+  amount: 14875
+
+_47:
+  house: villa_3
+  season_id: 17
+  duration_id: 8
+  amount: 10540
+
+_48:
+  house: villa_3
+  season_id: 18
+  duration_id: 8
+  amount: 7990
+
+_49:
+  house: villa_3
+  season_id: 13
+  duration_id: 9
+  amount: 4480
+
+_50:
+  house: villa_3
+  season_id: 14
+  duration_id: 9
+  amount: 6580
+
+_51:
+  house: villa_3
+  season_id: 15
+  duration_id: 9
+  amount: 8680
+
+_52:
+  house: villa_3
+  season_id: 16
+  duration_id: 9
+  amount: 12250
+
+_53:
+  house: villa_3
+  season_id: 17
+  duration_id: 9
+  amount: 8680
+
+_54:
+  house: villa_3
+  season_id: 18
+  duration_id: 9
+  amount: 6580

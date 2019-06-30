@@ -1,11 +1,58 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  start: 1
-  finish: 1
-  house: one
+# LP65/119
+_1:
+  id: 1
+  start: 5
+  finish: 13
+  house: villa_1
 
-two:
-  start: 1
-  finish: 1
-  house: two
+_2:
+  id: 2
+  start: 14
+  finish: 27
+  house: villa_1
+
+_3:
+  id: 3
+  start: 28
+  finish: 180
+  house: villa_1
+
+# W45
+_4:
+  id: 4
+  start: 5
+  finish: 13
+  house: villa_2
+
+_5:
+  id: 5
+  start: 14
+  finish: 27
+  house: villa_2
+
+_6:
+  id: 6
+  start: 28
+  finish: 180
+  house: villa_2
+
+# BT06
+_7:
+  id: 7
+  start: 5
+  finish: 13
+  house: villa_3
+
+_8:
+  id: 8
+  start: 14
+  finish: 27
+  house: villa_3
+
+_9:
+  id: 9
+  start: 28
+  finish: 180
+  house: villa_3

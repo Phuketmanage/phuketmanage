@@ -5,21 +5,21 @@
 # below each fixture, per the syntax in the comments below
 #
 admin: #{}
-  email: 'bytheair@gmail.com'
+  email: 'admin@test.com'
   roles: admin
 #
 manager: #{}
-  email: 'test@test.com'
+  email: 'manager@test.com'
   roles: manager
 
 owner: #{}
-  email: 'test2@test.com'
+  email: 'owner@test.com'
   roles: owner
 
 tenant: #{}
-  email: 'test4@test.com'
+  email: 'tenant@test.com'
   roles: tenant
 
 owner_tenant: #{}
-  email: 'test5@test.com'
+  email: 'owner_tenant@test.com'
   roles: owner, tenant

@@ -1,15 +1,148 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  ssd: 1
-  ssm: 1
-  sfd: 1
-  sfm: 1
-  house: one
+# LP65/119
+_1:
+  id: 1
+  ssd: 15
+  ssm: 4
+  sfd: 31
+  sfm: 10
+  house: villa_1
 
-two:
+_2:
+  id: 2
   ssd: 1
-  ssm: 1
-  sfd: 1
+  ssm: 11
+  sfd: 30
+  sfm: 11
+  house: villa_1
+
+_3:
+  id: 3
+  ssd: 1
+  ssm: 12
+  sfd: 14
+  sfm: 12
+  house: villa_1
+
+_4:
+  id: 4
+  ssd: 15
+  ssm: 12
+  sfd: 15
   sfm: 1
-  house: two
+  house: villa_1
+
+_5:
+  id: 5
+  ssd: 16
+  ssm: 1
+  sfd: 28
+  sfm: 2
+  house: villa_1
+
+_6:
+  id: 6
+  ssd: 1
+  ssm: 3
+  sfd: 14
+  sfm: 4
+  house: villa_1
+
+# W45
+_7:
+  id: 7
+  ssd: 15
+  ssm: 4
+  sfd: 31
+  sfm: 10
+  house: villa_2
+
+_8:
+  id: 8
+  ssd: 1
+  ssm: 11
+  sfd: 30
+  sfm: 11
+  house: villa_2
+
+_9:
+  id: 9
+  ssd: 1
+  ssm: 12
+  sfd: 14
+  sfm: 12
+  house: villa_2
+
+_10:
+  id: 10
+  ssd: 15
+  ssm: 12
+  sfd: 15
+  sfm: 1
+  house: villa_2
+
+_11:
+  id: 11
+  ssd: 16
+  ssm: 1
+  sfd: 28
+  sfm: 2
+  house: villa_2
+
+_12:
+  id: 12
+  ssd: 1
+  ssm: 3
+  sfd: 14
+  sfm: 4
+  house: villa_2
+
+# BT06
+_13:
+  id: 13
+  ssd: 15
+  ssm: 4
+  sfd: 31
+  sfm: 10
+  house: villa_3
+
+_14:
+  id: 14
+  ssd: 1
+  ssm: 11
+  sfd: 30
+  sfm: 11
+  house: villa_3
+
+_15:
+  id: 15
+  ssd: 1
+  ssm: 12
+  sfd: 14
+  sfm: 12
+  house: villa_3
+
+_16:
+  id: 16
+  ssd: 15
+  ssm: 12
+  sfd: 15
+  sfm: 1
+  house: villa_3
+
+_17:
+  id: 17
+  ssd: 16
+  ssm: 1
+  sfd: 28
+  sfm: 2
+  house: villa_3
+
+_18:
+  id: 18
+  ssd: 1
+  ssm: 3
+  sfd: 14
+  sfm: 4
+  house: villa_3

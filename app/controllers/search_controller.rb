@@ -5,7 +5,9 @@ class SearchController < ApplicationController
       if !@search.valid?
         render :index and return
       end
-      @houses = House.all
+      booking = Booking.new
+      @houses = booking.get_available_houses @search.rs, @search.rf
+      # byebug
       @prices = @search.get_prices @houses
     end
   end
