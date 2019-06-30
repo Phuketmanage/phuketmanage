@@ -5,11 +5,11 @@ one:
   title_ru: MyString
   description_en: MyText
   description_ru: MyText
-  owner: one
+  owner: owner
 
 two:
   title_en: MyString
   title_ru: MyString
   description_en: MyText
   description_ru: MyText
-  owner: two
+  owner: owner

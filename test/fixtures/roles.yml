@@ -9,5 +9,5 @@ manager:
 owner:
   name: Owner
 
-client:
-  name: Client
+tenant:
+  name: Tenant

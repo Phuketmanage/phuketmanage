@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_26_103400) do
+ActiveRecord::Schema.define(version: 2019_06_30_055747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 2019_06_26_103400) do
     t.index ["tenant_id"], name: "index_bookings_on_tenant_id"
   end
 
+  create_table "durations", force: :cascade do |t|
+    t.integer "start"
+    t.integer "finish"
+    t.bigint "house_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_durations_on_house_id"
+  end
+
   create_table "houses", force: :cascade do |t|
     t.string "title_en"
     t.string "title_ru"
@@ -35,6 +44,18 @@ ActiveRecord::Schema.define(version: 2019_06_26_103400) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owner_id"], name: "index_houses_on_owner_id"
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.integer "season_id"
+    t.integer "duration_id"
+    t.integer "amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["duration_id"], name: "index_prices_on_duration_id"
+    t.index ["house_id"], name: "index_prices_on_house_id"
+    t.index ["season_id"], name: "index_prices_on_season_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -47,6 +68,17 @@ ActiveRecord::Schema.define(version: 2019_06_26_103400) do
     t.bigint "user_id", null: false
     t.bigint "role_id", null: false
     t.index ["user_id", "role_id"], name: "index_roles_users_on_user_id_and_role_id"
+  end
+
+  create_table "seasons", force: :cascade do |t|
+    t.integer "ssd"
+    t.integer "ssm"
+    t.integer "sfd"
+    t.integer "sfm"
+    t.bigint "house_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_seasons_on_house_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -78,5 +110,8 @@ ActiveRecord::Schema.define(version: 2019_06_26_103400) do
 
   add_foreign_key "bookings", "houses"
   add_foreign_key "bookings", "users", column: "tenant_id"
+  add_foreign_key "durations", "houses"
   add_foreign_key "houses", "users", column: "owner_id"
+  add_foreign_key "prices", "houses"
+  add_foreign_key "seasons", "houses"
 end

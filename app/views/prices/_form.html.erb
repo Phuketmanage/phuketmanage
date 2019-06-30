@@ -1,0 +1,30 @@
+<% path = [house, price] if action_name == 'new' %>
+<% path = price if action_name == 'edit' %>
+<%= form_with(model: path, local: true) do |form| %>
+  <% if price.errors.any? %>
+    <%= render 'shared/error_messages', object: form.object %>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :season_id %>
+    <%= form.select :season_id,
+          @seasons.all.map {|obj| ["#{obj.ssd}.#{obj.ssm} - #{obj.sfd}.#{obj.sfm}", obj.id]},
+                    { }, { class: "form-control" } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :duration_id %>
+    <%= form.select :duration_id,
+          @durations.all.map {|obj| ["#{obj.start} - #{obj.finish}", obj.id]},
+                    { }, { class: "form-control" } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.number_field :amount %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

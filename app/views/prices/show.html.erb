@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>House:</strong>
+  <%= @price.house_id %>
+</p>
+
+<p>
+  <strong>Season:</strong>
+  <%= @price.season_id %>
+</p>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @price.duration_id %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @price.amount %>
+</p>
+
+<%= link_to 'Edit', edit_price_path(@price) %> |
+<%= link_to 'Back', house_prices_path %>

@@ -1,0 +1,16 @@
+<%= form_with model: search, url: search_path, method: 'get', local: true do |f| %>
+  <% if search.errors.any? %>
+    <%= render 'shared/error_messages', object: f.object %>
+  <% end %>
+  <div class="row">
+    <div class="col-2 formn_field">
+      <%= f.date_field :rs, class: 'form-control' %>
+    </div>
+    <div class="col-2">
+      <%= f.date_field :rf, class: 'form-control' %>
+    </div>
+    <div class="col-2">
+      <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary"%>
+    </div>
+  </div>
+<% end %>

@@ -19,11 +19,19 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
-    sign_in users(:owner_client)
+    sign_in users(:tenant)
     get users_path
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner_tenant)
+    get users_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+
 
   end
 
@@ -54,7 +62,18 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
-    sign_in users(:owner_client)
+    sign_in users(:tenant)
+    get new_user_invitation_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    post user_invitation_path params: {user: {email: 'test10@test.com'}}
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner_tenant)
     get new_user_invitation_path
     assert_redirected_to root_path
     follow_redirect!

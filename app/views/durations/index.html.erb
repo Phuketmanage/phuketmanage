@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Durations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Start</th>
+      <th>Finish</th>
+      <th>House</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @durations.each do |duration| %>
+      <tr>
+        <td><%= duration.start %></td>
+        <td><%= duration.finish %></td>
+        <td><%= duration.house_id %></td>
+        <td><%= link_to 'Show', duration %></td>
+        <td><%= link_to 'Edit', edit_duration_path(duration) %></td>
+        <td><%= link_to 'Destroy', duration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Duration', new_duration_path %>

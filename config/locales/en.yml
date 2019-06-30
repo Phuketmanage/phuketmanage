@@ -1,2 +1,4 @@
 en:
-  hello: "Hello world"
+  search:
+    search: Search
+    results: Search results

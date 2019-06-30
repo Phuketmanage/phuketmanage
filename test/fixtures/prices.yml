@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  start: 2019-06-26
-  finish: 2019-06-26
   house: one
-  tenant: tenant
+  season_id: 1
+  duration_id: 1
+  amount: 1
 
 two:
-  start: 2019-06-26
-  finish: 2019-06-26
   house: two
-  tenant: tenant
+  season_id: 1
+  duration_id: 1
+  amount: 1

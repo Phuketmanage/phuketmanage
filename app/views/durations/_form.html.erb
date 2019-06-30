@@ -1,0 +1,32 @@
+<%= form_with(model: duration, local: true) do |form| %>
+  <% if duration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(duration.errors.count, "error") %> prohibited this duration from being saved:</h2>
+
+      <ul>
+        <% duration.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :start %>
+    <%= form.number_field :start %>
+  </div>
+
+  <div class="field">
+    <%= form.label :finish %>
+    <%= form.number_field :finish %>
+  </div>
+
+  <div class="field">
+    <%= form.label :house_id %>
+    <%= form.text_field :house_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
