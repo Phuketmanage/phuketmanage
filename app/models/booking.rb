@@ -17,7 +17,6 @@ class Booking < ApplicationRecord
       Booking.statuses[:canceled]).all.map{
       |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
     booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
-    byebug
     if booked_house_ids.any?
       available_houses = House.where.not(id: booked_house_ids)
     else

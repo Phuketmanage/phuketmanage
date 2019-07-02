@@ -2,6 +2,8 @@ class SearchController < ApplicationController
   def index
     @search = Search.new(search_params)
     if @search.stage == nil || @search.stage == '1'
+      # byebug
+      @houses = []
       if !@search.valid?
         render :index and return
       end

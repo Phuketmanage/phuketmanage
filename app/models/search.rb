@@ -4,6 +4,8 @@ class Search
   attr_accessor :stage, :rs, :rf, :duration
 
   validates :rs, :rf, presence: true
+  validate :start_end_correct
+
 
   def initialize(attributes = {})
     @rs = attributes[:rs].to_date if !attributes[:rs].nil?
@@ -18,13 +20,14 @@ class Search
       total = 0
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration).first
+    # byebug
       next if durations.nil?
       seasons = get_seasons house.seasons
       seasons.each do |s|
         amount = house.prices.where(duration_id: durations.id,
                                     season_id: s[:id]).first.amount
         price = amount*s[:days]
-        puts "#{s[:days]} = #{price}"
+        puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
         total += price
       end
       result[house.id] = {total: total, per_day: total/duration.to_f.round()}
@@ -50,10 +53,11 @@ class Search
         next if !overlapping? ss, sf, rs, rf
         overlapping_seasons << get_overlapped_info(s.id, ss, sf, rs, rf)
         days_left -= overlapping_seasons.last[:days]
-        if days_left > 0
-          days_left -= 1
-          overlapping_seasons.last[:days] += 1
-        end
+        break if days_left == 0
+        # if days_left > 0
+        #   days_left -= 1
+        #   overlapping_seasons.last[:days] += 1
+        # end
       end
       break if year_modifier > 1
     end
@@ -111,14 +115,34 @@ class Search
     #   days +=day_change if day_change == -1 && ist > iet
     # end
 
-    hash = { id: sid, days: days }#, start: s, finish: f }
+    hash = { id: sid, days: days , ss: ss, sf: sf }
   end
 
   def overlapping? (ss, se, rs, re)
-    if rs < se && re > ss
+    if rs <= se && re > ss
       return true
     else
       return false
     end
   end
+
+  private
+
+    def start_end_correct
+      return if rs.nil? || rf.nil?
+      if rf < rs
+        errors.add(:rf, I18n.t('search.rf_less_rs'))
+      end
+      if rs < Time.now.in_time_zone('Bangkok').to_date || rf < Time.now.in_time_zone('Bangkok').to_date
+        errors.add(:duration, I18n.t('search.in_the_past'))
+      end
+      if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
+        errors.add(:rs, I18n.t('search.too_soon'))
+      end
+      if duration < 5
+        errors.add(:duration, I18n.t('search.too_short'))
+      end
+    end
+
+
 end

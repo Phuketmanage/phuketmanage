@@ -2,3 +2,8 @@ en:
   search:
     search: Search
     results: Search results
+    rf_less_rs: End of stay can not be less then beginig
+    in_the_past: Begining or End of period can not be in the past
+    too_soon: You can book at least 2 days in advance
+    too_short: Minimum rental period is 5 days
+
