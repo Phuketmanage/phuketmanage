@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class DurationsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:admin)
     @duration = durations(:_1)
   end
 

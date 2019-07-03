@@ -10,8 +10,7 @@ class Ability
     if user.role? :owner
       # can :read, [ House ]
     elsif user.role? :manager
-      can :read, [ User ]
-      can :read, [ House ]
+      can :read, [ User, House, Duration, Season, Price, Booking ]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

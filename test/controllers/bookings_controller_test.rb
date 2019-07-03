@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class BookingsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:admin)
     @booking = bookings(:_1)
   end
 
