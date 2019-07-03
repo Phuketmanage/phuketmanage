@@ -5,8 +5,8 @@ Rails.application.routes.draw do
     resources :bookings
     resources :houses do
       resources :prices, except: :show, shallow: true
-      resources :seasons, shallow: true
-      resources :durations, shallow: true
+      resources :seasons, except: :show, shallow: true
+      resources :durations, except: :show, shallow: true
     end
     get 'dashboard', to: 'admin#index'
     get 'owner', to: 'owner#index'
@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'calendar/ical/:ical_name', to: 'houses#ical'
     get 'search', to: 'search#index'
+    resources :settings
+
   end
 
   root to: 'pages#index'

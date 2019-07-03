@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :set_locale
+  before_action :set_settings
 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:alert] = exception.message
@@ -7,6 +8,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+    def set_settings
+      @settings = Setting.all.map{|s| [s.var, s.value]}.to_h
+    end
 
     def default_url_options
         { locale: I18n.locale }

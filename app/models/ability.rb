@@ -6,12 +6,14 @@ class Ability
   def initialize(user)
     user ||= User.new                          # guest user
 
-    if user.role? :admin
-      can :manage, :all
+
+    if user.role? :owner
+      # can :read, [ House ]
     elsif user.role? :manager
       can :read, [ User ]
-    elsif user.role? :owner
-      # can :read, [ Asset ]
+      can :read, [ House ]
+    elsif user.role? :admin
+      can :manage, :all
       # # manage products, assets he owns
       # can :manage, Product do | product |
       #   product.try( :owner ) == user

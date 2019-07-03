@@ -1,4 +1,6 @@
-<%= form_with(model: season, local: true) do |form| %>
+<% path = [house, season] if action_name == 'new' %>
+<% path = season if action_name == 'edit' %>
+<%= form_with(model: path, local: true) do |form| %>
   <% if season.errors.any? %>
     <%= render 'shared/error_messages', object: form.object %>
   <% end %>
@@ -31,14 +33,6 @@
     </div>
   </div>
 
-  <div class="form_row">
-    <div class="form_group col-2">
-    <%= form.label :house_id %>
-    <%= form.select :house_id,
-          @houses.all.map {|h| [h.title_en, h.id]},
-                    { }, { class: "form-control" } %>
-    </div>
-  </div>
   <div class="actions">
       <%= form.submit class: 'btn btn-primary' %>
   </div>

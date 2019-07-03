@@ -4,7 +4,8 @@ class SeasonsController < ApplicationController
   # GET /seasons
   # GET /seasons.json
   def index
-    @seasons = Season.all
+    @house = House.find(params[:house_id])
+    @seasons = @house.seasons
   end
 
   # GET /seasons/1
@@ -14,22 +15,24 @@ class SeasonsController < ApplicationController
 
   # GET /seasons/new
   def new
+    @house = House.find(params[:house_id])
     @season = Season.new
-    @houses = House.all
   end
 
   # GET /seasons/1/edit
   def edit
+    @house = @season.house
   end
 
   # POST /seasons
   # POST /seasons.json
   def create
-    @season = Season.new(season_params)
+    @house = House.find(params[:house_id])
+    @season = @house.seasons.build(season_params)
 
     respond_to do |format|
       if @season.save
-        format.html { redirect_to seasons_path, notice: 'Season was successfully created.' }
+        format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully created.' }
         format.json { render :show, status: :created, location: @season }
       else
         @houses = House.all
@@ -42,12 +45,12 @@ class SeasonsController < ApplicationController
   # PATCH/PUT /seasons/1
   # PATCH/PUT /seasons/1.json
   def update
+    @house = @season.house
     respond_to do |format|
       if @season.update(season_params)
-        format.html { redirect_to @season, notice: 'Season was successfully updated.' }
+        format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully updated.' }
         format.json { render :show, status: :ok, location: @season }
       else
-        @houses = House.all
         format.html { render :edit }
         format.json { render json: @season.errors, status: :unprocessable_entity }
       end
@@ -57,9 +60,10 @@ class SeasonsController < ApplicationController
   # DELETE /seasons/1
   # DELETE /seasons/1.json
   def destroy
+    @house = @season.house
     @season.destroy
     respond_to do |format|
-      format.html { redirect_to seasons_url, notice: 'Season was successfully destroyed.' }
+      format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

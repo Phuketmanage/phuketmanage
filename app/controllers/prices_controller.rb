@@ -17,6 +17,7 @@ class PricesController < ApplicationController
 
   # GET /prices/new
   def new
+
     @house = House.find(params[:house_id])
     @price = Price.new
     @durations = @house.durations
@@ -38,7 +39,7 @@ class PricesController < ApplicationController
 
     respond_to do |format|
       if @price.save
-        format.html { redirect_to house_prices_path, notice: 'Price was successfully created.' }
+        format.html { redirect_to house_prices_path(@house), notice: 'Price was successfully created.' }
         format.json { render :show, status: :created, location: @price }
       else
         format.html { render :new }
@@ -65,9 +66,10 @@ class PricesController < ApplicationController
   # DELETE /prices/1
   # DELETE /prices/1.json
   def destroy
+    house = @price.house
     @price.destroy
     respond_to do |format|
-      format.html { redirect_to prices_url, notice: 'Price was successfully destroyed.' }
+      format.html { redirect_to house_prices_url(house), notice: 'Price was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

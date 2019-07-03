@@ -14,7 +14,7 @@ class Search
   end
 
   def get_prices houses = []
-    t1 = Time.now
+    # t1 = Time.now
     result = {}
     houses.each do |house|
       total = 0
@@ -23,6 +23,30 @@ class Search
     # byebug
       next if durations.nil?
       seasons = get_seasons house.seasons
+      seasons.each do |s|
+        amount = house.prices.where(duration_id: durations.id,
+                                    season_id: s[:id]).first.amount
+        price = amount*s[:days]
+        # puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
+        total += price
+      end
+      result[house.id] = {total: total, per_day: total/duration.to_f.round()}
+
+    end
+    # puts "#{(Time.now-t1)}ms"
+    return result
+  end
+
+def get_prices_old houses = []
+    t1 = Time.now
+    result = {}
+    houses.each do |house|
+      total = 0
+      durations = house.durations.where(
+        'start <= ?  AND finish >= ?', duration, duration).first
+    # byebug
+      next if durations.nil?
+      seasons = get_seasons_old house.seasons
       seasons.each do |s|
         amount = house.prices.where(duration_id: durations.id,
                                     season_id: s[:id]).first.amount
@@ -118,8 +142,8 @@ class Search
     hash = { id: sid, days: days , ss: ss, sf: sf }
   end
 
-  def overlapping? (ss, se, rs, re)
-    if rs <= se && re > ss
+  def overlapping? (ss, sf, rs, rf)
+    if rs < sf && rf > ss
       return true
     else
       return false

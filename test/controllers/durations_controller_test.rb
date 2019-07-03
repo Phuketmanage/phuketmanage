@@ -2,30 +2,25 @@ require 'test_helper'
 
 class DurationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @duration = durations(:one)
+    @duration = durations(:_1)
   end
 
   test "should get index" do
-    get durations_url
+    get house_durations_url(@duration.house)
     assert_response :success
   end
 
   test "should get new" do
-    get new_duration_url
+    get new_house_duration_url(@duration.house)
     assert_response :success
   end
 
   test "should create duration" do
     assert_difference('Duration.count') do
-      post durations_url, params: { duration: { finish: @duration.finish, house_id: @duration.house_id, start: @duration.start } }
+      post house_durations_url(@duration.house), params: { duration: { finish: @duration.finish, start: @duration.start } }
     end
 
-    assert_redirected_to duration_url(Duration.last)
-  end
-
-  test "should show duration" do
-    get duration_url(@duration)
-    assert_response :success
+    assert_redirected_to house_durations_url(Duration.last.house)
   end
 
   test "should get edit" do
@@ -35,14 +30,15 @@ class DurationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update duration" do
     patch duration_url(@duration), params: { duration: { finish: @duration.finish, house_id: @duration.house_id, start: @duration.start } }
-    assert_redirected_to duration_url(@duration)
+    assert_redirected_to house_durations_url(@duration.house)
   end
 
   test "should destroy duration" do
+    house = @duration.house
     assert_difference('Duration.count', -1) do
       delete duration_url(@duration)
     end
 
-    assert_redirected_to durations_url
+    assert_redirected_to house_durations_url(house)
   end
 end

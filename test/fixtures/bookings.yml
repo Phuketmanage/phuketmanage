@@ -16,7 +16,7 @@ _2:
 
 _3:
   start: 1.08.<%= Time.now.year+1 %>
-  finish: 12.02.<%= Time.now.year+1 %>
+  finish: 11.08.<%= Time.now.year+1 %>
   house: villa_2
   tenant: tenant
   status: confirmed
