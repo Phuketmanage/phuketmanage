@@ -1,5 +1,6 @@
 class HousesController < ApplicationController
   before_action :set_house, only: [:show, :edit, :update, :destroy]
+  layout 'admin'
 
   def ical
 
@@ -36,10 +37,14 @@ class HousesController < ApplicationController
   # GET /houses/new
   def new
     @house = House.new
+    @owners = User.with_role('Owner')
+    @types = HouseType.all
   end
 
   # GET /houses/1/edit
   def edit
+    @owners = User.with_role('Owner')
+    @types = HouseType.all
   end
 
   # POST /houses
@@ -49,9 +54,11 @@ class HousesController < ApplicationController
 
     respond_to do |format|
       if @house.save
-        format.html { redirect_to @house, notice: 'House was successfully created.' }
+        format.html { redirect_to houses_path, notice: 'House was successfully created.' }
         format.json { render :show, status: :created, location: @house }
       else
+        @owners = User.with_role('Owner')
+        @types = HouseType.all
         format.html { render :new }
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
@@ -63,9 +70,11 @@ class HousesController < ApplicationController
   def update
     respond_to do |format|
       if @house.update(house_params)
-        format.html { redirect_to @house, notice: 'House was successfully updated.' }
+        format.html { redirect_to houses_path, notice: 'House was successfully updated.' }
         format.json { render :show, status: :ok, location: @house }
       else
+        @owners = User.with_role('Owner')
+        @types = HouseType.all
         format.html { render :edit }
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
@@ -90,6 +99,23 @@ class HousesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def house_params
-      params.require(:house).permit(:title_en, :title_ru, :description_en, :description_ru, :owner_id)
+      params.require(:house).permit(
+                                    :title_en,
+                                    :title_ru,
+                                    :description_en,
+                                    :description_ru,
+                                    :owner_id,
+                                    :type_id,
+                                    :code,
+                                    :size,
+                                    :plot_size,
+                                    :rooms,
+                                    :bathrooms,
+                                    :pool,
+                                    :pool_size,
+                                    :communal_pool,
+                                    :parking,
+                                    :parking_size
+                                    )
     end
 end

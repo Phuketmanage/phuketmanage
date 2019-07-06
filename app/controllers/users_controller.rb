@@ -1,8 +1,15 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-
+  layout 'admin'
   def index
-    @users = User.all
+    if params['role']
+      @users = User.with_role(params['role'])
+    else
+      if current_user.role? :admin
+        @users = User.all
+      elsif current_user.role? :manager
+      end
+    end
   end
 
   def new
@@ -30,7 +37,7 @@ class UsersController < ApplicationController
 
     if @user.update(user_params)
       flash[:notice] = "Successfully updated User."
-      redirect_to root_path
+      redirect_to users_path
     else
       render :action => 'edit'
     end
@@ -40,13 +47,13 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.destroy
       flash[:notice] = "Successfully deleted User."
-      redirect_to root_path
+      redirect_to users_path
     end
   end
   private
 
   def user_params
-     params.require(:user).permit(:email, :password, :password_confirmation, { role_ids: []})
+     params.require(:user).permit(:email, :name, :surname, :password, :password_confirmation, { role_ids: []})
   end
 
 end

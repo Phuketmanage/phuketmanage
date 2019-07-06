@@ -6,6 +6,16 @@ ru:
     in_the_past: Период аренды не может быть в прошлом
     too_soon: Вы можете забронировать минимум за 2 дня
     too_short: Минимальный период аренды 5 дней
+  activerecord:
+    errors:
+      models:
+        price:
+          attributes:
+            amount:
+              greater_than_or_equal_to: Цена не может быть меньше 0
+      messages:
+        required: обязательное поле
+        blank: не может быть пустым
   date:
     order: [ !ruby/symbol day, !ruby/symbol month, !ruby/symbol year ]
     month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]

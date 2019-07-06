@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_133110) do
+ActiveRecord::Schema.define(version: 2019_07_06_091050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,13 @@ ActiveRecord::Schema.define(version: 2019_07_03_133110) do
     t.index ["house_id"], name: "index_durations_on_house_id"
   end
 
+  create_table "house_types", force: :cascade do |t|
+    t.string "name_en"
+    t.string "name_ru"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "houses", force: :cascade do |t|
     t.string "title_en"
     t.string "title_ru"
@@ -45,7 +52,24 @@ ActiveRecord::Schema.define(version: 2019_07_03_133110) do
     t.bigint "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "type_id", null: false
+    t.string "code"
+    t.integer "size"
+    t.integer "plot_size"
+    t.integer "rooms"
+    t.integer "bathrooms"
+    t.boolean "pool"
+    t.string "pool_size"
+    t.boolean "communal_pool"
+    t.boolean "parking"
+    t.integer "parking_size"
+    t.index ["bathrooms"], name: "index_houses_on_bathrooms"
+    t.index ["code"], name: "index_houses_on_code"
+    t.index ["communal_pool"], name: "index_houses_on_communal_pool"
     t.index ["owner_id"], name: "index_houses_on_owner_id"
+    t.index ["parking"], name: "index_houses_on_parking"
+    t.index ["rooms"], name: "index_houses_on_rooms"
+    t.index ["type_id"], name: "index_houses_on_type_id"
   end
 
   create_table "prices", force: :cascade do |t|
@@ -121,6 +145,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_133110) do
   add_foreign_key "bookings", "houses"
   add_foreign_key "bookings", "users", column: "tenant_id"
   add_foreign_key "durations", "houses"
+  add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"

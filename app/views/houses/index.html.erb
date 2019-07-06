@@ -1,12 +1,11 @@
 <h1>Houses</h1>
 
-<table>
+<table class='table'>
   <thead>
     <tr>
+      <th>Code</th>
       <th>Title en</th>
       <th>Title ru</th>
-      <th>Description en</th>
-      <th>Description ru</th>
       <th>Owner</th>
       <th colspan="3"></th>
     </tr>
@@ -15,12 +14,11 @@
   <tbody>
     <% @houses.each do |house| %>
       <tr>
+        <td><%= house.code %></td>
         <td><%= house.title_en %></td>
         <td><%= house.title_ru %></td>
-        <td><%= house.description_en %></td>
-        <td><%= house.description_ru %></td>
-        <td><%= house.owner_id %></td>
-        <td><%= link_to 'Show', house %></td>
+        <td><%= "#{house.owner.name} #{house.owner.surname}" %></td>
+        <td><%= link_to 'Show' %></td>
         <td><%= link_to 'Edit', edit_house_path(house) %></td>
         <td><%= link_to 'Destroy', house, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

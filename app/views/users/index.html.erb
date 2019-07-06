@@ -1,5 +1,11 @@
-<%= provide(:title,  'Users') %>
-<h1>Admin::User#index</h1>
+<% if params['role'].kind_of?(Array) %>
+  <% title = 'Management' %>
+<% else %>
+  <% title = params['role'].pluralize %>
+<% end %>
+
+<%= provide(:title,  title) %>
+<h1><%= title %></h1>
 <%= render @users %>
 
 <%= link_to 'Create new user', new_user_path, { class: "nav-link" } %>

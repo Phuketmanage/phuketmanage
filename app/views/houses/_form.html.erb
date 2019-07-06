@@ -1,42 +1,107 @@
 <%= form_with(model: house, local: true) do |form| %>
   <% if house.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(house.errors.count, "error") %> prohibited this house from being saved:</h2>
-
-      <ul>
-        <% house.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render 'shared/error_messages', object: form.object %>
   <% end %>
 
-  <div class="field">
-    <%= form.label :title_en %>
-    <%= form.text_field :title_en %>
+  <div class="row form-group">
+    <%= form.label :owner_id, class: 'col-md-1 col-form-label' %>
+    <div class="col-2 ">
+      <%= form.select :owner_id,
+            @owners.all.map {|o| ["#{o.name} #{o.surname}", o.id]},
+                      { prompt: 'Select owner' }, { class: "form-control",  } %>
+    </div>
+    <%= form.label :type_id, class: 'col-md-1 col-form-label' %>
+    <div class="col-2 ">
+      <%= form.select :type_id,
+            @types.all.map {|t| [t.send("name_#{I18n.locale}"), t.id]},
+                      { prompt: 'Select type' }, { class: "form-control",  } %>
+    </div>
+
   </div>
 
-  <div class="field">
-    <%= form.label :title_ru %>
-    <%= form.text_field :title_ru %>
+  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+    <strong>English</strong>
+    <hr>
+    <div class="row">
+      <div class="col-6 form-group">
+        <%= form.label :title_en %>
+        <%= form.text_field :title_en, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col form-group">
+        <%= form.label :description_en %>
+        <%= form.text_area :description_en, class: 'form-control', rows: 6 %>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :description_en %>
-    <%= form.text_area :description_en %>
+  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+    <strong>Русский</strong>
+    <hr>
+    <div class="row">
+      <div class="col-6 form-group">
+      <%= form.label 'Заголовок' %>
+      <%= form.text_field :title_ru, class: 'form-control'%>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col form-group">
+        <%= form.label 'Описание' %>
+        <%= form.text_area :description_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
   </div>
+  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+    <strong>General details</strong>
+    <hr>
+    <div class="row">
+      <div class="col-1 form-group">
+        <%= form.label :rooms %>
+        <%= form.number_field :rooms, class: 'form-control' %>
+      </div>
+      <div class="col-1 form-group">
+        <%= form.label :bathrooms %>
+        <%= form.number_field :bathrooms, class: 'form-control' %>
+      </div>
+      <div class="col-1 form-group">
+        <%= form.label :size %>
+        <%= form.number_field :size, class: 'form-control' %>
+      </div>
+      <div class="col-1 form-group">
+        <%= form.label :plot_size %>
+        <%= form.number_field :plot_size, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :pool, { class: 'form-check-input',
+                                  id: 'pool_check_box' } %>
+          <%= form.label :pool, {     class: 'form-check-label',
+                                  for: 'pool_check_box' } %>
+                                  </div>
+      </div>
+      <div class="col-2 form-group">
+        <div class="form-check">
+          <%= form.check_box :communal_pool, { class: 'form-check-input',
+                                  id: 'communal_pool_check_box' } %>
+          <%= form.label :communal_pool, {     class: 'form-check-label',
+                                  for: 'communal_pool_check_box' } %>
+                                  </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2 form-group">
+        <%= form.label 'Pool size, sq m' %>
+        <%= form.number_field :pool_size, class: 'form-control' %>
+      </div>
 
-  <div class="field">
-    <%= form.label :description_ru %>
-    <%= form.text_area :description_ru %>
-  </div>
-
-  <div class="field">
-    <%= form.label :owner_id %>
-    <%= form.text_field :owner_id %>
+    </div>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Back', houses_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>

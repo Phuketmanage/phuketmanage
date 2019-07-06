@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name en:</strong>
+  <%= @house_type.name_en %>
+</p>
+
+<p>
+  <strong>Name ru:</strong>
+  <%= @house_type.name_ru %>
+</p>
+
+<%= link_to 'Edit', edit_house_type_path(@house_type) %> |
+<%= link_to 'Back', house_types_path %>

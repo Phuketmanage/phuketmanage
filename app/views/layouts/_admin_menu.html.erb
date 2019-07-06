@@ -2,6 +2,12 @@
   <div class="collapse navbar-collapse" id="admin-nav">
     <ul class="navbar-nav flex-column">
       <li class="nav-item text-nowrap">
+        <%= link_to 'Owners', users_path(role: 'Owner'), class: "nav-link" %>
+        <%= link_to 'Tenants', users_path(role: 'Tenant'), class: "nav-link" %>
+        <% if current_user.role? :admin %>
+          <%= link_to 'Management', users_path(role: ['Admin', 'Manager']), class: "nav-link" %>
+        <% end %>
+        <%= link_to 'Houses', houses_path, class: "nav-link" %>
         <%= link_to 'Sign out', destroy_user_session_path, { method: :delete, class: "nav-link" } %>
       </li>
     </ul>

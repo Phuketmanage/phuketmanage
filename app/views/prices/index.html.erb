@@ -1,33 +1,80 @@
 <h1>Prices</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>House</th>
-      <th>Duration</th>
-      <th>Season</th>
-      <th>Amount</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% r = 1 %>
+<div class="row">
+  <div class="col-1">
+  </div>
+  <% @seasons.each do |s| %>
+    <div class="col-1 price_col">
+      <strong><%= "#{s.ssd}.#{s.ssm} - #{s.sfd}.#{s.sfm}" %></strong>
+      <%= link_to 'Destroy', delete_season_path(@house, season_id: s.id), method: :delete, data: { confirm: 'Are you sure?' } %>
 
-  <tbody>
-    <% @prices.each do |price| %>
-      <% duration = Duration.find(price.duration_id) %>
-      <% season = Season.find(price.season_id) %>
-      <tr>
-        <td><%= price.house_id %></td>
-        <td><%= "#{duration.start} - #{duration.finish}" %></td>
-        <td><%= "#{season.ssd}.#{season.ssm} - #{season.sfd}.#{season.sfm}" %></td>
-        <td><%= price.amount %></td>
-        <td></td>
-        <td><%= link_to 'Edit', edit_price_path(price) %></td>
-        <td><%= link_to 'Destroy', price, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    </div>
+  <% end %>
+</div>
 
-<br>
+<% @durations.each do |d| %>
+  <% r +=1 %>
+    <div class="row">
+      <% c = 1 %>
+      <% if c == 1 %>
+        <div class="col-1 price_col">
+          <strong><%= "#{d.start} - #{d.finish}" %></strong>
+          <%= link_to 'Destroy', delete_duration_path(@house, duration_id: d.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+        <% c += 1 %>
+      <% end %>
+      <% @seasons.each do |s| %>
+        <div class="col-1 price_col">
+          <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
+          <%= form_with(model: price, method: 'put') do |f| %>
+          <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}",
+                                data: {id: price.id} %>
+          <% end %>
+        </div>
+      <% c += 1 %>
+      <% end %>
+    </div>
+<% end %>
 
-<%= link_to 'New Price', new_house_price_path %>
+Add duration
+<%= form_with(model: @duration, url: add_duration_path(@house), local: true) do |f| %>
+  <div class="row">
+    <div class="col-2">
+      <%= f.number_field :start,  class: "form-control",
+                                  placeholder: "Start" %>
+    </div>
+    <div class="col-2">
+      <%= f.number_field :finish, class: "form-control",
+                                  placeholder: "Finish" %>
+    </div>
+    <div class="col-2">
+      <%= f.submit class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+Add season
+<%= form_with(model: @season, url: add_season_path(@house), local: true) do |f| %>
+  <div class="row">
+    <div class="col-2">
+      <%= f.number_field :ssd,  class: "form-control",
+                                  placeholder: "Start day" %>
+    </div>
+    <div class="col-2">
+      <%= f.number_field :ssm, class: "form-control",
+                                  placeholder: "Start month" %>
+    </div>
+    <div class="col-2">
+      <%= f.number_field :sfd,  class: "form-control",
+                                  placeholder: "Finish day" %>
+    </div>
+    <div class="col-2">
+      <%= f.number_field :sfm, class: "form-control",
+                                  placeholder: "Finish month" %>
+    </div>
+
+    <div class="col-2">
+      <%= f.submit class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
