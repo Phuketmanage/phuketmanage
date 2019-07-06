@@ -8,7 +8,7 @@ class PricesController < ApplicationController
   # GET /prices.json
   def index
     @house = House.find(params[:house_id])
-    @prices = @house.prices.order(:duration_id)
+    @prices = @house.prices.all
     @durations = @house.durations
     @duration = Duration.new
     @seasons = @house.seasons
@@ -22,7 +22,6 @@ class PricesController < ApplicationController
 
   # GET /prices/new
   def new
-
     @house = House.find(params[:house_id])
     @price = Price.new
     @durations = @house.durations
@@ -54,23 +53,22 @@ class PricesController < ApplicationController
   end
 
   def create_duration
-
     @house = House.find(params[:id])
-    @prices = @house.prices.order(:duration_id)
-    @durations = @house.durations
     @seasons = @house.seasons
-    duration = @house.durations.build(duration_params)
-
+    @duration = @house.durations.build(duration_params)
     respond_to do |format|
-      if duration.save
+      if @duration.save
         @seasons.each do |s|
-          @price = @house.prices.create(duration_id: duration.id,
+          @price = @house.prices.create(duration_id: @duration.id,
                                         season_id: s.id,
                                         amount: 0)
         end
         format.html { redirect_to house_prices_path(@house), notice: 'Duration was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
+        @prices = @house.prices.all
+        @durations = @house.durations.reload
+        @season = Season.new
         format.html { render :index }
         format.json { render json: @price.errors, status: :unprocessable_entity }
       end
@@ -78,22 +76,22 @@ class PricesController < ApplicationController
   end
 
   def create_season
-    byebug
     @house = House.find(params[:id])
-    @prices = @house.prices.order(:duration_id)
     @durations = @house.durations
-    @seasons = @house.seasons
-    season = @house.seasons.build(season_params)
+    @season = @house.seasons.build(season_params)
     respond_to do |format|
-      if season.save
+      if @season.save
         @durations.each do |d|
           @price = @house.prices.create(duration_id: d.id,
-                                        season_id: season.id,
+                                        season_id: @season.id,
                                         amount: 0)
         end
         format.html { redirect_to house_prices_path(@house), notice: 'Season was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
+        @prices = @house.prices.all
+        @seasons = @house.seasons.reload
+        @duration = Duration.new
         format.html { render :index }
         format.json { render json: @price.errors, status: :unprocessable_entity }
       end

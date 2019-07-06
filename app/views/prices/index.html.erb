@@ -25,6 +25,7 @@
         <% c += 1 %>
       <% end %>
       <% @seasons.each do |s| %>
+        <%= puts "#{d} - #{s}" %>
         <div class="col-1 price_col">
           <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
           <%= form_with(model: price, method: 'put') do |f| %>
@@ -39,6 +40,10 @@
 
 Add duration
 <%= form_with(model: @duration, url: add_duration_path(@house), local: true) do |f| %>
+  <% if @duration.errors.any? %>
+    <%= render 'shared/error_messages', object: f.object %>
+  <% end %>
+
   <div class="row">
     <div class="col-2">
       <%= f.number_field :start,  class: "form-control",
@@ -55,6 +60,10 @@ Add duration
 <% end %>
 Add season
 <%= form_with(model: @season, url: add_season_path(@house), local: true) do |f| %>
+  <% if @season.errors.any? %>
+    <%= render 'shared/error_messages', object: f.object %>
+  <% end %>
+
   <div class="row">
     <div class="col-2">
       <%= f.number_field :ssd,  class: "form-control",
