@@ -1,5 +1,6 @@
 class DurationsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :house
+  # load_and_authorize_resource :duration, through: :house, shallow: true
 
   before_action :set_duration, only: [:show, :edit, :update, :destroy]
 

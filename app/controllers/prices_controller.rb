@@ -1,5 +1,6 @@
 class PricesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :house
+  # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
   before_action :set_price, only: [:show, :edit, :update, :destroy]
 
@@ -53,11 +54,13 @@ class PricesController < ApplicationController
   end
 
   def create_duration
+
     @house = House.find(params[:id])
     @prices = @house.prices.order(:duration_id)
     @durations = @house.durations
     @seasons = @house.seasons
     duration = @house.durations.build(duration_params)
+
     respond_to do |format|
       if duration.save
         @seasons.each do |s|
@@ -75,6 +78,7 @@ class PricesController < ApplicationController
   end
 
   def create_season
+    byebug
     @house = House.find(params[:id])
     @prices = @house.prices.order(:duration_id)
     @durations = @house.durations

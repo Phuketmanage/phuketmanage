@@ -1,5 +1,6 @@
 class SeasonsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :house
+  # load_and_authorize_resource :price, through: :house, shallow: true
 
   before_action :set_season, only: [:show, :edit, :update, :destroy]
 
