@@ -1,7 +1,7 @@
 <% if params['role'].kind_of?(Array) %>
   <% title = 'Management' %>
 <% else %>
-  <% title = params['role'].pluralize %>
+  <% title = params['role'] ? params['role'].pluralize : 'Users' %>
 <% end %>
 
 <%= provide(:title,  title) %>
