@@ -14,20 +14,23 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @roles = Role.where(name: ['Owner', 'Tenant']).all
   end
 
   def create
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Successfully created User."
-      redirect_to root_path
+      redirect_to users_path
     else
+      @roles = Role.where(name: ['Owner', 'Tenant']).all
       render :action => 'new'
     end
   end
 
   def edit
     @user = User.find(params[:id])
+    @roles = Role.where(name: ['Owner', 'Tenant']).all
   end
 
   def update
@@ -39,6 +42,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Successfully updated User."
       redirect_to users_path
     else
+      @roles = Role.where(name: ['Owner', 'Tenant']).all
       render :action => 'edit'
     end
   end

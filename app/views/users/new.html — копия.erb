@@ -1,21 +1,13 @@
-<%= form_with(model: user, local: true) do |f| %>
-  <% if user.errors.any? %>
+<h2>New user</h2>
+
+<%= form_with(model: @user, url: create_user_path, local: true) do |f| %>
+  <% if @user.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
 
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :surname %><br />
-    <%= f.text_field :surname, autofocus: true, autocomplete: "surname" %>
   </div>
 
   <div class="field">
@@ -34,7 +26,7 @@
 
   <div class="field">
     Role:
-    <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |c| %>
+    <%= f.collection_check_boxes :role_ids, Role.all, :id, :name do |c| %>
         <div class="form-check form-check-inline">
           <%= c.check_box(class: "form-check-input") %>
           <%= c.label(class: "form-check-label" ) %>
@@ -47,3 +39,5 @@
     <%= f.submit "Update" %>
   </div>
 <% end %>
+
+<%= link_to "Back", :back %>

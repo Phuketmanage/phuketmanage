@@ -7,7 +7,7 @@
       <th>Title en</th>
       <th>Title ru</th>
       <th>Owner</th>
-      <th colspan="3"></th>
+      <th>Actions</th>
     </tr>
   </thead>
 
@@ -18,9 +18,12 @@
         <td><%= house.title_en %></td>
         <td><%= house.title_ru %></td>
         <td><%= "#{house.owner.name} #{house.owner.surname}" %></td>
-        <td><%= link_to 'Show' %></td>
-        <td><%= link_to 'Edit', edit_house_path(house) %></td>
-        <td><%= link_to 'Destroy', house, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to 'Show' %>
+          <%= link_to 'Edit', edit_house_path(house) %>
+          <%= link_to 'Prices', house_prices_path(house) %>
+          <%= link_to 'Destroy', house, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>

@@ -2,8 +2,10 @@
 
 <%= render 'form', user: @user %>
 
-<h3>Cancel my account</h3>
+
+<% if current_user.role?('Admin') %>
+<h3>Cancel account</h3>
 
 <p>Unhappy? <%= link_to "Cancel account", user_path(@user), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
+<% end %>
 <%= link_to "Back", :back %>
