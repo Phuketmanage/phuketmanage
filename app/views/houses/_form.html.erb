@@ -84,7 +84,7 @@
                                   id: 'pool_check_box' } %>
           <%= form.label :pool, {     class: 'form-check-label',
                                   for: 'pool_check_box' } %>
-                                  </div>
+        </div>
       </div>
       <div class="col-2 form-group">
         <div class="form-check">
@@ -92,7 +92,7 @@
                                   id: 'communal_pool_check_box' } %>
           <%= form.label :communal_pool, {     class: 'form-check-label',
                                   for: 'communal_pool_check_box' } %>
-                                  </div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -100,9 +100,16 @@
         <%= form.label 'Pool size, sq m' %>
         <%= form.number_field :pool_size, class: 'form-control' %>
       </div>
-
     </div>
   </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :unavailable, { class: 'form-check-input',
+                            id: 'unavailable_check_box' } %>
+    <%= form.label :unavailable, {     class: 'form-check-label',
+                            for: 'unavailable_check_box' } %>
+  </div>
+
 
   <div class="actions">
     <%= form.submit 'Save', class: 'btn btn-primary' %>

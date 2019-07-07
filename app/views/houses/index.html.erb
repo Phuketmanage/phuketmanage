@@ -13,7 +13,11 @@
 
   <tbody>
     <% @houses.each do |house| %>
-      <tr>
+      <% if house.unavailable %>
+        <tr class="text-muted">
+      <% else %>
+        <tr>
+      <% end %>
         <td><%= house.code %></td>
         <td><%= house.title_en %></td>
         <td><%= house.title_ru %></td>

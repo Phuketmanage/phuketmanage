@@ -4,7 +4,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in users(:admin)
+    sign_in users(:manager)
     @season = seasons(:_1)
   end
 

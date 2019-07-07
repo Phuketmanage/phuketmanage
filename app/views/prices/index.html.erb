@@ -25,12 +25,10 @@
         <% c += 1 %>
       <% end %>
       <% @seasons.each do |s| %>
-        <%= puts "#{d} - #{s}" %>
         <div class="col-1 price_col">
           <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
           <%= form_with(model: price, method: 'put') do |f| %>
-          <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}",
-                                data: {id: price.id} %>
+          <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}", data: {id: price.id} %>
           <% end %>
         </div>
       <% c += 1 %>
@@ -84,6 +82,20 @@ Add season
 
     <div class="col-2">
       <%= f.submit class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+Copy durations and seasons from othe house
+<%= form_with(url: copy_table_path(@house), local: true) do |f| %>
+  <div class="row form-group">
+    <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
+    <div class="col-md-2 ">
+      <%= f.select :copy_from_id,
+            @houses.all.map {|h| [h.code, h.id]},
+                      { prompt: 'Select house' }, { class: "form-control",  } %>
+    </div>
+    <div class="col-2">
+      <%= f.submit 'Copy', class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>

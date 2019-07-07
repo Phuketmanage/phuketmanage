@@ -10,4 +10,16 @@
     description_en: Description
     description_ru: Описание
     owner: owner
+    code: villa_1
+    type: villa
+    size: 170
+    plot_size: 200
+    rooms: 3
+    bathrooms: 3
+    pool: true
+    pool_size: 30
+    communal_pool: false
+    parking: true
+    parking_size: 2
+    unavailable: false
 <% end %>

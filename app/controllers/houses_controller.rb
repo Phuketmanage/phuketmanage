@@ -28,7 +28,7 @@ class HousesController < ApplicationController
   # GET /houses
   # GET /houses.json
   def index
-    @houses = House.all
+    @houses = House.all.order(:unavailable, :code)
   end
 
   # GET /houses/1
@@ -109,7 +109,6 @@ class HousesController < ApplicationController
                                     :description_ru,
                                     :owner_id,
                                     :type_id,
-                                    :code,
                                     :size,
                                     :plot_size,
                                     :rooms,
@@ -118,7 +117,8 @@ class HousesController < ApplicationController
                                     :pool_size,
                                     :communal_pool,
                                     :parking,
-                                    :parking_size
+                                    :parking_size,
+                                    :unavailable
                                     )
     end
 end

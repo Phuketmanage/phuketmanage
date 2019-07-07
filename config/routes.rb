@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     delete 'houses/:id/delete_duration', to: 'prices#destroy_duration', as: 'delete_duration'
     post 'houses/:id/add_season', to: 'prices#create_season', as: 'add_season'
     delete 'houses/:id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
+    post 'prices/:id/copy_table', to: 'prices#copy_table', as: 'copy_table'
     get 'dashboard', to: 'admin#index'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'

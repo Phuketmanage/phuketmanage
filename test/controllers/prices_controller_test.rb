@@ -13,10 +13,10 @@ class PricesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_house_price_url(@price.house)
-    assert_response :success
-  end
+  # test "should get new" do
+  #   get new_house_price_url(@price.house)
+  #   assert_response :success
+  # end
 
   test "should create price" do
     assert_difference('Price.count') do

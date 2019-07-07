@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_06_091050) do
+ActiveRecord::Schema.define(version: 2019_07_07_060208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 2019_07_06_091050) do
     t.boolean "communal_pool"
     t.boolean "parking"
     t.integer "parking_size"
+    t.boolean "unavailable", default: false
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(version: 2019_07_06_091050) do
     t.index ["parking"], name: "index_houses_on_parking"
     t.index ["rooms"], name: "index_houses_on_rooms"
     t.index ["type_id"], name: "index_houses_on_type_id"
+    t.index ["unavailable"], name: "index_houses_on_unavailable"
   end
 
   create_table "prices", force: :cascade do |t|

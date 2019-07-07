@@ -7,12 +7,14 @@ class PricesController < ApplicationController
   # GET /prices
   # GET /prices.json
   def index
+    @houses = House.all.active
     @house = House.find(params[:house_id])
     @prices = @house.prices.all
     @durations = @house.durations
     @duration = Duration.new
     @seasons = @house.seasons
     @season = Season.new
+
   end
 
   # GET /prices/1
@@ -59,7 +61,7 @@ class PricesController < ApplicationController
     respond_to do |format|
       if @duration.save
         @seasons.each do |s|
-          @price = @house.prices.create(duration_id: @duration.id,
+          @price = @house.prices.create!(duration_id: @duration.id,
                                         season_id: s.id,
                                         amount: 0)
         end
@@ -82,7 +84,7 @@ class PricesController < ApplicationController
     respond_to do |format|
       if @season.save
         @durations.each do |d|
-          @price = @house.prices.create(duration_id: d.id,
+          @house.prices.create!(duration_id: d.id,
                                         season_id: @season.id,
                                         amount: 0)
         end
@@ -96,6 +98,36 @@ class PricesController < ApplicationController
         format.json { render json: @price.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def copy_table
+    @house = House.find(params[:id])
+    copy_from_id = params[:copy_from_id]
+    durations_from = House.find(copy_from_id).durations
+    if durations_from.any?
+      durations_from.each do |d|
+        @house.durations.create!(start: d.start, finish: d.finish)
+        # puts "Add duration: start: #{d.start}, finish: #{d.finish}"
+      end
+    end
+    # byebug
+    seasons_from = House.find(copy_from_id).seasons
+    if seasons_from.any?
+      seasons_from.each do |s|
+        @house.seasons.create!(ssd: s.ssd, ssm: s.ssm, sfd: s.sfd, sfm: s.sfm)
+        # puts "Add season: ssd: #{s.ssd}, ssm: #{s.ssm}, sfd: #{s.sfd}, sfm: #{s.sfm}"
+      end
+    end
+    durations_to = @house.durations
+    seasons_to = @house.seasons
+    durations_to.each do |d|
+      seasons_to.each do |s|
+        @house.prices.create!(duration_id: d.id,
+                              season_id: s.id,
+                              amount: 0)
+      end
+    end
+    redirect_to house_prices_path(@house)
   end
 
   # PATCH/PUT /prices/1
@@ -124,7 +156,7 @@ class PricesController < ApplicationController
     # @house = @price.house
     # respond_to do |format|
       price = Price.find(params[:id])
-      puts params
+      # puts params
       if price.update(price_params)
         render json: { price_id: price.id, status: :ok }
       else

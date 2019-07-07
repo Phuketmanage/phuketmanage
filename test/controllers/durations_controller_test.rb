@@ -4,7 +4,7 @@ class DurationsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in users(:admin)
+    sign_in users(:manager)
     @duration = durations(:_1)
   end
 

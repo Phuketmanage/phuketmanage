@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class HouseTypesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
-    @house_type = house_types(:one)
+    sign_in users(:manager)
+    @house_type = house_types(:villa)
   end
 
   test "should get index" do
@@ -39,6 +42,8 @@ class HouseTypesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy house_type" do
+    sign_in users(:admin)
+    House.destroy_all
     assert_difference('HouseType.count', -1) do
       delete house_type_url(@house_type)
     end

@@ -51,13 +51,13 @@ def get_prices_old houses = []
         amount = house.prices.where(duration_id: durations.id,
                                     season_id: s[:id]).first.amount
         price = amount*s[:days]
-        puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
+        # puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
         total += price
       end
       result[house.id] = {total: total, per_day: total/duration.to_f.round()}
 
     end
-    puts "#{(Time.now-t1)}ms"
+    # puts "#{(Time.now-t1)}ms"
     return result
   end
 
