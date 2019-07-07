@@ -1,4 +1,5 @@
 class PricesController < ApplicationController
+  include SeasonsHelper
   load_and_authorize_resource :house
   # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
@@ -10,11 +11,10 @@ class PricesController < ApplicationController
     @houses = House.all.active
     @house = House.find(params[:house_id])
     @prices = @house.prices.all
-    @durations = @house.durations
+    @durations = @house.durations.order(:start)
     @duration = Duration.new
-    @seasons = @house.seasons
+    @seasons = @house.seasons.order(:created_at)
     @season = Season.new
-
   end
 
   # GET /prices/1
@@ -39,20 +39,20 @@ class PricesController < ApplicationController
 
   # POST /prices
   # POST /prices.json
-  def create
-    @house = House.find(params[:house_id])
-    @price = @house.prices.build(price_params)
+  # def create
+  #   @house = House.find(params[:house_id])
+  #   @price = @house.prices.build(price_params)
 
-    respond_to do |format|
-      if @price.save
-        format.html { redirect_to house_prices_path(@house), notice: 'Price was successfully created.' }
-        format.json { render :index, status: :created, location: @price }
-      else
-        format.html { render :new }
-        format.json { render json: @price.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @price.save
+  #       format.html { redirect_to house_prices_path(@house), notice: 'Price was successfully created.' }
+  #       format.json { render :index, status: :created, location: @price }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @price.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   def create_duration
     @house = House.find(params[:id])
@@ -68,6 +68,7 @@ class PricesController < ApplicationController
         format.html { redirect_to house_prices_path(@house), notice: 'Duration was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
+        @houses = House.all.active
         @prices = @house.prices.all
         @durations = @house.durations.reload
         @season = Season.new
@@ -91,6 +92,7 @@ class PricesController < ApplicationController
         format.html { redirect_to house_prices_path(@house), notice: 'Season was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
+        @houses = House.all.active
         @prices = @house.prices.all
         @seasons = @house.seasons.reload
         @duration = Duration.new
@@ -132,7 +134,7 @@ class PricesController < ApplicationController
 
   # PATCH/PUT /prices/1
   # PATCH/PUT /prices/1.json
-  def update
+  def update_old
     @house = @price.house
     respond_to do |format|
       if @price.update(price_params)
@@ -143,26 +145,15 @@ class PricesController < ApplicationController
         format.json { render json: @price.errors, status: :unprocessable_entity }
       end
     end
-    # def update_fb_post_id
-    #   # byebug
-    #   post = Post.find(params[:id])
-    #   post.update("fb_post_id_#{params[:locale]}": params[:fb_post_id])
-    #   render json: { status: :ok }
-    # end
-
   end
 
-  def update_ajax
-    # @house = @price.house
-    # respond_to do |format|
+  def update
       price = Price.find(params[:id])
-      # puts params
       if price.update(price_params)
         render json: { price_id: price.id, status: :ok }
       else
         render json: {errors: price.errors, price_id: price.id}, status: :unprocessable_entity
       end
-    # end
   end
 
   # DELETE /prices/1

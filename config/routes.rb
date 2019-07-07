@@ -4,11 +4,11 @@ Rails.application.routes.draw do
     devise_for :users
     resources :bookings
     resources :houses do
-      resources :prices, except: [:show, :new], shallow: true
-      resources :seasons, except: :show, shallow: true
-      resources :durations, except: :show, shallow: true
+      resources :prices, only: [:index]
+      # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
+      # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
     end
-    get 'prices/:id/update_ajax', to: 'prices#update_ajax'
+    get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:id/add_duration', to: 'prices#create_duration', as: 'add_duration'
     delete 'houses/:id/delete_duration', to: 'prices#destroy_duration', as: 'delete_duration'
     post 'houses/:id/add_season', to: 'prices#create_season', as: 'add_season'

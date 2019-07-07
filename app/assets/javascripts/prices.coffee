@@ -3,7 +3,7 @@ $ ->
     id = $(this).data('id')
     array = [1, 2, 3, 4, 5];
     $.ajax
-      url: '/prices/'+id+'/update_ajax',
+      url: '/prices/'+id+'/update',
       type: "get",
       dataType: "json",
       # data: { data_value: JSON.stringify(array) },

@@ -81,4 +81,5 @@ class SeasonsController < ApplicationController
     def season_params
       params.require(:season).permit(:ssd, :ssm, :sfd, :sfm, :house_id)
     end
+
 end

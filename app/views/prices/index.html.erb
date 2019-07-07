@@ -1,4 +1,4 @@
-<h1>Prices</h1>
+<h1>Prices for <%= "#{@house.code} (#{@house.title_en})" %></h1>
 
 <% r = 1 %>
 <div class="row">
@@ -27,13 +27,19 @@
       <% @seasons.each do |s| %>
         <div class="col-1 price_col">
           <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
-          <%= form_with(model: price, method: 'put') do |f| %>
+          <%= form_with(model: price, url: "#", method: 'put') do |f| %>
           <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}", data: {id: price.id} %>
           <% end %>
         </div>
       <% c += 1 %>
       <% end %>
     </div>
+<% end %>
+
+<% if @seasons.count > 1 && have_seasons_gap?(@seasons) %>
+  <div class="alert alert-danger mt-2">
+    Have gap between seasons
+  </div>
 <% end %>
 
 Add duration
@@ -85,17 +91,19 @@ Add season
     </div>
   </div>
 <% end %>
-Copy durations and seasons from othe house
-<%= form_with(url: copy_table_path(@house), local: true) do |f| %>
-  <div class="row form-group">
-    <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2 ">
-      <%= f.select :copy_from_id,
-            @houses.all.map {|h| [h.code, h.id]},
-                      { prompt: 'Select house' }, { class: "form-control",  } %>
+<% if !@durations.any? && !@seasons.any? %>
+  Copy durations and seasons from othe house
+  <%= form_with(url: copy_table_path(@house), local: true) do |f| %>
+    <div class="row form-group">
+      <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
+      <div class="col-md-2 ">
+        <%= f.select :copy_from_id,
+              @houses.all.map {|h| [h.code, h.id]},
+                        { prompt: 'Select house' }, { class: "form-control",  } %>
+      </div>
+      <div class="col-2">
+        <%= f.submit 'Copy', class: 'btn btn-primary' %>
+      </div>
     </div>
-    <div class="col-2">
-      <%= f.submit 'Copy', class: 'btn btn-primary' %>
-    </div>
-  </div>
+  <% end %>
 <% end %>

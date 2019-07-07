@@ -13,9 +13,15 @@ ru:
           attributes:
             amount:
               greater_than_or_equal_to: Цена не может быть меньше 0
+      models:
+        duration:
+          attributes:
+            start:
+              greater_than: должно быть больше 0
       messages:
         required: обязательное поле
         blank: не может быть пустым
+
   date:
     order: [ !ruby/symbol day, !ruby/symbol month, !ruby/symbol year ]
     month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]
