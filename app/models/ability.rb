@@ -6,7 +6,6 @@ class Ability
   def initialize(user)
     user ||= User.new                          # guest user
 
-
     if user.role? :owner
       # can :read, [ House ]
     elsif user.role? :manager

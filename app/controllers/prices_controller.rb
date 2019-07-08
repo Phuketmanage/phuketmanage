@@ -1,15 +1,20 @@
 class PricesController < ApplicationController
   include SeasonsHelper
-  load_and_authorize_resource :house
+  load_and_authorize_resource :house, id_param: :number
   # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
+  before_action :set_house, only: [ :index, :new,
+                                    :create_duration, :create_season,
+                                    :destroy_duration, :destroy_season,
+                                    :copy_table]
   before_action :set_price, only: [:show, :edit, :update, :destroy]
+
 
   # GET /prices
   # GET /prices.json
   def index
     @houses = House.all.active
-    @house = House.find(params[:house_id])
+    # @house = House.find(params[:house_id])
     @prices = @house.prices.all
     @durations = @house.durations.order(:start)
     @duration = Duration.new
@@ -24,7 +29,7 @@ class PricesController < ApplicationController
 
   # GET /prices/new
   def new
-    @house = House.find(params[:house_id])
+    # @house = House.find(params[:house_id])
     @price = Price.new
     @durations = @house.durations
     @seasons = @house.seasons
@@ -55,7 +60,7 @@ class PricesController < ApplicationController
   # end
 
   def create_duration
-    @house = House.find(params[:id])
+    # @house = House.find(params[:id])
     @seasons = @house.seasons
     @duration = @house.durations.build(duration_params)
     respond_to do |format|
@@ -65,7 +70,7 @@ class PricesController < ApplicationController
                                         season_id: s.id,
                                         amount: 0)
         end
-        format.html { redirect_to house_prices_path(@house), notice: 'Duration was successfully created.' }
+        format.html { redirect_to house_prices_path(@house.number), notice: 'Duration was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
         @houses = House.all.active
@@ -79,7 +84,7 @@ class PricesController < ApplicationController
   end
 
   def create_season
-    @house = House.find(params[:id])
+    # @house = House.find(params[:id])
     @durations = @house.durations
     @season = @house.seasons.build(season_params)
     respond_to do |format|
@@ -89,7 +94,7 @@ class PricesController < ApplicationController
                                         season_id: @season.id,
                                         amount: 0)
         end
-        format.html { redirect_to house_prices_path(@house), notice: 'Season was successfully created.' }
+        format.html { redirect_to house_prices_path(@house.number), notice: 'Season was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
         @houses = House.all.active
@@ -103,9 +108,9 @@ class PricesController < ApplicationController
   end
 
   def copy_table
-    @house = House.find(params[:id])
-    copy_from_id = params[:copy_from_id]
-    durations_from = House.find(copy_from_id).durations
+    # @house = House.find(params[:id])
+    copy_from_number = params[:copy_from_number]
+    durations_from = House.find_by(number: copy_from_number).durations
     if durations_from.any?
       durations_from.each do |d|
         @house.durations.create!(start: d.start, finish: d.finish)
@@ -113,7 +118,7 @@ class PricesController < ApplicationController
       end
     end
     # byebug
-    seasons_from = House.find(copy_from_id).seasons
+    seasons_from = House.find_by(number: copy_from_number).seasons
     if seasons_from.any?
       seasons_from.each do |s|
         @house.seasons.create!(ssd: s.ssd, ssm: s.ssm, sfd: s.sfd, sfm: s.sfm)
@@ -129,7 +134,7 @@ class PricesController < ApplicationController
                               amount: 0)
       end
     end
-    redirect_to house_prices_path(@house)
+    redirect_to house_prices_path(@house.numberw)
   end
 
   # PATCH/PUT /prices/1
@@ -138,7 +143,7 @@ class PricesController < ApplicationController
     @house = @price.house
     respond_to do |format|
       if @price.update(price_params)
-        format.html { redirect_to house_prices_path(@house), notice: 'Price was successfully updated.' }
+        format.html { redirect_to house_prices_path(@house.number), notice: 'Price was successfully updated.' }
         format.json { render :show, status: :ok, location: @price }
       else
         format.html { render :edit }
@@ -162,35 +167,39 @@ class PricesController < ApplicationController
     house = @price.house
     @price.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(house), notice: 'Price was successfully destroyed.' }
+      format.html { redirect_to house_prices_url(house.number), notice: 'Price was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def destroy_duration
-    house = House.find(params[:id])
+    # house = House.find(params[:id])
     duration = Duration.find(params[:duration_id])
     Price.where(duration_id: duration.id).destroy_all
     duration.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(house), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def destroy_season
-    house = House.find(params[:id])
+    # house = House.find(params[:id])
     season = Season.find(params[:season_id])
     Price.where(season_id: season.id).destroy_all
     season.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(house), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
 
   private
+    def set_house
+      @house = House.find_by(number: params[:house_id])
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_price
       @price = Price.find(params[:id])

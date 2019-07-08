@@ -28,24 +28,24 @@ class HousesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show house" do
-    get house_url(@house)
+    get house_url(@house.number)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_house_url(@house)
+    get edit_house_url(@house.number)
     assert_response :success
   end
 
   test "should update house" do
-    patch house_url(@house), params: { house: { description_en: @house.description_en, description_ru: @house.description_ru, owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru } }
+    patch house_url(@house.number), params: { house: { description_en: @house.description_en, description_ru: @house.description_ru, owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru } }
     assert_redirected_to houses_url
   end
 
   test "should destroy house" do
     sign_in users(:admin)
     assert_difference('House.count', -1) do
-      delete house_url(@house)
+      delete house_url(@house.number)
     end
 
     assert_redirected_to houses_url

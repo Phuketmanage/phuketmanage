@@ -1,29 +1,8 @@
 class HousesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource id_param: :number
 
   before_action :set_house, only: [:show, :edit, :update, :destroy]
   layout 'admin'
-
-  def ical
-
-    respond_to do |format|
-        format.html
-        format.ics do
-          cal = Icalendar::Calendar.new
-          cal.x_wr_calname = 'Awesome Rails Calendar'
-          cal.event do |e|
-            e.dtstart     = DateTime.now + 2.days
-            e.dtend       = DateTime.now + 20.days
-            e.summary     = "Meeting with the man."
-            e.description = "Have a long lunch meeting and decide nothing..."
-          end
-          cal.publish
-          # render text: cal.to_ical #, content_type: 'text/calendar'
-          render text: cal.to_ical
-        end
-    end
-  end
-
 
   # GET /houses
   # GET /houses.json
@@ -53,7 +32,14 @@ class HousesController < ApplicationController
   # POST /houses.json
   def create
     @house = House.new(house_params)
-
+    number_unique = false
+    until number_unique do
+      number = (('1'..'9').to_a).shuffle[0..rand(1..6)].join
+      house = House.find_by(number: number)
+      number_unique = true if house.nil?
+    end
+    @house.number = number
+    @house.secret = SecureRandom.hex(16)
     respond_to do |format|
       if @house.save
         format.html { redirect_to houses_path, notice: 'House was successfully created.' }
@@ -65,6 +51,7 @@ class HousesController < ApplicationController
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /houses/1
@@ -96,7 +83,7 @@ class HousesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_house
-      @house = House.find(params[:id])
+      @house = House.find_by(number: params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

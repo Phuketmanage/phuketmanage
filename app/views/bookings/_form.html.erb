@@ -1,37 +1,31 @@
 <%= form_with(model: booking, local: true) do |form| %>
   <% if booking.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(booking.errors.count, "error") %> prohibited this booking from being saved:</h2>
-
-      <ul>
-        <% booking.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render 'shared/error_messages', object: form.object %>
   <% end %>
 
-  <div class="field">
-    <%= form.label :start %>
-    <%= form.date_select :start %>
-  </div>
+  <div class="row">
+    <div class="col-md-2 form-group">
+      <%= form.date_field :start, class: 'form-control' %>
+    </div>
 
-  <div class="field">
-    <%= form.label :finish %>
-    <%= form.date_select :finish %>
-  </div>
+    <div class="col-md-2 form-group">
+      <%= form.date_field :finish, class: 'form-control' %>
+    </div>
 
-  <div class="field">
-    <%= form.label :house_id %>
-    <%= form.text_field :house_id %>
-  </div>
+    <div class="col-md-2 form-group">
+      <%= form.select :house_id,
+            @houses.all.map {|h| [h.code, h.id]},
+                      { prompt: 'Select house' }, { class: "form-control",  } %>
+    </div>
 
-  <div class="field">
-    <%= form.label :tenant_id %>
-    <%= form.text_field :tenant_id %>
-  </div>
+    <div class="col-md-2 form-group">
+      <%= form.select :tenant_id,
+            @tenants.all.map {|t| ["#{t.name} #{t.surname}", t.id]},
+                      { prompt: 'Select tenant' }, { class: "form-control",  } %>
+    </div>
 
-  <div class="actions">
-    <%= form.submit %>
+    <div class="col-md-2 form-group">
+      <%= form.submit 'Save', class: 'btn btn-primary' %>
+    </div>
   </div>
 <% end %>

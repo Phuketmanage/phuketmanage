@@ -9,4 +9,12 @@ class House < ApplicationRecord
 
   scope :active, -> { where(unavailable: false) }
 
+
+  def add_numbers
+    houses = House.all
+    houses.each do |h|
+      h.update_attributes(number: (('1'..'9').to_a).shuffle[0..rand(1..6)].join)
+    end
+  end
+
 end

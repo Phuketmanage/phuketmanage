@@ -11,6 +11,7 @@
     description_ru: Описание
     owner: owner
     code: villa_1
+    number: <%= (('1'..'9').to_a).shuffle[0..rand(1..6)].join %>
     type: villa
     size: 170
     plot_size: 200

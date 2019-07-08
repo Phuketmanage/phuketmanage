@@ -9,7 +9,7 @@ class PricesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get house_prices_url (@price.house)
+    get house_prices_url (@price.house.number)
     assert_response :success
   end
 

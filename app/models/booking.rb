@@ -8,7 +8,7 @@ class Booking < ApplicationRecord
     changing: 5,
     block: 6 }
   belongs_to :house
-  belongs_to :tenant, class_name: 'User'
+  belongs_to :tenant, class_name: 'User', optional: true
 
 
   def get_available_houses rs, rf

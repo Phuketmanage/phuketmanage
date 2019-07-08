@@ -23,7 +23,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
       post bookings_url, params: { booking: { finish: @booking.finish, house_id: @booking.house_id, start: @booking.start, tenant_id: @booking.tenant_id } }
     end
 
-    assert_redirected_to booking_url(Booking.last)
+    assert_redirected_to bookings_url
   end
 
   test "should show booking" do
@@ -38,7 +38,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update booking" do
     patch booking_url(@booking), params: { booking: { finish: @booking.finish, house_id: @booking.house_id, start: @booking.start, tenant_id: @booking.tenant_id } }
-    assert_redirected_to booking_url(@booking)
+    assert_redirected_to bookings_url
   end
 
   test "should destroy booking" do

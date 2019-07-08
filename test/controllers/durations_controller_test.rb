@@ -11,9 +11,9 @@ class DurationsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy duration" do
     house = @duration.house
     assert_difference('Duration.count', -1) do
-      delete delete_duration_path(house, duration_id: @duration.id)
+      delete delete_duration_path(house.number, duration_id: @duration.id)
     end
 
-    assert_redirected_to house_prices_path(house)
+    assert_redirected_to house_prices_path(house.number)
   end
 end

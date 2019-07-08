@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_07_060208) do
+ActiveRecord::Schema.define(version: 2019_07_08_123228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,11 +19,16 @@ ActiveRecord::Schema.define(version: 2019_07_07_060208) do
     t.date "start"
     t.date "finish"
     t.bigint "house_id", null: false
-    t.bigint "tenant_id", null: false
+    t.bigint "tenant_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status"
+    t.string "number"
+    t.string "ical_UID"
+    t.integer "source_id"
     t.index ["house_id"], name: "index_bookings_on_house_id"
+    t.index ["number"], name: "index_bookings_on_number", unique: true
+    t.index ["source_id"], name: "index_bookings_on_source_id"
     t.index ["status"], name: "index_bookings_on_status"
     t.index ["tenant_id"], name: "index_bookings_on_tenant_id"
   end
@@ -64,9 +69,12 @@ ActiveRecord::Schema.define(version: 2019_07_07_060208) do
     t.boolean "parking"
     t.integer "parking_size"
     t.boolean "unavailable", default: false
+    t.string "number", limit: 10
+    t.string "secret"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
+    t.index ["number"], name: "index_houses_on_number", unique: true
     t.index ["owner_id"], name: "index_houses_on_owner_id"
     t.index ["parking"], name: "index_houses_on_parking"
     t.index ["rooms"], name: "index_houses_on_rooms"
@@ -113,6 +121,12 @@ ActiveRecord::Schema.define(version: 2019_07_07_060208) do
     t.string "var"
     t.string "value"
     t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "sources", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

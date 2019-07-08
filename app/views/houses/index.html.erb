@@ -23,10 +23,10 @@
         <td><%= house.title_ru %></td>
         <td><%= "#{house.owner.name} #{house.owner.surname}" %></td>
         <td>
-          <%= link_to 'Show' %>
-          <%= link_to 'Edit', edit_house_path(house) %>
-          <%= link_to 'Prices', house_prices_path(house) %>
-          <%= link_to 'Destroy', house, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Bookings', house_bookings_path(house.number) %> |
+          <%= link_to 'Prices', house_prices_path(house.number) %> |
+          <%= link_to 'Edit', edit_house_path(house.number) %> |
+          <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>

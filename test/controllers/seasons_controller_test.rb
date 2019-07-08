@@ -11,9 +11,9 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy season" do
     house = @season.house
     assert_difference('Season.count', -1) do
-      delete delete_season_path(house, season_id: @season.id)
+      delete delete_season_path(house.number, season_id: @season.id)
     end
 
-    assert_redirected_to house_prices_path(house)
+    assert_redirected_to house_prices_path(house.number)
   end
 end
