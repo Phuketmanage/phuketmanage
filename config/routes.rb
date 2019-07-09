@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     post 'houses/:house_id/add_season', to: 'prices#create_season', as: 'add_season'
     delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
     get 'houses/:house_id/bookings', to: 'bookings#index', as: 'house_bookings'
+    # post 'houses/:id/connections', to: 'houses#create_connection', as: 'add_connection'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
 
     get 'dashboard', to: 'admin#index'
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
     resources :settings
     resources :house_types
     resources :sources
+    resources :connections, only: [:create, :destroy]
   end
 
   root to: 'pages#index'

@@ -10,7 +10,6 @@ class Booking < ApplicationRecord
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
 
-
   def get_available_houses rs, rf
     overlapped_bookings = Booking.where(
       'start < ? AND finish > ? AND status != ?', rf, rs,

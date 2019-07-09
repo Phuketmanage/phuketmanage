@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_08_123228) do
+ActiveRecord::Schema.define(version: 2019_07_08_163218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,11 +26,22 @@ ActiveRecord::Schema.define(version: 2019_07_08_123228) do
     t.string "number"
     t.string "ical_UID"
     t.integer "source_id"
+    t.text "comment"
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
     t.index ["status"], name: "index_bookings_on_status"
     t.index ["tenant_id"], name: "index_bookings_on_tenant_id"
+  end
+
+  create_table "connections", force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.bigint "source_id", null: false
+    t.string "link"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_connections_on_house_id"
+    t.index ["source_id"], name: "index_connections_on_source_id"
   end
 
   create_table "durations", force: :cascade do |t|
@@ -160,6 +171,8 @@ ActiveRecord::Schema.define(version: 2019_07_08_123228) do
 
   add_foreign_key "bookings", "houses"
   add_foreign_key "bookings", "users", column: "tenant_id"
+  add_foreign_key "connections", "houses"
+  add_foreign_key "connections", "sources"
   add_foreign_key "durations", "houses"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"

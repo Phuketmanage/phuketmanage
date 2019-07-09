@@ -8,6 +8,7 @@
       <th>Finish</th>
       <th>House</th>
       <th>Tenant</th>
+      <th>Source</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
         <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
         <td><%= booking.house.code %></td>
         <td><%= "#{booking.tenant.name} #{booking.tenant.surname}" if booking.tenant %></td>
+        <td><%= Source.find(booking.source_id).name if booking.source_id %></td>
         <td>
           <%= link_to 'Show', booking %> |
           <%= link_to 'Edit', edit_booking_path(booking) %> |

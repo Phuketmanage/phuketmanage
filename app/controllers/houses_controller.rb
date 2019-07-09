@@ -1,7 +1,8 @@
 class HousesController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_house, only: [:show, :edit, :update, :destroy]
+  before_action :set_house, only: [ :show, :edit, :update, :destroy,
+                                    :create_connection]
   layout 'admin'
 
   # GET /houses
@@ -26,6 +27,10 @@ class HousesController < ApplicationController
   def edit
     @owners = User.with_role('Owner')
     @types = HouseType.all
+    @sources = Source.all
+    @connections = @house.connections.all
+    # byebug
+    @connection = @house.connections.new
   end
 
   # POST /houses
@@ -108,4 +113,5 @@ class HousesController < ApplicationController
                                     :unavailable
                                     )
     end
+
 end

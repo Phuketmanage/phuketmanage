@@ -35,6 +35,9 @@ class BookingsController < ApplicationController
       @bookings = Booking.all.order(:start)
     else
       @house = House.find_by(number: params[:house_id])
+      @house.connections.each do |c|
+        sync @house, c
+      end
       @bookings = @house.bookings.order(:start)
     end
   end
@@ -112,4 +115,29 @@ class BookingsController < ApplicationController
     def booking_params
       params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id)
     end
+
+    def sync house, connection
+      house.bookings.where(source_id: connection.source_id).destroy_all
+      require 'open-uri'
+      begin
+        cal_file = open(connection.link)
+        cals = Icalendar::Calendar.parse(cal_file)
+        cal = cals.first
+
+        cal.events.each do |e|
+          house.bookings.create!( source_id: connection.source_id,
+                                  start: e.dtstart,
+                                  finish: e.dtend,
+                                  ical_UID: e.uid,
+                                  comment: "#{e.summary} \n #{e.description}")
+        end
+      rescue OpenURI::HTTPError => error
+        response = error.io
+        response.status
+        # => ["503", "Service Unavailable"]
+        response.string
+        # => <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html DIR=\"LTR\">\n<head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"><meta name=\"viewport\" content=\"initial-scale=1\">...
+      end
+    end
+
 end

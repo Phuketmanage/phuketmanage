@@ -103,6 +103,22 @@
         <%= form.number_field :pool_size, class: 'form-control' %>
       </div>
     </div>
+    <div class="row">
+      <div class="col-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :parking, { class: 'form-check-input',
+                                  id: 'parking_check_box' } %>
+          <%= form.label :parking, {     class: 'form-check-label',
+                                  for: 'parking_check_box' } %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2 form-group">
+        <%= form.label 'Parking size, how many cars' %>
+        <%= form.number_field :parking_size, class: 'form-control' %>
+      </div>
+    </div>
   </div>
 
   <div class="form-check mb-2">
@@ -118,3 +134,36 @@
     <%= link_to 'Back', houses_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>
+
+<div class="shadow-sm mb-2 p-2 bg-light rounded mt-2">
+  <strong>Connections</strong>
+  <hr>
+  <% @connections.each do |c| %>
+    <p>
+      <%= "#{c.source.name}: #{c.link}" %>
+      <%= link_to 'Destroy', connection_path(c.id, house_id: house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+    </p>
+  <% end %>
+  <%= form_with(model: connection, url: connections_path(house_id: house.number), local: true) do |form| %>
+    <% if connection.errors.any? %>
+      <%= render 'shared/error_messages', object: form.object %>
+    <% end %>
+    <div class="row">
+      <div class="col-md-2 ">
+        <%= form.select :source_id,
+              @sources.all.map {|s| [s.name, s.id]},
+                        { prompt: 'Select source' }, { class: "form-control",  } %>
+      </div>
+
+      <div class="col-md-8 form-group">
+        <%= form.text_field :link,  placeholder: "Link",
+                                    class: 'form-control' %>
+      </div>
+      <div class="col-md-2 actions">
+        <%= form.submit 'Save connection', class: 'btn btn-primary' %>
+      </div>
+
+    </div>
+  <% end %>
+
+</div>
