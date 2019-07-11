@@ -20,7 +20,6 @@ class Search
       total = 0
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration).first
-    # byebug
       next if durations.nil?
       seasons = get_seasons house.seasons
       seasons.each do |s|

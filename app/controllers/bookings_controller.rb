@@ -31,13 +31,10 @@ class BookingsController < ApplicationController
   # GET /bookings
   # GET /bookings.json
   def index
-    if !params[:house_id].present?
+    if !params[:number].present?
       @bookings = Booking.all.order(:start)
     else
-      @house = House.find_by(number: params[:house_id])
-      @house.connections.each do |c|
-        sync @house, c
-      end
+      @house = House.find_by(number: params[:number])
       @bookings = @house.bookings.order(:start)
     end
   end
@@ -79,6 +76,35 @@ class BookingsController < ApplicationController
     end
   end
 
+  def sync
+
+    if params[:a] == 'update'
+      if !params[:number].present?
+        redirect_to bookings_path
+      else
+        house = House.find_by(number: params[:number])
+        connections = house.connections
+        connections.each do |c|
+          next if c.source_id == 1 || c.source_id == 2
+          # Check if was never synced
+          what_to_sync = 'upcoming'
+          what_to_sync = 'all' if c.last_sync.nil?
+          get_synced_data house, c, what_to_sync
+          c.update_attributes(last_sync: Time.zone.now)
+        end
+        bookings = house.bookings.order(:start)
+        redirect_to house_bookings_path(house.number)
+      end
+    elsif params[:a] == 'clear'
+      house = House.find_by(number: params[:number])
+
+      house.bookings.where.not(source_id: nil).destroy_all
+      house.connections.update_all(last_sync: nil)
+      redirect_to house_bookings_path(house.number)
+    end
+
+  end
+
   # PATCH/PUT /bookings/1
   # PATCH/PUT /bookings/1.json
   def update
@@ -116,21 +142,51 @@ class BookingsController < ApplicationController
       params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id)
     end
 
-    def sync house, connection
-      house.bookings.where(source_id: connection.source_id).destroy_all
+    def get_synced_data house, connection, what_to_sync
+      # house.bookings.where(source_id: connection.source_id).destroy_all
       require 'open-uri'
       begin
         cal_file = open(connection.link)
         cals = Icalendar::Calendar.parse(cal_file)
         cal = cals.first
-
+        if connection.source.name == 'Tripadvisor'
+          house.bookings.where(source_id: connection.source_id).destroy_all
+        end
         cal.events.each do |e|
+          #Airbnb specific: If date was blocked  few days before and
+          # after booking
+          next if connection.source.name == 'Airbnb' &&
+                  ( e.summary.strip == 'Airbnb (Not available)' ||
+                  e.description.nil? )
+          next if what_to_sync == 'upcoming' &&
+                  e.dtend < Time.zone.now
+          #Airbnb, Homeaway: Check if booking was synced before
+          if  connection.source.name == 'Airbnb' ||
+              connection.source.name == 'Homeaway'
+            existing_booking = house.bookings.where(ical_UID: e.uid.to_s).first
+            if !existing_booking.nil?
+              #If booking was synced before and didn't changed
+              next if existing_booking.start == e.dtstart &&
+                      existing_booking.finish == e.dtend &&
+                      existing_booking.comment == "#{e.summary} \n #{e.description}"
+              #If booking was synced before but was changed need to rewrite
+              existing_booking.destroy
+              # Here need to add notification
+              # Notification.new( type: Booking,
+              #                   comment: 'Updated after sync',
+              #                   link: link_to booking_path())
+            end
+          end
+          #Tripadvisor: Check if booking was synced before
+
           house.bookings.create!( source_id: connection.source_id,
                                   start: e.dtstart,
                                   finish: e.dtend,
                                   ical_UID: e.uid,
                                   comment: "#{e.summary} \n #{e.description}")
+          # Need to calculate prices for all
         end
+
       rescue OpenURI::HTTPError => error
         response = error.io
         response.status

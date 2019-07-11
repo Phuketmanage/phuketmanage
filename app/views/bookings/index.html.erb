@@ -1,4 +1,9 @@
 <h1>Bookings <%= @house.code if @house %></h1>
+<% if @house %>
+  <%= link_to 'Sync', house_sync_path(number: @house.number,  params: { a: 'update'}) %> |
+  <%= link_to 'Clear synced', house_sync_path(@house.number,params: { a: 'clear'}) %>
+
+<% end %>
 
 <table class="table">
   <thead>

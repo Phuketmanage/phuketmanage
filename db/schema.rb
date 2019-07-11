@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_08_163218) do
+ActiveRecord::Schema.define(version: 2019_07_11_145746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,10 @@ ActiveRecord::Schema.define(version: 2019_07_08_163218) do
     t.string "ical_UID"
     t.integer "source_id"
     t.text "comment"
+    t.integer "sale"
+    t.integer "agent"
+    t.integer "comm"
+    t.integer "nett"
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
@@ -40,6 +44,7 @@ ActiveRecord::Schema.define(version: 2019_07_08_163218) do
     t.string "link"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "last_sync"
     t.index ["house_id"], name: "index_connections_on_house_id"
     t.index ["source_id"], name: "index_connections_on_source_id"
   end
