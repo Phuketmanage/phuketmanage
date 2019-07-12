@@ -85,7 +85,7 @@ class BookingsController < ApplicationController
         house = House.find_by(number: params[:number])
         connections = house.connections
         connections.each do |c|
-          next if c.source_id == 1 || c.source_id == 2
+          next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
           # Check if was never synced
           what_to_sync = 'upcoming'
           what_to_sync = 'all' if c.last_sync.nil?
@@ -153,6 +153,7 @@ class BookingsController < ApplicationController
           house.bookings.where(source_id: connection.source_id).destroy_all
         end
         cal.events.each do |e|
+
           #Airbnb specific: If date was blocked  few days before and
           # after booking
           next if connection.source.name == 'Airbnb' &&
@@ -162,7 +163,8 @@ class BookingsController < ApplicationController
                   e.dtend < Time.zone.now
           #Airbnb, Homeaway: Check if booking was synced before
           if  connection.source.name == 'Airbnb' ||
-              connection.source.name == 'Homeaway'
+              connection.source.name == 'Homeaway' ||
+              connection.source.name == 'Booking'
             existing_booking = house.bookings.where(ical_UID: e.uid.to_s).first
             if !existing_booking.nil?
               #If booking was synced before and didn't changed

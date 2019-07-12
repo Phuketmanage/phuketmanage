@@ -12,7 +12,7 @@ class Season < ApplicationRecord
   validate :start_from_finish
   validate :not_overlapped
   validate :not_end_of_february
-  validate :not_less_then_15_days
+  validate :not_less_then_days
 
   def start_from_finish
     s = House.find(house_id).seasons.order(:created_at).last
@@ -64,7 +64,7 @@ class Season < ApplicationRecord
     end
   end
 
-  def not_less_then_15_days
+  def not_less_then_days
     nss = (ssm.to_i+ssd.to_f/30).round(2)
     nsf = (sfm.to_i+sfd.to_f/30).round(2)
     year = Time.zone.now.year
@@ -76,7 +76,7 @@ class Season < ApplicationRecord
     sf = Time.zone.parse("#{sfd}.#{sfm}.#{year+year_plus}").to_date
     Time.zone.now.year
     # byebug
-    if (sf - ss).to_i < 15
+    if (sf - ss).to_i < 14
       errors.add(:base, "Season duration can not be less then 15 days")
     end
   end
