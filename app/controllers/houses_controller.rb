@@ -21,15 +21,17 @@ class HousesController < ApplicationController
     @house = House.new
     @owners = User.with_role('Owner')
     @types = HouseType.all
+    @sources = Source.all.order(:name)
+    @connections = @house.connections.all
+    @connection = @house.connections.new
   end
 
   # GET /houses/1/edit
   def edit
     @owners = User.with_role('Owner')
     @types = HouseType.all
-    @sources = Source.all
+    @sources = Source.all.order(:name)
     @connections = @house.connections.all
-    # byebug
     @connection = @house.connections.new
   end
 
@@ -52,6 +54,9 @@ class HousesController < ApplicationController
       else
         @owners = User.with_role('Owner')
         @types = HouseType.all
+        @sources = Source.all.order(:name)
+        @connections = @house.connections.all
+        @connection = @house.connections.new
         format.html { render :new }
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
