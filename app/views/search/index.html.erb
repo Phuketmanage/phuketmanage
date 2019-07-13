@@ -2,6 +2,7 @@
 <%= render 'form', search: @search %>
 <div class="duration"><%= @search.duration %> days</div>
 <% @houses.each do |h| %>
+  <% next if @prices[h.id].nil? %>
   <div class="row">
     <div class="col-md-2 house"><%= h.send("title_#{I18n.locale}") %></div>
     <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
