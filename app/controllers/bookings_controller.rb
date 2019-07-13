@@ -61,8 +61,15 @@ class BookingsController < ApplicationController
   # POST /bookings.json
   def create
     @booking = Booking.new(booking_params)
+    @house = House.where(id: params[:booking][:house_id])
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
+    search = Search.new({rs: params[:booking][:start], rf: params[:booking][:finish]})
+    @prices = search.get_prices @house
+    @booking.sale = @prices.first[1][:total]
+    @booking.agent = 0
+    @booking.nett = @booking.sale * (100-@house.first.type.comm).to_f/100
+    @booking.comm = @booking.sale - @booking.agent - @booking.nett
     respond_to do |format|
       if @booking.save
         format.html { redirect_to bookings_path, notice: 'Booking was successfully created.' }
@@ -139,7 +146,7 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id)
+      params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id, :sale, :agent, :comm, :nett)
     end
 
     def get_synced_data house, connection, what_to_sync

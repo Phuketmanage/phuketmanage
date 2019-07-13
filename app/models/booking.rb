@@ -17,9 +17,9 @@ class Booking < ApplicationRecord
       |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
     booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
     if booked_house_ids.any?
-      available_houses = House.where.not(id: booked_house_ids)
+      available_houses = House.for_rent.where.not(id: booked_house_ids)
     else
-      available_houses = House.all
+      available_houses = House.for_rent.all
     end
 
   end

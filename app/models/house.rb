@@ -9,6 +9,7 @@ class House < ApplicationRecord
   validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
 
   scope :active, -> { where(unavailable: false) }
+  scope :for_rent, -> { where(unavailable: false) }
 
   # Was used after filed number added
   # def add_numbers

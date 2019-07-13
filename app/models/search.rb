@@ -30,7 +30,6 @@ class Search
         total += price
       end
       result[house.id] = {total: total, per_day: total/duration.to_f.round()}
-
     end
     # puts "#{(Time.now-t1)}ms"
     return result

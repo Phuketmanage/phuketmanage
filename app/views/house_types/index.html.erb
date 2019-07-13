@@ -7,6 +7,7 @@
     <tr>
       <th>Name en</th>
       <th>Name ru</th>
+      <th>Comm</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
       <tr>
         <td><%= house_type.name_en %></td>
         <td><%= house_type.name_ru %></td>
+        <td><%= house_type.comm %></td>
         <td><%= link_to 'Show', house_type %></td>
         <td><%= link_to 'Edit', edit_house_type_path(house_type) %></td>
         <td><%= link_to 'Destroy', house_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
