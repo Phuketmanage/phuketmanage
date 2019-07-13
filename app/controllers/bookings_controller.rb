@@ -55,21 +55,22 @@ class BookingsController < ApplicationController
   def edit
     @houses = House.all.active
     @tenants = User.with_role('Tenant')
+    @booking_original = @booking.dup
+    search = Search.new({rs: @booking.start, rf: @booking.finish})
+    prices = search.get_prices [@booking.house]
+    @booking_original.calc prices.first[1]
   end
 
   # POST /bookings
   # POST /bookings.json
   def create
+    # @house = House.where(id: params[:booking][:house_id])
     @booking = Booking.new(booking_params)
-    @house = House.where(id: params[:booking][:house_id])
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     search = Search.new({rs: params[:booking][:start], rf: params[:booking][:finish]})
-    @prices = search.get_prices @house
-    @booking.sale = @prices.first[1][:total]
-    @booking.agent = 0
-    @booking.nett = @booking.sale * (100-@house.first.type.comm).to_f/100
-    @booking.comm = @booking.sale - @booking.agent - @booking.nett
+    prices = search.get_prices [@booking.house]
+    @booking.calc prices.first[1]
     respond_to do |format|
       if @booking.save
         format.html { redirect_to bookings_path, notice: 'Booking was successfully created.' }
@@ -117,11 +118,23 @@ class BookingsController < ApplicationController
   def update
     respond_to do |format|
       if @booking.update(booking_params)
-        format.html { redirect_to bookings_path, notice: 'Booking was successfully updated.' }
+        if  @booking.saved_changes.key?(:start) ||
+            @booking.saved_changes.key?(:finish) ||
+            @booking.saved_changes.key?(:house_id)
+            search = Search.new({rs: @booking.start, rf: @booking.finish})
+            prices = search.get_prices [@booking.house]
+            @booking.calc prices.first[1]
+            @booking.save
+        end
+        format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.active
         @tenants = User.with_role('Tenant')
+        @booking_original = @booking.dup
+        search = Search.new({rs: @booking.start, rf: @booking.finish})
+        prices = search.get_prices [@booking.house]
+        @booking_original.calc prices.first[1]
         format.html { render :edit }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
@@ -188,14 +201,17 @@ class BookingsController < ApplicationController
           end
           #Tripadvisor: Check if booking was synced before
 
-          house.bookings.create!( source_id: connection.source_id,
+          booking = house.bookings.new(
+                                  source_id: connection.source_id,
                                   start: e.dtstart,
                                   finish: e.dtend,
                                   ical_UID: e.uid,
                                   comment: "#{e.summary} \n #{e.description}")
-          # Need to calculate prices for all
+          search = Search.new({rs: booking.start, rf: booking.finish})
+          prices = search.get_prices booking.house
+          booking.calc prices
+          booking.save
         end
-
       rescue OpenURI::HTTPError => error
         response = error.io
         response.status

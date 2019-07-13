@@ -9,19 +9,21 @@ class Booking < ApplicationRecord
     block: 6 }
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
+  validate :price_chain
 
-  def get_available_houses rs, rf
-    overlapped_bookings = Booking.where(
-      'start < ? AND finish > ? AND status != ?', rf, rs,
-      Booking.statuses[:canceled]).all.map{
-      |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
-    booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
-    if booked_house_ids.any?
-      available_houses = House.for_rent.where.not(id: booked_house_ids)
-    else
-      available_houses = House.for_rent.all
-    end
-
+  def calc price
+    self.sale = (price[:total]).round()
+    self.agent = 0
+    self.nett = (sale * (100-house.type.comm).to_f/100).round()
+    self.comm = (sale - agent - nett).round()
   end
+
+  private
+
+    def price_chain
+      if nett != sale - agent - comm
+        errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+      end
+    end
 
 end

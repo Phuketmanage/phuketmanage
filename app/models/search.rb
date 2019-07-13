@@ -1,7 +1,7 @@
 class Search
   include ActiveModel::Model
 
-  attr_accessor :stage, :rs, :rf, :duration
+  attr_accessor :stage, :rs, :rf, :rs_e, :rf_e, :duration
 
   validates :rs, :rf, presence: true
   validate :start_end_correct
@@ -130,13 +130,6 @@ def get_prices_old houses = []
     s = [rs,ss].max
     f = [rf,sf].min
     days = (f.to_date - s.to_date).to_i
-    # if re > ss && re < se # Last interval in reservation request
-    #   ist = is.strftime("%H:%M")
-    #   iet = ie.strftime("%H:%M")
-    #   days +=day_change if day_change == 1 && ist < iet
-    #   days +=day_change if day_change == -1 && ist > iet
-    # end
-
     hash = { id: sid, days: days , ss: ss, sf: sf }
   end
 
@@ -146,6 +139,25 @@ def get_prices_old houses = []
     else
       return false
     end
+  end
+
+  def get_available_houses #rs, rf
+    overlapped_bookings = Booking.where(
+      'start < ? AND finish > ? AND status != ?', rf_e, rs_e,
+      Booking.statuses[:canceled]).all.map{
+      |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
+    booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
+    if booked_house_ids.any?
+      available_houses = House.for_rent.where.not(id: booked_house_ids)
+    else
+      available_houses = House.for_rent.all
+    end
+
+  end
+
+  def prepare settings
+    rs_e = rs - settings['dtnb'].to_i.days
+    rf_e = rf + settings['dtnb'].to_i.days
   end
 
   private

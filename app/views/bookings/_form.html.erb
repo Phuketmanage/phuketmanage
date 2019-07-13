@@ -23,9 +23,31 @@
             @tenants.all.map {|t| ["#{t.name} #{t.surname}", t.id]},
                       { prompt: 'Select tenant' }, { class: "form-control",  } %>
     </div>
-
+  </div>
+  <div class="row">
     <div class="col-md-2 form-group">
-      <%= form.submit 'Save', class: 'btn btn-primary' %>
+      <%= form.label :sale %>
+      <%= form.number_field :sale, class: 'form-control calcs' %>
+      <small>Origial: <%= @booking_original.sale if !@booking_original.nil? %></small>
     </div>
+    <div class="col-md-2 form-group">
+      <%= form.label :agent %>
+      <%= form.number_field :agent, class: 'form-control calcs' %>
+    </div>
+    <div class="col-md-2 form-group">
+      <%= form.label :comm %> <span id='comm_percent'><%= (@booking.comm/@booking.sale.to_f*100).round(2) if !@booking_original.nil? %></span> %
+      <%= form.number_field :comm, class: 'form-control calcs' %>
+      <small>Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
+    </div>
+    <div class="col-md-2 form-group">
+      <%= form.label :nett %>
+      <%= form.number_field :nett, class: 'form-control calcs' %>
+      <small>Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
+    </div>
+  </div>
+  <div>
+      <%= form.submit 'Save', class: 'btn btn-primary' %>
+      <%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
+
   </div>
 <% end %>
