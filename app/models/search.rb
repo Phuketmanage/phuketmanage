@@ -6,7 +6,6 @@ class Search
   validates :rs, :rf, presence: true
   validate :start_end_correct
 
-
   def initialize(attributes = {})
     super
     return if attributes.empty?
@@ -59,30 +58,6 @@ class Search
     return result
   end
 
-def get_prices_old houses = []
-    t1 = Time.now
-    result = {}
-    houses.each do |house|
-      total = 0
-      durations = house.durations.where(
-        'start <= ?  AND finish >= ?', duration, duration).first
-    # byebug
-      next if durations.nil?
-      seasons = get_seasons_old house.seasons
-      seasons.each do |s|
-        amount = house.prices.where(duration_id: durations.id,
-                                    season_id: s[:id]).first.amount
-        price = amount*s[:days]
-        # puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
-        total += price
-      end
-      result[house.id] = {total: total, per_day: total/duration.to_f.round()}
-
-    end
-    # puts "#{(Time.now-t1)}ms"
-    return result
-  end
-
   def get_seasons seasons
     overlapping_seasons = []
     overlapped_info = {}
@@ -100,52 +75,8 @@ def get_prices_old houses = []
         overlapping_seasons << get_overlapped_info(s.id, ss, sf, rs, rf)
         days_left -= overlapping_seasons.last[:days]
         break if days_left == 0
-        # if days_left > 0
-        #   days_left -= 1
-        #   overlapping_seasons.last[:days] += 1
-        # end
       end
       break if year_modifier > 1
-    end
-    return overlapping_seasons
-  end
-
-  def get_seasons_old seasons
-    rsy = rs.year #Reservation start year
-    rey = rf.year #Reservation end year
-    overlapping_seasons = []
-    overlapped_info = {}
-    year = rsy
-    seasons.each do |s|
-      ss = Time.parse("#{s.ssd}.#{s.ssm}.#{year}").to_date
-      sf = Time.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
-      if rsy == rey
-        if ss.month > sf.month
-          if overlapping? ss-1.year, sf, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss-1.year, sf, rs, rf)
-          end
-          if overlapping? ss, sf+1.year, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss, sf+1.year, rs, rf)
-          end
-        else
-          if overlapping? ss, sf, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss, sf, rs, rf)
-          end
-        end
-      elsif rsy < rey
-        if ss.month > sf.month
-          if overlapping? ss, sf+1.year, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss, sf+1.year, rs, rf)
-          end
-        else
-          if overlapping? ss, sf, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss, sf, rs, rf)
-          end
-          if overlapping? ss+1.year, sf+1.year, rs, rf
-            overlapping_seasons.push(get_overlapped_info s.id, ss+1.year, sf+1.year, rs, rf)
-          end
-        end
-      end
     end
     return overlapping_seasons
   end
@@ -178,14 +109,6 @@ def get_prices_old houses = []
     end
 
   end
-
-  # def prepare settings
-  #   self.rs = rs.to_date
-  #   self.rf = rf.to_date
-  #   self.rs_e = rs - settings['dtnb'].to_i.days
-  #   self.rf_e = rf + settings['dtnb'].to_i.days
-  #   self.duration = (rf-rs).to_i
-  # end
 
   private
 

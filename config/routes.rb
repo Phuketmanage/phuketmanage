@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     post 'houses/:house_id/add_season', to: 'prices#create_season', as: 'add_season'
     delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
     get 'houses/:number/bookings', to: 'bookings#index', as: 'house_bookings'
+    get 'houses/:number/bookings/new', to: 'bookings#new', as: 'new_house_booking'
     get 'houses/:number/sync', to: 'bookings#sync', as: 'house_sync'
     # post 'houses/:id/connections', to: 'houses#create_connection', as: 'add_connection'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'

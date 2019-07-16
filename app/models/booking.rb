@@ -21,8 +21,10 @@ class Booking < ApplicationRecord
   private
 
     def price_chain
-      if nett != sale - agent - comm
-        errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+      if !self.block?
+        if nett != sale - agent - comm
+          errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+        end
       end
     end
 

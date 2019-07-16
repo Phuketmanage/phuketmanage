@@ -23,6 +23,11 @@
             @tenants.all.map {|t| ["#{t.name} #{t.surname}", t.id]},
                       { prompt: 'Select tenant' }, { class: "form-control",  } %>
     </div>
+
+    <div class="col-md-2 form-group">
+      <%= form.select :status, ["confirmed", "block"], {}, { class: "form-control"} %>
+    </div>
+
   </div>
   <div class="row">
     <div class="col-md-2 form-group">
@@ -47,7 +52,10 @@
   </div>
   <div>
       <%= form.submit 'Save', class: 'btn btn-primary' %>
-      <%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
-
+      <% if @booking.house %>
+        <%= link_to 'Back', house_bookings_path(@booking.house.number), class: 'btn btn-secondary' %>
+      <% else %>
+        <%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
+      <% end %>
   </div>
 <% end %>

@@ -30,17 +30,21 @@
         <td>
           <%= link_to 'Show', booking %> |
           <%= link_to 'Edit', edit_booking_path(booking) %> |
-          <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% if @house %>
+            <%= link_to 'Destroy', booking_path(booking, hid: @house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% else %>
+            <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Booking', new_booking_path %>
 <% if @house %>
+  <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
   | <%= link_to 'All Bookings', bookings_path %>
+<% else %>
+  <%= link_to 'New Booking', new_booking_path %>
 <% end %>
 

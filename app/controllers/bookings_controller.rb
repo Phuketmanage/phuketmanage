@@ -48,17 +48,25 @@ class BookingsController < ApplicationController
   def new
     @booking = Booking.new
     @houses = House.all.active
+    if params[:number]
+      @booking.house = @houses.find_by(number: params[:number])
+    end
+
     @tenants = User.with_role('Tenant')
+
   end
 
   # GET /bookings/1/edit
   def edit
     @houses = House.all.active
     @tenants = User.with_role('Tenant')
-    @booking_original = @booking.dup
     search = Search.new({rs: @booking.start, rf: @booking.finish})
-    prices = search.get_prices [@booking.house]
-    @booking_original.calc prices.first[1]
+    @booking_original = nil
+    unless @booking.block?
+      @booking_original = @booking.dup
+      prices = search.get_prices [@booking.house]
+      @booking_original.calc prices.first[1]
+    end
   end
 
   # POST /bookings
@@ -75,9 +83,12 @@ class BookingsController < ApplicationController
       @tenants = User.with_role('Tenant')
       render :new and return
     end
-    @booking = Booking.new(booking_params)
-    prices = search.get_prices [@booking.house]
-    @booking.calc prices.first[1]
+    if @booking.block?
+      @booking.sale = @booking.agent = @booking.comm = @booking.nett = 0
+    else
+      prices = search.get_prices [@booking.house]
+      @booking.calc prices.first[1]
+    end
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     respond_to do |format|
@@ -171,7 +182,12 @@ class BookingsController < ApplicationController
   def destroy
     @booking.destroy
     respond_to do |format|
-      format.html { redirect_to bookings_url, notice: 'Booking was successfully destroyed.' }
+      if params[:hid]
+        path = house_bookings_path(@booking.house.number)
+      else
+        path = bookings_path
+      end
+      format.html { redirect_to path, notice: 'Booking was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -184,7 +200,7 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id, :sale, :agent, :comm, :nett)
+      params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id, :sale, :agent, :comm, :nett, :status)
     end
 
     def get_synced_data house, connection, what_to_sync
