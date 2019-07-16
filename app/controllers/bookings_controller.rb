@@ -113,7 +113,7 @@ class BookingsController < ApplicationController
         house = House.find_by(number: params[:number])
         connections = house.connections
         connections.each do |c|
-          next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
+          # next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
           # Check if was never synced
           what_to_sync = 'upcoming'
           what_to_sync = 'all' if c.last_sync.nil?
@@ -249,8 +249,8 @@ class BookingsController < ApplicationController
                                   ical_UID: e.uid,
                                   comment: "#{e.summary} \n #{e.description}")
           search = Search.new({rs: booking.start, rf: booking.finish})
-          prices = search.get_prices booking.house
-          booking.calc prices
+          prices = search.get_prices [booking.house]
+          booking.calc prices.first[1]
           booking.save
         end
       rescue OpenURI::HTTPError => error

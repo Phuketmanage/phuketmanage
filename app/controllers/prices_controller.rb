@@ -134,7 +134,7 @@ class PricesController < ApplicationController
                               amount: 0)
       end
     end
-    redirect_to house_prices_path(@house.numberw)
+    redirect_to house_prices_path(@house.number)
   end
 
   # PATCH/PUT /prices/1
