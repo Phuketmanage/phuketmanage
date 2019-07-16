@@ -17,6 +17,7 @@
       <th>Sale</th>
       <th>Agent</th>
       <th>Comm</th>
+      <th>Comm total</th>
       <th>Nett</th>
       <th>Action</th>
     </tr>
@@ -34,6 +35,10 @@
         <td><%= booking.sale %></td>
         <td><%= booking.agent %></td>
         <td><%= booking.comm %></td>
+        <td>
+          <%= booking.agent + booking.comm %>
+          (<%= ((booking.agent + booking.comm).to_f/booking.sale*100).round(2) %>%)
+        </td>
         <td><%= booking.nett %></td>
         <td>
           <%= link_to 'Show', booking %> |

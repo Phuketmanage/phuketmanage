@@ -2,14 +2,14 @@
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-  <div class="row">
-    <div class="col-2 formn_field">
+  <div class="row ">
+    <div class="col-md-2 form-group">
       <%= f.date_field :rs, class: 'form-control' %>
     </div>
-    <div class="col-2">
+    <div class="col-md-2 form-group">
       <%= f.date_field :rf, class: 'form-control' %>
     </div>
-    <div class="col-2">
+    <div class="col-md-2 form-group">
       <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary"%>
     </div>
   </div>

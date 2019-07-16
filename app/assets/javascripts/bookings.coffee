@@ -1,4 +1,4 @@
-$ ->
+$(document).on "turbolinks:load", ->
   $('.calcs').change ->
     sale = $('#booking_sale').val()
     comm = $('#booking_comm').val()
