@@ -64,16 +64,25 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
-    # @house = House.where(id: params[:booking][:house_id])
     @booking = Booking.new(booking_params)
-    @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
-    @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
-    search = Search.new({rs: params[:booking][:start], rf: params[:booking][:finish]})
+    search = Search.new(rs: @booking.start,
+                        rf: @booking.finish,
+                        dtnb: @settings['dtnb'])
+    answer = search.is_house_available? @booking.house_id
+    if !answer[:result]
+      @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
+      @houses = House.all.active
+      @tenants = User.with_role('Tenant')
+      render :new and return
+    end
+    @booking = Booking.new(booking_params)
     prices = search.get_prices [@booking.house]
     @booking.calc prices.first[1]
+    @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
+    @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     respond_to do |format|
       if @booking.save
-        format.html { redirect_to bookings_path, notice: 'Booking was successfully created.' }
+        format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all.active
@@ -116,6 +125,22 @@ class BookingsController < ApplicationController
   # PATCH/PUT /bookings/1
   # PATCH/PUT /bookings/1.json
   def update
+    search = Search.new(rs: params[:booking][:start],
+                        rf: params[:booking][:finish],
+                        dtnb: @settings['dtnb'])
+    house_id = params[:booking][:house_id]
+    answer = search.is_house_available? house_id, @booking.id
+    if !answer[:result]
+      @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
+      @houses = House.all.active
+      @tenants = User.with_role('Tenant')
+      @booking_original = @booking.dup
+      prices = search.get_prices [@booking.house]
+      @booking_original.calc prices.first[1]
+      render :edit and return
+    end
+
+
     respond_to do |format|
       if @booking.update(booking_params)
         if  @booking.saved_changes.key?(:start) ||

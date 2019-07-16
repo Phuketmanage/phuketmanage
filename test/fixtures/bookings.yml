@@ -6,6 +6,11 @@ _1:
   house: villa_1
   tenant: tenant
   status: confirmed
+  number: number_1
+  sale: 30000
+  agent: 0
+  comm: 6000
+  nett: 24000
 
 _2:
   start: 15.07.<%= Time.now.year+1 %>
@@ -13,6 +18,12 @@ _2:
   house: villa_3
   tenant: tenant
   status: confirmed
+  number: number_2
+  sale: 10
+  agent: 0
+  comm: 2
+  nett: 8
+
 
 _3:
   start: 1.08.<%= Time.now.year+1 %>
@@ -20,3 +31,32 @@ _3:
   house: villa_2
   tenant: tenant
   status: confirmed
+  number: number_3
+  sale: 10
+  agent: 0
+  comm: 2
+  nett: 8
+
+_4:
+  start: 15.06.<%= Time.now.year+1 %>
+  finish: 29.06.<%= Time.now.year+1 %>
+  house: villa_1
+  tenant: tenant
+  status: confirmed
+  number: number_4
+  sale: 10
+  agent: 0
+  comm: 2
+  nett: 8
+
+_5:
+  start: 17.07.<%= Time.now.year+1 %>
+  finish: 24.08.<%= Time.now.year+1 %>
+  house: villa_2
+  tenant: tenant
+  status: canceled
+  number: number_5
+  sale: 10
+  agent: 0
+  comm: 2
+  nett: 8

@@ -3,11 +3,14 @@
 villa:
   name_en: Villa
   name_ru: Вилла
+  comm: 20
 
 townhouse:
   name_en: Townhouse
   name_ru: Таунхаус
+  comm: 20
 
 apartment:
   name_en: Apartrment
   name_ru: Апартаменты
+  comm: 25

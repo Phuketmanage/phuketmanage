@@ -1,9 +1,10 @@
 class ConnectionsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_house
+  # before_action :set_house, only: :create
 
   def create
+    @house = House.find_by(number: params[:hid])
     @connection = @house.connections.build(connection_params)
     if @connection.save
       redirect_to edit_house_path(@house.number), notice: 'Connection was successfully created.'
@@ -18,14 +19,15 @@ class ConnectionsController < ApplicationController
 
   def destroy
     @connection = Connection.find(params[:id])
+    hid = @connection.house.number
     @connection.destroy
-    redirect_to edit_house_path(@house.number), notice: 'Connection was successfully deleted.'
+    redirect_to edit_house_path(hid), notice: 'Connection was successfully deleted.'
   end
 
   private
-    def set_house
-      @house = House.find_by(number: params[:house_id])
-    end
+    # def set_house
+
+    # end
 
     def connection_params
       params.require(:connection).permit(:house_id, :source_id, :link)

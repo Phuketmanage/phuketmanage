@@ -1,16 +1,40 @@
 class Search
   include ActiveModel::Model
 
-  attr_accessor :stage, :rs, :rf, :rs_e, :rf_e, :duration
+  attr_accessor :stage, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
 
   validates :rs, :rf, presence: true
   validate :start_end_correct
 
 
   def initialize(attributes = {})
-    @rs = attributes[:rs].to_date if !attributes[:rs].nil?
-    @rf = attributes[:rf].to_date if !attributes[:rs].nil?
-    @duration = (rf-rs).to_i if !rf.nil? && !rs.nil?
+    super
+    return if attributes.empty?
+    @rs = rs.to_date
+    @rf = rf.to_date
+    @rs_e = rs - dtnb.to_i.days
+    @rf_e = rf + dtnb.to_i.days
+    @duration = (rf-rs).to_i
+  end
+
+  def is_house_available? house_id, booking_id = nil
+    result = {}
+    result[:result] = true
+
+    if booking_id.nil?
+      overlapped = Booking.where(
+        'start < ? AND finish > ? AND status != ? AND house_id = ?',
+        rf_e, rs_e, Booking.statuses[:canceled], house_id).all
+    else
+      overlapped = Booking.where(
+        'start < ? AND finish > ? AND status != ? AND house_id = ? AND id != ?',
+        rf_e, rs_e, Booking.statuses[:canceled], house_id, booking_id).all
+    end
+    if overlapped.any?
+      result[:result] = false
+      result[:overlapped] = overlapped.map(&:number)
+    end
+    return result
   end
 
   def get_prices houses = []
@@ -141,7 +165,7 @@ def get_prices_old houses = []
     end
   end
 
-  def get_available_houses #rs, rf
+  def get_available_houses
     overlapped_bookings = Booking.where(
       'start < ? AND finish > ? AND status != ?', rf_e, rs_e,
       Booking.statuses[:canceled]).all.map{
@@ -155,10 +179,13 @@ def get_prices_old houses = []
 
   end
 
-  def prepare settings
-    rs_e = rs - settings['dtnb'].to_i.days
-    rf_e = rf + settings['dtnb'].to_i.days
-  end
+  # def prepare settings
+  #   self.rs = rs.to_date
+  #   self.rf = rf.to_date
+  #   self.rs_e = rs - settings['dtnb'].to_i.days
+  #   self.rf_e = rf + settings['dtnb'].to_i.days
+  #   self.duration = (rf-rs).to_i
+  # end
 
   private
 

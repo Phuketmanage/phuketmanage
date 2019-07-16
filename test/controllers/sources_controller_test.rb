@@ -5,7 +5,7 @@ class SourcesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     sign_in users(:admin)
-    @source = sources(:one)
+    @source = sources(:airbnb)
   end
 
   test "should get index" do

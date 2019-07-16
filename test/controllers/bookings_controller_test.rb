@@ -18,14 +18,6 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create booking" do
-    assert_difference('Booking.count') do
-      post bookings_url, params: { booking: { finish: @booking.finish, house_id: @booking.house_id, start: @booking.start, tenant_id: @booking.tenant_id } }
-    end
-
-    assert_redirected_to bookings_url
-  end
-
   test "should show booking" do
     get booking_url(@booking)
     assert_response :success
@@ -38,7 +30,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update booking" do
     patch booking_url(@booking), params: { booking: { finish: @booking.finish, house_id: @booking.house_id, start: @booking.start, tenant_id: @booking.tenant_id } }
-    assert_redirected_to bookings_url
+    assert_redirected_to edit_booking_path(@booking)
   end
 
   test "should destroy booking" do

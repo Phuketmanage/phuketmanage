@@ -141,10 +141,10 @@
   <% @connections.each do |c| %>
     <p>
       <%= "#{c.source.name}: #{c.link}" %>
-      <%= link_to 'Destroy', connection_path(c.id, house_id: house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+      <%= link_to 'Destroy', connection_path(c.id), method: :delete, data: { confirm: 'Are you sure?' } %>
     </p>
   <% end %>
-  <%= form_with(model: connection, url: connections_path(house_id: house.number), local: true) do |form| %>
+  <%= form_with(model: connection, url: connections_path(hid: house.number), local: true) do |form| %>
     <% if connection.errors.any? %>
       <%= render 'shared/error_messages', object: form.object %>
     <% end %>

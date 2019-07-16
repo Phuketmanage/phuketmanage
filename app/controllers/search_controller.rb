@@ -1,12 +1,13 @@
 class SearchController < ApplicationController
   def index
-    @search = Search.new(search_params)
+    @search = Search.new( rs: params[:search][:rs],
+                          rf: params[:search][:rf],
+                          dtnb: @settings['dtnb'])
     if @search.stage == nil || @search.stage == '1'
       @houses = []
       if !@search.valid?
         render :index and return
       end
-      @search.prepare @settings
       @houses = @search.get_available_houses
       @prices = @search.get_prices @houses
     end

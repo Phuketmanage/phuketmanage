@@ -1,3 +1,3 @@
 class Source < ApplicationRecord
-  has_many :connections
+  has_many :connections, dependent: :destroy
 end
