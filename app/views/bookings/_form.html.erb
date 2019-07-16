@@ -40,7 +40,7 @@
       <%= form.number_field :agent, class: 'form-control calcs' %>
     </div>
     <div class="col-md-2 form-group">
-      <%= form.label :comm %> <span id='comm_percent'><%= (@booking.comm/@booking.sale.to_f*100).round(2) if !@booking_original.nil? %></span> %
+      <%= form.label :comm %> <span id='comm_percent'><%= ((@booking.agent+@booking.comm)/@booking.sale.to_f*100).round(2) if !@booking_original.nil? %></span> %
       <%= form.number_field :comm, class: 'form-control calcs' %>
       <small>Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
     </div>
