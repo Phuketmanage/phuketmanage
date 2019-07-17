@@ -2,7 +2,23 @@
 <% if @house %>
   <%= link_to 'Sync', house_sync_path(number: @house.number,  params: { a: 'update'}) %> |
   <%= link_to 'Clear synced', house_sync_path(@house.number,params: { a: 'clear'}) %>
+<% end %>
 
+<% if @house %>
+  | <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
+  <% if !params[:past].present? %>
+    | <%= link_to "Old bookings for #{@house.code}", house_bookings_path(@house.number, past: true) %>
+  <% else %>
+    | <%= link_to "Current bookings for #{@house.code}", house_bookings_path(@house.number) %>
+  <% end %>
+  | <%= link_to 'Bookings for all houses', bookings_path %>
+<% else %>
+  <%= link_to 'New Booking', new_booking_path %>
+  <% if !params[:past].present? %>
+    | <%= link_to 'Old bookings', bookings_path(past: true) %>
+  <% else %>
+    | <%= link_to 'Current bookings', bookings_path %>
+  <% end %>
 <% end %>
 
 <table class="table">
@@ -51,21 +67,4 @@
     <% end %>
   </tbody>
 </table>
-
-<% if @house %>
-  <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
-  <% if !params[:past].present? %>
-    | <%= link_to "Old bookings for #{@house.code}", house_bookings_path(@house.number, past: true) %>
-  <% else %>
-    | <%= link_to "Current bookings for #{@house.code}", house_bookings_path(@house.number) %>
-  <% end %>
-  | <%= link_to 'Bookings for all houses', bookings_path %>
-<% else %>
-  <%= link_to 'New Booking', new_booking_path %>
-  <% if !params[:past].present? %>
-    | <%= link_to 'Old bookings', bookings_path(past: true) %>
-  <% else %>
-    | <%= link_to 'Current bookings', bookings_path %>
-  <% end %>
-<% end %>
 

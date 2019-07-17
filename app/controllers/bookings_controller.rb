@@ -124,7 +124,7 @@ class BookingsController < ApplicationController
           # next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
           # Check if was never synced
           what_to_sync = 'upcoming'
-          what_to_sync = 'all' if c.last_sync.nil?
+          # what_to_sync = 'all' if c.last_sync.nil?
           get_synced_data house, c, what_to_sync
           c.update_attributes(last_sync: Time.zone.now)
         end
@@ -133,8 +133,7 @@ class BookingsController < ApplicationController
       end
     elsif params[:a] == 'clear'
       house = House.find_by(number: params[:hid])
-
-      house.bookings.where.not(source_id: nil).destroy_all
+      house.bookings.where('source_id IS NOT NULL AND number IS NULL').destroy_all
       house.connections.update_all(last_sync: nil)
       redirect_to house_bookings_path(house.number)
     end
@@ -251,6 +250,7 @@ class BookingsController < ApplicationController
           #Tripadvisor: Check if booking was synced before
 
           booking = house.bookings.new(
+                                  number: nil,
                                   source_id: connection.source_id,
                                   start: e.dtstart,
                                   finish: e.dtend,
