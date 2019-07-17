@@ -31,11 +31,19 @@ class BookingsController < ApplicationController
   # GET /bookings
   # GET /bookings.json
   def index
-    if !params[:number].present?
-      @bookings = Booking.all.order(:start)
+    if !params[:hid].present?
+      if !params[:past].present? #when
+        @bookings = Booking.where('finish >= ?', Time.zone.now.to_date).order(:start)
+      else
+        @bookings = Booking.where('finish < ?', Time.zone.now.to_date).order(:start)
+      end
     else
-      @house = House.find_by(number: params[:number])
-      @bookings = @house.bookings.order(:start)
+      @house = House.find_by(number: params[:hid])
+      if !params[:past].present? #when
+        @bookings = @house.bookings.where('finish >= ?', Time.zone.now.to_date).order(:start)
+      else
+        @bookings = @house.bookings.where('finish < ?', Time.zone.now.to_date).order(:start)
+      end
     end
   end
 
@@ -48,8 +56,8 @@ class BookingsController < ApplicationController
   def new
     @booking = Booking.new
     @houses = House.all.active
-    if params[:number]
-      @booking.house = @houses.find_by(number: params[:number])
+    if params[:hid]
+      @booking.house = @houses.find_by(number: params[:hid])
     end
 
     @tenants = User.with_role('Tenant')
@@ -107,10 +115,10 @@ class BookingsController < ApplicationController
   def sync
 
     if params[:a] == 'update'
-      if !params[:number].present?
+      if !params[:hid].present?
         redirect_to bookings_path
       else
-        house = House.find_by(number: params[:number])
+        house = House.find_by(number: params[:hid])
         connections = house.connections
         connections.each do |c|
           # next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
@@ -124,7 +132,7 @@ class BookingsController < ApplicationController
         redirect_to house_bookings_path(house.number)
       end
     elsif params[:a] == 'clear'
-      house = House.find_by(number: params[:number])
+      house = House.find_by(number: params[:hid])
 
       house.bookings.where.not(source_id: nil).destroy_all
       house.connections.update_all(last_sync: nil)

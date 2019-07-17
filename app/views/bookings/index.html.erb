@@ -1,4 +1,4 @@
-<h1>Bookings <%= @house.code if @house %></h1>
+<h1><%= 'Old ' if params[:past].present? %>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
 <% if @house %>
   <%= link_to 'Sync', house_sync_path(number: @house.number,  params: { a: 'update'}) %> |
   <%= link_to 'Clear synced', house_sync_path(@house.number,params: { a: 'clear'}) %>
@@ -29,7 +29,7 @@
         <td><%= booking.number %></td>
         <td><%= booking.start.strftime('%d.%m.%Y') %></td>
         <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
-        <td><%= booking.house.code %></td>
+        <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
         <td><%= "#{booking.tenant.name} #{booking.tenant.surname}" if booking.tenant %></td>
         <td><%= Source.find(booking.source_id).name if booking.source_id %></td>
         <td><%= booking.sale %></td>
@@ -40,7 +40,6 @@
         </td>
         <td><%= booking.nett %></td>
         <td>
-          <%= link_to 'Show', booking %> |
           <%= link_to 'Edit', edit_booking_path(booking) %> |
           <% if @house %>
             <%= link_to 'Destroy', booking_path(booking, hid: @house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -55,8 +54,18 @@
 
 <% if @house %>
   <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
-  | <%= link_to 'All Bookings', bookings_path %>
+  <% if !params[:past].present? %>
+    | <%= link_to "Old bookings for #{@house.code}", house_bookings_path(@house.number, past: true) %>
+  <% else %>
+    | <%= link_to "Current bookings for #{@house.code}", house_bookings_path(@house.number) %>
+  <% end %>
+  | <%= link_to 'Bookings for all houses', bookings_path %>
 <% else %>
   <%= link_to 'New Booking', new_booking_path %>
+  <% if !params[:past].present? %>
+    | <%= link_to 'Old bookings', bookings_path(past: true) %>
+  <% else %>
+    | <%= link_to 'Current bookings', bookings_path %>
+  <% end %>
 <% end %>
 
