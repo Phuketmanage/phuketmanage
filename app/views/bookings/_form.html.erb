@@ -50,6 +50,13 @@
       <small>Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col form-group">
+      <%= form.text_area :comment, class: 'form-control', rows: 6 %>
+    </div>
+  </div>
+
   <div>
       <%= form.submit 'Save', class: 'btn btn-primary' %>
       <% if @booking.house %>

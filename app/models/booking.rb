@@ -18,6 +18,73 @@ class Booking < ApplicationRecord
     self.comm = (sale - agent - nett).round()
   end
 
+def self.sync houses = []
+    require 'open-uri'
+    houses = House.all if houses.empty?
+    houses.each do |h|
+      h.bookings.where('source_id IS NOT NULL AND number IS NULL').destroy_all
+      connections = h.connections
+      connections.each do |c|
+        begin
+          cal_file = open(c.link)
+          cals = Icalendar::Calendar.parse(cal_file)
+          cal = cals.first
+          # if c.source.name == 'Tripadvisor'
+
+          # end
+
+          cal.events.each do |e|
+            # #Airbnb specific: If date was blocked  few days before and
+            # # after booking
+            next if c.source.name == 'Airbnb' &&
+                    ( e.summary.strip == 'Airbnb (Not available)' ||
+                    e.description.nil? )
+
+            next if e.dtend < Time.zone.now
+            # #Airbnb, Homeaway: Check if booking was synced before
+            # if  c.source.name == 'Airbnb' ||
+            #     c.source.name == 'Homeaway' ||
+            #     c.source.name == 'Booking'
+            #   existing_booking = h.bookings.where(ical_UID: e.uid.to_s).first
+            #   if !existing_booking.nil?
+            #     #If booking was synced before and didn't changed
+            #     next if existing_booking.start == e.dtstart &&
+            #             existing_booking.finish == e.dtend &&
+            #             existing_booking.comment == "#{e.summary} \n #{e.description}"
+            #     #If booking was synced before but was changed need to rewrite
+            #     existing_booking.destroy
+            #     # Here need to add notification
+            #     # Notification.new( type: Booking,
+            #     #                   comment: 'Updated after sync',
+            #     #                   link: link_to booking_path())
+            #   end
+            # end
+
+            booking = h.bookings.new(
+                                    number: nil,
+                                    source_id: c.source_id,
+                                    start: e.dtstart,
+                                    finish: e.dtend,
+                                    ical_UID: e.uid,
+                                    comment: "#{e.summary} \n #{e.description}")
+            search = Search.new(rs: booking.start, rf: booking.finish)
+            prices = search.get_prices [h]
+            booking.calc prices.first[1]
+            booking.save
+          end
+        rescue OpenURI::HTTPError => error
+          response = error.io
+          response.status
+          # => ["503", "Service Unavailable"]
+          response.string
+          # => <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html DIR=\"LTR\">\n<head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"><meta name=\"viewport\" content=\"initial-scale=1\">...
+        end
+        c.update(last_sync: Time.zone.now)
+      end
+    end
+  end
+
+
   private
 
     def price_chain

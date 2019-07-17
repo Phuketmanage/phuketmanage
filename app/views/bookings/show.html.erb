@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-md-1"><strong>Start:</strong></div>
+  <div class="col"><%= @booking.start.strftime('%d.%m.%Y') %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Finish:</strong></div>
+  <div class="col"><%= @booking.finish.strftime('%d.%m.%Y') %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>House:</strong></div>
+  <div class="col"><%= @booking.house_id %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Tenant:</strong></div>
+  <div class="col"><%= @booking.tenant_id %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Status:</strong></div>
+  <div class="col"><%= @booking.status %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Sale:</strong></div>
+  <div class="col"><%= @booking.sale %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Agent:</strong></div>
+  <div class="col"><%= @booking.agent %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Comm:</strong></div>
+  <div class="col"><%= @booking.comm %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Nett:</strong></div>
+  <div class="col"><%= @booking.nett %></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><strong>Comment:</strong></div>
+  <div class="col"><%= simple_format @booking.comment %></div>
+</div>
+
+<%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
