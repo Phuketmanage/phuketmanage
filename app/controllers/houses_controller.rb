@@ -21,7 +21,7 @@ class HousesController < ApplicationController
     @house = House.new
     @owners = User.with_role('Owner')
     @types = HouseType.all
-    @sources = Source.all.order(:name)
+    @sources = Source.syncable.order(:name)
     @connections = @house.connections.all
     @connection = @house.connections.new
   end
@@ -30,7 +30,7 @@ class HousesController < ApplicationController
   def edit
     @owners = User.with_role('Owner')
     @types = HouseType.all
-    @sources = Source.all.order(:name)
+    @sources = Source.syncable.order(:name)
     @connections = @house.connections.all
     @connection = @house.connections.new
   end
@@ -54,7 +54,7 @@ class HousesController < ApplicationController
       else
         @owners = User.with_role('Owner')
         @types = HouseType.all
-        @sources = Source.all.order(:name)
+        @sources = Source.syncable.order(:name)
         @connections = @house.connections.all
         @connection = @house.connections.new
         format.html { render :new }

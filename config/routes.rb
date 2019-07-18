@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     get 'search', to: 'search#index'
     resources :settings
     resources :house_types
-    resources :sources
+    resources :sources, except: :show
     resources :connections, only: [:create, :destroy]
   end
 

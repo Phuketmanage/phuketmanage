@@ -7,19 +7,19 @@
 
   <div class="row form-group">
     <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2 ">
+    <div class="col-md-2">
       <%= form.select :owner_id,
             @owners.all.map {|o| ["#{o.name} #{o.surname}", o.id]},
-                      { prompt: 'Select owner' }, { class: "form-control",  } %>
+                      { prompt: 'Select owner' }, { class: "form-control"  } %>
     </div>
     <%#= form.label :type_id, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2 ">
+    <div class="col-md-2">
       <%= form.select :type_id,
             @types.all.map {|t| [t.send("name_#{I18n.locale}"), t.id]},
-                      { prompt: 'Select type' }, { class: "form-control",  } %>
+                      { prompt: 'Select type' }, { class: "form-control"  } %>
     </div>
     <%#= form.label :code, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2 ">
+    <div class="col-md-2">
       <%= form.text_field :code, class: 'form-control', placeholder: 'Code' %>
     </div>
 

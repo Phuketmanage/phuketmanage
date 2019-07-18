@@ -18,7 +18,7 @@ class Booking < ApplicationRecord
     self.comm = (sale - agent - nett).round()
   end
 
-def self.sync houses = []
+  def self.sync houses = []
     require 'open-uri'
     houses = House.all if houses.empty?
     houses.each do |h|
@@ -85,7 +85,6 @@ def self.sync houses = []
       end
     end
   end
-
 
   private
 

@@ -1,22 +1,25 @@
 <%= form_with(model: source, local: true) do |form| %>
   <% if source.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(source.errors.count, "error") %> prohibited this source from being saved:</h2>
-
-      <ul>
-        <% source.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render 'shared/error_messages', object: form.object %>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+  <div class="row">
+    <div class="col-md-2 form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: 'form-control' %>
+    </div>
   </div>
 
+  <div class="form-check mb-2">
+    <%= form.check_box :syncable, { class: 'form-check-input',
+                            id: 'syncable_check_box' } %>
+    <%= form.label :syncable, {     class: 'form-check-label',
+                            for: 'syncable_check_box' } %>
+  </div>
+
+
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Back', sources_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>
