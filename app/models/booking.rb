@@ -77,9 +77,9 @@ class Booking < ApplicationRecord
                                     synced: true)
             search = Search.new(rs: booking.start, rf: booking.finish)
             prices = search.get_prices [h]
-            puts "Event: #{e.inspect}"
-            puts "Search: #{search.inspect}"
-            puts "House: #{h.inspect}"
+            # puts "Event: #{e.inspect}"
+            # puts "Search: #{search.inspect}"
+            # puts "House: #{h.inspect}"
             booking.calc prices
             booking.save
           end
