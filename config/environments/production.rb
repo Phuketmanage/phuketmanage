@@ -87,6 +87,7 @@ Rails.application.configure do
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.log_level = ENV["LOG_LEVEL"].present? ? ENV["LOG_LEVEL"] : :info
   end
 
   # Do not dump schema after migrations.
