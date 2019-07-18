@@ -50,7 +50,7 @@
         <td><%= booking.agent %></td>
         <td><%= booking.comm %></td>
         <td>
-          <%= ((booking.agent + booking.comm).to_f/booking.sale*100).round(2) %>%
+          <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
         </td>
         <td><%= booking.nett %></td>
         <td>

@@ -39,8 +39,10 @@ class Search
   def get_prices houses = []
     # t1 = Time.now
     result = {}
+
     houses.each do |house|
       total = 0
+
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration).first
       next if durations.nil?

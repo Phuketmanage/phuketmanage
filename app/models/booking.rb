@@ -12,10 +12,14 @@ class Booking < ApplicationRecord
   validate :price_chain
 
   def calc price
-    self.sale = (price[:total]).round()
-    self.agent = 0
-    self.nett = (sale * (100-house.type.comm).to_f/100).round()
-    self.comm = (sale - agent - nett).round()
+    if price.empty?
+      self.sale = self.agent = self.nett = self.comm = 0
+    else
+      self.sale = (price.first[1][:total]).round()
+      self.agent = 0
+      self.nett = (sale * (100-house.type.comm).to_f/100).round()
+      self.comm = (sale - agent - nett).round()
+    end
   end
 
   def self.sync houses = []
@@ -40,7 +44,9 @@ class Booking < ApplicationRecord
             next if c.source.name == 'Airbnb' &&
                     ( e.summary.strip == 'Airbnb (Not available)' ||
                     e.description.nil? )
-
+            next if c.source.name == 'Tripadvisor' &&
+                    ( e.summary.strip == 'Not available' ||
+                    e.description.nil? )
             next if e.dtend < Time.zone.now
             # #Airbnb, Homeaway: Check if booking was synced before
             # if  c.source.name == 'Airbnb' ||
@@ -74,7 +80,7 @@ class Booking < ApplicationRecord
             puts "Event: #{e.inspect}"
             puts "Search: #{search.inspect}"
             puts "House: #{h.inspect}"
-            booking.calc prices.first[1]
+            booking.calc prices
             booking.save
           end
         rescue OpenURI::HTTPError => error

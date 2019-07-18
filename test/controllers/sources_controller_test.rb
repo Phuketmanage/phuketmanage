@@ -23,12 +23,7 @@ class SourcesControllerTest < ActionDispatch::IntegrationTest
       post sources_url, params: { source: { name: @source.name } }
     end
 
-    assert_redirected_to source_url(Source.last)
-  end
-
-  test "should show source" do
-    get source_url(@source)
-    assert_response :success
+    assert_redirected_to sources_url
   end
 
   test "should get edit" do
@@ -38,7 +33,7 @@ class SourcesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update source" do
     patch source_url(@source), params: { source: { name: @source.name } }
-    assert_redirected_to source_url(@source)
+    assert_redirected_to sources_url
   end
 
   test "should destroy source" do

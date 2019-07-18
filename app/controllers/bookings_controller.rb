@@ -73,7 +73,7 @@ class BookingsController < ApplicationController
     unless @booking.block?
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
-      @booking_original.calc prices.first[1]
+      @booking_original.calc prices
     end
   end
 
@@ -95,7 +95,7 @@ class BookingsController < ApplicationController
       @booking.sale = @booking.agent = @booking.comm = @booking.nett = 0
     else
       prices = search.get_prices [@booking.house]
-      @booking.calc prices.first[1]
+      @booking.calc prices
     end
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
@@ -138,7 +138,7 @@ class BookingsController < ApplicationController
       @tenants = User.with_role('Tenant')
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
-      @booking_original.calc prices.first[1]
+      @booking_original.calc prices
       render :edit and return
     end
 
@@ -150,7 +150,7 @@ class BookingsController < ApplicationController
             @booking.saved_changes.key?(:house_id)
             search = Search.new({rs: @booking.start, rf: @booking.finish})
             prices = search.get_prices [@booking.house]
-            @booking.calc prices.first[1]
+            @booking.calc prices
             @booking.save
         end
         format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully updated.' }
@@ -161,7 +161,7 @@ class BookingsController < ApplicationController
         @booking_original = @booking.dup
         search = Search.new({rs: @booking.start, rf: @booking.finish})
         prices = search.get_prices [@booking.house]
-        @booking_original.calc prices.first[1]
+        @booking_original.calc prices
         format.html { render :edit }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
