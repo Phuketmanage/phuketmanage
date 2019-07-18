@@ -122,31 +122,6 @@ class BookingsController < ApplicationController
       Booking.sync
       redirect_to bookings_path and return
     end
-
-    # if params[:a] == 'update'
-    #   if !params[:hid].present?
-    #     redirect_to bookings_path
-    #   else
-    #     house = House.find_by(number: params[:hid])
-    #     connections = house.connections
-    #     connections.each do |c|
-    #       # next if c.source_id == 1 || c.source_id == 2 || c.source_id == 3
-    #       # Check if was never synced
-    #       what_to_sync = 'upcoming'
-    #       # what_to_sync = 'all' if c.last_sync.nil?
-    #       get_synced_data house, c, what_to_sync
-    #       c.update_attributes(last_sync: Time.zone.now)
-    #     end
-    #     bookings = house.bookings.order(:start)
-    #     redirect_to house_bookings_path(house.number)
-    #   end
-    # elsif params[:a] == 'clear'
-    #   house = House.find_by(number: params[:hid])
-    #   house.bookings.where('source_id IS NOT NULL AND number IS NULL').destroy_all
-    #   house.connections.update_all(last_sync: nil)
-    #   redirect_to house_bookings_path(house.number)
-    # end
-
   end
 
   # PATCH/PUT /bookings/1
@@ -219,64 +194,5 @@ class BookingsController < ApplicationController
       params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id, :sale, :agent, :comm, :nett, :status, :comment)
     end
 
-    # def get_synced_data house, connection, what_to_sync
-    #   # house.bookings.where(source_id: connection.source_id).destroy_all
-    #   require 'open-uri'
-    #   begin
-    #     cal_file = open(connection.link)
-    #     cals = Icalendar::Calendar.parse(cal_file)
-    #     cal = cals.first
-    #     if connection.source.name == 'Tripadvisor'
-    #       house.bookings.where(source_id: connection.source_id).destroy_all
-    #     end
-    #     cal.events.each do |e|
-
-    #       #Airbnb specific: If date was blocked  few days before and
-    #       # after booking
-    #       next if connection.source.name == 'Airbnb' &&
-    #               ( e.summary.strip == 'Airbnb (Not available)' ||
-    #               e.description.nil? )
-    #       next if what_to_sync == 'upcoming' &&
-    #               e.dtend < Time.zone.now
-    #       #Airbnb, Homeaway: Check if booking was synced before
-    #       if  connection.source.name == 'Airbnb' ||
-    #           connection.source.name == 'Homeaway' ||
-    #           connection.source.name == 'Booking'
-    #         existing_booking = house.bookings.where(ical_UID: e.uid.to_s).first
-    #         if !existing_booking.nil?
-    #           #If booking was synced before and didn't changed
-    #           next if existing_booking.start == e.dtstart &&
-    #                   existing_booking.finish == e.dtend &&
-    #                   existing_booking.comment == "#{e.summary} \n #{e.description}"
-    #           #If booking was synced before but was changed need to rewrite
-    #           existing_booking.destroy
-    #           # Here need to add notification
-    #           # Notification.new( type: Booking,
-    #           #                   comment: 'Updated after sync',
-    #           #                   link: link_to booking_path())
-    #         end
-    #       end
-    #       #Tripadvisor: Check if booking was synced before
-
-    #       booking = house.bookings.new(
-    #                               number: nil,
-    #                               source_id: connection.source_id,
-    #                               start: e.dtstart,
-    #                               finish: e.dtend,
-    #                               ical_UID: e.uid,
-    #                               comment: "#{e.summary} \n #{e.description}")
-    #       search = Search.new({rs: booking.start, rf: booking.finish})
-    #       prices = search.get_prices [booking.house]
-    #       booking.calc prices.first[1]
-    #       booking.save
-    #     end
-    #   rescue OpenURI::HTTPError => error
-    #     response = error.io
-    #     response.status
-    #     # => ["503", "Service Unavailable"]
-    #     response.string
-    #     # => <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html DIR=\"LTR\">\n<head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"><meta name=\"viewport\" content=\"initial-scale=1\">...
-    #   end
-    # end
 
 end

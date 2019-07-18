@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     devise_for :users
+    get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
     resources :bookings
     resources :houses do
       resources :prices, only: [:index]
@@ -16,7 +17,6 @@ Rails.application.routes.draw do
     delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
     get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
     get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
-    get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
     # post 'houses/:id/connections', to: 'houses#create_connection', as: 'add_connection'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
 

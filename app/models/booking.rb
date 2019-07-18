@@ -22,7 +22,8 @@ def self.sync houses = []
     require 'open-uri'
     houses = House.all if houses.empty?
     houses.each do |h|
-      h.bookings.where('source_id IS NOT NULL AND number IS NULL').destroy_all
+      # h.bookings.where('source_id IS NOT NULL AND number IS NULL').destroy_all
+      h.bookings.where(synced: true).destroy_all
       connections = h.connections
       connections.each do |c|
         begin
@@ -66,7 +67,8 @@ def self.sync houses = []
                                     start: e.dtstart,
                                     finish: e.dtend,
                                     ical_UID: e.uid,
-                                    comment: "#{e.summary} \n #{e.description}")
+                                    comment: "#{e.summary} \n #{e.description}",
+                                    synced: true)
             search = Search.new(rs: booking.start, rf: booking.finish)
             prices = search.get_prices [h]
             booking.calc prices.first[1]

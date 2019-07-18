@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_12_153959) do
+ActiveRecord::Schema.define(version: 2019_07_18_092452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,10 +31,12 @@ ActiveRecord::Schema.define(version: 2019_07_12_153959) do
     t.integer "agent"
     t.integer "comm"
     t.integer "nett"
+    t.boolean "synced", default: false
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
     t.index ["status"], name: "index_bookings_on_status"
+    t.index ["synced"], name: "index_bookings_on_synced"
     t.index ["tenant_id"], name: "index_bookings_on_tenant_id"
   end
 
