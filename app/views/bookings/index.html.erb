@@ -1,8 +1,7 @@
 <h1><%= 'Old ' if params[:past].present? %>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
 
 <% if @house %>
-  <%= link_to 'Sync', booking_sync_path(hid: @house.number) %>
-  | <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
+  <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
   <% if !params[:past].present? %>
     | <%= link_to "Old bookings for #{@house.code}", house_bookings_path(@house.number, past: true) %>
   <% else %>
@@ -10,8 +9,7 @@
   <% end %>
   | <%= link_to 'Bookings for all houses', bookings_path %>
 <% else %>
-  <%= link_to 'Sync', booking_sync_path %>
-  | <%= link_to 'New Booking', new_booking_path %>
+  <%= link_to 'New Booking', new_booking_path %>
   <% if !params[:past].present? %>
     | <%= link_to 'Old bookings', bookings_path(past: true) %>
   <% else %>
