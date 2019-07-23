@@ -1,4 +1,4 @@
-$ ->
+$(document).on "turbolinks:load", ->
   $('.price_amount').change ->
     id = $(this).data('id')
     array = [1, 2, 3, 4, 5];

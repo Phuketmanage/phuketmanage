@@ -11,7 +11,8 @@ class Booking < ApplicationRecord
   belongs_to :tenant, class_name: 'User', optional: true
   validate :price_chain
 
-  def self.prepare_timeline today, last_date
+  def self.prepare_timeline last_date = nil
+    today = Time.zone.now.in_time_zone('Bangkok').to_date
     days = (last_date - today).to_i+1
     timeline_data = {}
 
