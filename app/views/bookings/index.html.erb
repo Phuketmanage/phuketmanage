@@ -21,6 +21,7 @@
   <thead>
     <tr>
       <th>Number</th>
+      <th>Status</th>
       <th>Start</th>
       <th>Finish</th>
       <th>House</th>
@@ -39,6 +40,7 @@
     <% @bookings.each do |booking| %>
       <tr>
         <td><%= booking.number %></td>
+        <td><%= booking.status %></td>
         <td><%= booking.start.strftime('%d.%m.%Y') %></td>
         <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
         <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>

@@ -94,8 +94,6 @@ body {
  * Personal
  */
 
-
-
 .accordion .card .card-header h5 a:not(.collapsed) .rotate-icon {
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
@@ -129,4 +127,58 @@ body {
   text-color: grey
 }
 
+/*
+ * Timeline
+ */
 
+.timeline_container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  border: 1px solid;
+  overflow: auto;
+  white-space: nowrap;
+  font-size: 0;
+
+}
+
+.house {
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  font-size: initial;
+}
+
+.cell, .date {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  padding: 0px;
+  margin: 0px;
+  font-size: initial;
+}
+
+.month_date {
+  display: inline-block;
+}
+
+.date {
+  text-align: center;
+}
+
+.month {
+  display: block;
+  font-size: initial;
+  text-align: center;
+  border-left: 1px solid black;
+}
+
+.booked {
+  background-color: green;
+}
+
+.free, .date {
+  background-color: white;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+}

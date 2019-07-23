@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get '/:locale' , to: 'pages#index'
     devise_for :users
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
+    get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
     resources :bookings
     resources :houses do
       resources :prices, only: [:index]
