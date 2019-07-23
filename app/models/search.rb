@@ -37,12 +37,9 @@ class Search
   end
 
   def get_prices houses = []
-    # t1 = Time.now
     result = {}
-
     houses.each do |house|
       total = 0
-
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration).first
       next if durations.nil?
@@ -51,12 +48,10 @@ class Search
         amount = house.prices.where(duration_id: durations.id,
                                     season_id: s[:id]).first.amount
         price = amount*s[:days]
-        # puts "#{s[:ss].strftime('%d.%m.%Y')}-#{s[:sf].strftime('%d.%m.%Y')} / #{s[:days]} = #{price}"
         total += price
       end
       result[house.id] = {total: total, per_day: total/duration.to_f.round()}
     end
-    # puts "#{(Time.now-t1)}ms"
     return result
   end
 
@@ -65,14 +60,14 @@ class Search
     overlapped_info = {}
     days_left = duration
     year_modifier = 0
+    year = rs.year
     until days_left == 0 do
-      year = rs.year+year_modifier
       seasons.each_with_index do |s, index|
-        season_of_next_year = 0
-        season_of_next_year = 1 if s.ssm > s.sfm
-        ss = Time.parse("#{s.ssd}.#{s.ssm}.#{year}").to_date
-        sf = Time.parse("#{s.sfd}.#{s.sfm}.#{year+season_of_next_year}").to_date
-        year_modifier +=1 if index == seasons.size-1
+        trans_season_modifier = 0
+        trans_season_modifier = -1 if s.ssm > s.sfm
+        ss = Time.parse("#{s.ssd}.#{s.ssm}.#{year+trans_season_modifier}").to_date
+        sf = Time.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
+        year +=1 if index == seasons.size-1
         next if !overlapping? ss, sf, rs, rf
         overlapping_seasons << get_overlapped_info(s.id, ss, sf, rs, rf)
         days_left -= overlapping_seasons.last[:days]

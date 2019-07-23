@@ -11,6 +11,55 @@ class Booking < ApplicationRecord
   belongs_to :tenant, class_name: 'User', optional: true
   validate :price_chain
 
+  def self.prepare_timeline today, last_date
+    days = (last_date - today).to_i+1
+    timeline_data = {}
+
+    houses = House.order(unavailable: :asc).select(:id)
+    houses.each do |h|
+      bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
+      timeline_data[h.id] = {}
+      timeline_data[h.id]['tmp_house'] = h.code
+      timeline_data[h.id]['tmp_today'] = today
+      timeline_data[h.id]['tmp_last_date'] = last_date
+      index = 0
+      last_cell = 0
+      bookings.each do |b|
+        index += 1
+        timeline_data[h.id][b.id] = {}
+        if b.start < today
+          empty_cells = 0
+          booking_cells = (b.finish - today).to_i+1
+        else
+          empty_cells = (b.start - today).to_i-last_cell
+          booking_cells = (b.finish - cb.start).to_i+1
+          # over_cells = last_cell+empty_cells+booking_cells - @days*2
+          # over_cells - 0.5 if over_cells % 2 > 0
+          # booking_cells -= over_cells if over_cells > 0
+        end
+
+        timeline_data[h.id][b.id][:tmp_period] = "#{b.start} - #{b.finish}"
+        timeline_data[h.id][b.id][:empty_cells] = empty_cells
+        timeline_data[h.id][b.id][:booking_cells] = booking_cells
+        timeline_data[h.id][b.id][:class] = b.status
+        last_cell += empty_cells + booking_cells
+        timeline_data[h.id][b.id][:last_cell] = last_cell
+        if bookings.count(:id) == index
+          empty_cells = days - last_cell +1
+          timeline_data[h.id][0] = {}
+          timeline_data[h.id][0][:empty_cells] = empty_cells
+          timeline_data[h.id][0][:booking_cells] = 0
+        end
+      end
+      if bookings.empty?
+        timeline_data[h.id][0] = {}
+        timeline_data[h.id][0][:empty_cells] = days
+        timeline_data[h.id][0][:booking_cells] = 0
+      end
+    end
+    return timeline_data
+  end
+
   def calc price
     if price.empty?
       self.sale = self.agent = self.nett = self.comm = 0

@@ -47,6 +47,17 @@ class BookingsController < ApplicationController
     end
   end
 
+  def index_timeline
+    today = Time.zone.now.in_time_zone('Bangkok').to_date
+    if !params[:period].nil?
+      last_date = Time.zone.now.in_time_zone('Bangkok').to_date + params[:period].to_i
+    else
+      last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+    end
+    # @bookings = Bookings.select(:id, :start, :finish, :status).where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, CarBooking.statuses[:canceled]).order(:end)
+    timeline_data = Booking.prepare_timeline today, last_date
+  end
+
   # GET /bookings/1
   # GET /bookings/1.json
   def show

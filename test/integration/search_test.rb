@@ -176,5 +176,15 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'div.house', count: 3
     assert_select 'div.house', 'Villa 1'
     assert_select 'div.price', '295750 THB'
+
+    # 23.07.2019 catch up
+    rs = "5.01.#{year}".to_date
+    rf = "22.01.#{year}".to_date
+    get search_path params: { search: { rs: rs, rf: rf } }
+    assert_select 'div.duration', '17 days'
+    assert_select 'div.house', count: 3
+    assert_select 'div.house', 'Villa 1'
+    assert_select 'div.price', '129625 THB'
+
   end
 end
