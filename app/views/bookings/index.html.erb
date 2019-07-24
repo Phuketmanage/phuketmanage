@@ -1,6 +1,6 @@
 <h1><%= 'Old ' if params[:past].present? %>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
 
-<%= link_to 'Bookings (timeline view)', bookings_timeline_path %> |
+<%= link_to 'Bookings (timeline view)', bookings_timeline_path(period: 45) %> |
 <% if @house %>
   <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
   <% if !params[:past].present? %>
