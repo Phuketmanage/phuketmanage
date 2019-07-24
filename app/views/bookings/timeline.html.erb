@@ -51,7 +51,7 @@
           <% end %>
           <% width = 30*b[:length] %>
           <div class="cell booked" style="width: <%= width %>px;">
-            #<%= Booking.find_by(number: b[:number]).number %>
+            <%= link_to b[:number], edit_booking_path(Booking.find_by(number: b[:number])) %>
           </div>
           <% last_position = b[:position] + b[:length] - 1 %>
           <!-- Empty cells after last booking -->
