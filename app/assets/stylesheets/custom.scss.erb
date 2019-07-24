@@ -160,7 +160,7 @@ body {
 
 .house_code {
   width: 80px;
-  height: 30px;
+  height: 60px;
   font-size: initial;
 }
 
@@ -180,18 +180,12 @@ body {
   display: inline-block;
 }
 
-.house {
-  display: inline-block;
-  width: 80px;
-  height: 30px;
-  font-size: initial;
-}
-
 .cell, .date {
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
   font-size: initial;
+  line-height: 15px
 }
 
 .month_date {
@@ -216,11 +210,9 @@ body {
   a {
     color: #f8f9fa;
   }
-
 }
 
 .free {
-  background-color: white;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
 }
@@ -239,6 +231,8 @@ body {
 
 .job {
   position:absolute;
-  top: 0px;
-  left: 60px;
+  font-size: 90%;
+  @extend .rounded;
+  line-height: 13px;
+  width: 50px;
 }

@@ -1,14 +1,6 @@
 <%= form_with(model: job_type, local: true) do |form| %>
   <% if job_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(job_type.errors.count, "error") %> prohibited this job_type from being saved:</h2>
-
-      <ul>
-        <% job_type.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render 'shared/error_messages', object: form.object %>
   <% end %>
 
   <div class="field">

@@ -20,7 +20,7 @@
         <% if over_days > 0  %>
           <% month_days -= over_days %>
         <% end %>
-        <% width = 30*month_days %>
+        <% width = 60*month_days %>
         <div class='month' style="width: <%= width %>px;"><%= date.strftime('%B') %></div>
       <% end %>
       <div class="date">
@@ -54,11 +54,20 @@
               </div>
             <% end %>
           <% end %>
-          <% width = 30*b[:length] %>
+          <% width = 60*b[:length] %>
           <div class="cell booked" style="width: <%= width %>px;">
-            <%= link_to b[:number], edit_booking_path(Booking.find_by(number: b[:number])) %>
-            <% Booking.find_by(number: b[:number]).jobs.each do |j| %>
-              <div class='job'><%= j.job_types.name %></div>
+            <% booking = Booking.find_by(number: b[:number]) %>
+            <%= link_to b[:number], edit_booking_path(booking) %>
+            <% n = 1 %>
+            <% booking.jobs.each do |j| %>
+              <% job_position = (j.date-booking.start).to_i %>
+              <div  class='job'
+                    style="background-color: <%= j.job_type.color %>;
+                    top: <%= 15*n %>px;
+                    left: <%= job_position*60+5 %>px;">
+                <%= "#{j.job_type.code}#{j.time}" %>
+              </div>
+              <% n += 1 %>
             <% end %>
           </div>
           <% last_position = b[:position] + b[:length] - 1 %>

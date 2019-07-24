@@ -10,7 +10,7 @@ class Booking < ApplicationRecord
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
   has_many :jobs, dependent: :destroy
-  validate :price_chain
+  validate :price_chain, unless: :allotment?
 
   def self.prepare_timeline period = nil
     today = Time.zone.now.in_time_zone('Bangkok').to_date
