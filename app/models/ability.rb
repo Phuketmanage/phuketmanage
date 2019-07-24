@@ -14,8 +14,8 @@ class Ability
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection ]
-      cannot :destroy, [ HouseType, House, Booking ]
+                      Connection, JobType, Job ]
+      cannot :destroy, [ HouseType, House, Booking, JobType ]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

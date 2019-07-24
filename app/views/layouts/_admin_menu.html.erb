@@ -17,6 +17,12 @@
         <%= link_to 'Sources', sources_path, class: "nav-link" %>
       </li>
       <li class="nav-item">
+        <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to 'Job types', job_types_path, class: "nav-link" %>
+      </li>
+      <li class="nav-item">
         <% if current_user.role? :admin %>
           <%= link_to 'Management', users_path(role: ['Admin', 'Manager']), class: "nav-link" %>
         <% end %>

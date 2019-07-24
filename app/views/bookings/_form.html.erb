@@ -57,6 +57,14 @@
     </div>
   </div>
 
+  <div class="form-check mb-2">
+    <%= form.check_box :allotment, { class: 'form-check-input',
+                            id: 'unavailable_check_box' } %>
+    <%= form.label :allotment, {     class: 'form-check-label',
+                            for: 'unavailable_check_box' } %>
+  </div>
+
+
   <div>
       <%= form.submit 'Save', class: 'btn btn-primary' %>
       <% if @booking.house %>

@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     resources :house_types
     resources :sources, except: :show
     resources :connections, only: [:create, :destroy]
+    resources :jobs, except: :show
+    resources :job_types, except: :show
   end
 
   root to: 'pages#index'

@@ -1,0 +1,63 @@
+<%= form_with(model: job, local: true) do |form| %>
+  <% if job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(job.errors.count, "error") %> prohibited this job from being saved:</h2>
+
+      <ul>
+        <% job.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :job_type_id %>
+      <%= form.select :job_type_id,
+            JobType.all.map {|t| [t.name, t.id]}, {}, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :booking_id %>
+      <%= form.select :booking_id,
+            Booking.where.not(status: Booking.statuses['canceled']).all.order(:start).map {|b| ["#{b.house.code}: #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]}, { prompt: 'Select booking' }, { class: "form-control" } %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :house_id %>
+      <%= form.select :house_id,
+            House.order(:code).all.map {|h| [h.code, h.id]},
+            { prompt: 'Select house' }, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :date %>
+      <%= form.date_field :date, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :time %>
+      <%= form.text_field :time, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-2">
+      <%= form.label :comment %>
+      <%= form.text_field :comment, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Save', class: 'btn btn-primary'%>
+    <%= link_to 'Back', jobs_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

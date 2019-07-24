@@ -6,6 +6,7 @@ class House < ApplicationRecord
   has_many :seasons, dependent: :destroy
   has_many :durations, dependent: :destroy
   has_many :connections, dependent: :destroy
+  has_many :jobs, dependent: :destroy
   validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
 
   scope :active, -> { where(unavailable: false) }

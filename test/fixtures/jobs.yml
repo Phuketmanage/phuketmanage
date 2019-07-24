@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job_type: one
+  booking: one
+  house: one
+  date: 2019-07-24
+  time: MyString
+  comment: MyString
+
+two:
+  job_type: two
+  booking: two
+  house: two
+  date: 2019-07-24
+  time: MyString
+  comment: MyString

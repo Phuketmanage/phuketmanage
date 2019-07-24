@@ -9,6 +9,7 @@ class Booking < ApplicationRecord
     block: 6 }
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
+  has_many :jobs, dependent: :destroy
   validate :price_chain
 
   def self.prepare_timeline period = nil

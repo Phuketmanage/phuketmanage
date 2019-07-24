@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_18_100207) do
+ActiveRecord::Schema.define(version: 2019_07_24_085840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2019_07_18_100207) do
     t.integer "comm"
     t.integer "nett"
     t.boolean "synced", default: false
+    t.boolean "allotment"
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
@@ -99,6 +100,28 @@ ActiveRecord::Schema.define(version: 2019_07_18_100207) do
     t.index ["rooms"], name: "index_houses_on_rooms"
     t.index ["type_id"], name: "index_houses_on_type_id"
     t.index ["unavailable"], name: "index_houses_on_unavailable"
+  end
+
+  create_table "job_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "code"
+    t.string "color"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.bigint "job_type_id", null: false
+    t.bigint "booking_id", null: false
+    t.bigint "house_id"
+    t.date "date"
+    t.string "time"
+    t.string "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["booking_id"], name: "index_jobs_on_booking_id"
+    t.index ["house_id"], name: "index_jobs_on_house_id"
+    t.index ["job_type_id"], name: "index_jobs_on_job_type_id"
   end
 
   create_table "prices", force: :cascade do |t|
@@ -186,6 +209,9 @@ ActiveRecord::Schema.define(version: 2019_07_18_100207) do
   add_foreign_key "durations", "houses"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
+  add_foreign_key "jobs", "bookings"
+  add_foreign_key "jobs", "houses"
+  add_foreign_key "jobs", "job_types"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
 end
