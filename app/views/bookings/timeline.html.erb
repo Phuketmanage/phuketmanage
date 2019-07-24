@@ -29,7 +29,7 @@
 
   <div class="timeline_left_container">
     <% @timeline[:data].each do |h| %>
-      <div class="house_code">
+      <div class="house_code <%= 'text-muted' if House.find_by(number: h[:hid]).unavailable? %>">
         <%= House.find_by(number: h[:hid]).code %>
       </div>
     <% end %>

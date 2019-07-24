@@ -23,7 +23,7 @@ class Booking < ApplicationRecord
     timeline[:start] = today
     timeline[:days] = days
     timeline[:data] = []
-    houses = House.order(unavailable: :asc)
+    houses = House.order(:unavailable, :code)
     houses.each do |h|
       bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
       house = {}
