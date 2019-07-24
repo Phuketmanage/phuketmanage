@@ -131,15 +131,53 @@ body {
  * Timeline
  */
 
+.timeline {
+  font-size: 0;
+  border: 1px solid black;
+  white-space: nowrap;
+}
+
+.timeline_top_container {
+  width: calc(100% - 80px);
+  border: 0px;
+  overflow-x: hidden;
+  font-size: 0;
+  margin-left: 79px;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+ }
+
+.timeline_left_container {
+  display: inline-block;
+  width: 80px;
+  height: 600px;
+  border: 0px;
+  overflow-y: hidden;
+  font-size: 0;
+  border-right: 1px solid black;
+
+}
+
+.house_code {
+  width: 80px;
+  height: 30px;
+  font-size: initial;
+}
+
 .timeline_container {
   position: relative;
-  width: 100%;
+  display: inline-block;
+  width: calc(100% - 80px);
   height: 600px;
-  border: 1px solid;
+  border: 0px;
   overflow: auto;
   white-space: nowrap;
   font-size: 0;
 
+}
+
+.timeline_header {
+  display: inline-block;
 }
 
 .house {
@@ -153,8 +191,6 @@ body {
   display: inline-block;
   width: 30px;
   height: 30px;
-  padding: 0px;
-  margin: 0px;
   font-size: initial;
 }
 
@@ -170,15 +206,28 @@ body {
   display: block;
   font-size: initial;
   text-align: center;
-  border-left: 1px solid black;
 }
 
 .booked {
   background-color: green;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
-.free, .date {
+.free {
   background-color: white;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.house_code {
+  border-bottom: 1px solid black;
+}
+.month {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.date {
+  border-right: 1px solid black;
 }

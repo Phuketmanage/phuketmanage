@@ -1,11 +1,9 @@
 <h1>Timeline</h1>
 
-<div class="timeline_container">
-  <!-- Header open -->
-  <div class="timeline_header">
-    <div class="house">
-      House
-    </div>
+<%= link_to 'Bookings (table view)', bookings_path %>
+
+<div class="timeline">
+  <div class="timeline_top_container">
     <% @timeline[:days].times do |i| %>
       <% date = @timeline[:start]+i.days %>
       <% day = date.day %>
@@ -23,53 +21,59 @@
       <div class="date">
         <%= day %>
       </div>
-      <% if day == month_end %>
+      <% if day == month_end || i+1 == @timeline[:days] %>
         </div> <!-- Close month -->
       <% end %>
     <% end %>
   </div>
-  <!-- Header close -->
 
-  <% @timeline[:data].each do |h| %>
-    <div>
-      <div class="house">
+  <div class="timeline_left_container">
+    <% @timeline[:data].each do |h| %>
+      <div class="house_code">
         <%= House.find_by(number: h[:hid]).code %>
       </div>
-      <% last_position = 0 %>
-      <% i = 1 %>
-      <% h[:bookings].each do |b| %>
+    <% end %>
+  </div>
 
-        <% if b[:position] - 1 > last_position %>
-          <% (b[:position] - 1 - last_position).times do %>
-            <div class="cell free">
-            &nbsp;
-            </div>
+  <div class="timeline_container">
+    <% @timeline[:data].each do |h| %>
+      <div>
+        <% last_position = 0 %>
+        <% i = 1 %>
+        <% h[:bookings].each do |b| %>
+
+          <% if b[:position] - 1 > last_position %>
+            <% (b[:position] - 1 - last_position).times do %>
+              <div class="cell free">
+              &nbsp;
+              </div>
+            <% end %>
           <% end %>
+          <% width = 30*b[:length] %>
+          <div class="cell booked" style="width: <%= width %>px;">
+            #<%= Booking.find_by(number: b[:number]).number %>
+          </div>
+          <% last_position = b[:position] + b[:length] - 1 %>
+          <!-- Empty cells after last booking -->
+          <% if i == h[:bookings].size && last_position < @timeline[:days] %>
+            <%= h[:bookings].size %>
+            <% (@timeline[:days]-last_position).times do %>
+              <div class="cell free">
+                &nbsp;
+              </div>
+            <% end %>
+          <% end %>
+          <% i += 1 %>
         <% end %>
-        <% width = 30*b[:length] %>
-        <div class="cell booked" style="width: <%= width %>px;">
-          #<%= Booking.find_by(number: b[:number]).number %>
-        </div>
-        <% last_position = b[:position] + b[:length] - 1 %>
-        <!-- Empty cells after last booking -->
-        <% if i == h[:bookings].size && last_position < @timeline[:days] %>
-          <%= h[:bookings].size %>
-          <% (@timeline[:days]-last_position).times do %>
+        <!-- Emtry cells if no bookings -->
+        <% if h[:bookings].empty? %>
+          <% @timeline[:days].times do %>
             <div class="cell free">
               &nbsp;
             </div>
           <% end %>
         <% end %>
-        <% i += 1 %>
-      <% end %>
-      <!-- Emtry cells if no bookings -->
-      <% if h[:bookings].empty? %>
-        <% @timeline[:days].times do %>
-          <div class="cell free">
-            &nbsp;
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
