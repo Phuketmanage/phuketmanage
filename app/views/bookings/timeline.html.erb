@@ -57,8 +57,8 @@
           <% width = 30*b[:length] %>
           <div class="cell booked" style="width: <%= width %>px;">
             <%= link_to b[:number], edit_booking_path(Booking.find_by(number: b[:number])) %>
-            <% Booking.find_by(number: b[:number]).jobs.each do %>
-              <div>job.job_types.name</div>
+            <% Booking.find_by(number: b[:number]).jobs.each do |j| %>
+              <div class='job'><%= j.job_types.name %></div>
             <% end %>
           </div>
           <% last_position = b[:position] + b[:length] - 1 %>
