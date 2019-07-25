@@ -15,6 +15,13 @@
     <%= form.label :color %>
     <%= form.text_field :color %>
   </div>
+  <div class="form-check mb-2">
+    <%= form.check_box :for_house_only, { class: 'form-check-input',
+                            id: 'for_house_only_check_box' } %>
+    <%= form.label :for_house_only, {     class: 'form-check-label',
+                            for: 'for_house_only_check_box' } %>
+  </div>
+
 
   <div class="actions">
     <%= form.submit %>

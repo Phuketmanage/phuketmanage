@@ -1,54 +1,65 @@
-<%= form_with(model: job, local: true) do |form| %>
-<% if job.errors.any? %>
-  <%= render 'shared/error_messages', object: form.object %>
-<% end %>
+<div class="modal fade" id="new_job_modal" tabindex="-1" role="dialog" aria-labelledby="new_transfer_modal_label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="new_transfer_modal_label">New job</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%= form_with(model: job, id: "new_job") do |form| %>
+      <div class="modal-body">
+        <%= render 'shared/error_messages', object: form.object %>
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :job_type_id %>
+            <%= form.select :job_type_id,
+                  JobType.all.map {|t| [t.name, t.id]}, {}, class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :booking_id %>
+            <%= form.select :booking_id,
+                  Booking.where.not(status: Booking.statuses['canceled']).all.order(:start).map {|b| ["#{b.house.code}: #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]}, { prompt: 'Select booking' }, { class: "form-control" } %>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :house_id %>
+            <%= form.select :house_id,
+                  House.order(:code).all.map {|h| [h.code, h.id]},
+                  { prompt: 'Select house' }, class: "form-control" %>
+          </div>
+        </div>
 
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :job_type_id %>
-      <%= form.select :job_type_id,
-            JobType.all.map {|t| [t.name, t.id]}, {}, class: "form-control" %>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :booking_id %>
-      <%= form.select :booking_id,
-            Booking.where.not(status: Booking.statuses['canceled']).all.order(:start).map {|b| ["#{b.house.code}: #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]}, { prompt: 'Select booking' }, { class: "form-control" } %>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :house_id %>
-      <%= form.select :house_id,
-            House.order(:code).all.map {|h| [h.code, h.id]},
-            { prompt: 'Select house' }, class: "form-control" %>
-    </div>
-  </div>
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :date %>
+            <%= form.date_field :date, class: "form-control" %>
+          </div>
+        </div>
 
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :date %>
-      <%= form.date_field :date, class: "form-control" %>
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :time %>
+            <%= form.text_field :time, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col form-group">
+            <%= form.label :comment %>
+            <%= form.text_field :comment, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+      <%= hidden_field_tag 'cell_id' %>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <%= form.submit 'Save',  class: "btn btn-primary"  %>
+      </div>
+      <% end %>
     </div>
   </div>
-
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :time %>
-      <%= form.text_field :time, class: "form-control" %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-group col-2">
-      <%= form.label :comment %>
-      <%= form.text_field :comment, class: "form-control" %>
-    </div>
-  </div>
-
-  <div class="actions">
-    <%= form.submit 'Save', class: 'btn btn-primary'%>
-    <%= link_to 'Back', jobs_path, class: 'btn btn-secondary' %>
-  </div>
-<% end %>
+</div>

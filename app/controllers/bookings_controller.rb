@@ -56,12 +56,15 @@ class BookingsController < ApplicationController
       last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
     end
     @days = (last_date - @today).to_i+1
+    @job_types_for_bookings = JobType.where.not(for_house_only: true).order(:name)
+    @job_types_for_houses = JobType.order(for_house_only: :desc, name: :asc)
+    @job = Job.new
   end
 
   def timeline_data
     puts params[:period].nil?
     timeline = Booking.timeline_data params[:period]
-    render json: { timeline:  timeline}
+    render json: { timeline:  timeline }
   end
 
   # GET /bookings/1

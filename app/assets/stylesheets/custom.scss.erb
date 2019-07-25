@@ -192,7 +192,8 @@ body {
 .cell {
   border-right: 1px solid #DDD;
   border-bottom: 1px solid #DDD;
-  position: relative;
+  /*position: relative;*/
+  vertical-align: top;
 }
 
 .cell_compact, .date_compact {
@@ -224,6 +225,7 @@ body {
     color: #f8f9fa;
   }
   overflow: visible;
+  position: relative;
   z-index: 2;
 }
 
@@ -245,10 +247,25 @@ body {
 }
 
 .job, .booking_data {
-  position:absolute;
+  position: static;
   font-size: 90%;
   @extend .rounded;
   line-height: 13px;
   width: 50px;
-  z-index: 3;
+  z-index: 4;
+  margin-bottom: 2px;
+  cursor: pointer;
+
+}
+
+.job:first-child {
+  margin-top: 15px;
+}
+
+.dropdown.new_job, .dropdown.destroy_job {
+  position: fixed;
+  z-index: 5;
+  .dropdown-item {
+    padding: 0.1rem 1.5rem;
+  }
 }

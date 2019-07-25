@@ -35,7 +35,6 @@
       <% end %>
     <% end %>
   </div>
-
   <div class="timeline_left_container">
     <% @houses.each do |h| %>
       <div class="house_code <%= 'text-muted' if h.unavailable? %>">
@@ -46,11 +45,44 @@
   <div class="timeline_container">
     <% @houses.each_with_index do |h, y| %>
       <div class="house_line">
-      <% @days.times do |x| %>
-        <div class="cell" id=<%= "x#{x+1}y#{y+1}" %>>
-        </div>
-      <% end %>
-      <div>
+        <% @days.times do |x| %>
+          <div class="cell" id=<%= "x#{x+1}y#{y+1}" %> data-house-id=<%= h.id %> data-date=<%= @today+x.days %>></div>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
+
+<div class="dropdown new_job">
+  <div class="dropdown-menu new_job">
+    <div class="dropdown_menu_for_booking">
+      <h6 class="dropdown-header">New job for Booking</h6>
+      <% @job_types_for_bookings.each do |jt| %>
+        <%= link_to "#{jt.name}", "#", class: "dropdown-item for_booking",
+          data: {
+            job_type_id: jt.id,
+            toggle: "modal",
+            target: "#new_job_modal"} %>
+      <% end %>
+      <div class="dropdown-divider"></div>
+    </div>
+    <h6 class="dropdown-header">New job for House</h6>
+    <% @job_types_for_houses.each do |jt| %>
+      <%= link_to "#{jt.name}", "#", class: "dropdown-item for_house",
+        data: {
+          job_type_id: jt.id,
+          toggle: "modal",
+          target: "#new_job_modal"} %>
+    <% end %>
+  </div>
+</div>
+
+<div class="dropdown destroy_job">
+  <div class="dropdown-menu destroy_job">
+    <%= link_to 'Cancel job', '#', id: 'cancel_job', class: "dropdown-item for_job" %>
+  </div>
+</div>
+
+<%= render 'jobs/form', job: @job %>
+
+

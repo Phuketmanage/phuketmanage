@@ -32,7 +32,6 @@ $(document).on "turbolinks:load", ->
     url: '/bookings/timeline_data',
     type: "get",
     dataType: "json",
-    # data: { data_value: JSON.stringify(array) },
     data: { period: $('#period').val() },
     success: (data) ->
       console.log('Timeline ready')
@@ -40,25 +39,115 @@ $(document).on "turbolinks:load", ->
     error: (data) ->
       console.log('Something went wrong')
 
+  $(document).on 'click', ->
+    $('.dropdown-menu').hide()
+
+  $('.cell').on 'contextmenu', (e) ->
+    e.preventDefault()
+    $('.dropdown-menu.new_job').hide()
+    $('.dropdown-menu.destroy_job').hide()
+    posX = e.pageX - $(window).scrollLeft();
+    posY = e.pageY - $(window).scrollTop();
+    $('.dropdown.new_job').css('top', "#{posY}px")
+    $('.dropdown.new_job').css('left', "#{posX}px")
+    $('.dropdown').removeClass('dropup')
+    if posY > $(window).height()/8*5
+      $('.dropdown').addClass('dropup')
+    if $(this).hasClass('booked')
+      $('select#job_booking_id').val($(this).data('booking-id'))
+      $('select#job_house_id').val("")
+      $('select#job_house_id').attr('disabled', true)
+      $('select#job_booking_id').removeAttr('disabled')
+      $('.dropdown_menu_for_booking').show()
+    else
+      $('select#job_house_id').val($(this).data('house-id'))
+      $('select#job_booking_id').val("")
+      $('select#job_house_id').removeAttr('disabled')
+      $('select#job_booking_id').attr('disabled', true)
+      $('.dropdown_menu_for_booking').hide()
+    $('input#job_date').val($(this).data('date'))
+    $('input#cell_id').val("##{$(this).attr('id')}")
+    $('.dropdown-menu.new_job').toggle()
+
+  $('#new_job_modal').on 'show.bs.modal', (event) ->
+    link = $(event.relatedTarget)
+    job_type_id = link.data('job-type-id')
+    modal = $(this)
+    modal.find('select#job_job_type_id').val(job_type_id)
+  $('#new_job_modal').on 'shown.bs.modal', (event) ->
+    $('input#job_time').trigger('focus')
+
+  $('#new_job').submit (e) ->
+    e.preventDefault()
+    $.ajax
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+      url: '/jobs',
+      type: "post",
+      dataType: "json",
+      data: {
+        job: {
+          job_type_id: $('select#job_job_type_id').val(),
+          booking_id:$('select#job_booking_id').val(),
+          house_id: $('select#job_house_id').val(),
+          date: $('input#job_date').val(),
+          time: $('input#job_time').val(),
+          comment: $('input#job_comment').val()
+        },
+        cell_id: $('input#cell_id').val()
+      },
+      success: (data) ->
+        console.log('Job created')
+        allocate_job data.cell_id, data.job
+      error: (data) ->
+        console.log('Something went wrong')
+    $('#new_job_modal').modal('hide')
+    return  false;
+
+  $('.cell').on 'contextmenu', '.job', (e) ->
+    e.preventDefault()
+    $('.dropdown-menu.new_job').hide()
+    $('.dropdown-menu.destroy_job').hide()
+    posX = e.pageX - $(window).scrollLeft();
+    posY = e.pageY - $(window).scrollTop();
+    $('.dropdown.destroy_job').css('top', "#{posY}px")
+    $('.dropdown.destroy_job').css('left', "#{posX}px")
+    $('.dropdown-menu.destroy_job').toggle()
+    $('#cancel_job').data('job-id', $(this).attr('id'))
+    e.stopPropagation();
+
+  $('#cancel_job').click (e) ->
+    e.preventDefault()
+    job_id = $(this).data('job-id')
+    $.ajax
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+      url: "/jobs/#{$(this).data('job-id')}",
+      type: "delete",
+      dataType: "json",
+      success: (data) ->
+        $("##{job_id}.job").remove()
+      error: (data) ->
+        console.log('Something went wrong')
+    $('.dropdown-menu.new_job').hide()
+
 close_dates = (h) ->
   for b in h.bookings
     for x_add in [0..b.length-1]
       x = b.x+x_add
       $("#x"+x+"y"+b.y).addClass('booked')
+      $("#x"+x+"y"+b.y).data('booking-id', b.id)
       if x_add == 0
-        $("#x"+x+"y"+b.y).css("z-index", 4)
+        $("#x"+x+"y"+b.y).css("z-index", 3)
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
-    for j, i in b.jobs
-      style = "top:"+15*(i+1)+"px;background-color:"+j.color+";"
-      $("#x"+j.x+"y"+b.y).css("z-index", 3)
-      $("#x"+j.x+"y"+b.y).append("
-        <div class='job' style="+style+">"+j.code+j.time+"</div>")
-      $("#x"+j.x+"y"+b.y).data('jobs', i+1)
-  for j, i in h.jobs
-    jobs_qty = $("#x"+j.x+"y"+h.y).data('jobs')
-    jobs_qty = if jobs_qty then jobs_qty else 0
-    style = "top:"+15*(i+1+jobs_qty)+"px;background-color:"+j.color+";"
-    $("#x"+j.x+"y"+h.y).css("z-index", 3)
-    $("#x"+j.x+"y"+h.y).append("
-      <div class='job' style="+style+">"+j.code+j.time+"</div>")
 
+    allocate_job "#x#{j.x}y#{b.y}", j for j in b.jobs
+  allocate_job "#x#{j.x}y#{h.y}", j for j in h.jobs
+
+allocate_job = (cell, j) ->
+  jobs_qty = $(cell).data('jobs')
+  jobs_qty = if jobs_qty then jobs_qty else 0
+  style = "background-color:"+j.color+";"
+  $(cell).append("
+    <div class='job' style=#{style} id=#{j.id}>#{j.code}#{j.time}</div>")
+  $(cell).data('jobs', jobs_qty+1)
