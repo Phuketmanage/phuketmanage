@@ -1,4 +1,5 @@
 class Booking < ApplicationRecord
+
   enum status:  {
     temporary: 0,
     pending: 1,
@@ -12,35 +13,66 @@ class Booking < ApplicationRecord
   has_many :jobs, dependent: :destroy
   validate :price_chain, unless: :allotment?
 
-  def self.prepare_timeline period = nil
+  def self.timeline_data period = nil
     today = Time.zone.now.in_time_zone('Bangkok').to_date
     if period.nil?
       last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
     else
-      last_date = Time.zone.now.in_time_zone('Bangkok').to_date + period.to_i
+      last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
     end
     days = (last_date - today).to_i+1
     timeline = {}
     timeline[:start] = today
     timeline[:days] = days
-    timeline[:data] = []
+    timeline[:houses] = []
     houses = House.order(:unavailable, :code)
+    y = 1
     houses.each do |h|
+      # Get bookings for house
       bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
       house = {}
       house[:hid] = h.number
+      house[:y] = y
       house[:bookings] = []
       bookings.each do |b|
         booking = {}
+        booking[:id] = b.id
         booking[:number] = b.number
-        booking[:position] = ([b.start, today].max - today).to_i+1
+        booking[:comment] = b.comment
+        booking[:x] = ([b.start, today].max - today).to_i+1
+        booking[:y] = y
         booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
-
+        # Get jobs for bookings
+        jobs = b.jobs
+        booking[:jobs] = []
+        jobs.each do |j|
+          job = {}
+          job[:id] = j.id
+          job[:x] = (j.date - today).to_i+1
+          job[:time] = j.time
+          job[:comment] = j.comment
+          job[:code] = j.job_type.code
+          job[:color] = j.job_type.color
+          booking[:jobs] << job
+        end
         house[:bookings] << booking
       end
-      timeline[:data] << house
+      # Get jobs for house
+      jobs = h.jobs
+      house[:jobs] = []
+      jobs.each do |j|
+        job = {}
+        job[:id] = j.id
+        job[:x] = (j.date - today).to_i+1
+        job[:time] = j.time
+        job[:comment] = j.comment
+        job[:code] = j.job_type.code
+        job[:color] = j.job_type.color
+        house[:jobs] << job
+      end
+      timeline[:houses] << house
+      y += 1
     end
-
     return timeline
   end
 

@@ -7,90 +7,49 @@
   <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %>
 <% end %>
 
+<%= form_with do |f| %>
+  <div class="form-check mb-2">
+    <%= f.check_box :compact_view, { class: 'form-check-input',
+                            id: 'compact_check_box' } %>
+    <%= f.label 'Compact view', {     class: 'form-check-label',
+                            for: 'compact_check_box' } %>
+  </div>
+<% end %>
+
 <div class="timeline">
   <div class="timeline_top_container">
-    <% @timeline[:days].times do |i| %>
-      <% date = @timeline[:start]+i.days %>
+    <% @days.times do |i| %>
+      <% date = @today+i.days %>
       <% day = date.day %>
       <% month_end = date.end_of_month.day %>
       <% if (i == 0 && day > 1) || day == 1 %>
         <div class='month_date'> <!-- Open month -->
-        <% month_days = month_end - day + 1 %>
-        <% over_days = (date + month_days.days - @timeline[:start]+@timeline[:days].days).to_i %>
-        <% if over_days > 0  %>
-          <% month_days -= over_days %>
-        <% end %>
-        <% width = 60*month_days %>
-        <div class='month' style="width: <%= width %>px;"><%= date.strftime('%B') %></div>
+          <div class='month'><%= date.strftime('%B') %></div>
       <% end %>
       <div class="date">
         <%= day %>
       </div>
-      <% if day == month_end || i+1 == @timeline[:days] %>
+      <% if day == month_end || i+1 == @days %>
         </div> <!-- Close month -->
       <% end %>
     <% end %>
   </div>
 
   <div class="timeline_left_container">
-    <% @timeline[:data].each do |h| %>
-      <div class="house_code <%= 'text-muted' if House.find_by(number: h[:hid]).unavailable? %>">
-        <%= House.find_by(number: h[:hid]).code %>
+    <% @houses.each do |h| %>
+      <div class="house_code <%= 'text-muted' if h.unavailable? %>">
+        <%= h.code %>
       </div>
     <% end %>
   </div>
-
   <div class="timeline_container">
-    <% @timeline[:data].each do |h| %>
+    <% @houses.each_with_index do |h, y| %>
+      <div class="house_line">
+      <% @days.times do |x| %>
+        <div class="cell" id=<%= "x#{x+1}y#{y+1}" %>>
+        </div>
+      <% end %>
       <div>
-        <% last_position = 0 %>
-        <% i = 1 %>
-        <% h[:bookings].each do |b| %>
-
-          <% if b[:position] - 1 > last_position %>
-            <% (b[:position] - 1 - last_position).times do %>
-              <div class="cell free">
-              &nbsp;
-              </div>
-            <% end %>
-          <% end %>
-          <% width = 60*b[:length] %>
-          <div class="cell booked" style="width: <%= width %>px;">
-            <% booking = Booking.find_by(number: b[:number]) %>
-            <%= link_to b[:number], edit_booking_path(booking) %>
-            <% n = 1 %>
-            <% booking.jobs.each do |j| %>
-              <% job_position = (j.date-booking.start).to_i %>
-              <div  class='job'
-                    style="background-color: <%= j.job_type.color %>;
-                    top: <%= 15*n %>px;
-                    left: <%= job_position*60+5 %>px;">
-                <%= "#{j.job_type.code}#{j.time}" %>
-              </div>
-              <% n += 1 %>
-            <% end %>
-          </div>
-          <% last_position = b[:position] + b[:length] - 1 %>
-          <!-- Empty cells after last booking -->
-          <% if i == h[:bookings].size && last_position < @timeline[:days] %>
-            <%= h[:bookings].size %>
-            <% (@timeline[:days]-last_position).times do %>
-              <div class="cell free">
-                &nbsp;
-              </div>
-            <% end %>
-          <% end %>
-          <% i += 1 %>
-        <% end %>
-        <!-- Emtry cells if no bookings -->
-        <% if h[:bookings].empty? %>
-          <% @timeline[:days].times do %>
-            <div class="cell free">
-              &nbsp;
-            </div>
-          <% end %>
-        <% end %>
-      </div>
     <% end %>
   </div>
 </div>

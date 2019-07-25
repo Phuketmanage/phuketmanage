@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class JobsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:admin)
     @job = jobs(:one)
   end
 
@@ -16,16 +19,12 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create job" do
+    new_name = 'test'
     assert_difference('Job.count') do
       post jobs_url, params: { job: { booking_id: @job.booking_id, comment: @job.comment, date: @job.date, house_id: @job.house_id, job_type_id: @job.job_type_id, time: @job.time } }
     end
 
-    assert_redirected_to job_url(Job.last)
-  end
-
-  test "should show job" do
-    get job_url(@job)
-    assert_response :success
+    assert_redirected_to jobs_url
   end
 
   test "should get edit" do
@@ -35,7 +34,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update job" do
     patch job_url(@job), params: { job: { booking_id: @job.booking_id, comment: @job.comment, date: @job.date, house_id: @job.house_id, job_type_id: @job.job_type_id, time: @job.time } }
-    assert_redirected_to job_url(@job)
+    assert_redirected_to jobs_url
   end
 
   test "should destroy job" do

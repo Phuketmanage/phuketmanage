@@ -185,7 +185,23 @@ body {
   width: 60px;
   height: 60px;
   font-size: initial;
-  line-height: 15px
+  line-height: 15px;
+  z-index: 1;
+}
+
+.cell {
+  border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  position: relative;
+}
+
+.cell_compact, .date_compact {
+  width: 30px;
+  height: 30px;
+}
+
+.house_code_compact {
+  height: 30px;
 }
 
 .month_date {
@@ -204,12 +220,11 @@ body {
 
 .booked {
   background-color: #28a745;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  position: relative;
   a {
     color: #f8f9fa;
   }
+  overflow: visible;
+  z-index: 2;
 }
 
 .free {
@@ -229,10 +244,11 @@ body {
   border-right: 1px solid black;
 }
 
-.job {
+.job, .booking_data {
   position:absolute;
   font-size: 90%;
   @extend .rounded;
   line-height: 13px;
   width: 50px;
+  z-index: 3;
 }
