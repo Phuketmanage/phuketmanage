@@ -14,6 +14,7 @@
     <%= f.label 'Compact view', {     class: 'form-check-label',
                             for: 'compact_check_box' } %>
   </div>
+  <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
 <% end %>
 
 <div class="timeline">

@@ -33,7 +33,7 @@ $(document).on "turbolinks:load", ->
     type: "get",
     dataType: "json",
     # data: { data_value: JSON.stringify(array) },
-    data: { period: 45 },
+    data: { period: $('#period').val() },
     success: (data) ->
       console.log('Timeline ready')
       close_dates h for h in data.timeline.houses

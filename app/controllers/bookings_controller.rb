@@ -59,6 +59,7 @@ class BookingsController < ApplicationController
   end
 
   def timeline_data
+    puts params[:period].nil?
     timeline = Booking.timeline_data params[:period]
     render json: { timeline:  timeline}
   end
