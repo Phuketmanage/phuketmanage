@@ -1,5 +1,3 @@
-<h1>Timeline</h1>
-
 <%= link_to 'Bookings (table view)', bookings_path %> |
 <% if params[:period].present? %>
   <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %>
@@ -7,15 +5,15 @@
   <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %>
 <% end %>
 
-<%= form_with do |f| %>
-  <div class="form-check mb-2">
-    <%= f.check_box :compact_view, { class: 'form-check-input',
-                            id: 'compact_check_box' } %>
-    <%= f.label 'Compact view', {     class: 'form-check-label',
-                            for: 'compact_check_box' } %>
-  </div>
-  <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
-<% end %>
+    <%= form_with do |f| %>
+      <div class="form-check mb-1">
+        <%= f.check_box :compact_view, { class: 'form-check-input',
+                                id: 'compact_check_box' } %>
+        <%= f.label 'Compact view', {     class: 'form-check-label',
+                                for: 'compact_check_box' } %>
+      </div>
+      <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
+    <% end %>
 
 <div class="timeline">
   <div class="timeline_top_container">
@@ -53,6 +51,12 @@
   </div>
 </div>
 
+<div class='mt-2'>
+  Agenda:
+  <% JobType.order(:name).each do |jt| %>
+    <div style="background-color:<%= jt.color %>;display:inline-block;" class='rounded text-white p-1'><%= jt.name %></div>
+  <% end %>
+</div>
 <div class="dropdown new_job">
   <div class="dropdown-menu new_job">
     <div class="dropdown_menu_for_booking">
