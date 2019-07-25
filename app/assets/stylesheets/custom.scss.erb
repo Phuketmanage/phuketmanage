@@ -199,6 +199,9 @@ body {
 .cell_compact, .date_compact {
   width: 30px;
   height: 30px;
+  .job:first-child {
+    margin-top: 0px;
+  }
 }
 
 .house_code_compact {
@@ -247,7 +250,6 @@ body {
 }
 
 .job, .booking_data {
-  position: static;
   font-size: 90%;
   @extend .rounded;
   line-height: 13px;
@@ -255,7 +257,6 @@ body {
   z-index: 4;
   margin-bottom: 2px;
   cursor: pointer;
-
 }
 
 .job:first-child {

@@ -13,20 +13,14 @@ $(document).on "turbolinks:load", ->
       $('.cell').addClass('cell_compact')
       $('.date').addClass('date_compact')
       $('.house_code').addClass('house_code_compact')
+      $('.job').addClass('job_compact')
       $('.booking_data').hide()
-      $('.job').each ->
-        j = $(@)
-        new_top = parseInt(j.css('top').substr 0,2)-15
-        j.css('top', new_top)
     else
       $('.cell').removeClass('cell_compact')
       $('.date').removeClass('date_compact')
       $('.house_code').removeClass('house_code_compact')
+      $('.job').removeClass('job_compact')
       $('.booking_data').show()
-      $('.job').each ->
-        j = $(@)
-        new_top = parseInt(j.css('top').substr 0,2)+15
-        j.css('top', new_top)
 
   $.ajax
     url: '/bookings/timeline_data',
