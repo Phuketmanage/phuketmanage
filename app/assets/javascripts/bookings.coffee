@@ -61,13 +61,23 @@ $(document).on "turbolinks:load", ->
       $('.dropdown_menu_for_booking').hide()
     $('input#job_date').val($(this).data('date'))
     $('input#cell_id').val("##{$(this).attr('id')}")
+    $('#new_job div.job_type').hide()
+    $('#new_job div.job_user').hide()
+    $('#new_job div.job_booking').hide()
+    $('#new_job div.job_house').hide()
+    $('#new_job div.job_date').hide()
     $('.dropdown-menu.new_job').toggle()
 
   $('#new_job_modal').on 'show.bs.modal', (event) ->
     link = $(event.relatedTarget)
     job_type_id = link.data('job-type-id')
+    user_id = link.data('user-id')
     modal = $(this)
+    $('#new_job_modal_label').html(link.text())
+    $('#new_job #job_details').show()
     modal.find('select#job_job_type_id').val(job_type_id)
+    modal.find('select#job_user_id').val(user_id)
+
   $('#new_job_modal').on 'shown.bs.modal', (event) ->
     $('input#job_time').trigger('focus')
 
@@ -121,6 +131,7 @@ $(document).on "turbolinks:load", ->
       dataType: "json",
       success: (data) ->
         $("##{job_id}.job").remove()
+        console.log('Job destroyed')
       error: (data) ->
         console.log('Something went wrong')
     $('.dropdown-menu.new_job').hide()
@@ -143,5 +154,9 @@ allocate_job = (cell, j) ->
   jobs_qty = if jobs_qty then jobs_qty else 0
   style = "background-color:"+j.color+";"
   $(cell).append("
-    <div class='job' style=#{style} id=#{j.id}>#{j.code}#{j.time}</div>")
+    <div  class='job'
+          style=#{style}
+          id=#{j.id}>
+      #{j.code}#{j.time}
+    </div>")
   $(cell).data('jobs', jobs_qty+1)

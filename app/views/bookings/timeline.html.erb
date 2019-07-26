@@ -44,7 +44,11 @@
     <% @houses.each_with_index do |h, y| %>
       <div class="house_line">
         <% @days.times do |x| %>
-          <div class="cell" id=<%= "x#{x+1}y#{y+1}" %> data-house-id=<%= h.id %> data-date=<%= @today+x.days %>></div>
+          <div  class="cell"
+                id=<%= "x#{x+1}y#{y+1}" %>
+                data-house-id=<%= h.id %>
+                data-date=<%= @today+x.days %>>
+                </div>
         <% end %>
       </div>
     <% end %>
@@ -65,6 +69,7 @@
         <%= link_to "#{jt.name}", "#", class: "dropdown-item for_booking",
           data: {
             job_type_id: jt.id,
+            user_id: User.with_role('Maid').first.id,
             toggle: "modal",
             target: "#new_job_modal"} %>
       <% end %>
@@ -75,6 +80,7 @@
       <%= link_to "#{jt.name}", "#", class: "dropdown-item for_house",
         data: {
           job_type_id: jt.id,
+          user_id: User.with_role('Maid').first.id,
           toggle: "modal",
           target: "#new_job_modal"} %>
     <% end %>

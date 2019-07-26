@@ -8,13 +8,18 @@ class UsersController < ApplicationController
       if current_user.role? :admin
         @users = User.all
       elsif current_user.role? :manager
+        @users = User.with_role(['Owner', 'Tenant'])
       end
     end
   end
 
   def new
     @user = User.new
-    @roles = Role.where(name: ['Owner', 'Tenant']).all
+    if current_user.role? :admin
+      @roles = Role.all
+    else
+      @roles = Role.where(name: ['Owner', 'Tenant']).all
+    end
   end
 
   def create
@@ -23,7 +28,11 @@ class UsersController < ApplicationController
       flash[:notice] = "Successfully created User."
       redirect_to users_path
     else
-      @roles = Role.where(name: ['Owner', 'Tenant']).all
+      if current_user.role? :admin
+        @roles = Role.all
+      else
+        @roles = Role.where(name: ['Owner', 'Tenant']).all
+      end
       render :action => 'new'
     end
   end
