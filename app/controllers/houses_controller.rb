@@ -115,7 +115,11 @@ class HousesController < ApplicationController
                                     :communal_pool,
                                     :parking,
                                     :parking_size,
-                                    :unavailable
+                                    :unavailable,
+                                    :rental,
+                                    :maintenance,
+                                    :outsource_cleaning,
+                                    :outsource_linen
                                     )
     end
 

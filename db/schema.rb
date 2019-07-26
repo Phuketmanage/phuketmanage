@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_26_171641) do
+ActiveRecord::Schema.define(version: 2019_07_26_191900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,10 @@ ActiveRecord::Schema.define(version: 2019_07_26_171641) do
     t.boolean "unavailable", default: false
     t.string "number", limit: 10
     t.string "secret"
+    t.boolean "rental", default: false
+    t.boolean "maintenance", default: false
+    t.boolean "outsource_cleaning", default: false
+    t.boolean "outsource_linen", default: false
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
