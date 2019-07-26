@@ -8,6 +8,9 @@ class Ability
 
     if user.role? :owner
       # can :read, [ House ]
+    elsif user.role? 'Maid'
+      can :read, Job
+    elsif user.role? 'Guest relation'
     elsif user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User

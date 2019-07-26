@@ -1,0 +1,17 @@
+<div class="row shadow-sm mb-2 p-2 bg-light rounded">
+  <div class="col">
+    <div class="row">
+      <div class="col-md-2"><%= "#{job.user.name}" if job.user_id %></div>
+      <div class="col-md-1"><%= "#{job.created_at.strftime('%d.%m.%Y')}" %></div>
+      <div class="col-md-2"><%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %></div>
+      <div class="col-md-1"><%= job.closed.strftime('%d.%m.%Y') if job.closed %></div>
+      <div class="col-md-2"><%= job.job_type.name %></div>
+      <div class="col-md-2"><%= job.booking.number if job.booking_id %></div>
+      <div class="col-md-2"><%= job.house.code if job.house_id %></div>
+    </div>
+    <div class="row">
+      <div class="col-md-6"><p>Job:</p><%= job.job %></div>
+      <div class="col-md-6"><p>Comment:</p><%= job.comment %></div>
+    </div>
+  </div>
+</div>

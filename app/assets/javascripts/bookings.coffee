@@ -59,13 +59,13 @@ $(document).on "turbolinks:load", ->
       $('select#job_house_id').removeAttr('disabled')
       $('select#job_booking_id').attr('disabled', true)
       $('.dropdown_menu_for_booking').hide()
-    $('input#job_date').val($(this).data('date'))
+    $('input#job_plan').val($(this).data('date'))
     $('input#cell_id').val("##{$(this).attr('id')}")
     $('#new_job div.job_type').hide()
     $('#new_job div.job_user').hide()
     $('#new_job div.job_booking').hide()
     $('#new_job div.job_house').hide()
-    $('#new_job div.job_date').hide()
+    $('#new_job div.job_plan').hide()
     $('.dropdown-menu.new_job').toggle()
 
   $('#new_job_modal').on 'show.bs.modal', (event) ->
@@ -92,9 +92,10 @@ $(document).on "turbolinks:load", ->
       data: {
         job: {
           job_type_id: $('select#job_job_type_id').val(),
+          user_id: $('select#job_user_id').val(),
           booking_id:$('select#job_booking_id').val(),
           house_id: $('select#job_house_id').val(),
-          date: $('input#job_date').val(),
+          plan: $('input#job_plan').val(),
           time: $('input#job_time').val(),
           comment: $('input#job_comment').val()
         },

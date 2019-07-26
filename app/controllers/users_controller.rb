@@ -39,7 +39,11 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @roles = Role.where(name: ['Owner', 'Tenant']).all
+    if current_user.role? :admin
+      @roles = Role.all
+    else
+      @roles = Role.where(name: ['Owner', 'Tenant']).all
+    end
   end
 
   def update

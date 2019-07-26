@@ -1,35 +1,19 @@
 <h1>Jobs</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Job type</th>
-      <th>Booking</th>
-      <th>House</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Comment</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @jobs.each do |job| %>
-      <tr>
-        <td><%= job.job_type_id %></td>
-        <td><%= job.booking_id %></td>
-        <td><%= job.house_id %></td>
-        <td><%= job.date %></td>
-        <td><%= job.time %></td>
-        <td><%= job.comment %></td>
-        <td><%= link_to 'Show', job %></td>
-        <td><%= link_to 'Edit', edit_job_path(job) %></td>
-        <td><%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
+<% if current_user.role? :admin %>
+  <div class="row mb-2 p-2 font-weight-bold d-none d-md-flex">
+    <div class="col-md-2">User</div>
+    <div class="col-md-1">Open</div>
+    <div class="col-md-2">Plan</div>
+    <div class="col-md-1">Closed</div>
+    <div class="col-md-2">Job type</div>
+    <div class="col-md-2">Booking</div>
+    <div class="col-md-2">House</div>
+  </div>
+  <% @jobs.each do |job| %>
+    <%= render 'job_admin', job: job %>
+  <% end %>
+<% else %>
+<% end %>
 
 <%= link_to 'New Job', new_job_path %>

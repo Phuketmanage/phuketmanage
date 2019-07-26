@@ -5,7 +5,11 @@ class JobsController < ApplicationController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = Job.all
+    if current_user.role? :admin
+      @jobs = Job.all
+    else
+      @jobs = current_user.jobs
+    end
   end
 
   # GET /jobs/1
@@ -34,7 +38,7 @@ class JobsController < ApplicationController
                                         code: @job.job_type.code,
                                         color: @job.job_type.color,
                                         time: @job.time,
-                                        comment: @job.comment
+                                        job: @job.job
                                       },
                                       cell_id: params[:cell_id]
                                     },
@@ -45,23 +49,6 @@ class JobsController < ApplicationController
                               status: :unprocessable_entity }
       end
     end
-  end
-
-  def create_ajax
-    @job = Job.new(job_params)
-    puts params
-    # @job.save
-    render json: { status: ok }
-    # respond_to do |format|
-    # @job.save
-    #   if @job.save
-    #     format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
-    #     format.json { render :show, status: :created, location: @job }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @job.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # PATCH/PUT /jobs/1

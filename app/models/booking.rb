@@ -48,7 +48,7 @@ class Booking < ApplicationRecord
         jobs.each do |j|
           job = {}
           job[:id] = j.id
-          job[:x] = (j.date - today).to_i+1
+          job[:x] = (j.plan - today).to_i+1
           job[:time] = j.time
           job[:comment] = j.comment
           job[:code] = j.job_type.code
@@ -63,7 +63,7 @@ class Booking < ApplicationRecord
       jobs.each do |j|
         job = {}
         job[:id] = j.id
-        job[:x] = (j.date - today).to_i+1
+        job[:x] = (j.plan - today).to_i+1
         job[:time] = j.time
         job[:comment] = j.comment
         job[:code] = j.job_type.code
