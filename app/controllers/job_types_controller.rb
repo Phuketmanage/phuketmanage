@@ -1,4 +1,6 @@
 class JobTypesController < ApplicationController
+  load_and_authorize_resource
+
   before_action :set_job_type, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 

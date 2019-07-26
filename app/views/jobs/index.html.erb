@@ -1,19 +1,19 @@
-<h1>Jobs</h1>
-
-<% if current_user.role? :admin %>
-  <div class="row mb-2 p-2 font-weight-bold d-none d-md-flex">
-    <div class="col-md-2">User</div>
-    <div class="col-md-1">Open</div>
-    <div class="col-md-2">Plan</div>
-    <div class="col-md-1">Closed</div>
-    <div class="col-md-2">Job type</div>
-    <div class="col-md-2">Booking</div>
-    <div class="col-md-2">House</div>
-  </div>
-  <% @jobs.each do |job| %>
-    <%= render 'job_admin', job: job %>
+<h1>Todos</h1>
+<div id='jobs'>
+  <% if current_user.role? :admin %>
+    <%= link_to 'New Job', new_job_path %>
+    <% @jobs.each do |job| %>
+      <%= render 'job_admin', job: job %>
+    <% end %>
+  <% elsif current_user.role? :maid %>
+    <% date = "" %>
+    <% @jobs.each do |job| %>
+      <% if date != job.plan %>
+        <strong><%= job.plan %></strong>
+        <% date = job.plan %>
+      <% end %>
+      <%= render 'job_maid', job: job %>
+    <% end %>
   <% end %>
-<% else %>
-<% end %>
+</div>
 
-<%= link_to 'New Job', new_job_path %>

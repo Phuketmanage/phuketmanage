@@ -1,0 +1,6 @@
+<div class="row shadow-sm mb-2 p-2 bg-light rounded">
+  <%= job.time %>
+  <%= job.booking.house.code if job.booking_id %>
+  <%= job.house.code if job.house_id %>
+  <%= job.job_type.name %>
+</div>

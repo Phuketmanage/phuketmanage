@@ -34,4 +34,13 @@ class ApplicationController < ActionController::Base
       end
       super
     end
+
+    def after_sign_in_path_for(resource)
+      if current_user.role? 'Maid'
+        jobs_path
+      else
+        dashboard_path
+      end
+        # return the path based on resource
+    end
 end

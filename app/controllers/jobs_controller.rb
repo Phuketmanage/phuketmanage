@@ -1,14 +1,17 @@
 class JobsController < ApplicationController
+  load_and_authorize_resource
+
   before_action :set_job, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 
   # GET /jobs
   # GET /jobs.json
   def index
+    @job = Job.new
     if current_user.role? :admin
-      @jobs = Job.all
+      @jobs = Job.order(:plan)
     else
-      @jobs = current_user.jobs
+      @jobs = current_user.jobs.order(:plan)
     end
   end
 
@@ -58,6 +61,7 @@ class JobsController < ApplicationController
       if @job.update(job_params)
         format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }
         format.json { render :show, status: :ok, location: @job }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @job.errors, status: :unprocessable_entity }

@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     # post 'houses/:id/connections', to: 'houses#create_connection', as: 'add_connection'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
 
-    get 'dashboard', to: 'admin#index'
+    get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
     resources :users, except: :create

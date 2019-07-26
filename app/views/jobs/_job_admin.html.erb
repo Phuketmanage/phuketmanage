@@ -1,17 +1,40 @@
 <div class="row shadow-sm mb-2 p-2 bg-light rounded">
   <div class="col">
     <div class="row">
-      <div class="col-md-2"><%= "#{job.user.name}" if job.user_id %></div>
-      <div class="col-md-1"><%= "#{job.created_at.strftime('%d.%m.%Y')}" %></div>
-      <div class="col-md-2"><%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %></div>
-      <div class="col-md-1"><%= job.closed.strftime('%d.%m.%Y') if job.closed %></div>
-      <div class="col-md-2"><%= job.job_type.name %></div>
-      <div class="col-md-2"><%= job.booking.number if job.booking_id %></div>
-      <div class="col-md-2"><%= job.house.code if job.house_id %></div>
+      <div class="col">
+        <div class="d-md-inline-block"><%= "For: #{job.user.name} |" if job.user_id %></div>
+        <div class="d-md-inline-block"><%= "Start: #{job.created_at.strftime('%d.%m.%Y')} |" %></div>
+        <div class="d-md-inline-block"><%= "Plan: #{job.plan.strftime('%d.%m.%Y')} #{job.time} |" if job.plan %></div>
+        <div class="d-md-inline-block"><%= "Closed: #{job.closed.strftime('%d.%m.%Y')} |" if job.closed %></div>
+        <div class="d-md-inline-block"><%= "Type: #{job.job_type.name} |" %></div>
+        <div class="d-md-inline-block"><%= "Booking: #{job.booking.number} |" if job.booking_id %></div>
+        <div class="d-md-inline-block"><%= "House: #{job.house.code} |" if job.house_id %></div>
+        <div class="d-md-inline-block">
+          <%= link_to 'Edit', edit_job_path(job) %> |
+          <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+      </div>
     </div>
     <div class="row">
-      <div class="col-md-6"><p>Job:</p><%= job.job %></div>
-      <div class="col-md-6"><p>Comment:</p><%= job.comment %></div>
+      <div class="col">
+        <%= form_with(model: job, class: "update_job") do |f| %>
+          <div class="form-row">
+            <div class="col-md-6 from-group">
+              <%= f.label :job %>
+              <%= f.text_area :job, class: 'form-control', row: 2,
+                data: {job_id: job.id, field: 'job'} %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :comment %>
+              <%= f.text_area :comment, class: 'form-control', row: 2,
+                data: {job_id: job.id, field: 'comment'} %>
+            </div>
+          </div>
+          <%= f.submit 'Save', {  class: "btn btn-primary mt-2",
+                                  id: "btn_job_#{job.id}",
+                                  style: "display: none;"} %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
