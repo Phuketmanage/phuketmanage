@@ -13,7 +13,7 @@ class JobsController < ApplicationController
       if params[:closed].present?
         @jobs = Job.where.not(user_id: maids, closed: nil).order(closed: :desc)
       else
-        @jobs = Job.where.not(closed: nil).where.not(user_id: maids).order(:plan)
+        @jobs = Job.where(closed: nil).where.not(user_id: maids).order(:plan)
       end
     else
       if params[:closed].present?
