@@ -1,1 +1,4 @@
 $('#btn_job_<%= @job.id %>').hide()
+<% if @job_closed %>
+  $('#job_<%= @job.id %>').remove()
+<% end %>

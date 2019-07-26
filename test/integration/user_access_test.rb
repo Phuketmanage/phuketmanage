@@ -112,5 +112,12 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   end
 
+  test "user can only destroy job which they own" do
+    manager = users(:manager)
+    admin = users(:admin)
+    ability = Ability.new(manager)
+    assert ability.can?(:destroy, Job.new(creator: manager))
+    assert ability.cannot?(:destroy, Job.new(creator: admin))
+  end
 
 end

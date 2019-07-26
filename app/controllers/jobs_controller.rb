@@ -10,9 +10,17 @@ class JobsController < ApplicationController
     @job = Job.new
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
-      @jobs = Job.where.not(user_id: maids).order(:plan)
+      if params[:closed].present?
+        @jobs = Job.where.not(user_id: maids, closed: nil).order(closed: :desc)
+      else
+        @jobs = Job.where.not(closed: nil).where.not(user_id: maids).order(:plan)
+      end
     else
-      @jobs = current_user.jobs.order(:plan)
+      if params[:closed].present?
+        @jobs = current_user.jobs.where.not(closed: nil).order(closed: :desc)
+      else
+        @jobs = current_user.jobs.where(closed: nil).order(:plan)
+      end
     end
   end
 
@@ -34,6 +42,7 @@ class JobsController < ApplicationController
   # POST /jobs.json
   def create
     @job = Job.new(job_params)
+    @job.creator_id = current_user.id
     respond_to do |format|
       if @job.save
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
@@ -58,10 +67,16 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   # PATCH/PUT /jobs/1.json
   def update
+    if params[:mark_as_done].present?
+      @job_closed = true
+      @job.closed = Time.zone.now
+      @job.save
+      return
+    end
     respond_to do |format|
       if @job.update(job_params)
         format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }
-        format.json { render :show, status: :ok, location: @job }
+        format.json { render :index, status: :ok, location: @job }
         format.js
       else
         format.html { render :edit }
@@ -73,11 +88,11 @@ class JobsController < ApplicationController
   # DELETE /jobs/1
   # DELETE /jobs/1.json
   def destroy
-    @job.destroy
-    respond_to do |format|
-      format.html { redirect_to jobs_url, notice: 'Job was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+      @job.destroy
+      respond_to do |format|
+        format.html { redirect_to jobs_url, notice: 'Job was successfully destroyed.' }
+        format.json { head :no_content }
+      end
   end
 
   private

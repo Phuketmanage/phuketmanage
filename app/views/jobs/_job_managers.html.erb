@@ -1,20 +1,23 @@
-<div class="row shadow-sm mb-2 p-2 bg-light rounded">
+<div class="row shadow-sm mb-2 p-2 bg-light rounded" id="job_<%= job.id %>">
   <div class="col">
     <div class="row">
       <div class="col">
-        <div class="d-md-inline-block"><%= "For: #{job.user.name}" if job.user_id %></div>
-        <div class="d-md-inline-block"><%= "| Start: #{job.created_at.strftime('%d.%m.%Y')}" %></div>
+        <div class="d-md-inline-block"><%= "Created: #{job.created_at.strftime('%d.%m.%Y')}" %></div>
         <div class="d-md-inline-block"><%= "| Plan: #{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %></div>
         <div class="d-md-inline-block"><%= "| Closed: #{job.closed.strftime('%d.%m.%Y')} |" if job.closed %></div>
-        <div class="d-md-inline-block"><%= "| Type: #{job.job_type.name}" %></div>
-        <div class="d-md-inline-block"><%= "| Booking: #{job.booking.number}" if job.booking_id %></div>
-        <div class="d-md-inline-block"><%= "| House: #{job.house.code}" if job.house_id %></div>
         <% if current_user.role? :admin %>
-          <div class="d-md-inline-block">
-            <%= link_to 'Edit', edit_job_path(job) %> |
-            <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %>
-          </div>
+          <div class="d-md-inline-block"><%= "For: #{job.user.name}" if job.user_id %></div>
         <% end %>
+
+          <div class="d-md-inline-block">
+            <% if (job.creator == current_user) || current_user.role?(:admin) %>
+              <%= link_to 'Edit', edit_job_path(job) %> |
+            <% end %>
+            <% if (job.creator == current_user) || current_user.role?(:admin) %>
+              <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
+            <% end %>
+            <%= link_to 'Mark as done', job_path(job, mark_as_done: true), method: :put, remote: true %>
+          </div>
       </div>
     </div>
     <% if current_user.role? :admin %>
@@ -41,16 +44,15 @@
     </div>
     <% else %>
       Job: <%= job.job %>
-      <%= form_with(model: job, class: "update_job") do |f| %>
-        <div class="from-group">
-          <%= f.label :comment %>
+      <div class="mt-2">
+        <%= form_with(model: job, class: "update_job") do |f| %>
           <%= f.text_area :comment, class: 'form-control', row: 2,
             data: {job_id: job.id, field: 'comment'} %>
-        </div>
-        <%= f.submit 'Save', {  class: "btn btn-primary mt-2",
-                                id: "btn_job_#{job.id}",
-                                style: "display: none;"} %>
-      <% end %>
+          <%= f.submit 'Save', {  class: "btn btn-primary mt-2",
+                                  id: "btn_job_#{job.id}",
+                                  style: "display: none;"} %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

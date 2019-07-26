@@ -10,8 +10,11 @@
       <%= render 'job_maid', job: job %>
     <% end %>
   <% else %>
-    <% if current_user.role? :admin %>
-      <%= link_to 'New Job', new_job_path %>
+    <%= link_to 'New Job', new_job_path %> |
+    <% if params[:closed].present? %>
+      <%= link_to 'Opened Jobs', jobs_path() %>
+    <% else %>
+      <%= link_to 'Closed Jobs', jobs_path(closed: 1) %>
     <% end %>
     <% @jobs.each do |job| %>
       <%= render 'job_managers', job: job %>

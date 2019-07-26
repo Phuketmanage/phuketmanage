@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :houses, foreign_key: 'owner_id'
   has_many :bookings, foreign_key: 'tenant_id'
   has_many :jobs
+  has_many :jobs_created, class_name: 'Job', foreign_key: 'creator_id'
   scope :with_role, ->(role) { includes(:roles).where(roles: {name: role}) }
 
   def role?(role)

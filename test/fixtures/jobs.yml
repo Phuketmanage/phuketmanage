@@ -7,6 +7,7 @@ one:
   plan: 2019-07-24
   time: MyString
   comment: MyString
+  creator: admin
 
 two:
   job_type: two
@@ -15,3 +16,4 @@ two:
   plan: 2019-07-24
   time: MyString
   comment: MyString
+  creator: manager
