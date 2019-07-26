@@ -2,11 +2,25 @@
   <div class="col">
     <div class="row">
       <div class="col">
-        <div class="d-md-inline-block"><%= "Created: #{job.created_at.strftime('%d.%m.%Y')}" %></div>
-        <div class="d-md-inline-block"><%= "| Plan: #{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %></div>
-        <div class="d-md-inline-block"><%= "| Closed: #{job.closed.strftime('%d.%m.%Y')} |" if job.closed %></div>
+        <div class="d-inline-block">
+          <span class='text-muted'>Created:</span>
+          <%= " #{job.created_at.strftime('%d.%m.%Y')}" %>
+        </div>
+        <div class="d-inline-block">
+          <span class='text-muted'>Plan:</span>
+          <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %>
+        </div>
+        <% if job.closed %>
+          <div class="d-md-inline-block">
+            <span class='text-muted'>Closed:</span>
+            <%= job.closed.strftime('%d.%m.%Y') %>
+          </div>
+        <% end %>
         <% if current_user.role? :admin %>
-          <div class="d-md-inline-block"><%= "For: #{job.user.name}" if job.user_id %></div>
+          <div class="d-md-inline-block">
+            <span class='text-muted'>Created:</span>
+            <%= job.user.name if job.user_id %>
+          </div>
         <% end %>
 
           <div class="d-md-inline-block">
@@ -26,12 +40,12 @@
         <%= form_with(model: job, class: "update_job") do |f| %>
           <div class="form-row">
             <div class="col-md-6 from-group">
-              <%= f.label :job %>
+              <%= f.label :job, class: 'text-muted' %>
               <%= f.text_area :job, class: 'form-control', row: 2,
                 data: {job_id: job.id, field: 'job'} %>
             </div>
             <div class="col-md-6 from-group">
-              <%= f.label :comment %>
+              <%= f.label :comment, class: 'text-muted' %>
               <%= f.text_area :comment, class: 'form-control', row: 2,
                 data: {job_id: job.id, field: 'comment'} %>
             </div>
@@ -43,7 +57,7 @@
       </div>
     </div>
     <% else %>
-      Job: <%= job.job %>
+      <span class='text-muted'>Job:</span> <%= job.job %>
       <div class="mt-2">
         <%= form_with(model: job, class: "update_job") do |f| %>
           <%= f.text_area :comment, class: 'form-control', row: 2,
