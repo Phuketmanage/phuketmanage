@@ -4,7 +4,7 @@ one:
   job_type: one
   booking: _1
   house:
-  date: 2019-07-24
+  plan: 2019-07-24
   time: MyString
   comment: MyString
 
@@ -12,6 +12,6 @@ two:
   job_type: two
   booking:
   house: villa_1
-  date: 2019-07-24
+  plan: 2019-07-24
   time: MyString
   comment: MyString
