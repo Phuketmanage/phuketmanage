@@ -9,7 +9,8 @@ class JobsController < ApplicationController
   def index
     @job = Job.new
     if current_user.role? :admin
-      @jobs = Job.order(:plan)
+      maids = User.with_role('Maid').ids
+      @jobs = Job.where.not(user_id: maids).order(:plan)
     else
       @jobs = current_user.jobs.order(:plan)
     end

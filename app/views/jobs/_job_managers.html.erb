@@ -9,10 +9,12 @@
         <div class="d-md-inline-block"><%= "Type: #{job.job_type.name} |" %></div>
         <div class="d-md-inline-block"><%= "Booking: #{job.booking.number} |" if job.booking_id %></div>
         <div class="d-md-inline-block"><%= "House: #{job.house.code} |" if job.house_id %></div>
-        <div class="d-md-inline-block">
-          <%= link_to 'Edit', edit_job_path(job) %> |
-          <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </div>
+        <% if current_user.role? :admin %>
+          <div class="d-md-inline-block">
+            <%= link_to 'Edit', edit_job_path(job) %> |
+            <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </div>
+        <% end %>
       </div>
     </div>
     <div class="row">

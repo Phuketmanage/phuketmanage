@@ -1,11 +1,6 @@
 <h1>Todos</h1>
 <div id='jobs'>
-  <% if current_user.role? :admin %>
-    <%= link_to 'New Job', new_job_path %>
-    <% @jobs.each do |job| %>
-      <%= render 'job_admin', job: job %>
-    <% end %>
-  <% elsif current_user.role? :maid %>
+  <% if current_user.role? :maid %>
     <% date = "" %>
     <% @jobs.each do |job| %>
       <% if date != job.plan %>
@@ -14,6 +9,14 @@
       <% end %>
       <%= render 'job_maid', job: job %>
     <% end %>
+  <% else %>
+    <% if current_user.role? :admin %>
+      <%= link_to 'New Job', new_job_path %>
+    <% end %>
+    <% @jobs.each do |job| %>
+      <%= render 'job_managers', job: job %>
+    <% end %>
+
   <% end %>
 </div>
 

@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_in_path_for(resource)
-      if current_user.role? 'Maid'
+      if current_user.role?('Maid') || current_user.role?('Guest relation')
         jobs_path
       else
         dashboard_path

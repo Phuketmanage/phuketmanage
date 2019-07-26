@@ -11,13 +11,15 @@ class Ability
     elsif user.role? 'Maid'
       can :read, Job
     elsif user.role? 'Guest relation'
+      can [:index, :edit, :update], Job
     elsif user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Job ]
+                      Connection, JobType ]
+      can [:index, :edit, :update], Job
       cannot :destroy, [ HouseType, House, Booking, JobType ]
     elsif user.role? :admin
       can :manage, :all
