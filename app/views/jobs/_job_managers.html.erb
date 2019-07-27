@@ -35,27 +35,14 @@
       </div>
     </div>
     <% if current_user.role? :admin %>
-    <div class="row">
-      <div class="col">
+      <div>
         <%= form_with(model: job, class: "update_job") do |f| %>
-          <div class="form-row">
-            <div class="col-md-6 from-group">
-              <%= f.label :job, class: 'text-muted' %>
-              <%= f.text_area :job, class: 'form-control', row: 2,
-                data: {job_id: job.id, field: 'job'} %>
-            </div>
-            <div class="col-md-6 from-group">
-              <%= f.label :comment, class: 'text-muted' %>
-              <%= f.text_area :comment, class: 'form-control', row: 2,
-                data: {job_id: job.id, field: 'comment'} %>
-            </div>
-          </div>
-          <%= f.submit 'Save', {  class: "btn btn-primary mt-2",
-                                  id: "btn_job_#{job.id}",
-                                  style: "display: none;"} %>
+          <%= f.label :job, class: 'text-muted' %>
+          <%= f.text_area :job, class: 'form-control', row: 2,
+            data: {job_id: job.id, field: 'job'} %>
         <% end %>
       </div>
-    </div>
+      <span class='text-muted'>Comment:</span> <%= job.comment %>
     <% else %>
       <span class='text-muted'>Job:</span> <%= job.job %>
       <div class="mt-2">
