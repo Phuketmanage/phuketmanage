@@ -67,12 +67,14 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   # PATCH/PUT /jobs/1.json
   def update
-    if params[:mark_as_done].present?
-      @job_closed = true
-      @job.closed = Time.zone.now
+    if params[:done].present?
+      @job_status_toggled = true
+      @job.closed = Time.zone.now if params[:done] == 'true'
+      @job.closed = nil if params[:done] == 'false'
       @job.save
       return
     end
+
     respond_to do |format|
       if @job.update(job_params)
         format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }

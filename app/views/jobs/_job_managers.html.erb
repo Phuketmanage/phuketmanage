@@ -30,7 +30,12 @@
             <% if (job.creator == current_user) || current_user.role?(:admin) %>
               <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
             <% end %>
-            <%= link_to 'Mark as done', job_path(job, mark_as_done: true), method: :put, remote: true %>
+
+            <% if job.closed.nil? %>
+              <%= link_to 'Done', job_path(job, done: true), method: :put, remote: true %>
+            <% else %>
+              <%= link_to 'Undone', job_path(job, done: false), method: :put, remote: true %>
+            <% end %>
           </div>
       </div>
     </div>
