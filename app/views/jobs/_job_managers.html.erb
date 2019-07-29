@@ -8,7 +8,20 @@
         </div>
         <div class="d-inline-block">
           <span class='text-muted'>Plan:</span>
-          <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" if job.plan %>
+          <% if job.plan %>
+            <% if job.closed.nil? %>
+              <% if (job.plan - Time.zone.now.in_time_zone('Bangkok').to_date).to_i > 2 %>
+                <% job_class = 'have_time' %>
+              <% else %>
+                <% job_class = 'need_to_hurry' %>
+              <% end %>
+              <span class=<%= job_class %>>
+                <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" %>
+              </span>
+            <% else %>
+              <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" %>
+            <% end %>
+          <% end %>
         </div>
         <% if job.closed %>
           <div class="d-md-inline-block">
