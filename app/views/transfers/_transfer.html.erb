@@ -1,9 +1,14 @@
 <div class="row shadow-sm mb-2 p-1 bg-light rounded">
   <div class="col">
     <div class="row">
-      <div class="col-lg-1">
+      <% if signed_in? %>
+        <div class="col-lg-1">
+      <% else %>
+        <div class="col-lg-2">
+      <% end %>
+
+        <strong><%= transfer.trsf_type %></strong>
         <%= transfer.date.strftime("%d.%m.%y") if !transfer.date.nil? %>
-        <%= transfer.trsf_type %>
       </div>
       <div class="col-lg-2">
         <% if transfer.trsf_type == "IN" %>
@@ -14,17 +19,23 @@
         <%=  "#{transfer.from} - #{transfer.time}" %>
       </div>
       <div class="col-lg-2">
-        <span class="d-lg-none">Client: </span>
-        <%= "#{transfer.client}, #{transfer.pax} pax" %>
-      </div>
-      <div class="col-lg-2">
         <span class="d-lg-none">To: </span>
         <%= transfer.to %>
       </div>
+      <% if signed_in? %>
+        <div class="col-lg-2">
+      <% else %>
+        <div class="col-lg-3">
+      <% end %>
+        <span class="d-lg-none">Client: </span>
+        <%= "#{transfer.client}, #{transfer.pax} pax" %>
+      </div>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
       <div class="col-lg-1">
         <span class="d-lg-none">Booked by: </span>
         <%= "#{transfer.booked_by}" if !transfer.booked_by.nil? %>
       </div>
+      <% end %>
       <div class="col-lg-2 transfer_<%= transfer.status %>">
         <span class="d-lg-none">Status: </span>
         <% if transfer.sent? %>
@@ -35,17 +46,23 @@
       </div>
       <div class="col-lg-1">
         <span class="d-lg-none">Number: </span>
-        <%= link_to transfer.number, edit_transfer_path(transfer, request_from: controller_name), remote: :true %>
-      </div>
-      <div class="col-lg-1">
-        <span class="d-lg-none">Actions: </span>
-        <%= link_to 'Cancel', cancel_transfer_path(transfer), data: { confirm: 'Are you sure?' }, remote: :true %>
+        <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
+          <%= link_to transfer.number, edit_transfer_path(transfer, request_from: controller_name), remote: :true %>
+        <% else %>
+          <%= transfer.number %>
+        <% end %>
       </div>
 
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
+        <div class="col-lg-1">
+          <span class="d-lg-none">Actions: </span>
+          <%= link_to 'Cancel', cancel_transfer_path(transfer, request_from: controller_name), data: { confirm: 'Are you sure?' }, remote: :true %>
+        </div>
+      <% end %>
     </div>
     <div class="row">
       <div class="col">
-        <% if !transfer.remarks.empty? %>
+        <% if !transfer.remarks? %>
           <span class="d-lg-none">Remarks: </span>
           Remarks: <%= transfer.remarks  %>
         <% end %>

@@ -1,5 +1,5 @@
-<h1>Transfers#canceled</h1>
-
-<p>
-  <%= @greeting %>, find me in app/views/transfers_mailer/canceled.html.erb
-</p>
+<%= render 'frame',
+      title: 'Transfer canceled',
+      brand_color: '#FF4F33',
+      link_text: 'Confirm transfer cancelation',
+      link: supplier_cancel_transfer_url(@transfer.number) %>

@@ -95,10 +95,10 @@ class BookingsController < ApplicationController
     @booking_original = nil
     @transfers = @booking.transfers.all
     @transfer = @booking.transfers.new
-    @transfers_in = @booking.transfers.where(trsf_type: 'IN')
-    @transfers_out = @booking.transfers.where(trsf_type: 'OUT')
     @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
+    # @transfers_in = @booking.transfers.where(trsf_type: 'IN')
+    # @transfers_out = @booking.transfers.where(trsf_type: 'OUT')
     unless @booking.block?
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
@@ -168,6 +168,10 @@ class BookingsController < ApplicationController
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
       @booking_original.calc prices
+      @transfers = @booking.transfers.all
+      @transfer = @booking.transfers.new
+      @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+      @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
       render :edit and return
     end
 
@@ -191,6 +195,10 @@ class BookingsController < ApplicationController
         search = Search.new({rs: @booking.start, rf: @booking.finish})
         prices = search.get_prices [@booking.house]
         @booking_original.calc prices
+        @transfers = @booking.transfers.all
+        @transfer = @booking.transfers.new
+        @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+        @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
         format.html { render :edit }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md admin-menu-links mt-0 mb-0 pt-0 pb-0">
   <div class="collapse navbar-collapse" id="admin-nav">
     <ul class="navbar-nav flex-column">
-      <% if (current_user.role? 'Admin') || (current_user.role? 'Manager') %>
+      <% if current_user.role? ['Admin', 'Manager'] %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
         </li>

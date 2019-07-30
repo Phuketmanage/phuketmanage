@@ -5,3 +5,8 @@ one:
   value: 2
   description: Days between bookings
 
+two:
+  var: tranfer_supplier_email
+  value: monkeyfuntravels@hotmail.com
+  description:
+

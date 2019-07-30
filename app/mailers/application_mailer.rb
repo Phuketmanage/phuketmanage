@@ -2,7 +2,7 @@ class ApplicationMailer < ActionMailer::Base
   before_action :set_settings
   layout 'mailer'
 
-  default from: 'info@phuketmanage.com'
+  default from: 'Phuket Manage <info@phuketmanage.com>'
 
   private
     def set_settings

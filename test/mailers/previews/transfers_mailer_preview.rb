@@ -9,8 +9,8 @@ class TransfersMailerPreview < ActionMailer::Preview
   end
 
   def amended
-    transfer = Transfer.find_by(number: "W78BVYU")
-    transfer.trsf_type == "ARR" ? transfer.trsf_type = "DEP" : transfer.trsf_type = "ARR"
+    transfer = Transfer.find_by(number: "PY01N3M")
+    transfer.trsf_type == "IN" ? transfer.trsf_type = "OUT" : transfer.trsf_type = "IN"
     transfer.date = transfer.date+1.day
     transfer.time = transfer.time.split("").shuffle.join
     transfer.from = "New from".split("").shuffle.join
@@ -23,15 +23,10 @@ class TransfersMailerPreview < ActionMailer::Preview
     TransfersMailer.amended(transfer, changes)
   end
 
-
-  # Preview this email at http://localhost:3000/rails/mailers/transfers_mailer/confirmed
-  def confirmed
-    TransfersMailer.confirmed
-  end
-
   # Preview this email at http://localhost:3000/rails/mailers/transfers_mailer/canceled
   def canceled
-    TransfersMailer.canceled
+    transfer = Transfer.find_by(number: "PY01N3M")
+    TransfersMailer.canceled(transfer)
   end
 
 end

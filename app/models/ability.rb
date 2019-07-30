@@ -5,7 +5,7 @@ class Ability
 
   def initialize(user)
     user ||= User.new                          # guest user
-
+    can [:confirmed, :index_supplier, :canceled], Transfer
     if user.role? :owner
       # can :read, [ House ]
     elsif user.role? 'Maid'
@@ -13,14 +13,15 @@ class Ability
     elsif user.role? 'Guest relation'
       can :manage, Job
       cannot :destroy, Job
+      can :index, Transfer
     elsif user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType ]
-      cannot :destroy, [ HouseType, House, Booking, JobType ]
+                      Connection, JobType, Transfer ]
+      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update], Job
       can [:destroy], Job, creator: user
     elsif user.role? :admin

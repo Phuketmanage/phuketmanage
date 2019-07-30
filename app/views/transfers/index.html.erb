@@ -2,6 +2,23 @@
 
 <%= render 'shared/error_messages', object: @transfer %>
 
+<% if controller_name = "transfers" %>
+  <%= form_with(url: transfers_path, local: true, method: :get) do |f| %>
+    <div class="form-row">
+      <div class="col-md-2 form-group">
+        <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= f.submit 'Show', class: 'btn btn-primary' %>
+      </div>
+
+    </div>
+  <% end %>
+<% end %>
+
 <%= link_to 'New transfer', '#',
                       data: {
                         toggle: 'modal',

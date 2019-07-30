@@ -1,0 +1,74 @@
+<div width=100% align="center" style="box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.22);border: none; padding: 15px; margin-top:10px;background-color:#FFFFFF; text-align: left">
+  <% if @changes.key?('trsf_type') %>
+    <span style="text-decoration: line-through;color:#BBB">
+      <%= @changes['trsf_type'][0] %>
+    </span>
+  <% end %>
+  <strong><%= @transfer.trsf_type %></strong>
+  <% if @changes.key?('date') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['date'][0].strftime("%d.%m.%Y") %></span>
+  <% end %>
+  <%= @transfer.date.strftime("%d.%m.%Y") %><br />
+  <p>
+  <strong>
+  <% if @transfer.trsf_type == "IN" %>
+    Flight:
+  <% else %>
+  From:
+  <% end %>
+  </strong>
+  <% if @changes.key?('from') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['from'][0] %></span>
+  <% end %>
+  <%= @transfer.from %> -
+  <% if @changes.key?('time') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['time'][0] %></span>
+  <% end %>
+  <%= @transfer.time %>
+  <% house = House.find_by(code: @transfer.from.strip) %>
+  <% if house %>
+    <br />
+    <%= "Property address: #{house.address}" if house.address %><br />
+    <% if house.google_map %>
+      Google map: <%= link_to 'link', "#{@transfer.booking.house.google_map}", target: '_blank'  %>
+    <% end %>
+  <% end %>
+  </p>
+  <p>
+  <strong>To:</strong>
+  <% if @changes.key?('to') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['to'][0] %></span>
+  <% end %>
+  <%= "#{@transfer.to}" %>
+  <% house = House.find_by(code: @transfer.to.strip) %>
+  <% if house %>
+    <br />
+    <%= "Property address: #{house.address}" if house.address %><br />
+    <% if house.google_map %>
+      Google map: <%= link_to 'link', "#{@transfer.booking.house.google_map}", target: '_blank'  %>
+    <% end %>
+  <% end %>
+  </p>
+  <p>
+  <strong>Client:</strong>
+  <% if @changes.key?('client') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['client'][0] %></span>
+  <% end %>
+  <%= @transfer.client %>,
+  <% if @changes.key?('pax') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['pax'][0] %></span>
+  <% end %>
+  <%= @transfer.pax %>pax
+  </p>
+  <p>
+  Remarks:
+  <% if @changes.key?('remarks') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['remarks'][0] %></span>
+  <% end %>
+  <%= @transfer.remarks if !@transfer.remarks? %>
+  </p>
+  <p>
+  Booked by: <%= "#{@transfer.booked_by}" if !@transfer.booked_by.nil? %><br />
+  Transfer No: <%= @transfer.number %>
+  </p>
+</div>

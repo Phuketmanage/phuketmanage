@@ -1,14 +1,33 @@
 class TransfersController < ApplicationController
-  layout 'admin'
+  load_and_authorize_resource
+
+  layout 'admin', except: [:index_supplier, :confirmed, :canceled]
   before_action :set_transfer, only: [:show, :update, :destroy, :cancel]
 
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = Transfer.all.order(:date)
+
+    if !params[:from].present? && !params[:to].present?
+      today = Time.now.in_time_zone('Bangkok').to_date
+      @transfers = Transfer.where('date >= ?', today).order(:date)
+    elsif params[:from].present? && !params[:to].present?
+      from = params[:from].to_date
+      today = Time.now.in_time_zone('Bangkok').to_date
+      @transfers = Transfer.where('date >= ? AND date <= ?', from, today).order(:date)
+    elsif params[:from].present? && params[:to].present?
+      from = params[:from].to_date
+      to = params[:to].to_date
+      @transfers = Transfer.where('date >= ? AND date <= ?', from, to).order(:date)
+    end
     @transfer = Transfer.new
     @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
+  end
+
+  def index_supplier
+    today = Time.now.in_time_zone('Bangkok').to_date
+    @transfers = Transfer.where('date >= ?', today).order(:date)
   end
 
   # GET /transfers/1
@@ -66,7 +85,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  def confirm
+  def confirmed
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
       @notice = "There is no such transfer with booking no #{params[:number]}"
@@ -134,21 +153,45 @@ class TransfersController < ApplicationController
   end
 
   def cancel
-    @transfer.destroy
-    if !@transfer.booking_id.nil?
-      @transfers = @transfer.booking.transfers
-    else
-      today = Time.now.in_time_zone('Bangkok').to_date
-      @transfers = Transfer.where('date >= ?', today).order(:date)
+    respond_to do |format|
+      if @transfer.update(status: 'canceling')
+        if params[:request_from] == 'bookings'
+          @transfers = @transfer.booking.transfers
+        else
+          today = Time.now.in_time_zone('Bangkok').to_date
+          @transfers = Transfer.where('date >= ?', today).order(:date)
+        end
+        TransfersMailer.canceled(@transfer).deliver_now
+        format.js
+      else
+        render "Was not able to change transfer and send ammendment request."
+      end
     end
   end
+
+  def canceled
+    @transfer = Transfer.find_by(number: params[:number])
+    if @transfer.nil?
+      @notice = "There is no such transfer with booking no #{params[:number]}"
+      @color = "text-danger"
+      return
+    elsif @transfer.update(status: "canceled")
+      @notice = 'Transfer was successfully canceled.'
+      @color = "text-success"
+      return
+    else
+      @notice = 'Something went wrong. Transfer was not canceled.'
+      @color = "text-danger"
+    end
+  end
+
 
   # DELETE /transfers/1
   # DELETE /transfers/1.json
   def destroy
     @transfer.destroy
     respond_to do |format|
-      format.html { redirect_to private_transfers_url, notice: 'Transfer was successfully destroyed.' }
+      format.html { redirect_to transfers_url, notice: 'Transfer was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

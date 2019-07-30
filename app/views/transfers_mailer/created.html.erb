@@ -1,34 +1,5 @@
-<div style="width:100%!important;color:#767676;background:#f2f2f2;font-family:Tahoma,'Unicode Arial MS',Helvetica,Arial,sans-serif;font-size:13px;margin:0;padding:0">
-  <table width=700px align="center" style="padding: 5px;">
-    <tr>
-      <td>
-        <h1 style="font-family: Impact;">
-          <%= image_tag('https://phuketdrive.s3.amazonaws.com/images/logo.png', { width: 25 } ) %> PHUKET DRIVE
-        </h1>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>Transfer details:</b>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= render 'transfer' %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p><%= link_to 'Confirm transfer', suppliers_confirm_transfer_url(@transfer.number), target: "_blank"  %></p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p style="padding-top: 15px;">--<br />
-        <%= t('app.name') %><br />
-        <%= t('app.reservation_phone') %><br />
-        <%= t('app.reservation_email') %></p>
-      </td>
-    </tr>
-  </table>
-</div>
+<%= render 'frame',
+      title: 'New Transfer',
+      brand_color: '#4CAF50',
+      link_text: 'Confirm transfer',
+      link: supplier_confirm_transfer_url(@transfer.number) %>

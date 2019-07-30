@@ -7,10 +7,20 @@ class User < ApplicationRecord
   scope :with_role, ->(role) { includes(:roles).where(roles: {name: role}) }
 
   def role?(role)
-    role = role.to_s.dup
-    role[0] = role[0].capitalize
+    role = role.to_s if role.kind_of?(Symbol)
+    role = [role.dup] if role.kind_of?(String)
+    role.map{|r| r[0] = r[0].capitalize}
     !roles.find_by_name(role).nil?
   end
+
+  # def is_any_of?(role)
+  #   role = role.split = if role.kind_of?(String)
+  #   result = false
+  #   role.each do |r|
+
+  #   end
+
+  # end
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
