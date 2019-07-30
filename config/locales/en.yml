@@ -1,11 +1,11 @@
 en:
   app:
     name: "Phuket Manage - Life Is Drive"
-    email: "info@phuketdrive.com"
+    email: "info@phuketmanage.com"
     phone: "+6687 477 5544"
     reservation_phone: "+6687 477 5544"
-    reservation_email: "info@phuketdrive.com"
-    tagline: "Car rental Phuket Thailand"
+    reservation_email: "info@phuketmanage.com"
+    tagline: "Property Management Phuket Thailand"
   search:
     search: Search
     results: Search results
