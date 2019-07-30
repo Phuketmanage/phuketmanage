@@ -1,7 +1,5 @@
 <%= form_with(model: booking, local: true) do |form| %>
-  <% if booking.errors.any? %>
-    <%= render 'shared/error_messages', object: form.object %>
-  <% end %>
+  <%= render 'shared/error_messages', object: form.object %>
 
   <div class="row">
     <div class="col-md-2 form-group">
@@ -11,24 +9,28 @@
     <div class="col-md-2 form-group">
       <%= form.date_field :finish, class: 'form-control' %>
     </div>
-
     <div class="col-md-2 form-group">
       <%= form.select :house_id,
             @houses.all.map {|h| [h.code, h.id]},
                       { prompt: 'Select house' }, { class: "form-control",  } %>
     </div>
-
     <div class="col-md-2 form-group">
       <%= form.select :tenant_id,
             @tenants.all.map {|t| ["#{t.name} #{t.surname}", t.id]},
                       { prompt: 'Select tenant' }, { class: "form-control",  } %>
     </div>
-
     <div class="col-md-2 form-group">
       <%= form.select :status, ["confirmed", "block"], {}, { class: "form-control"} %>
     </div>
-
   </div>
+
+  <div class='row'>
+    <div class="col-md-6 form-group">
+      <%= form.label :client_details %>
+      <%= form.text_field :client_details, placeholder: 'Name, surname, pax, phone, email', class: 'form-control' %>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-2 form-group">
       <%= form.label :sale %>
@@ -53,7 +55,14 @@
 
   <div class="row">
     <div class="col form-group">
-      <%= form.text_area :comment, class: 'form-control', rows: 6 %>
+      <%= form.label 'Comment' %>
+      <%= form.text_area :comment, class: 'form-control', rows: 2 %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col form-group">
+      <%= form.label 'Comment for guest relation' %>
+      <%= form.text_area :comment_gr, class: 'form-control', rows: 2 %>
     </div>
   </div>
 
@@ -64,9 +73,9 @@
                             for: 'unavailable_check_box' } %>
   </div>
 
-
+  <%#= hidden_field_tag :house_id, @booking.house.id if @booking %>
   <div>
-      <%= form.submit 'Save', class: 'btn btn-primary' %>
+      <%= form.submit 'Save booking', class: 'btn btn-primary' %>
       <% if @booking.house %>
         <%= link_to 'Back', house_bookings_path(@booking.house.number), class: 'btn btn-secondary' %>
       <% else %>

@@ -67,6 +67,11 @@ class BookingsController < ApplicationController
     render json: { timeline:  timeline }
   end
 
+  def check_in_out
+    result = Booking.check_in_out
+  end
+
+
   # GET /bookings/1
   # GET /bookings/1.json
   def show
@@ -79,9 +84,7 @@ class BookingsController < ApplicationController
     if params[:hid]
       @booking.house = @houses.find_by(number: params[:hid])
     end
-
     @tenants = User.with_role('Tenant')
-
   end
 
   # GET /bookings/1/edit
@@ -90,6 +93,12 @@ class BookingsController < ApplicationController
     @tenants = User.with_role('Tenant')
     search = Search.new({rs: @booking.start, rf: @booking.finish})
     @booking_original = nil
+    @transfers = @booking.transfers.all
+    @transfer = @booking.transfers.new
+    @transfers_in = @booking.transfers.where(trsf_type: 'IN')
+    @transfers_out = @booking.transfers.where(trsf_type: 'OUT')
+    @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+    @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
     unless @booking.block?
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
@@ -211,7 +220,26 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:start, :finish, :house_id, :tenant_id, :number, :ical_UID, :source_id, :sale, :agent, :comm, :nett, :status, :comment, :allotment)
+      params.require(:booking).permit(:start,
+                                      :finish,
+                                      :house_id,
+                                      :tenant_id,
+                                      :number,
+                                      :ical_UID,
+                                      :source_id,
+                                      :sale,
+                                      :agent,
+                                      :comm,
+                                      :nett,
+                                      :status,
+                                      :comment,
+                                      :comment_gr,
+                                      :allotment,
+                                      :in_details,
+                                      :out_details,
+                                      :transfer_in,
+                                      :transfer_out,
+                                      :client_details)
     end
 
 

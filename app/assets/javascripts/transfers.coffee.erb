@@ -1,0 +1,134 @@
+$(document).on "turbolinks:load", ->
+  $('.link_new_transfer').on 'click', (e) ->
+    e.preventDefault()
+    $('form#new_transfer').attr('action', '/transfers')
+    $('form#new_transfer input[name=_method]').val('post')
+    type = $(this).data('transfer-type')
+    if type == 'IN'
+      $('#new_transfer_modal_label').html('New transfer IN');
+      $('#transfer_date').val($('#booking_start').val())
+      $('select#trsf_type').val(type)
+      $('#from_label').text("Flight")
+      $('#from').val('')
+      $('#to').val($('#booking_house_id').find(":selected").text())
+      Regex = /^\D+(?= )/
+      $('#transfer_client').val(Regex.exec($('#booking_client_details').val()))
+    if type == 'OUT'
+      $('#new_transfer_modal_label').html('New transfer OUT');
+      $('#transfer_date').val($('#booking_finish').val())
+      $('select#trsf_type').val(type)
+      $('#from_label').text("From")
+      $('#from').val($('#booking_house_id').find(":selected").text())
+      $('#to').val('Airport (International)')
+      Regex = /^\D+(?= )/
+      $('#transfer_client').val(Regex.exec($('#booking_client_details').val()))
+    if type == 'none'
+      $('#from_label').text("Flight")
+      $('#from').val('')
+      $('#to').val('')
+    $('#transfer_time').val('')
+    $('#transfer_remarks').val('')
+    $('#new_transfer input[type=submit]').val('Send transfer')
+
+  $('#transfer_form').on 'change', '#trsf_type', ->
+    $('#from_label').text("Flight") if $(this).val() == 'IN'
+    $('#from_label').text("From") if $(this).val() == 'OUT'
+  $('#transfer_form').on 'click', '#show_from_select', (e) ->
+    e.preventDefault()
+    $('#from').hide()
+    $('#from_select').show()
+    $('#show_from_select').hide()
+  $('#transfer_form').on 'change', '#from_select', ->
+    $('#from').val($('#from_select').find(":selected").text())
+    $('#from').show()
+    $('#from_select').hide()
+    $('#show_from_select').show()
+  $('#transfer_form').on 'click', '#show_to_select', (e) ->
+    e.preventDefault()
+    $('#to').hide()
+    $('#to_select').show()
+    $('#show_to_select').hide()
+  $('#transfer_form').on 'change', '#to_select', ->
+    $('#to').val($('#to_select').find(":selected").text())
+    $('#to').show()
+    $('#to_select').hide()
+    $('#show_to_select').show()
+
+  $('#transfer_form').on 'shown.bs.modal', '#new_transfer_modal',  ->
+    type = $('select#trsf_type').val()
+    $('select#trsf_type').change()
+    $('#from').show()
+    $('#from_select').hide()
+    $('#show_from_select').show()
+    $('#to').show()
+    $('#to_select').hide()
+    $('#show_to_select').show()
+    if type == 'IN'
+      $('#from').trigger('focus')
+    else
+      $('#transfer_time').trigger('focus')
+
+
+
+  # $('a[data-transfer-action=edit]').on 'click', (e) ->
+  #   e.preventDefault()
+  #   $.ajax
+  #     url: "/transfers/#{$(this).data('transfer-id')}",
+  #     type: "get",
+  #     dataType: "json",
+  #     success: (data) ->
+  #       $('#new_transfer_modal').modal('show')
+  #       $('#transfer_date').val(data.date)
+  #       $('select#trsf_type').val(data.trsf_type)
+  #       $('select#trsf_type').change()
+  #       $('#from').val(data.from)
+  #       $('#from').show()
+  #       $('#from_select').hide()
+  #       $('#show_from_select').show()
+  #       $('#transfer_time').val(data.time)
+  #       $('#transfer_client').val(data.client)
+  #       $('#transfer_pax').val(data.pax)
+  #       $('#to').val(data.to)
+  #       $('#to').show()
+  #       $('#to_select').hide()
+  #       $('#show_to_select').show()
+  #       $('#transfer_remarks').val(data.remarks)
+  #       $('input[type=submit]').val('Amend transfer')
+  #     error: (data) ->
+  #       console.log 'Something went wrong'
+
+  # $('#new_transfer').submit (e) ->
+  #   e.preventDefault()
+  #   $.ajax
+  #     beforeSend: (xhr) ->
+  #       xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+  #     url: '/transfers',
+  #     type: "post",
+  #     dataType: "json",
+  #     data: {
+  #       transfer: {
+  #         booking_id: $('#transfer_bookig_id').val(),
+  #         date: $('#transfer_date').val(),
+  #         trsf_type: $('#trsf_type').val(),
+  #         from: $('#from').val(),
+  #         time: $('#transfer_time').val(),
+  #         client: $('#transfer_client').val(),
+  #         pax: $('#transfer_pax').val(),
+  #         remarks: $('#transfer_remarks').val(),
+  #         booked_by: $('#transfer_booked_by').val()
+  #       },
+  #     },
+  #     success: (data) ->
+  #       console.log('Transfer saved and sent')
+  #       type = data.transfer.trsf_type.toLowerCase()
+  #       $("#booking_#{type}_details").val("#{data.transfer.from} #{data.transfer.time} #{data.transfer.status}")
+  #       $("#booking_#{type}_details").attr('readonly', '')
+  #       $("#booking_#{type}_details").removeClass('form-control')
+  #       $("#booking_#{type}_details").addClass('form-control-plaintext')
+  #       $(".link_new_transfer[data-transfer-type=#{type}]").hide()
+  #     error: (data) ->
+  #       console.log('Something went wrong')
+  #   $('#new_transfer_modal').modal('hide')
+  #   return  false;
+
+

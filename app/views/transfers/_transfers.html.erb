@@ -1,0 +1,19 @@
+<% if transfers.any? %>
+  <div class="d-none d-lg-block mb-2 p-2 ">
+    <div class="row font-weight-bold">
+      <div class="col-lg-1 pl-lg-0 pr-lg-0">Date/Type</div>
+      <div class="col-lg-2">From</div>
+      <div class="col-lg-2">Client</div>
+      <div class="col-lg-2">To</div>
+      <div class="col-lg-1">Booked by</div>
+      <div class="col-lg-2">Status</div>
+      <div class="col-lg-1">Number</div>
+      <div class="col-lg-1">Actions</div>
+    </div>
+  </div>
+
+  <%= render transfers %>
+
+<% else %>
+  No transfers for this booking yet
+<% end %>

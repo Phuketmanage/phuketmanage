@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     devise_for :users
@@ -35,7 +36,11 @@ Rails.application.routes.draw do
     resources :connections, only: [:create, :destroy]
     resources :jobs, except: :show
     resources :job_types, except: :show
+    get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
+    resources :transfers
   end
+  get '/transfers/:number/confirm', to: 'transfers#confirm', as: 'suppliers_confirm_transfer'
+  # get '/transfers/for_supplier', to: 'transfers#index_supplier', as: 'suppliers_confirm_transfer'
 
   root to: 'pages#index'
 end

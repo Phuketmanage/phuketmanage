@@ -119,7 +119,9 @@ class HousesController < ApplicationController
                                     :rental,
                                     :maintenance,
                                     :outsource_cleaning,
-                                    :outsource_linen
+                                    :outsource_linen,
+                                    :address,
+                                    :google_map
                                     )
     end
 

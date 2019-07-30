@@ -1,3 +1,31 @@
 <h1>Editing Booking</h1>
 
 <%= render 'form', booking: @booking %>
+
+<h3 class="mt-3">Transfers for Booking</h3>
+
+<%= link_to 'Book transfer IN', '#',
+              data: {
+                toggle: 'modal',
+                target: '#new_transfer_modal',
+                transfer_type: 'IN',
+              },
+              class: 'link_new_transfer' %> |
+<%= link_to 'Book transfer OUT', '#',
+              data: {
+                toggle: 'modal',
+                target: '#new_transfer_modal',
+                transfer_type: 'OUT',
+              },
+              class: 'link_new_transfer' %>
+<div id="transfers">
+  <%= render 'transfers/transfers', transfers: @transfers %>
+</div>
+<div id="transfer_form">
+  <%#= render 'transfers/form',  transfer: @transfer,
+                                request_from: 'bookings' %>
+  <%= render 'transfers/form',  transfer: @transfer %>
+
+</div>
+
+

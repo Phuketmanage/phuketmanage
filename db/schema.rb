@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_26_191900) do
+ActiveRecord::Schema.define(version: 2019_07_30_110846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,10 @@ ActiveRecord::Schema.define(version: 2019_07_26_191900) do
     t.integer "nett"
     t.boolean "synced", default: false
     t.boolean "allotment"
+    t.boolean "transfer_in", default: false
+    t.boolean "transfer_out", default: false
+    t.string "client_details"
+    t.text "comment_gr"
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
@@ -95,6 +99,8 @@ ActiveRecord::Schema.define(version: 2019_07_26_191900) do
     t.boolean "maintenance", default: false
     t.boolean "outsource_cleaning", default: false
     t.boolean "outsource_linen", default: false
+    t.string "address"
+    t.string "google_map"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
@@ -186,6 +192,25 @@ ActiveRecord::Schema.define(version: 2019_07_26_191900) do
     t.index ["syncable"], name: "index_sources_on_syncable"
   end
 
+  create_table "transfers", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.integer "trsf_type"
+    t.string "from"
+    t.string "time"
+    t.string "client"
+    t.string "pax"
+    t.string "to"
+    t.string "remarks"
+    t.string "booked_by"
+    t.string "number"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "date"
+    t.index ["booking_id"], name: "index_transfers_on_booking_id"
+    t.index ["number"], name: "index_transfers_on_number"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -227,4 +252,5 @@ ActiveRecord::Schema.define(version: 2019_07_26_191900) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
+  add_foreign_key "transfers", "bookings"
 end

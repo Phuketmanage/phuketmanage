@@ -1,0 +1,55 @@
+<div class="row shadow-sm mb-2 p-1 bg-light rounded">
+  <div class="col">
+    <div class="row">
+      <div class="col-lg-1">
+        <%= transfer.date.strftime("%d.%m.%y") if !transfer.date.nil? %>
+        <%= transfer.trsf_type %>
+      </div>
+      <div class="col-lg-2">
+        <% if transfer.trsf_type == "IN" %>
+          <span class="d-lg-none">Flight: </span>
+        <% else %>
+          <span class="d-lg-none">From: </span>
+        <% end %>
+        <%=  "#{transfer.from} - #{transfer.time}" %>
+      </div>
+      <div class="col-lg-2">
+        <span class="d-lg-none">Client: </span>
+        <%= "#{transfer.client}, #{transfer.pax} pax" %>
+      </div>
+      <div class="col-lg-2">
+        <span class="d-lg-none">To: </span>
+        <%= transfer.to %>
+      </div>
+      <div class="col-lg-1">
+        <span class="d-lg-none">Booked by: </span>
+        <%= "#{transfer.booked_by}" if !transfer.booked_by.nil? %>
+      </div>
+      <div class="col-lg-2 transfer_<%= transfer.status %>">
+        <span class="d-lg-none">Status: </span>
+        <% if transfer.sent? %>
+          <%= "#{transfer.status} #{transfer.created_at.strftime("%d.%m.%y")}" %>
+        <% else %>
+          <%= "#{transfer.status} #{transfer.updated_at.strftime("%d.%m.%y")}" %>
+        <% end %>
+      </div>
+      <div class="col-lg-1">
+        <span class="d-lg-none">Number: </span>
+        <%= link_to transfer.number, edit_transfer_path(transfer, request_from: controller_name), remote: :true %>
+      </div>
+      <div class="col-lg-1">
+        <span class="d-lg-none">Actions: </span>
+        <%= link_to 'Cancel', cancel_transfer_path(transfer), data: { confirm: 'Are you sure?' }, remote: :true %>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col">
+        <% if !transfer.remarks.empty? %>
+          <span class="d-lg-none">Remarks: </span>
+          Remarks: <%= transfer.remarks  %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

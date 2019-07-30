@@ -1,0 +1,20 @@
+<h1>Transfers</h1>
+
+<%= render 'shared/error_messages', object: @transfer %>
+
+<%= link_to 'New transfer', '#',
+                      data: {
+                        toggle: 'modal',
+                        target: '#new_transfer_modal',
+                        transfer_type: 'none',
+                      },
+                      class: 'link_new_transfer' %>
+
+<div id="transfers">
+  <%= render 'transfers', transfers: @transfers %>
+</div>
+<div id="transfer_form">
+  <%#= render 'form',  transfer: @transfer,
+                      request_from: 'transfers' %>
+  <%= render 'form',  transfer: @transfer %>
+</div>

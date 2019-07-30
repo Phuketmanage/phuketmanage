@@ -1,0 +1,48 @@
+<div width=100% align="center" style="border: solid 1px #DDDDDD; padding: 15px; background-color:#FFFFFF; text-align: left">
+  <% if @changes.key?('trsf_type') %>
+    <span style="text-decoration: line-through;color:#BBB">
+      <%= @changes['trsf_type'][0] %>
+    </span>
+  <% end %>
+  <%= @transfer.trsf_type %>
+  <% if @changes.key?('date') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['date'][0].strftime("%d.%m.%Y") %></span>
+  <% end %>
+  <%= @transfer.date.strftime("%d.%m.%Y") %><br />
+  <% if @transfer.trsf_type == "ARR" %>
+    Flight:
+  <% else %>
+    From:
+  <% end %>
+  <% if @changes.key?('from') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['from'][0] %></span>
+  <% end %>
+  <%=  @transfer.from %> -
+  <% if @changes.key?('time') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['time'][0] %></span>
+  <% end %>
+  <%= @transfer.time %>
+  <br />
+  Client:
+  <% if @changes.key?('client') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['client'][0] %></span>
+  <% end %>
+  <%= @transfer.client %>,
+  <% if @changes.key?('pax') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['pax'][0] %></span>
+  <% end %>
+  <%= @transfer.pax %>pax<br />
+  To:
+  <% if @changes.key?('to') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['to'][0] %></span>
+  <% end %>
+  <%= "#{@transfer.to}" %><br />
+  Remarks:
+  <% if @changes.key?('remarks') %>
+    <span style="text-decoration: line-through;color:#BBB"><%= @changes['remarks'][0] %></span>
+  <% end %>
+  <%= @transfer.remarks if !@transfer.remarks.empty? %>
+  <br />
+  Booked by: <%= "#{@transfer.booked_by}" if !@transfer.booked_by.nil? %><br />
+  Booking no: <%= @transfer.number %>
+</div>

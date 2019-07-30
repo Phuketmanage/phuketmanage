@@ -1,0 +1,94 @@
+<div class="modal fade" id="new_transfer_modal" tabindex="-1" role="dialog" aria-labelledby="new_transfer_modal_label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="new_transfer_modal_label">New transfer</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%= form_with(model: transfer, id: "new_transfer") do |form| %>
+
+      <div class="modal-body">
+          <%= render 'shared/error_messages', object: form.object %>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+              <%= form.date_field :date, {
+                min: Date.today.in_time_zone('Bangkok').to_date,
+                class: "form-control", required: true} %>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+              <%= form.select :trsf_type, Transfer.trsf_types.keys.to_a, {}, {
+                id: "trsf_type", class: "form-control", required: true } %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <%= form.label "Flight", id: "from_label" %>
+                <%= form.text_field :from, class: "form-control", required: true, id: "from" %>
+                <%= form.select :from_select, @select_items, {prompt: 'Select origin'}, {
+                id: "from_select", class: "form-control" } %>
+                <%= link_to "Select from the list", "#", id: 'show_from_select' %>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <%= form.label :time %>
+                <%= form.text_field :time, class: "form-control", required: true %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-10">
+              <div class="form-group">
+                <%= form.label :client %>
+                <%= form.text_field :client, class: "form-control", required: true %>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+                <%= form.label :pax %>
+                <%= form.text_field :pax, class: "form-control"%>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <%= form.label :to %>
+                <%= form.text_field :to, class: "form-control", required: true, id: "to"  %>
+                <%= form.select :to_select, @select_items, {prompt: 'Select destination'}, {
+                id: "to_select", class: "form-control" } %>
+                <%= link_to "Select from the list", "#", id: 'show_to_select' %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <%= form.label :remarks %>
+                <%= form.text_field :remarks, class: "form-control"  %>
+              </div>
+            </div>
+          </div>
+      </div>
+      <%= form.hidden_field :booking_id %>
+      <%= form.hidden_field :booked_by, value: current_user.name %>
+      <%= hidden_field_tag :request_from, request_from ||= controller_name %>
+      <%#= hidden_field_tag :request_from, controller_name %>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <% action_name == 'edit' ? button_txt = 'Amend transfer' : button_txt = 'Send transfer' %>
+        <%= form.submit button_txt,  class: "btn btn-primary" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

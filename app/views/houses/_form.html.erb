@@ -62,6 +62,16 @@
     <strong>General details</strong>
     <hr>
     <div class="row">
+      <div class="col-6 form-group">
+        <%= form.label :address %>
+        <%= form.text_field :address, class: 'form-control' %>
+      </div>
+      <div class="col-6 form-group">
+        <%= form.label :google_map %>
+        <%= form.text_field :google_map, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-1 form-group">
         <%= form.label :rooms %>
         <%= form.number_field :rooms, class: 'form-control' %>
@@ -121,38 +131,41 @@
     </div>
   </div>
 
-  <div class="form-check form-check-inline">
-    <%= form.check_box :rental, { class: 'form-check-input',
-                            id: 'rental_check_box' } %>
-    <%= form.label :rental, {     class: 'form-check-label',
-                            for: 'rental_check_box' } %>
-  </div>
-  <div class="form-check form-check-inline">
-    <%= form.check_box :maintenance, { class: 'form-check-input',
-                            id: 'maintenance_check_box' } %>
-    <%= form.label :maintenance, {     class: 'form-check-label',
-                            for: 'maintenance_check_box' } %>
-  </div>
-  <div class="form-check form-check-inline">
-    <%= form.check_box :outsource_cleaning, { class: 'form-check-input',
-                            id: 'outsource_cleaning_check_box' } %>
-    <%= form.label :outsource_cleaning, {     class: 'form-check-label',
-                            for: 'outsource_cleaning_check_box' } %>
-  </div>
-  <div class="form-check form-check-inline">
-    <%= form.check_box :outsource_linen, { class: 'form-check-input',
-                            id: 'outsource_linen_check_box' } %>
-    <%= form.label :outsource_linen, {     class: 'form-check-label',
-                            for: 'outsource_linen_check_box' } %>
-  </div>
+  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+    <strong>Service provided</strong>
+    <hr>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :rental, { class: 'form-check-input',
+                              id: 'rental_check_box' } %>
+      <%= form.label :rental, {     class: 'form-check-label',
+                              for: 'rental_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :maintenance, { class: 'form-check-input',
+                              id: 'maintenance_check_box' } %>
+      <%= form.label :maintenance, {     class: 'form-check-label',
+                              for: 'maintenance_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :outsource_cleaning, { class: 'form-check-input',
+                              id: 'outsource_cleaning_check_box' } %>
+      <%= form.label :outsource_cleaning, {     class: 'form-check-label',
+                              for: 'outsource_cleaning_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :outsource_linen, { class: 'form-check-input',
+                              id: 'outsource_linen_check_box' } %>
+      <%= form.label :outsource_linen, {     class: 'form-check-label',
+                              for: 'outsource_linen_check_box' } %>
+    </div>
 
+  </div>
   <div class="form-check mb-2">
     <%= form.check_box :unavailable, { class: 'form-check-input',
                             id: 'unavailable_check_box' } %>
     <%= form.label :unavailable, {     class: 'form-check-label',
                             for: 'unavailable_check_box' } %>
   </div>
-
 
   <div class="actions">
     <%= form.submit 'Save', class: 'btn btn-primary' %>

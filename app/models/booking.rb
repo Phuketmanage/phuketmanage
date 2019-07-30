@@ -11,7 +11,27 @@ class Booking < ApplicationRecord
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
   has_many :jobs, dependent: :destroy
+  has_many :transfers, dependent: :destroy
   validate :price_chain, unless: :allotment?
+
+  def self.check_in_out
+    result = []
+    today = Time.zone.now.in_time_zone('Bangkok').to_date
+    bookings = Booking.where('finish >= ? AND status != ?', today, Booking.statuses[:canceled]).order(:start)
+    bookings.each do |b|
+      line_in = {}
+      line_in[:date] = line_out[:date] =b.start
+      line_in[:type] = 'In'
+      line_in[:house_code] = line_out[:house_code] = b.house.code
+      line_in[:details] = b.in_details
+      line_out[:details] = b.out_details
+      line_in[:our_transfer] = b.transfer_in
+      line_out[:our_transfer] = b.transfer_out
+      line_in[:client] = line_out[:client] = b.client_details
+      result << line_in
+      result << line_out
+    end
+  end
 
   def self.timeline_data period = nil
     today = Time.zone.now.in_time_zone('Bangkok').to_date
