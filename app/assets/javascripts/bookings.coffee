@@ -142,6 +142,7 @@ close_dates = (h) ->
     for x_add in [0..b.length-1]
       x = b.x+x_add
       $("#x"+x+"y"+b.y).addClass('booked')
+      $("#x"+x+"y"+b.y).addClass(b.status)
       $("#x"+x+"y"+b.y).data('booking-id', b.id)
       if x_add == 0
         $("#x"+x+"y"+b.y).css("z-index", 3)

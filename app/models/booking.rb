@@ -15,34 +15,45 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   validate :price_chain, unless: :allotment?
 
+  scope :active, -> { where.not(status: [:canceled]) }
+  scope :real, -> { where.not(status: [:canceled, :block]) }
+
   def self.check_in_out
     result = []
     today = Time.zone.now.in_time_zone('Bangkok').to_date
-    bookings = Booking.where('finish >= ? AND status != ?', today, Booking.statuses[:canceled]).order(:start)
+    # bookings = Booking.where('finish >= ? AND status != ?', today, Booking.statuses[:canceled]).order(:start)
+    bookings = Booking.real.where('finish >= ?', today).order(:start)
     bookings.each do |b|
-      line_in = {}
-      line_out = {}
-      line_in[:type] = 'IN'
-      line_in[:date] = b.start.strftime('%d.%m.%Y')
-      line_out[:type] = 'OUT'
-      line_out[:date] = b.finish.strftime('%d.%m.%Y')
-      line_in[:house] = line_out[:house] = b.house.code
-      line_in[:client] = line_out[:client] = b.client_details
-      line_in[:source] = line_out[:source] = b.source.name if b.source
-      line_in[:comment] = line_out[:comment] = b.comment_gr
-      line_in[:transfers] = []
-      line_out[:transfers] = []
-      transfers = b.transfers
-      transfers.each do |t|
-        if t.trsf_type == 'IN'
+      if b.start >= today && !b.no_check_in
+        line_in = {}
+        line_in[:type] = 'IN'
+        line_in[:date] = b.start.strftime('%d.%m.%Y')
+        line_in[:house] = b.house.code
+        line_in[:client] = b.client_details
+        line_in[:source] = b.source.name if b.source
+        line_in[:comment] = b.comment_gr
+        line_in[:transfers] = []
+        transfers = b.transfers.where(trsf_type: :IN)
+        transfers.each do |t|
           line_in[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
         end
-        if t.trsf_type == 'OUT'
+        result << line_in
+      end
+      if !b.no_check_out
+        line_out = {}
+        line_out[:type] = 'OUT'
+        line_out[:date] = b.finish.strftime('%d.%m.%Y')
+        line_out[:house] = b.house.code
+        line_out[:client] = b.client_details
+        line_out[:source] = b.source.name if b.source
+        line_out[:comment] = b.comment_gr
+        line_out[:transfers] = []
+        transfers = b.transfers.where(trsf_type: :OUT)
+        transfers.each do |t|
           line_out[:transfers] << "#{t.time} #{t.remarks}"
         end
+        result << line_out
       end
-      result << line_in
-      result << line_out
     end
     result.sort_by{|r| r[:date].to_date}
   end
@@ -72,6 +83,7 @@ class Booking < ApplicationRecord
         booking = {}
         booking[:id] = b.id
         booking[:number] = b.number
+        booking[:status] = b.status
         booking[:comment] = b.comment
         booking[:x] = ([b.start, today].max - today).to_i+1
         booking[:y] = y

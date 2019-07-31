@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_201729) do
+ActiveRecord::Schema.define(version: 2019_07_31_073300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 2019_07_30_201729) do
     t.boolean "transfer_out", default: false
     t.string "client_details"
     t.text "comment_gr"
+    t.boolean "no_check_in", default: false
+    t.boolean "no_check_out", default: false
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"

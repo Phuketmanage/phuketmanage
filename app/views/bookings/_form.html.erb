@@ -66,15 +66,27 @@
     </div>
   </div>
 
-  <div class="form-check mb-2">
+  <div class="form-check form-check-inline">
     <%= form.check_box :allotment, { class: 'form-check-input',
                             id: 'unavailable_check_box' } %>
     <%= form.label :allotment, {     class: 'form-check-label',
                             for: 'unavailable_check_box' } %>
   </div>
+  <div class="form-check form-check-inline">
+    <%= form.check_box :no_check_in, { class: 'form-check-input',
+                            id: 'no_check_in_linen_check_box' } %>
+    <%= form.label :no_check_in, {     class: 'form-check-label',
+                            for: 'no_check_in_linen_check_box' } %>
+  </div>
+  <div class="form-check form-check-inline">
+    <%= form.check_box :no_check_out, { class: 'form-check-input',
+                            id: 'no_check_out_linen_check_box' } %>
+    <%= form.label :no_check_out, {     class: 'form-check-label',
+                            for: 'no_check_out_linen_check_box' } %>
+  </div>
 
   <%#= hidden_field_tag :house_id, @booking.house.id if @booking %>
-  <div>
+  <div  class='mt-3'>
       <%= form.submit 'Save booking', class: 'btn btn-primary' %>
       <% if @booking.house %>
         <%= link_to 'Back', house_bookings_path(@booking.house.number), class: 'btn btn-secondary' %>
