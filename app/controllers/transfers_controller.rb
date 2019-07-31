@@ -10,15 +10,15 @@ class TransfersController < ApplicationController
 
     if !params[:from].present? && !params[:to].present?
       today = Time.now.in_time_zone('Bangkok').to_date
-      @transfers = Transfer.where('date >= ?', today).order(:date)
+      @transfers = Transfer.where('date >= ?', today).order(:date).all
     elsif params[:from].present? && !params[:to].present?
       from = params[:from].to_date
       today = Time.now.in_time_zone('Bangkok').to_date
-      @transfers = Transfer.where('date >= ? AND date <= ?', from, today).order(:date)
+      @transfers = Transfer.where('date >= ? AND date <= ?', from, today).order(:date).all
     elsif params[:from].present? && params[:to].present?
       from = params[:from].to_date
       to = params[:to].to_date
-      @transfers = Transfer.where('date >= ? AND date <= ?', from, to).order(:date)
+      @transfers = Transfer.where('date >= ? AND date <= ?', from, to).order(:date).all
     end
     @transfer = Transfer.new
     @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
