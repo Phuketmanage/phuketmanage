@@ -137,6 +137,25 @@ $(document).on "turbolinks:load", ->
         console.log('Something went wrong')
     $('.dropdown-menu.new_job').hide()
 
+  if $('#no_check_in_check_box').is(':checked') == true
+    $('#booking_check_in').val('')
+    $('#booking_check_in').attr('disabled', true)
+  if $('#no_check_out_check_box').is(':checked') == true
+    $('#booking_check_out').val('')
+    $('#booking_check_out').attr('disabled', true)
+  $('#no_check_in_check_box').on 'change', ->
+    if this.checked == true
+      $('#booking_check_in').val('')
+      $('#booking_check_in').attr('disabled', true)
+    if this.checked == false
+      $('#booking_check_in').removeAttr('disabled')
+  $('#no_check_out_check_box').on 'change', ->
+    if this.checked == true
+      $('#booking_check_out').val('')
+      $('#booking_check_out').attr('disabled', true)
+    if this.checked == false
+      $('#booking_check_out').removeAttr('disabled')
+
 close_dates = (h) ->
   for b in h.bookings
     for x_add in [0..b.length-1]

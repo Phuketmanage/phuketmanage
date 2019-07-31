@@ -1,5 +1,21 @@
 <h1>Check in/out</h1>
 
+<%= form_with(url: bookings_check_in_out_path, local: true, method: :get) do |f| %>
+  <div class="form-row">
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
+    </div>
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
+    </div>
+    <div class="col-lg-3 form-group">
+      <%= f.submit 'Show', class: 'btn btn-primary' %>
+      <%= link_to 'Drop filer', bookings_check_in_out_path, class: 'btn btn-secondary'  %>
+    </div>
+  </div>
+<% end %>
+
+
 <div class="d-none d-lg-block mb-2 p-2 ">
   <div class="row font-weight-bold">
     <div class="col-lg-1">

@@ -18,16 +18,39 @@ class Booking < ApplicationRecord
   scope :active, -> { where.not(status: [:canceled]) }
   scope :real, -> { where.not(status: [:canceled, :block]) }
 
-  def self.check_in_out
+  def self.check_in_out from = nil, to = nil
     result = []
-    today = Time.zone.now.in_time_zone('Bangkok').to_date
-    # bookings = Booking.where('finish >= ? AND status != ?', today, Booking.statuses[:canceled]).order(:start)
-    bookings = Booking.real.where('finish >= ?', today).order(:start)
+    if !from.present? && !to.present?
+      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      to = Booking.maximum(:finish)
+      # bookings = Booking.real.where('finish >= ?', today).all
+    elsif from.present? && !to.present?
+      from = from.to_date
+      to = Booking.maximum(:finish)
+      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, today).all
+    elsif !from.present? && to.present?
+      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      to = to.to_date
+      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, today).all
+    elsif from.present? && to.present?
+      from = from.to_date
+      to = to.to_date
+      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, to).all
+    end
+    bookings = Booking.real.where('finish >= ? AND start <= ?', from, to).all
+    # today = Time.zone.now.in_time_zone('Bangkok').to_date
+    # bookings = Booking.real.where('finish >= ?', today).all
     bookings.each do |b|
-      if b.start >= today && !b.no_check_in
+      # puts "#{!b.check_in.present?} && #{b.start} < #{from}"
+      unless  b.no_check_in ||
+              (!b.check_in.present? && b.start < from) ||
+              (b.check_in.present? && (b.check_in < from || b.check_in > to))
+        puts b.no_check_in
+        puts "#{!b.check_in.present?} && #{b.start} < #{from}"
+        puts "#{b.check_in.present?} && #{b.check_in} < #{from}"
         line_in = {}
         line_in[:type] = 'IN'
-        line_in[:date] = b.start.strftime('%d.%m.%Y')
+        line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
         line_in[:house] = b.house.code
         line_in[:client] = b.client_details
         line_in[:source] = b.source.name if b.source
@@ -39,10 +62,12 @@ class Booking < ApplicationRecord
         end
         result << line_in
       end
-      if !b.no_check_out
+      unless  b.no_check_out ||
+              (!b.check_out.present? && b.finish > to) ||
+              (b.check_out.present? && (b.check_out < from || b.check_out > to))
         line_out = {}
         line_out[:type] = 'OUT'
-        line_out[:date] = b.finish.strftime('%d.%m.%Y')
+        line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
         line_out[:house] = b.house.code
         line_out[:client] = b.client_details
         line_out[:source] = b.source.name if b.source

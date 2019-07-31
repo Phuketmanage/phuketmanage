@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md admin-menu-links mt-0 mb-0 pt-0 pb-0">
   <div class="collapse navbar-collapse" id="admin-nav">
     <ul class="navbar-nav flex-column">
-      <% if current_user.role? ['Admin', 'Manager'] %>
+      <% if current_user.role? ['Manager'] %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
         </li>
@@ -20,16 +20,58 @@
         <li class="nav-item">
           <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
         </li>
-      <% end %>
         <li class="nav-item">
           <%= link_to 'Todos', jobs_path, class: "nav-link" %>
         </li>
-      <% if current_user.role? ['Admin', 'Guest relation'] %>
         <li class="nav-item">
           <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
         </li>
       <% end %>
-      <% if current_user.role? :admin %>
+
+      <% if current_user.role? ['Guest relation'] %>
+        <li class="nav-item">
+          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if current_user.role? ['Maid'] %>
+        <li class="nav-item">
+          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+
+      <% if current_user.role? ['Admin'] %>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Houses', houses_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Owners', users_path(role: 'Owner'), class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Tenants', users_path(role: 'Tenant'), class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Sources', sources_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Job types', job_types_path, class: "nav-link" %>
         </li>
@@ -46,8 +88,9 @@
           <%= link_to 'Settings', settings_path, class: "nav-link" %>
         </li>
       <% end %>
-      <%= link_to 'Sign out', destroy_user_session_path, { method: :delete, class: "nav-link" } %>
 
+      <li class="nav-item">
+      <%= link_to 'Sign out', destroy_user_session_path, { method: :delete, class: "nav-link" } %>
       </li>
     </ul>
   </div>

@@ -22,7 +22,7 @@
       <% end %>
       <div class="col-lg-2">Status</div>
       <div class="col-lg-1">Number</div>
-      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
         <div class="col-lg-1">Actions</div>
       <% end %>
     </div>

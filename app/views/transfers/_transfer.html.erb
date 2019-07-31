@@ -31,10 +31,10 @@
         <%= "#{transfer.client}, #{transfer.pax} pax" %>
       </div>
       <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
-      <div class="col-lg-1">
-        <span class="d-lg-none">Booked by: </span>
-        <%= "#{transfer.booked_by}" if !transfer.booked_by.nil? %>
-      </div>
+        <div class="col-lg-1">
+          <span class="d-lg-none">Booked by: </span>
+          <%= "#{transfer.booked_by}" if !transfer.booked_by.nil? %>
+        </div>
       <% end %>
       <div class="col-lg-2 transfer_<%= transfer.status %>">
         <span class="d-lg-none">Status: </span>
@@ -46,14 +46,14 @@
       </div>
       <div class="col-lg-1">
         <span class="d-lg-none">Number: </span>
-        <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
+        <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
           <%= link_to transfer.number, edit_transfer_path(transfer, request_from: controller_name), remote: :true %>
         <% else %>
           <%= transfer.number %>
         <% end %>
       </div>
 
-      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Guest relation']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
         <div class="col-lg-1">
           <span class="d-lg-none">Actions: </span>
           <%= link_to 'Cancel', cancel_transfer_path(transfer, request_from: controller_name), data: { confirm: 'Are you sure?' }, remote: :true %>

@@ -18,15 +18,15 @@
     </div>
   <% end %>
 <% end %>
-
-<%= link_to 'New transfer', '#',
+<% if current_user.role? ['Admin', 'Mnager'] %>
+  <%= link_to 'New transfer', '#',
                       data: {
                         toggle: 'modal',
                         target: '#new_transfer_modal',
                         transfer_type: 'none',
                       },
                       class: 'link_new_transfer' %>
-
+<% end %>
 <div id="transfers">
   <%= render 'transfers', transfers: @transfers %>
 </div>

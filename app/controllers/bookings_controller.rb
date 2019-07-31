@@ -68,7 +68,7 @@ class BookingsController < ApplicationController
   end
 
   def check_in_out
-    @result = Booking.check_in_out
+    @result = Booking.check_in_out params[:from], params[:to]
   end
 
 
@@ -249,7 +249,9 @@ class BookingsController < ApplicationController
                                       :transfer_out,
                                       :client_details,
                                       :no_check_in,
-                                      :no_check_out )
+                                      :no_check_out,
+                                      :check_in,
+                                      :check_out )
     end
 
 
