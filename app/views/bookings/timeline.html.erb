@@ -26,7 +26,7 @@
         <div class='month_date'> <!-- Open month -->
           <div class='month'><%= date.strftime('%B') %></div>
       <% end %>
-      <div class="date">
+      <div class="date<%= ' sunday' if date.sunday? %>">
         <%= day %>
       </div>
       <% if day == month_end || i+1 == @days %>
@@ -45,10 +45,11 @@
     <% @houses.each_with_index do |h, y| %>
       <div class="house_line">
         <% @days.times do |x| %>
-          <div  class="cell"
+          <% date = @today+x.days %>
+          <div  class="cell<%= ' sunday' if date.sunday? %>"
                 id=<%= "x#{x+1}y#{y+1}" %>
                 data-house-id=<%= h.id %>
-                data-date=<%= @today+x.days %>>
+                data-date=<%= date %>>
                 </div>
         <% end %>
       </div>

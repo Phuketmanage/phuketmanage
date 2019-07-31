@@ -46,7 +46,7 @@
         <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
         <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
         <td><%= "#{booking.tenant.name} #{booking.tenant.surname}" if booking.tenant %></td>
-        <td><%= Source.find(booking.source_id).name if booking.source_id %></td>
+        <td><%= booking.source.name if booking.source %></td>
         <td><%= booking.sale %></td>
         <td><%= booking.agent %></td>
         <td><%= booking.comm %></td>

@@ -68,7 +68,7 @@ class BookingsController < ApplicationController
   end
 
   def check_in_out
-    result = Booking.check_in_out
+    @result = Booking.check_in_out
   end
 
 
@@ -93,7 +93,7 @@ class BookingsController < ApplicationController
     @tenants = User.with_role('Tenant')
     search = Search.new({rs: @booking.start, rf: @booking.finish})
     @booking_original = nil
-    @transfers = @booking.transfers.all
+    @transfers = @booking.transfers.order(:date)
     @transfer = @booking.transfers.new
     @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])

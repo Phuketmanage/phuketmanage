@@ -119,7 +119,7 @@ class TransfersController < ApplicationController
     # end
 
     if params[:request_from] == 'bookings'
-      @transfers = @transfer.booking.transfers
+      @transfers = @transfer.booking.transfers.order(:date)
     else
       today = Time.now.in_time_zone('Bangkok').to_date
       @transfers = Transfer.where('date >= ?', today).order(:date)

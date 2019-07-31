@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
     get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
     get 'bookings/timeline_data', to: 'bookings#timeline_data'
+    get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
     resources :bookings
     resources :houses do
       resources :prices, only: [:index]

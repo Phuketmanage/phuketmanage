@@ -10,6 +10,7 @@ class Booking < ApplicationRecord
     block: 6 }
   belongs_to :house
   belongs_to :tenant, class_name: 'User', optional: true
+  belongs_to :source, optional: true
   has_many :jobs, dependent: :destroy
   has_many :transfers, dependent: :destroy
   validate :price_chain, unless: :allotment?
@@ -20,17 +21,30 @@ class Booking < ApplicationRecord
     bookings = Booking.where('finish >= ? AND status != ?', today, Booking.statuses[:canceled]).order(:start)
     bookings.each do |b|
       line_in = {}
-      line_in[:date] = line_out[:date] =b.start
-      line_in[:type] = 'In'
-      line_in[:house_code] = line_out[:house_code] = b.house.code
-      line_in[:details] = b.in_details
-      line_out[:details] = b.out_details
-      line_in[:our_transfer] = b.transfer_in
-      line_out[:our_transfer] = b.transfer_out
+      line_out = {}
+      line_in[:type] = 'IN'
+      line_in[:date] = b.start.strftime('%d.%m.%Y')
+      line_out[:type] = 'OUT'
+      line_out[:date] = b.finish.strftime('%d.%m.%Y')
+      line_in[:house] = line_out[:house] = b.house.code
       line_in[:client] = line_out[:client] = b.client_details
+      line_in[:source] = line_out[:source] = b.source.name if b.source
+      line_in[:comment] = line_out[:comment] = b.comment_gr
+      line_in[:transfers] = []
+      line_out[:transfers] = []
+      transfers = b.transfers
+      transfers.each do |t|
+        if t.trsf_type == 'IN'
+          line_in[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
+        end
+        if t.trsf_type == 'OUT'
+          line_out[:transfers] << "#{t.time} #{t.remarks}"
+        end
+      end
       result << line_in
       result << line_out
     end
+    result.sort_by{|r| r[:date].to_date}
   end
 
   def self.timeline_data period = nil

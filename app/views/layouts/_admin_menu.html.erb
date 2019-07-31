@@ -20,11 +20,15 @@
         <li class="nav-item">
           <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
         </li>
-
       <% end %>
         <li class="nav-item">
           <%= link_to 'Todos', jobs_path, class: "nav-link" %>
         </li>
+      <% if current_user.role? ['Admin', 'Guest relation'] %>
+        <li class="nav-item">
+          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
+        </li>
+      <% end %>
       <% if current_user.role? :admin %>
         <li class="nav-item">
           <%= link_to 'Job types', job_types_path, class: "nav-link" %>
