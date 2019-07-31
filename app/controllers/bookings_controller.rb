@@ -249,7 +249,7 @@ class BookingsController < ApplicationController
                                       :transfer_out,
                                       :client_details,
                                       :no_check_in,
-                                      :no_check_out)
+                                      :no_check_out )
     end
 
 
