@@ -191,8 +191,15 @@ class TransfersController < ApplicationController
   def destroy
     @transfer.destroy
     respond_to do |format|
-      format.html { redirect_to transfers_url, notice: 'Transfer was successfully destroyed.' }
-      format.json { head :no_content }
+      if params[:request_from] == 'bookings'
+        @transfers = @transfer.booking.transfers
+      else
+        today = Time.now.in_time_zone('Bangkok').to_date
+        @transfers = Transfer.where('date >= ?', today).order(:date)
+      end
+      format.js
+      # format.html { redirect_to transfers_url, notice: 'Transfer was successfully destroyed.' }
+      # format.json { head :no_content }
     end
   end
 

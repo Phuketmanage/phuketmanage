@@ -50,9 +50,9 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
 
     sign_in users(:admin)
     assert_difference('Transfer.count', -1) do
-      delete transfer_url(@transfer)
+      delete transfer_url(@transfer), xhr: true
     end
 
-    assert_redirected_to transfers_url
+    assert_response :success
   end
 end

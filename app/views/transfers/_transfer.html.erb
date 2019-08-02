@@ -57,6 +57,10 @@
         <div class="col-lg-1">
           <span class="d-lg-none">Actions: </span>
           <%= link_to 'Cancel', cancel_transfer_path(transfer, request_from: controller_name), data: { confirm: 'Are you sure?' }, remote: :true %>
+          <% if current_user.role?(['Admin']) %>
+            <%= link_to 'Destroy', transfer, method: :delete, request_from: controller_name, data: { confirm: 'Are you sure?' }, remote: :true %>
+          <% end %>
+
         </div>
       <% end %>
     </div>
