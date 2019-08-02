@@ -1,6 +1,32 @@
 <nav class="navbar navbar-expand-md admin-menu-links mt-0 mb-0 pt-0 pb-0">
   <div class="collapse navbar-collapse" id="admin-nav">
     <ul class="navbar-nav flex-column">
+
+      <% if current_user.role? ['Transfer'] %>
+        <li class="nav-item">
+          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+
+      <% if current_user.role? ['Maid'] %>
+        <li class="nav-item">
+          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if current_user.role? ['Guest relation'] %>
+        <li class="nav-item">
+          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
       <% if current_user.role? ['Manager'] %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
@@ -27,25 +53,6 @@
           <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
         </li>
       <% end %>
-
-      <% if current_user.role? ['Guest relation'] %>
-        <li class="nav-item">
-          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if current_user.role? ['Maid'] %>
-        <li class="nav-item">
-          <%= link_to 'Todos', jobs_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
 
       <% if current_user.role? ['Admin'] %>
         <li class="nav-item">

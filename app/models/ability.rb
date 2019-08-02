@@ -8,6 +8,8 @@ class Ability
     can [:confirmed, :index_supplier, :canceled], Transfer
     if user.role? :owner
       # can :read, [ House ]
+    elsif user.role? 'Transfer'
+      can :read, Transfer
     elsif user.role? 'Maid'
       can :read, Job
     elsif user.role? 'Guest relation'

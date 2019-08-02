@@ -1,4 +1,4 @@
-<div width=100% align="center" style="box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.22);border: none; padding: 15px; margin-top:10px;background-color:#FFFFFF; text-align: left">
+<div width=100% align="center" style="border: none; padding: 15px; margin-top:10px;background-color:#FFFFFF; text-align: left">
   <% if @changes.key?('trsf_type') %>
     <span style="text-decoration: line-through;color:#BBB">
       <%= @changes['trsf_type'][0] %>
@@ -65,7 +65,7 @@
   <% if @changes.key?('remarks') %>
     <span style="text-decoration: line-through;color:#BBB"><%= @changes['remarks'][0] %></span>
   <% end %>
-  <%= @transfer.remarks if !@transfer.remarks? %>
+  <%= @transfer.remarks if @transfer.remarks? %>
   </p>
   <p>
   Booked by: <%= "#{@transfer.booked_by}" if !@transfer.booked_by.nil? %><br />
