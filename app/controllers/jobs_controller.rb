@@ -43,17 +43,18 @@ class JobsController < ApplicationController
   def create
     @job = Job.new(job_params)
     @job.creator_id = current_user.id
+    # byebug
     respond_to do |format|
       if @job.save
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
-                                        type_id: @job.job_type.id
+                                        type_id: @job.job_type.id,
                                         code: @job.job_type.code,
                                         color: @job.job_type.color,
                                         time: @job.time,
-                                        job: @job.job
-                                        employee_id: @job.employee.id
+                                        job: @job.job,
+                                        employee_id: @job.employee_id
                                       },
                                       cell_id: params[:cell_id]
                                     },
@@ -107,6 +108,16 @@ class JobsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:job_type_id, :user_id, :booking_id, :house_id, :date, :time, :plan, :closed, :job, :comment )
+      params.require(:job).permit(:job_type_id,
+                                  :user_id,
+                                  :booking_id,
+                                  :house_id,
+                                  :date,
+                                  :time,
+                                  :plan,
+                                  :closed,
+                                  :job,
+                                  :comment,
+                                  :employee_id )
     end
 end

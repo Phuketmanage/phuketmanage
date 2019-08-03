@@ -16,6 +16,7 @@ class EmployeesController < ApplicationController
     empls = Employee.joins(:houses, :job_types).where(
       'houses.id = ? AND job_types.id = ?',
       params[:house_id], params[:job_type_id])
+    # puts "=== Employees === #{empls.inspect}"
     render json: empls.map{|e|{id: e.id, name: e.name, type: e.type.name}}
   end
 

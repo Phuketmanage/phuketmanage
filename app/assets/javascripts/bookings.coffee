@@ -21,6 +21,12 @@ $(document).on "turbolinks:load", ->
       $('.house_code').removeClass('house_code_compact')
       $('.job').removeClass('job_compact')
       $('.booking_data').show()
+  $('.hide_empl_type_jobs').change ->
+    # console.log $(this).data('empl-type-id')
+    if this.checked
+      $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]").hide()
+    else
+      $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]").show()
 
   $.ajax
     url: '/bookings/timeline_data',
@@ -30,6 +36,7 @@ $(document).on "turbolinks:load", ->
     success: (data) ->
       console.log('Timeline ready')
       close_dates h for h in data.timeline.houses
+      console.log('Bookings and jobs allocated')
     error: (data) ->
       console.log('Something went wrong')
 
@@ -78,10 +85,16 @@ $(document).on "turbolinks:load", ->
     booking_id = link.data('booking-id')
     get_employees job_type_id, house_id
     modal = $(this)
-    $('#new_job_modal_label').html(link.text())
-    $('#new_job #job_details').show()
+    modal.find('#job_time').val('')
+    modal.find('#job_job').val('')
+    modal.find('#new_job_modal_label').html(link.text())
+    modal.find('#new_job #job_details').show()
     modal.find('select#job_job_type_id').val(job_type_id)
     # modal.find('select#job_user_id').val(user_id)
+    modal.find('div.job_employee').hide()
+    modal.find('select#job_employee_id').html('')
+    modal.find('select#job_employee_id').append("<option value=''>Select employee</option>")
+
 
   $('#new_job_modal').on 'shown.bs.modal', (event) ->
     $('input#job_time').trigger('focus')
@@ -112,6 +125,7 @@ $(document).on "turbolinks:load", ->
         allocate_job data.cell_id, data.job
       error: (data) ->
         console.log('Something went wrong')
+        console.log(data.responseJSON)
     $('#new_job_modal').modal('hide')
     return  false;
 
@@ -124,7 +138,7 @@ $(document).on "turbolinks:load", ->
     $('.dropdown.destroy_job').css('top', "#{posY}px")
     $('.dropdown.destroy_job').css('left', "#{posX}px")
     $('.dropdown-menu.destroy_job').toggle()
-    $('#cancel_job').data('job-id', $(this).attr('id'))
+    $('#cancel_job').data('job-id', $(this).data('job-id'))
     e.stopPropagation();
 
   $('#cancel_job').click (e) ->
@@ -133,16 +147,17 @@ $(document).on "turbolinks:load", ->
     $.ajax
       beforeSend: (xhr) ->
         xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-      url: "/jobs/#{$(this).data('job-id')}",
+      url: "/jobs/#{job_id}",
       type: "delete",
       dataType: "json",
       success: (data) ->
-        $("##{job_id}.job").remove()
+        $("div[data-job-id='#{job_id}']").remove()
         console.log('Job destroyed')
       error: (data) ->
         console.log('Something went wrong')
     $('.dropdown-menu.new_job').hide()
 
+  # For Bookings form
   if $('#no_check_in_check_box').is(':checked') == true
     $('#booking_check_in').val('')
     $('#booking_check_in').attr('disabled', true)
@@ -175,7 +190,9 @@ close_dates = (h) ->
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
 
     allocate_job "#x#{j.x}y#{b.y}", j for j in b.jobs
+    # console.log "Booking jobs #{Object.keys(b.jobs).length}"
   allocate_job "#x#{j.x}y#{h.y}", j for j in h.jobs
+  # console.log "House jobs #{Object.keys(h.jobs).length}"
 
 allocate_job = (cell, j) ->
   jobs_qty = $(cell).data('jobs')
@@ -185,8 +202,10 @@ allocate_job = (cell, j) ->
     <div  class='job'
           style=#{style}
           data-job-id=#{j.id}
-          data-job-type-id=#{j.id}
-          data-job-id=#{j.id}>
+          data-job-type-id=#{j.type_id}
+          data-employee-id=#{j.employee_id}
+          data-empl-type-id=#{j.empl_type_id}
+          >
       #{j.code}#{j.time}
     </div>")
   $(cell).data('jobs', jobs_qty+1)
@@ -198,13 +217,13 @@ get_employees = (job_type_id, house_id) ->
     dataType: "json",
     data: { job_type_id: job_type_id, house_id: house_id },
     success: (data) ->
-      console.log(data)
-      $('select#job_employee_id').append("<option value='#{e.id}''>#{e.type} (#{e.name})</option") for e in data
+      # console.log(data)
+      $('select#job_employee_id').append("<option value='#{e.id}'>#{e.type} (#{e.name})</option>") for e in data
       if Object.keys(data).length == 1
         $('select#job_employee_id').val(data[0].id)
-        $('#new_job div.job_employee').hide()
       if Object.keys(data).length > 1
         $('#new_job div.job_employee').show()
+      console.log 'Employee list loaded'
     error: (data) ->
       console.log('Was not able to read employees list')
 

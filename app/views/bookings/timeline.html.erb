@@ -6,15 +6,25 @@
   <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %>
 <% end %>
 
-    <%= form_with do |f| %>
-      <div class="form-check mb-1">
-        <%= f.check_box :compact_view, { class: 'form-check-input',
-                                id: 'compact_check_box' } %>
-        <%= f.label 'Compact view', {     class: 'form-check-label',
-                                for: 'compact_check_box' } %>
-      </div>
-      <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
-    <% end %>
+<%= form_with do |f| %>
+  <div class="form-check mb-1">
+    <%= f.check_box :compact_view, { class: 'form-check-input',
+                            id: 'compact_check_box' } %>
+    <%= f.label 'Compact view', {     class: 'form-check-label',
+                            for: 'compact_check_box' } %>
+  </div>
+  Hide jobs for our:
+  <% EmplType.all.each do |et| %>
+  <div class="form-check form-check-inline">
+    <%= f.check_box et.name,  class: 'form-check-input hide_empl_type_jobs',
+                              id: "hide_empl_type_#{et.id}",
+                              data: { empl_type_id: et.id } %>
+    <%= f.label et.name,  class: 'form-check-label',
+                          for: "hide_empl_type_#{et.id}" %>
+  </div>
+  <% end %>
+  <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
+<% end %>
 
 <div class="timeline">
   <div class="timeline_top_container">

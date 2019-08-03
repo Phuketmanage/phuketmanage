@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  empl_type: one
+  type: one
   name: MyString
 
 two:
-  empl_type: two
+  type: two
   name: MyString
