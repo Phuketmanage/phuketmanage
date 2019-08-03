@@ -123,7 +123,6 @@ class Booking < ApplicationRecord
           job[:type_id] = j.job_type_id
           job[:employee_id] = j.employee.id if !j.employee.nil?
           job[:empl_type_id] = j.employee.type.id if !j.employee.nil?
-          puts "=== #{job[:empl_type_id]}"
           job[:x] = (j.plan - today).to_i+1
           job[:time] = j.time
           job[:comment] = j.comment

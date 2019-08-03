@@ -22,11 +22,17 @@ $(document).on "turbolinks:load", ->
       $('.job').removeClass('job_compact')
       $('.booking_data').show()
   $('.hide_empl_type_jobs').change ->
-    # console.log $(this).data('empl-type-id')
+    job = $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]")
     if this.checked
-      $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]").hide()
+      job.hide()
     else
-      $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]").show()
+      job.show()
+  $('.show_job_types').change ->
+    job = $("div[data-job-type-id=#{$(this).data('job-type-id')}]")
+    if this.checked
+      job.hide()
+    else
+      job.show()
 
   $.ajax
     url: '/bookings/timeline_data',
