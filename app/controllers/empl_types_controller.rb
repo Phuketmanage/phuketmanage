@@ -1,4 +1,6 @@
 class EmplTypesController < ApplicationController
+  load_and_authorize_resource
+
   layout 'admin'
   before_action :set_empl_type, only: [:show, :edit, :update, :destroy]
 
