@@ -16,7 +16,7 @@
     </div>
   </div>
   <div style='display: inline-block;'>
-    | Show jobs for our:
+    | <strong>Show jobs for our:</strong>
     <% EmplType.all.each do |et| %>
       <div class="form-check form-check-inline">
         <%= f.check_box et.name,  class: 'form-check-input hide_empl_type_jobs',
@@ -29,7 +29,7 @@
     <% end %>
   </div>
   <div style='display: inline-block;'>
-    | Show job of types:
+    <strong>Show jobs of types:</strong>
     <% JobType.all.each do |jt| %>
       <div class="form-check form-check-inline">
         <%= f.check_box jt.name,
