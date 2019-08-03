@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get '/employees/list_for_job', to: 'employees#list_for_job'
   resources :employees
   resources :empl_types
   get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'

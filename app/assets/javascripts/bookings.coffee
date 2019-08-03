@@ -45,6 +45,8 @@ $(document).on "turbolinks:load", ->
     $('.dropdown.new_job').css('top', "#{posY}px")
     $('.dropdown.new_job').css('left', "#{posX}px")
     $('.dropdown').removeClass('dropup')
+    $('.dropdown-item.for_booking').attr('data-booking-id', $(this).data('booking-id'))
+    $('.dropdown-item').attr('data-house-id', $(this).data('house-id'))
     if posY > $(window).height()/8*5
       $('.dropdown').addClass('dropup')
     if $(this).hasClass('booked')
@@ -71,12 +73,15 @@ $(document).on "turbolinks:load", ->
   $('#new_job_modal').on 'show.bs.modal', (event) ->
     link = $(event.relatedTarget)
     job_type_id = link.data('job-type-id')
-    user_id = link.data('user-id')
+    # user_id = link.data('user-id')
+    house_id = link.data('house-id')
+    booking_id = link.data('booking-id')
+    get_employees job_type_id, house_id
     modal = $(this)
     $('#new_job_modal_label').html(link.text())
     $('#new_job #job_details').show()
     modal.find('select#job_job_type_id').val(job_type_id)
-    modal.find('select#job_user_id').val(user_id)
+    # modal.find('select#job_user_id').val(user_id)
 
   $('#new_job_modal').on 'shown.bs.modal', (event) ->
     $('input#job_time').trigger('focus')
@@ -92,7 +97,8 @@ $(document).on "turbolinks:load", ->
       data: {
         job: {
           job_type_id: $('select#job_job_type_id').val(),
-          user_id: $('select#job_user_id').val(),
+          # user_id: $('select#job_user_id').val(),
+          employee_id: $('select#job_employee_id').val(),
           booking_id:$('select#job_booking_id').val(),
           house_id: $('select#job_house_id').val(),
           plan: $('input#job_plan').val(),
@@ -162,7 +168,8 @@ close_dates = (h) ->
       x = b.x+x_add
       $("#x"+x+"y"+b.y).addClass('booked')
       $("#x"+x+"y"+b.y).addClass(b.status)
-      $("#x"+x+"y"+b.y).data('booking-id', b.id)
+      $("#x"+x+"y"+b.y).attr('data-booking-id', b.id)
+      # $("#x"+x+"y"+b.y).data('booking-id', b.id)
       if x_add == 0
         $("#x"+x+"y"+b.y).css("z-index", 3)
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
@@ -177,7 +184,27 @@ allocate_job = (cell, j) ->
   $(cell).append("
     <div  class='job'
           style=#{style}
-          id=#{j.id}>
+          data-job-id=#{j.id}
+          data-job-type-id=#{j.id}
+          data-job-id=#{j.id}>
       #{j.code}#{j.time}
     </div>")
   $(cell).data('jobs', jobs_qty+1)
+
+get_employees = (job_type_id, house_id) ->
+  $.ajax
+    url: '/employees/list_for_job',
+    type: "get",
+    dataType: "json",
+    data: { job_type_id: job_type_id, house_id: house_id },
+    success: (data) ->
+      console.log(data)
+      $('select#job_employee_id').append("<option value='#{e.id}''>#{e.type} (#{e.name})</option") for e in data
+      if Object.keys(data).length == 1
+        $('select#job_employee_id').val(data[0].id)
+        $('#new_job div.job_employee').hide()
+      if Object.keys(data).length > 1
+        $('#new_job div.job_employee').show()
+    error: (data) ->
+      console.log('Was not able to read employees list')
+

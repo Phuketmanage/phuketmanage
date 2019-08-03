@@ -63,6 +63,7 @@
     <div style="background-color:<%= jt.color %>;display:inline-block;" class='rounded text-white p-1'><%= jt.name %></div>
   <% end %>
 </div>
+
 <div class="dropdown new_job">
   <div class="dropdown-menu new_job">
     <div class="dropdown_menu_for_booking">
@@ -71,7 +72,7 @@
         <%= link_to "#{jt.name}", "#", class: "dropdown-item for_booking",
           data: {
             job_type_id: jt.id,
-            user_id: User.with_role('Maid').first.id,
+            # user_id: User.with_role('Maid').first.id,
             toggle: "modal",
             target: "#new_job_modal"} %>
       <% end %>
@@ -82,7 +83,7 @@
       <%= link_to "#{jt.name}", "#", class: "dropdown-item for_house",
         data: {
           job_type_id: jt.id,
-          user_id: User.with_role('Maid').first.id,
+          # user_id: User.with_role('Maid').first.id,
           toggle: "modal",
           target: "#new_job_modal"} %>
     <% end %>

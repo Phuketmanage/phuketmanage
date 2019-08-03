@@ -48,10 +48,12 @@ class JobsController < ApplicationController
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
+                                        type_id: @job.job_type.id
                                         code: @job.job_type.code,
                                         color: @job.job_type.color,
                                         time: @job.time,
                                         job: @job.job
+                                        employee_id: @job.employee.id
                                       },
                                       cell_id: params[:cell_id]
                                     },

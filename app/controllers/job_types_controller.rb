@@ -72,6 +72,6 @@ class JobTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_type_params
-      params.require(:job_type).permit(:name, :code, :color, :for_house_only)
+      params.require(:job_type).permit(:name, :code, :color, :for_house_only, { empl_type_ids: []})
     end
 end

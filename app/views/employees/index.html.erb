@@ -14,7 +14,7 @@
   <tbody>
     <% @employees.each do |employee| %>
       <tr>
-        <td><%= employee.empl_type_id %></td>
+        <td><%= employee.type.name %></td>
         <td><%= employee.name %></td>
         <td><%= link_to 'Show', employee %></td>
         <td><%= link_to 'Edit', edit_employee_path(employee) %></td>

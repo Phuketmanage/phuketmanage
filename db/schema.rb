@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_03_051211) do
+ActiveRecord::Schema.define(version: 2019_08_03_114810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,8 +164,10 @@ ActiveRecord::Schema.define(version: 2019_08_03_051211) do
     t.date "closed"
     t.text "job"
     t.bigint "creator_id", null: false
+    t.bigint "employee_id"
     t.index ["booking_id"], name: "index_jobs_on_booking_id"
     t.index ["creator_id"], name: "index_jobs_on_creator_id"
+    t.index ["employee_id"], name: "index_jobs_on_employee_id"
     t.index ["house_id"], name: "index_jobs_on_house_id"
     t.index ["job_type_id"], name: "index_jobs_on_job_type_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
@@ -277,6 +279,7 @@ ActiveRecord::Schema.define(version: 2019_08_03_051211) do
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
   add_foreign_key "jobs", "bookings"
+  add_foreign_key "jobs", "employees"
   add_foreign_key "jobs", "houses"
   add_foreign_key "jobs", "job_types"
   add_foreign_key "jobs", "users"

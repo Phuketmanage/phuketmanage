@@ -12,6 +12,14 @@ class EmployeesController < ApplicationController
   def show
   end
 
+  def list_for_job
+    empls = Employee.joins(:houses, :job_types).where(
+      'houses.id = ? AND job_types.id = ?',
+      params[:house_id], params[:job_type_id])
+    render json: empls.map{|e|{id: e.id, name: e.name, type: e.type.name}}
+  end
+
+
   # GET /employees/new
   def new
     @employee = Employee.new
@@ -69,6 +77,6 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
-      params.require(:employee).permit(:empl_type_id, :name)
+      params.require(:employee).permit(:type_id, :name)
     end
 end

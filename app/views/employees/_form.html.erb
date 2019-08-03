@@ -1,19 +1,12 @@
 <%= form_with(model: employee, local: true) do |form| %>
-  <% if employee.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
+  <%= render 'shared/error_messages', object: form.object %>
 
-      <ul>
-        <% employee.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <div class="field">
-    <%= form.label :empl_type_id %>
-    <%= form.text_field :empl_type_id %>
+    <%= form.label :type %>
+    <%= form.select :type_id,
+          EmplType.all.map {|et| [et.name, et.id]},
+                    { prompt: 'Select empl type' } %>
   </div>
 
   <div class="field">

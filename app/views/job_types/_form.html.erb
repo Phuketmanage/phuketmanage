@@ -21,6 +21,17 @@
     <%= form.label :for_house_only, {     class: 'form-check-label',
                             for: 'for_house_only_check_box' } %>
   </div>
+
+  <div class="field">
+    Employee types:
+    <%= form.collection_check_boxes :empl_type_ids, EmplType.all, :id, :name do |et| %>
+        <div class="form-check form-check-inline">
+          <%= et.check_box(class: "form-check-input") %>
+          <%= et.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

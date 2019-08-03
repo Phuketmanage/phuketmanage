@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Code</th>
       <th>Color</th>
+      <th>Job for</th>
       <th>For house only</th>
       <th colspan="3"></th>
     </tr>
@@ -17,6 +18,11 @@
         <td><%= job_type.name %></td>
         <td><%= job_type.code %></td>
         <td style="background-color: <%= job_type.color %>" class='job'><%= job_type.color %></td>
+        <td>
+          <% job_type.empl_types.each do |et| %>
+            <%= et.name %>
+          <% end %>
+        </td>
         <td><%= 'Yes' if job_type.for_house_only? %></td>
         <td><%= link_to 'Show', job_type %></td>
         <td><%= link_to 'Edit', edit_job_type_path(job_type) %></td>
