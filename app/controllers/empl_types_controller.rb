@@ -1,4 +1,5 @@
 class EmplTypesController < ApplicationController
+  layout 'admin'
   before_action :set_empl_type, only: [:show, :edit, :update, :destroy]
 
   # GET /empl_types

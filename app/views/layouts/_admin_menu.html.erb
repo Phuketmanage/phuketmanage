@@ -83,6 +83,14 @@
           <%= link_to 'Job types', job_types_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
+          <%= link_to 'Employees', employees_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Empl types', empl_types_path, class: "nav-link" %>
+        </li>
+
+
+        <li class="nav-item">
           <%= link_to 'Management', users_path( role: [ 'Admin',
                                                         'Manager',
                                                         'Maid']),
