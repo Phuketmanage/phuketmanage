@@ -24,15 +24,15 @@ $(document).on "turbolinks:load", ->
   $('.hide_empl_type_jobs').change ->
     job = $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]")
     if this.checked
-      job.hide()
-    else
       job.show()
+    else
+      job.hide()
   $('.show_job_types').change ->
     job = $("div[data-job-type-id=#{$(this).data('job-type-id')}]")
     if this.checked
-      job.hide()
-    else
       job.show()
+    else
+      job.hide()
 
   $.ajax
     url: '/bookings/timeline_data',

@@ -16,25 +16,27 @@
     </div>
   </div>
   <div style='display: inline-block;'>
-    | Hide jobs for our:
+    | Show jobs for our:
     <% EmplType.all.each do |et| %>
       <div class="form-check form-check-inline">
         <%= f.check_box et.name,  class: 'form-check-input hide_empl_type_jobs',
                                   id: "hide_empl_type_#{et.id}",
-                                  data: { empl_type_id: et.id } %>
+                                  data: { empl_type_id: et.id },
+                                  checked: true %>
         <%= f.label et.name,  class: 'form-check-label',
                               for: "hide_empl_type_#{et.id}" %>
       </div>
     <% end %>
   </div>
   <div style='display: inline-block;'>
-    | Show only job of type:
+    | Show job of types:
     <% JobType.all.each do |jt| %>
       <div class="form-check form-check-inline">
         <%= f.check_box jt.name,
               class: 'form-check-input show_job_types',
               id: "show_job_type_#{jt.id}",
-              data: { job_type_id: jt.id } %>
+              data: { job_type_id: jt.id },
+              checked: true %>
         <%= f.label jt.name,  class: 'form-check-label',
                               for: "show_job_type_#{jt.id}" %>
       </div>
