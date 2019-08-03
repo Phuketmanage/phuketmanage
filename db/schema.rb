@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_31_143942) do
+ActiveRecord::Schema.define(version: 2019_08_03_051211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,32 @@ ActiveRecord::Schema.define(version: 2019_07_31_143942) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["house_id"], name: "index_durations_on_house_id"
+  end
+
+  create_table "empl_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "empl_types_job_types", id: false, force: :cascade do |t|
+    t.bigint "job_type_id", null: false
+    t.bigint "empl_type_id", null: false
+    t.index ["job_type_id", "empl_type_id"], name: "index_empl_types_job_types_on_job_type_id_and_empl_type_id", unique: true
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.bigint "type_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["type_id"], name: "index_employees_on_type_id"
+  end
+
+  create_table "employees_houses", id: false, force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.bigint "employee_id", null: false
+    t.index ["house_id", "employee_id"], name: "index_employees_houses_on_house_id_and_employee_id", unique: true
   end
 
   create_table "house_types", force: :cascade do |t|
@@ -247,6 +273,7 @@ ActiveRecord::Schema.define(version: 2019_07_31_143942) do
   add_foreign_key "connections", "houses"
   add_foreign_key "connections", "sources"
   add_foreign_key "durations", "houses"
+  add_foreign_key "employees", "empl_types", column: "type_id"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
   add_foreign_key "jobs", "bookings"

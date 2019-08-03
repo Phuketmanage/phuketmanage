@@ -24,6 +24,7 @@ class HousesController < ApplicationController
     @sources = Source.syncable.order(:name)
     @connections = @house.connections.all
     @connection = @house.connections.new
+    @job_types = JobType.all
   end
 
   # GET /houses/1/edit
@@ -33,6 +34,8 @@ class HousesController < ApplicationController
     @sources = Source.syncable.order(:name)
     @connections = @house.connections.all
     @connection = @house.connections.new
+    @job_types = JobType.all
+
   end
 
   # POST /houses

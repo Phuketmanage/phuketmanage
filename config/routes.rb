@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :employees
+  resources :empl_types
   get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
   get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
   get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'

@@ -134,6 +134,13 @@
   <div class="shadow-sm mb-2 p-2 bg-light rounded">
     <strong>Service provided</strong>
     <hr>
+    <%= form.collection_check_boxes :job_types, @job_types, :id, :name do |c| %>
+        <div class="form-check form-check-inline">
+          <%= c.check_box(class: "form-check-input") %>
+          <%= c.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+
     <div class="form-check form-check-inline">
       <%= form.check_box :rental, { class: 'form-check-input',
                               id: 'rental_check_box' } %>
