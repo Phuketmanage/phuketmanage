@@ -20,12 +20,20 @@
                   JobType.all.map {|t| [t.name, t.id]}, {}, class: "form-control" %>
           </div>
         </div>
+        <!-- Need to be deleted afetr  migrate to employee style -->
         <div class="form-row job_user">
           <div class="col form-group">
             <%= form.label :user_id %>
             <%= form.select :user_id,
                   User.with_role('Maid').map {|u| [u.name, u.id]},
                   { prompt: 'Select employee' },
+                  class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-row job_employee">
+          <div class="col form-group">
+            <%= form.label :employee_id %>
+            <%= form.select :employee_id, {}, { prompt: 'Select employee' },
                   class: "form-control" %>
           </div>
         </div>

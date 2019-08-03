@@ -4,5 +4,7 @@ class Job < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :booking, optional: true
   belongs_to :house, optional: true
+  belongs_to :employee, optional: true
   validates :plan, presence: true
+
 end

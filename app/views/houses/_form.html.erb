@@ -1,9 +1,7 @@
 <% path = houses_path if action_name == 'new' %>
 <% path = house_path(house.number) if action_name == 'edit' %>
 <%= form_with(model: house, url: path, local: true) do |form| %>
-  <% if house.errors.any? %>
-    <%= render 'shared/error_messages', object: form.object %>
-  <% end %>
+  <%= render 'shared/error_messages', object: form.object %>
 
   <div class="row form-group">
     <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
@@ -132,8 +130,18 @@
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-light rounded">
-    <strong>Service provided</strong>
+    <strong>Employees:</strong>
     <hr>
+
+    <%= form.collection_check_boxes :employee_ids, Employee.all, :id, :type_with_name do |e| %>
+        <div class="form-check form-check-inline">
+          <%= e.check_box(class: "form-check-input") %>
+          <%= e.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+
+    <strong>Service provided</strong>
+
     <div class="form-check form-check-inline">
       <%= form.check_box :rental, { class: 'form-check-input',
                               id: 'rental_check_box' } %>

@@ -115,10 +115,15 @@ class Booking < ApplicationRecord
         booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
         # Get jobs for bookings
         jobs = b.jobs
+
         booking[:jobs] = []
         jobs.each do |j|
           job = {}
           job[:id] = j.id
+          job[:type_id] = j.job_type_id
+          job[:employee_id] = j.employee.id if !j.employee.nil?
+          job[:empl_type_id] = j.employee.type.id if !j.employee.nil?
+          puts "=== #{job[:empl_type_id]}"
           job[:x] = (j.plan - today).to_i+1
           job[:time] = j.time
           job[:comment] = j.comment
@@ -134,6 +139,10 @@ class Booking < ApplicationRecord
       jobs.each do |j|
         job = {}
         job[:id] = j.id
+        job[:type_id] = j.job_type_id
+        job[:employee_id] = j.employee.id if !j.employee.nil?
+
+        job[:empl_type_id] = j.employee.type.id if !j.employee.nil?
         job[:x] = (j.plan - today).to_i+1
         job[:time] = j.time
         job[:comment] = j.comment
