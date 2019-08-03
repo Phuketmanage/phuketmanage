@@ -20,7 +20,7 @@
     </div>
   <% end %>
 <% end %>
-<% if current_user.role? ['Admin', 'Mnager'] %>
+<% if current_user.role? ['Admin', 'Manager'] %>
   <%= link_to 'New transfer', '#',
                       data: {
                         toggle: 'modal',
