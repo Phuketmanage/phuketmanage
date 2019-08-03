@@ -24,6 +24,14 @@ class JobsController < ApplicationController
     end
   end
 
+  def index_new
+    maids = EmplType.find_by(name: 'Maids').employees.ids
+    @jobs = Job.where(closed: nil, employee_id: maids).order(:plan)
+    # @jobs = Job.where(closed: nil).order(:plan)
+    @for = :maids
+    render :index
+  end
+
   # GET /jobs/1
   # GET /jobs/1.json
   def show

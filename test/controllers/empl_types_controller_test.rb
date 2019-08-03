@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class EmplTypesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:admin)
     @empl_type = empl_types(:one)
   end
 

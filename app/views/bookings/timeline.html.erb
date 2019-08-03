@@ -1,10 +1,11 @@
 <%= link_to 'New Booking', new_booking_path %> |
-<%= link_to 'Bookings (table view)', bookings_path %> |
+<%= link_to 'Bookings (list view)', bookings_path %> |
 <% if params[:period].present? %>
-  <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %>
+  <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %> |
 <% else %>
-  <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %>
+  <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %> |
 <% end %>
+<%= link_to 'Jobs (list view)', jobs_new_path %>
 
 <%= form_with do |f| %>
   <div style='display: inline-block;'>
