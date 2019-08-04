@@ -5,9 +5,16 @@
 <% else %>
   <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %> |
 <% end %>
-<%= link_to 'Show all houses', "#", id: 'show_all_houses' %> |
+<%= link_to 'Show all houses', "#", id: 'show_all_houses' %>
 
 <%= form_with do |f| %>
+  <div class="form-check form-check-inline">
+    <%= f.check_box :compact_view, { class: 'form-check-input',
+                            id: 'compact_check_box' } %>
+    <%= f.label 'Compact view', {     class: 'form-check-label',
+                            for: 'compact_check_box' } %>
+  </div>
+
   <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
 <% end %>
 

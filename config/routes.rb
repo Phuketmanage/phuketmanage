@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :todos
   get '/employees/list_for_job', to: 'employees#list_for_job'
   resources :employees
   resources :empl_types
