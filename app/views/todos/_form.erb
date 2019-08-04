@@ -1,0 +1,31 @@
+
+<%= form_with(model: todo, local: true) do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
+  <div class="form-row todo
+_user">
+    <% if current_user.role? :admin %>
+      <div class="col-md-2 form-group">
+        <%= form.label :Employee %>
+        <%= form.select :user_id,
+              User.with_role(['Manager', 'Guest relation', 'Accounting']).map {|u| [u.name, u.id]},
+              { prompt: 'Select employee' },
+              class: "form-control" %>
+      </div>
+    <% else %>
+     <%= form.hidden_field :user_id, value: current_user.id %>
+    <% end %>
+    <div class="col-md-2 form-group">
+      <%= form.label :plan %>
+      <%= form.date_field :plan, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col form-group">
+      <%= form.label :job
+     %>
+      <%= form.text_field :job, class: "form-control" %>
+    </div>
+  </div>
+  <%= form.submit 'Save', class: "btn btn-primary"  %>
+  <%= link_to 'Back', todos_path, class: "btn btn-secondary"  %>
+<% end %>

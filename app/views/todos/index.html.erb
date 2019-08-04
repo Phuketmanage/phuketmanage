@@ -1,0 +1,11 @@
+<h1>Todos</h1>
+<div id='todos'>
+  <%= link_to 'New Todo', new_todo_path %> |
+  <% if params[:closed].present? %>
+    <%= link_to 'Opened Todo', todos_path() %>
+  <% else %>
+    <%= link_to 'Closed Todo', todos_path(closed: 1) %>
+  <% end %>
+  <%= render @todos %>
+</div>
+

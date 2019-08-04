@@ -1,0 +1,77 @@
+<div class="row shadow-sm mb-2 p-2 bg-light rounded" id="todo_<%= todo.id %>">
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <div class="d-inline-block">
+          <span class='text-muted'>Created:</span>
+          <%= " #{todo.created_at.strftime('%d.%m.%Y')}" %>
+        </div>
+        <div class="d-inline-block">
+          <span class='text-muted'>Plan:</span>
+          <% if todo.plan %>
+            <% if todo.closed.nil? %>
+              <% if (todo.plan - Time.zone.now.in_time_zone('Bangkok').to_date).to_i > 2 %>
+                <% todo_class = 'have_time' %>
+              <% else %>
+                <% todo_class = 'need_to_hurry' %>
+              <% end %>
+              <span class=<%= todo_class %>>
+                <%= "#{todo.plan.strftime('%d.%m.%Y')} #{todo.time}" %>
+              </span>
+            <% else %>
+              <%= "#{todo.plan.strftime('%d.%m.%Y')} #{todo.time}" %>
+            <% end %>
+          <% end %>
+        </div>
+        <% if todo.closed %>
+          <div class="d-md-inline-block">
+            <span class='text-muted'>Closed:</span>
+            <%= todo.closed.strftime('%d.%m.%Y') %>
+          </div>
+        <% end %>
+        <% if current_user.role? :admin %>
+          <div class="d-md-inline-block">
+            <span class='text-muted'>Created:</span>
+            <%= todo.user.name if todo.user_id %>
+          </div>
+        <% end %>
+
+          <div class="d-md-inline-block">
+            <% if (todo.creator == current_user) || current_user.role?(:admin) %>
+              <%= link_to 'Edit', edit_todo_path(todo) %> |
+            <% end %>
+            <% if (todo.creator == current_user) || current_user.role?(:admin) %>
+              <%= link_to 'Destroy', todo, method: :delete, data: { confirm: 'Are you sure?' } %> |
+            <% end %>
+
+            <% if todo.closed.nil? %>
+              <%= link_to 'Done', todo_path(todo, done: true), method: :put, remote: true %>
+            <% else %>
+              <%= link_to 'Undone', todo_path(todo, done: false), method: :put, remote: true %>
+            <% end %>
+          </div>
+      </div>
+    </div>
+    <% if current_user.role? :admin %>
+      <div>
+        <%= form_with(model: todo, class: "update_todo") do |f| %>
+          <%= f.label :job, class: 'text-muted' %>
+          <%= f.text_area :job, class: 'form-control', row: 2,
+            data: {todo_id: todo.id, field: 'todo'} %>
+        <% end %>
+      </div>
+      <span class='text-muted'>Comment:</span> <%= todo.comment %>
+    <% else %>
+      <span class='text-muted'>Job:</span> <%= todo.todo %>
+      <div class="mt-2">
+        <%= form_with(model: todo, class: "update_todo") do |f| %>
+          <%= f.text_area :comment, class: 'form-control', row: 2,
+            data: {todo_id: todo.id, field: 'comment'} %>
+          <%= f.submit 'Save', {  class: "btn btn-primary mt-2",
+                                  id: "btn_todo_#{todo.id}",
+                                  style: "display: none;"} %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

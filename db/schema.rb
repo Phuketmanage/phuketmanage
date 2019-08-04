@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_03_114810) do
+ActiveRecord::Schema.define(version: 2019_08_04_091653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,6 +224,19 @@ ActiveRecord::Schema.define(version: 2019_08_03_114810) do
     t.index ["syncable"], name: "index_sources_on_syncable"
   end
 
+  create_table "todos", force: :cascade do |t|
+    t.bigint "creator_id", null: false
+    t.bigint "user_id", null: false
+    t.date "plan"
+    t.date "closed"
+    t.text "job"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_todos_on_creator_id"
+    t.index ["user_id"], name: "index_todos_on_user_id"
+  end
+
   create_table "transfers", force: :cascade do |t|
     t.bigint "booking_id"
     t.date "date"
@@ -286,5 +299,7 @@ ActiveRecord::Schema.define(version: 2019_08_03_114810) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
+  add_foreign_key "todos", "users"
+  add_foreign_key "todos", "users", column: "creator_id"
   add_foreign_key "transfers", "bookings"
 end

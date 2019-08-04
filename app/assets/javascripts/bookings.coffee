@@ -15,12 +15,16 @@ $(document).on "turbolinks:load", ->
       $('.house_code').addClass('house_code_compact')
       $('.job').addClass('job_compact')
       $('.booking_data').hide()
+      $('a.hide_house').text('H')
+      $('a.hide_house').css('display', 'inline-block')
     else
       $('.cell').removeClass('cell_compact')
       $('.date').removeClass('date_compact')
       $('.house_code').removeClass('house_code_compact')
       $('.job').removeClass('job_compact')
       $('.booking_data').show()
+      $('a.hide_house').text('hide')
+      $('a.hide_house').css('display', 'block')
   $('.hide_empl_type_jobs').change ->
     job = $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]")
     if this.checked
@@ -33,6 +37,17 @@ $(document).on "turbolinks:load", ->
       job.show()
     else
       job.hide()
+  $('a.hide_house').on 'click', (e) ->
+    e.preventDefault()
+    house_id = $(this).data('house-id')
+    console.log house_id
+    $("div.house_code[data-house-id=#{house_id}]").hide()
+    $("div.house_line[data-house-id=#{house_id}]").hide()
+  $('a#show_all_houses').on 'click', (e) ->
+    e.preventDefault()
+    $("div.house_code").show()
+    $("div.house_line").show()
+
 
   $.ajax
     url: '/bookings/timeline_data',
