@@ -40,8 +40,7 @@
     <% @houses.each do |h| %>
       <div  class="house_code <%= 'text-muted' if h.unavailable? %>"
             data-house-id='<%= h.id %>'>
-        <%= h.code %>
-        <%= link_to 'Hide', '#',  class: 'hide_house',
+        <%= link_to h.code, '#',  class: 'hide_house',
                                   data: { house_id: h.id },
                                   style: 'display: block;' %>
       </div>

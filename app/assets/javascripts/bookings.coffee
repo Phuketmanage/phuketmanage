@@ -15,16 +15,12 @@ $(document).on "turbolinks:load", ->
       $('.house_code').addClass('house_code_compact')
       $('.job').addClass('job_compact')
       $('.booking_data').hide()
-      $('a.hide_house').text('H')
-      $('a.hide_house').css('display', 'inline-block')
     else
       $('.cell').removeClass('cell_compact')
       $('.date').removeClass('date_compact')
       $('.house_code').removeClass('house_code_compact')
       $('.job').removeClass('job_compact')
       $('.booking_data').show()
-      $('a.hide_house').text('hide')
-      $('a.hide_house').css('display', 'block')
   $('.hide_empl_type_jobs').change ->
     job = $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]")
     if this.checked
