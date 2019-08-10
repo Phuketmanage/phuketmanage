@@ -61,30 +61,39 @@
           <% end %>
         </div>
       </div>
+      <% booking = Booking.find(r[:booking_id]) %>
+      <% if r[:type] == "IN" %>
+        <div class="row">
+          <div class="col">
+              Period: <%= " #{booking.start.strftime('%d.%m.%Y')} -
+                            #{booking.finish.strftime('%d.%m.%Y')}" %><br />
+              Price: <%= booking.sale %><br />
+              Source: <%= booking.source.name %>
+          </div>
+        </div>
+      <% end %>
       <div class="row">
         <div class="col">
 
             <%=  "Comment: #{r[:comment]}" %>
             <%= link_to "Edit comment", '', class: 'edit_comment',
                                             data: { booking_id: r[:booking_id] } %>
-            <% booking = Booking.find(r[:booking_id]) %>
             <%= form_with model: booking,
                           url: update_booking_comment_gr_path(r[:booking_id]),
                           local: true,
                           class: 'form_edit_comment_gr d-none',
                           data: { booking_id: r[:booking_id] } do |f| %>
-            <div class="form-group">
-              <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
-            </div>
-            <div class="form-group text-right">
-              <%= f.submit "Save", class: 'btn btn-primary' %>
-              <%= link_to "Cancel", '#',
-                    class: 'btn btn-secondary cancel_edit_comment',
-                    data: { booking_id: r[:booking_id] }
-               %>
-            </div>
+              <div class="form-group">
+                <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
+              </div>
+              <div class="form-group text-right">
+                <%= f.submit "Save", class: 'btn btn-primary' %>
+                <%= link_to "Cancel", '#',
+                      class: 'btn btn-secondary cancel_edit_comment',
+                      data: { booking_id: r[:booking_id] }
+                 %>
+              </div>
             <% end %>
-
         </div>
       </div>
     </div>
