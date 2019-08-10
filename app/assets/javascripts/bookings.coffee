@@ -199,6 +199,11 @@ $(document).on "turbolinks:load", ->
     e.preventDefault()
     booking_id = $(this).data('booking-id')
     $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").removeClass('d-none')
+  $('a.cancel_edit_comment').on 'click', (e) ->
+    e.preventDefault()
+    booking_id = $(this).data('booking-id')
+    $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").addClass('d-none')
+
 
 close_dates = (h) ->
   for b in h.bookings
