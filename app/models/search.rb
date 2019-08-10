@@ -22,11 +22,11 @@ class Search
 
     if booking_id.nil?
       overlapped = Booking.where(
-        'start < ? AND finish > ? AND status != ? AND house_id = ?',
+        'start <= ? AND finish >= ? AND status != ? AND house_id = ?',
         rf_e, rs_e, Booking.statuses[:canceled], house_id).all
     else
       overlapped = Booking.where(
-        'start < ? AND finish > ? AND status != ? AND house_id = ? AND id != ?',
+        'start <= ? AND finish >= ? AND status != ? AND house_id = ? AND id != ?',
         rf_e, rs_e, Booking.statuses[:canceled], house_id, booking_id).all
     end
     if overlapped.any?
@@ -95,7 +95,7 @@ class Search
 
   def get_available_houses
     overlapped_bookings = Booking.where(
-      'start < ? AND finish > ? AND status != ?', rf_e, rs_e,
+      'start <= ? AND finish >= ? AND status != ?', rf_e, rs_e,
       Booking.statuses[:canceled]).all.map{
       |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
     booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}

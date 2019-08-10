@@ -2,7 +2,7 @@
 
 one:
   var: dtnb
-  value: 2
+  value: 1
   description: Days between bookings
 
 two:

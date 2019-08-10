@@ -1,9 +1,11 @@
 require 'test_helper'
 
 class SearchTest < ActionDispatch::IntegrationTest
+  # include Devise::Test::IntegrationHelpers
 
   # setup do
-  #   b1 = bookings(:one)
+
+  #   # b1 = bookings(:one)
   # end
 
   test 'available houses' do
@@ -187,4 +189,5 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'div.price', '129625 THB'
 
   end
+
 end

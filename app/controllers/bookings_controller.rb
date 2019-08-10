@@ -112,8 +112,9 @@ class BookingsController < ApplicationController
     @booking = Booking.new(booking_params)
     search = Search.new(rs: @booking.start,
                         rf: @booking.finish,
-                        dtnb: @settings['dtnb'])
+                        dtnb: 0) #dtnb: @settings['dtnb'])
     answer = search.is_house_available? @booking.house_id
+    # byebug
     if !answer[:result]
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
       @houses = House.all.active
@@ -158,7 +159,7 @@ class BookingsController < ApplicationController
   def update
     search = Search.new(rs: params[:booking][:start],
                         rf: params[:booking][:finish],
-                        dtnb: @settings['dtnb'])
+                        dtnb: 0) #dtnb: @settings['dtnb'])
     house_id = params[:booking][:house_id]
     answer = search.is_house_available? house_id, @booking.id
     if !answer[:result]
@@ -181,7 +182,9 @@ class BookingsController < ApplicationController
         if  @booking.saved_changes.key?(:start) ||
             @booking.saved_changes.key?(:finish) ||
             @booking.saved_changes.key?(:house_id)
-            search = Search.new({rs: @booking.start, rf: @booking.finish})
+            search = Search.new({ rs: @booking.start,
+                                  rf: @booking.finish}) #,
+                                  # staff: true })
             prices = search.get_prices [@booking.house]
             @booking.calc prices
             @booking.save

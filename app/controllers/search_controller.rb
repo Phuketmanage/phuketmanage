@@ -3,6 +3,7 @@ class SearchController < ApplicationController
     @search = Search.new( rs: params[:search][:rs],
                           rf: params[:search][:rf],
                           dtnb: @settings['dtnb'])
+    # byebug
     if @search.stage == nil || @search.stage == '1'
       @houses = []
       if !@search.valid?

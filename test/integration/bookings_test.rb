@@ -41,8 +41,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     end
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_1"]'
 
-    # Not available if dtnb = 2
-    start = "21.07.#{year}".to_date
+    # House available
+    start = "20.07.#{year}".to_date
     finish = "28.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
@@ -65,26 +65,40 @@ class BookingsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
+    # Manager can create new booking even if dtnb = 2
+    start = "1.07.#{year}"
+    finish = "9.07.#{year}"
+    house = houses(:villa_1)
+    assert_difference 'Booking.count', 1 do
+      post bookings_path params: { booking: { start: start,
+                                              finish: finish,
+                                              house_id: house.id,
+                                              status: 'confirmed'} }
+    end
+    assert_redirected_to edit_booking_path(Booking.last)
+    follow_redirect!
+    assert_select 'div.alert li', text: 'Booking was successfully created.'
+
 
   end
 
   test 'update booking' do
     year = Time.now.year+1
     # Change only dates - house not available
-    new_start = "30.06.#{year}".to_date
+    new_start = "29.06.#{year}".to_date
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: @booking.finish,
                                               house_id: @booking.house.id } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_4"]'
 
-    year = Time.now.year+1
-
-    # Change only dates - house not available because dtnb = 2
+    # Change only dates - house available for manager even dtnb = 2
     new_start = "30.06.#{year}".to_date
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: @booking.finish,
                                               house_id: @booking.house.id } }
-    assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_4"]'
+    assert_redirected_to edit_booking_path(@booking)
+    follow_redirect!
+    assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
     # Change only dates - house available = success
     new_start = "2.07.#{year}".to_date
@@ -126,13 +140,25 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_2"]'
 
     # Change dates and house - house is not available because dtnb = 2
-    new_start = "26.07.#{year}".to_date
+    new_start = "25.07.#{year}".to_date
     new_finish = "2.08.#{year}".to_date
     new_house = houses(:villa_3)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: new_finish,
                                               house_id: new_house.id } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_2"]'
+
+    # Change dates and house - house is available even dtnb = 2
+    new_start = "26.07.#{year}".to_date
+    new_finish = "2.08.#{year}".to_date
+    new_house = houses(:villa_3)
+    put booking_path(@booking.id), params: {  booking: { start: new_start,
+                                              finish: new_finish,
+                                              house_id: new_house.id } }
+    assert_redirected_to edit_booking_path(@booking)
+    follow_redirect!
+    assert_select 'div.alert li', text: 'Booking was successfully updated.'
+
 
 
     # Change dates and house - house is available = success
