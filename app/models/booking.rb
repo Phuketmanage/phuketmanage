@@ -45,9 +45,9 @@ class Booking < ApplicationRecord
       unless  b.no_check_in ||
               (!b.check_in.present? && b.start < from) ||
               (b.check_in.present? && (b.check_in < from || b.check_in > to))
-        puts b.no_check_in
-        puts "#{!b.check_in.present?} && #{b.start} < #{from}"
-        puts "#{b.check_in.present?} && #{b.check_in} < #{from}"
+        # puts b.no_check_in
+        # puts "#{!b.check_in.present?} && #{b.start} < #{from}"
+        # puts "#{b.check_in.present?} && #{b.check_in} < #{from}"
         line_in = {}
         line_in[:booking_id] = b.id
         line_in[:type] = 'IN'

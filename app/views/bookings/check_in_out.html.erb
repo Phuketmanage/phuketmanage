@@ -68,7 +68,7 @@
               Period: <%= " #{booking.start.strftime('%d.%m.%Y')} -
                             #{booking.finish.strftime('%d.%m.%Y')}" %><br />
               Price: <%= booking.sale %><br />
-              Source: <%= booking.source.name %>
+              Source: <%= booking.source.name if booking.source %>
           </div>
         </div>
       <% end %>
