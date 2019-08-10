@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
     get 'bookings/timeline_data', to: 'bookings#timeline_data'
     get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
+    patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
     resources :bookings
     resources :houses do
       resources :prices, only: [:index]

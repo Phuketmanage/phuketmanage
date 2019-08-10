@@ -49,6 +49,7 @@ class Booking < ApplicationRecord
         puts "#{!b.check_in.present?} && #{b.start} < #{from}"
         puts "#{b.check_in.present?} && #{b.check_in} < #{from}"
         line_in = {}
+        line_in[:booking_id] = b.id
         line_in[:type] = 'IN'
         line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
         line_in[:house] = b.house.code
@@ -66,6 +67,7 @@ class Booking < ApplicationRecord
               (!b.check_out.present? && b.finish > to) ||
               (b.check_out.present? && (b.check_out < from || b.check_out > to))
         line_out = {}
+        line_out[:booking_id] = b.id
         line_out[:type] = 'OUT'
         line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
         line_out[:house] = b.house.code

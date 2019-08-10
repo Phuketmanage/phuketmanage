@@ -194,6 +194,12 @@ $(document).on "turbolinks:load", ->
     if this.checked == false
       $('#booking_check_out').removeAttr('disabled')
 
+  # For check in/out
+  $('a.edit_comment').on 'click', (e) ->
+    e.preventDefault()
+    booking_id = $(this).data('booking-id')
+    $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").removeClass('d-none')
+
 close_dates = (h) ->
   for b in h.bookings
     for x_add in [0..b.length-1]

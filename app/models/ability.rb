@@ -17,6 +17,7 @@ class Ability
       cannot :destroy, Job
       can :index, Transfer
       can :check_in_out, Booking
+      can :timeline, Booking
     elsif user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User

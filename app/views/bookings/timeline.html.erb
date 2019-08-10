@@ -1,5 +1,7 @@
-<%= link_to 'New Booking', new_booking_path %> |
-<%= link_to 'Bookings (list view)', bookings_path %> |
+<% if current_user.role? ['Admin', 'Manager'] %>
+  <%= link_to 'New Booking', new_booking_path %> |
+  <%= link_to 'Bookings (list view)', bookings_path %> |
+<% end %>
 <% if params[:period].present? %>
   <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %> |
 <% else %>

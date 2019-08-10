@@ -1,7 +1,8 @@
 class BookingsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_booking, only: [:show, :edit, :update, :destroy]
+  before_action :set_booking, only: [ :show, :edit, :update,
+                                      :update_comment_gr,  :destroy ]
   layout 'admin'
 
   def ical
@@ -206,6 +207,12 @@ class BookingsController < ApplicationController
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def update_comment_gr
+    @booking.update(booking_params)
+    @result = Booking.check_in_out
+    redirect_to bookings_check_in_out_path
   end
 
   # DELETE /bookings/1
