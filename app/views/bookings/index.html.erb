@@ -21,13 +21,12 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Number</th>
-      <th>Status</th>
+      <th>House</th>
       <th>Start</th>
       <th>Finish</th>
-      <th>House</th>
-      <th>Tenant</th>
+      <th>Client</th>
       <th>Source</th>
+      <th>Status</th>
       <th>Sale</th>
       <th>Agent</th>
       <th>Comm</th>
@@ -40,13 +39,12 @@
   <tbody>
     <% @bookings.each do |booking| %>
       <tr>
-        <td><%= booking.number %></td>
-        <td><%= booking.status %></td>
+        <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
         <td><%= booking.start.strftime('%d.%m.%Y') %></td>
         <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
-        <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
-        <td><%= "#{booking.tenant.name} #{booking.tenant.surname}" if booking.tenant %></td>
+        <td><%= booking.client_details %></td>
         <td><%= booking.source.name if booking.source %></td>
+        <td><%= booking.status %></td>
         <td><%= booking.sale %></td>
         <td><%= booking.agent %></td>
         <td><%= booking.comm %></td>
