@@ -23,7 +23,7 @@ class Ability
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Transfer ]
+                      Connection, JobType, Transfer, Source ]
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update], Job
       can [:destroy], Job, creator: user
