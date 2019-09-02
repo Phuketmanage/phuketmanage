@@ -49,14 +49,33 @@ class BookingsController < ApplicationController
   end
 
   def timeline
-    @houses = House.order(:unavailable, :code)
-    @today = Time.zone.now.in_time_zone('Bangkok').to_date
-    if params[:period].nil?
-      last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-    else
-      last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
+    if !params[:from].present? && !params[:to].present?
+      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if params[:period].nil?
+        to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+      else
+        to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
+      end
+    elsif params[:from].present? && !params[:to].present?
+      from = params[:from].to_date
+      to = Booking.maximum(:finish)
+    elsif !params[:from].present? && params[:to].present?
+      from = Booking.minimum(:start)
+      to = params[:to].to_date
+    elsif params[:from].present? && params[:to].present?
+      from = params[:from].to_date
+      to = params[:to].to_date
     end
-    @days = (last_date - @today).to_i+1
+    @houses = House.order(:unavailable, :code)
+    # @today = Time.zone.now.in_time_zone('Bangkok').to_date
+    @today = from
+    # if params[:period].nil?
+    #   last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+    # else
+    #   last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
+    # end
+    # @days = (last_date - @today).to_i+1
+    @days = (to - from).to_i+1
     @job_types_for_bookings = JobType.where.not(for_house_only: true).order(:name)
     @job_types_for_houses = JobType.order(for_house_only: :desc, name: :asc)
     @job = Job.new
@@ -64,7 +83,8 @@ class BookingsController < ApplicationController
 
   def timeline_data
     # puts params[:period].nil?
-    timeline = Booking.timeline_data params[:period]
+    # byebug
+    timeline = Booking.timeline_data params[:from], params[:to], params[:period]
     render json: { timeline:  timeline }
   end
 

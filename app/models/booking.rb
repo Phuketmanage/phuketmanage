@@ -85,23 +85,46 @@ class Booking < ApplicationRecord
     result.sort_by{|r| r[:date].to_date}
   end
 
-  def self.timeline_data period = nil
-    today = Time.zone.now.in_time_zone('Bangkok').to_date
-    if period.nil?
-      last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-    else
-      last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
+  def self.timeline_data from = nil, to = nil, period = nil
+
+    if !from.present? && !to.present?
+      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if period.nil?
+        to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+      else
+        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
+      end
+    elsif from.present? && !to.present?
+      from = from.to_date
+      to = Booking.maximum(:finish)
+    elsif !from.present? && to.present?
+      # from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Booking.minimum(:start)
+      to = to.to_date
+    elsif from.present? && to.present?
+      from = from.to_date
+      to = to.to_date
     end
-    days = (last_date - today).to_i+1
+
+    # today = Time.zone.now.in_time_zone('Bangkok').to_date
+    # if period.nil?
+    #   last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+    # else
+    #   last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
+    # end
+    # days = (last_date - today).to_i+1
+    days = (to - from).to_i+1
     timeline = {}
-    timeline[:start] = today
+    # timeline[:start] = today
+    timeline[:start] = from
     timeline[:days] = days
     timeline[:houses] = []
     houses = House.order(:unavailable, :code)
     y = 1
     houses.each do |h|
       # Get bookings for house
-      bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
+      # bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
+      bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', from, to, Booking.statuses[:canceled]).order(:finish)
       house = {}
       house[:hid] = h.number
       house[:y] = y
@@ -112,9 +135,11 @@ class Booking < ApplicationRecord
         booking[:number] = b.number
         booking[:status] = b.status
         booking[:comment] = b.comment
-        booking[:x] = ([b.start, today].max - today).to_i+1
+        # booking[:x] = ([b.start, today].max - today).to_i+1
+        booking[:x] = ([b.start, from].max - from).to_i+1
         booking[:y] = y
-        booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
+        # booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
+        booking[:length] = ([b.finish, to].min-[b.start, from].max).to_i+1
         # Get jobs for bookings
         jobs = b.jobs
 
@@ -125,7 +150,8 @@ class Booking < ApplicationRecord
           job[:type_id] = j.job_type_id
           job[:employee_id] = j.employee.id if !j.employee.nil?
           job[:empl_type_id] = j.employee.type.id if !j.employee.nil?
-          job[:x] = (j.plan - today).to_i+1
+          # job[:x] = (j.plan - today).to_i+1
+          job[:x] = (j.plan - from).to_i+1
           job[:time] = j.time
           job[:comment] = j.comment
           job[:code] = j.job_type.code

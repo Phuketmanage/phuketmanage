@@ -49,7 +49,11 @@ $(document).on "turbolinks:load", ->
     url: '/bookings/timeline_data',
     type: "get",
     dataType: "json",
-    data: { period: $('#period').val() },
+    data: {
+      from: $('#from').val(),
+      to: $('#to').val(),
+      period: $('#period').val()
+    },
     success: (data) ->
       console.log('Timeline ready')
       close_dates h for h in data.timeline.houses

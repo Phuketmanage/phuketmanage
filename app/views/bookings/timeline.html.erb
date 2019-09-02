@@ -71,6 +71,23 @@
   <% end %>
 </div>
 
+<div class='mt-2'>
+<%= form_with(url: bookings_timeline_path, local: true, method: :get) do |f| %>
+  <div class="form-row">
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
+    </div>
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
+    </div>
+    <div class="col-lg-3 form-group">
+      <%= f.submit 'Show', class: 'btn btn-primary' %>
+      <%= link_to 'Drop filter', bookings_check_in_out_path, class: 'btn btn-secondary'  %>
+    </div>
+  </div>
+<% end %>
+</div>
+
 <div class="dropdown new_job">
   <div class="dropdown-menu new_job">
     <div class="dropdown_menu_for_booking">
