@@ -82,7 +82,7 @@
     </div>
     <div class="col-lg-3 form-group">
       <%= f.submit 'Show', class: 'btn btn-primary' %>
-      <%= link_to 'Drop filter', bookings_check_in_out_path, class: 'btn btn-secondary'  %>
+      <%= link_to 'Drop filter', bookings_timeline_path(period: 45), class: 'btn btn-secondary'  %>
     </div>
   </div>
 <% end %>
