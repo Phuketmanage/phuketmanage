@@ -26,7 +26,7 @@ class Ability
                       Connection, JobType, Transfer, Source ]
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update], Job
-      can [:destroy], Job #, creator: user
+      can [:destroy], Job, creator: user
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
