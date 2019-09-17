@@ -25,7 +25,7 @@ class Ability
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
                       Connection, JobType, Transfer, Source ]
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
-      can [:index, :new, :create, :edit, :update], Job
+      can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job, creator: user
     elsif user.role? :admin
       can :manage, :all

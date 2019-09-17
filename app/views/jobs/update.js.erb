@@ -1,4 +1,5 @@
-$('#btn_job_<%= @job.id %>').hide()
+$('div#job_<%= @job.id %>').html("<%= j render 'job_managers', job: @job %>")
+$('#form_edit_comment_<%= @job.id %>').hide()
 <% if @job_status_toggled %>
   $('#job_<%= @job.id %>').remove()
 <% end %>

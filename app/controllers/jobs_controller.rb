@@ -37,7 +37,7 @@ class JobsController < ApplicationController
                                           collected IS NULL OR
                                           sent IS NULL OR
                                           rooms IS NULL OR
-                                          price IS NULL)', 'P', 'X')
+                                          price IS NULL)', 'B', 'X')
                                     .order(:plan)
   end
 
