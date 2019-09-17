@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_04_133308) do
+ActiveRecord::Schema.define(version: 2019_09_16_121614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,10 @@ ActiveRecord::Schema.define(version: 2019_08_04_133308) do
     t.text "job"
     t.bigint "creator_id", null: false
     t.bigint "employee_id"
+    t.date "collected"
+    t.date "sent"
+    t.integer "rooms"
+    t.integer "price"
     t.index ["booking_id"], name: "index_jobs_on_booking_id"
     t.index ["creator_id"], name: "index_jobs_on_creator_id"
     t.index ["employee_id"], name: "index_jobs_on_employee_id"

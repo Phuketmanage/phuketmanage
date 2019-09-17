@@ -146,7 +146,8 @@ $(document).on "turbolinks:load", ->
         allocate_job data.cell_id, data.job
       error: (data) ->
         console.log('Something went wrong')
-        console.log(data.responseJSON)
+        console.log("JSON: #{data.responseJSON}")
+        console.log("TEXT: #{data.responseText}")
     $('#new_job_modal').modal('hide')
     return  false;
 

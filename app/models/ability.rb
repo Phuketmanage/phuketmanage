@@ -11,7 +11,7 @@ class Ability
     elsif user.role? 'Transfer'
       can :read, Transfer
     elsif user.role? 'Maid'
-      can :read, Job
+      can [:laundry, :update_laundry], Job
     elsif user.role? 'Guest relation'
       can :manage, Job
       cannot :destroy, Job

@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_job, only: [:show, :edit, :update, :destroy]
+  before_action :set_job, only: [:show, :edit, :update, :update_laundry, :destroy]
   layout 'admin'
 
   # GET /jobs
@@ -32,6 +32,15 @@ class JobsController < ApplicationController
     render :index
   end
 
+  def laundry
+    @laundry = Job.joins(:job_type).where('job_types.code IN (?,?) AND (
+                                          collected IS NULL OR
+                                          sent IS NULL OR
+                                          rooms IS NULL OR
+                                          price IS NULL)', 'P', 'X')
+                                    .order(:plan)
+  end
+
   # GET /jobs/1
   # GET /jobs/1.json
   def show
@@ -51,9 +60,9 @@ class JobsController < ApplicationController
   def create
     @job = Job.new(job_params)
     @job.creator_id = current_user.id
-    # byebug
     respond_to do |format|
       if @job.save
+
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
@@ -98,6 +107,11 @@ class JobsController < ApplicationController
     end
   end
 
+  def update_laundry
+    @job.update(job_params)
+    redirect_to laundry_path
+  end
+
   # DELETE /jobs/1
   # DELETE /jobs/1.json
   def destroy
@@ -126,6 +140,10 @@ class JobsController < ApplicationController
                                   :closed,
                                   :job,
                                   :comment,
-                                  :employee_id )
+                                  :employee_id,
+                                  :collected,
+                                  :sent,
+                                  :rooms,
+                                  :price )
     end
 end
