@@ -2,60 +2,87 @@
 <h5>
 Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strftime('%d.%m.%Y') %>
 </h5>
-<div class="form-row d-none d-md-flex">
-  <div class="col-md-1 form-group font-weight-bold">
-    House/บ้าน
+<div class='mt-2'>
+<%= form_with(url: laundry_path, local: true, method: :get) do |f| %>
+  <div class="form-row">
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
+    </div>
+    <div class="col-lg-2 form-group">
+      <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
+    </div>
+    <div class="col-lg-3 form-group">
+      <%= f.submit 'Show', class: 'btn btn-primary' %>
+      <%= link_to 'Drop filter', laundry_path, class: 'btn btn-secondary'  %>
+    </div>
   </div>
-  <div class="col-md-1 form-group font-weight-bold">
-    Job/งาน
-  </div>
-  <div class="col-md-1 form-group font-weight-bold">
-    Change/เปลี่ยน
-  </div>
-  <div class="col-md-2 form-group font-weight-bold">
-    Collect/รับ
-  </div>
-  <div class="col-md-2 form-group font-weight-bold">
-    Send/ส่ง
-  </div>
-  <div class="col-md-1 form-group font-weight-bold">
-    Rooms/ห้อง
-  </div>
-  <div class="col-md-1 form-group font-weight-bold">
-    Price/ราคา
-  </div>
+<% end %>
 </div>
-<% @laundry.each do |l| %>
-  <%= form_with model: l, local: true, url: update_laundry_path(l) do |f| %>
-    <% if l.errors.any? %>
-      <%= render 'shared/error_messages', object: f.object %>
-    <% end %>
-    <div class="form-row">
-      <div class="col-md-1 form-group">
-        <%= l.house.code if l.house %>
-        <%= l.booking.house.code if l.booking %>
-      </div>
-      <div class="col-md-1 form-group">
-        <%= l.job_type.code %>
-      </div>
-      <div class="col-md-1 form-group">
-        <%= l.plan.strftime('%d.%m.%Y') %>
-      </div>
-      <div class="col-md-2 form-group">
-        <%= f.date_field :collected, class: 'form-control' %>
-      </div>
-      <div class="col-md-2 form-group">
-        <%= f.date_field :sent, class: 'form-control' %>
-      </div>
-      <div class="col-md-1 form-group">
-        <%= f.number_field :rooms, placeholder: 'rooms', class: 'form-control' %>
-      </div>
-      <div class="col-md-1 form-group">
-        <%= f.number_field :price, placeholder: 'price', class: 'form-control' %>
-      </div>
-      <div class="col-md-1 form-group">
-        <%= f.submit 'Save', class: 'btn btn-primary' %>
-      </div>
+
+<% if @error_message.present? %>
+  <div class="alert alert-warning" role="alert">
+    <%= @error_message %>
+  </div>
+<% else %>
+
+
+  <div class="form-row d-none d-md-flex">
+    <div class="col-md-1 form-group font-weight-bold">
+      House/บ้าน
+    </div>
+    <div class="col-md-1 form-group font-weight-bold">
+      Job/งาน
+    </div>
+    <div class="col-md-1 form-group font-weight-bold">
+      Change/เปลี่ยน
+    </div>
+    <div class="col-md-2 form-group font-weight-bold">
+      Collect/รับ
+    </div>
+    <div class="col-md-2 form-group font-weight-bold">
+      Send/ส่ง
+    </div>
+    <div class="col-md-1 form-group font-weight-bold">
+      Rooms/ห้อง
+    </div>
+    <div class="col-md-1 form-group font-weight-bold">
+      Price/ราคา
+    </div>
+  </div>
+  <% @laundry.each do |l| %>
+    <div class="shadow-sm mb-2 p-2 bg-light rounded">
+      <%= form_with model: l, local: true, url: update_laundry_path(l) do |f| %>
+        <% if l.errors.any? %>
+          <%= render 'shared/error_messages', object: f.object %>
+        <% end %>
+        <div class="form-row">
+          <div class="col-md-1">
+            <%= l.house.code if l.house %>
+            <%= l.booking.house.code if l.booking %>
+          </div>
+          <div class="col-md-1 form-group">
+            <%= l.job_type.code %>
+          </div>
+          <div class="col-md-1 form-group">
+            <%= l.plan.strftime('%d.%m.%Y') %>
+          </div>
+          <div class="col-md-2 form-group">
+            <%= f.date_field :collected, class: 'form-control' %>
+          </div>
+          <div class="col-md-2 form-group">
+            <%= f.date_field :sent, class: 'form-control' %>
+          </div>
+          <div class="col-md-1 form-group">
+            <%= f.number_field :rooms, placeholder: 'rooms', class: 'form-control' %>
+          </div>
+          <div class="col-md-1 form-group">
+            <%= f.number_field :price, placeholder: 'price', class: 'form-control' %>
+          </div>
+          <div class="col-md-1 form-group">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 <% end %>
