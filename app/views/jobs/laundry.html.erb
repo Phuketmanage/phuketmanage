@@ -46,6 +46,9 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
     <div class="col-md-1 form-group font-weight-bold">
       Price/ราคา
     </div>
+    <div class="col-md-2 form-group font-weight-bold">
+      Comment/หมายเหตุ
+    </div>
   </div>
   <% @laundry.each do |l| %>
     <div class="shadow-sm mb-2 p-2 bg-light rounded">
