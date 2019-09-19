@@ -34,11 +34,11 @@ class JobsController < ApplicationController
   end
 
   def laundry
-    @laundry = Job.joins(:job_type).where('job_types.code IN (?,?) AND (
+    @laundry = Job.joins(:job_type).where('job_types.code IN (?,?,?) AND (
                                           collected IS NULL OR
                                           sent IS NULL OR
                                           rooms IS NULL OR
-                                          price IS NULL)', 'B', 'X')
+                                          price IS NULL)', 'B', 'X', 'L')
                                     .order(:plan)
   end
 
