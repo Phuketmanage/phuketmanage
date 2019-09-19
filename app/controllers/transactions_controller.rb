@@ -39,25 +39,24 @@ class TransactionsController < ApplicationController
     @transaction.set_owner
     respond_to do |format|
       if @transaction.save
-        if params[:transaction][:inc_owner].present? ||
-            params[:transaction][:exp_owner].present?
-          balance_owner = BalanceOut.new(
-            debit: params[:transaction][:inc_owner],
-            credit: params[:transaction][:exp_owner])
-          @transaction.balance_outs << balance_owner
+        de_ow = params[:transaction][:inc_owner].to_d
+        cr_ow = params[:transaction][:exp_owner].to_d
+        de_co = params[:transaction][:inc_company].to_d
+        cr_co = params[:transaction][:exp_company].to_d
+        if de_ow.present? || cr_ow.present?
+          balance_ow = BalanceOut.new(debit: de_ow, credit: cr_ow)
+          @transaction.balance_outs << balance_ow
+          if de_co.present? || cr_co.present?
+            ow_pay_to_co = de_co + cr_co
+            balance_ow = BalanceOut.new(credit: ow_pay_to_co)
+            @transaction.balance_outs << balance_ow
+            balance_co = Balance.new(debit: ow_pay_to_co)
+            @transaction.balances << balance_co
+          end
         end
-        if params[:transaction][:inc_company].present?
-          balance_owner = BalanceOut.new(
-            credit: params[:transaction][:inc_company])
-          @transaction.balance_outs << balance_owner
-          balance_company = Balance.new(
-            debit: params[:transaction][:inc_company])
-          @transaction.balances << balance_company
-        end
-        if params[:transaction][:exp_company].present?
-          balance_company = Balance.new(
-            credit: params[:transaction][:exp_company])
-          @transaction.balances << balance_company
+        if cr_co.present?
+          balance_co = Balance.new(credit: cr_co)
+          @transaction.balances << balance_co
         end
         format.html { redirect_to @transaction, notice: 'Transaction was successfully created.' }
         format.json { render :show, status: :created, location: @transaction }

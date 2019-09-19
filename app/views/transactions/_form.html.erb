@@ -4,7 +4,7 @@
   <div class="form-row">
     <div class="col-md-2">
       <%= form.label :date %>
-      <%= form.date_field :date, class: 'form-control' %>
+      <%= form.date_field :date, value: Time.now.strftime('%Y-%m-%d'), class: 'form-control' %>
     </div>
     <div class="col-md-2">
       <%= form.label :type_id %>
@@ -28,21 +28,21 @@
   <div class="form-row">
     <div class="col-md-1">
       <%= form.label :inc_owner %>
-      <%= form.number_field :inc_owner, step: 0.01, class: "form-control" %>
+      <%= form.number_field :inc_owner, step: 0.01, placeholder: 0, class: "form-control" %>
     </div>
     <div class="col-md-1">
       <%= form.label :exp_owner %>
-      <%= form.number_field :exp_owner, step: 0.01, class: "form-control" %>
+      <%= form.number_field :exp_owner, step: 0.01, placeholder: 0, class: "form-control" %>
     </div>
   </div>
   <div class="form-row">
     <div class="col-md-1">
       <%= form.label :inc_company %>
-      <%= form.number_field :inc_company, step: 0.01, class: "form-control" %>
+      <%= form.number_field :inc_company, step: 0.01, placeholder: 0, class: "form-control" %>
     </div>
     <div class="col-md-1">
       <%= form.label :exp_company %>
-      <%= form.number_field :exp_company, step: 0.01, class: "form-control" %>
+      <%= form.number_field :exp_company, step: 0.01, placeholder: 0, class: "form-control" %>
     </div>
   </div>
 
