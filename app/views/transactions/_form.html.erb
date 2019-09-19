@@ -1,0 +1,73 @@
+<%= form_with(model: transaction, local: true) do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
+
+  <div class="form-row">
+    <div class="col-md-2">
+      <%= form.label :date %>
+      <%= form.date_field :date, class: 'form-control' %>
+    </div>
+    <div class="col-md-2">
+      <%= form.label :type_id %>
+      <%= form.select :type_id,
+            TransactionType.all.map {|t| [t.name_en, t.id]},
+                      { prompt: 'Select transaction type' }, class: "form-control" %>
+    </div>
+    <div class="col-md-2">
+      <%= form.label :house_id %>
+      <%= form.select :house_id,
+            House.all.map {|h| [h.code, h.id]},
+                      { prompt: 'Select house' }, class: "form-control" %>
+    </div>
+    <div class="col-md-2">
+      <%= form.label :user_id %>
+      <%= form.select :user_id,
+            User.with_role(['Owner']).map {|u| [u.name, u.id]},
+            { prompt: 'Select owner' }, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-1">
+      <%= form.label :inc_owner %>
+      <%= form.number_field :inc_owner, step: 0.01, class: "form-control" %>
+    </div>
+    <div class="col-md-1">
+      <%= form.label :exp_owner %>
+      <%= form.number_field :exp_owner, step: 0.01, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-1">
+      <%= form.label :inc_company %>
+      <%= form.number_field :inc_company, step: 0.01, class: "form-control" %>
+    </div>
+    <div class="col-md-1">
+      <%= form.label :exp_company %>
+      <%= form.number_field :exp_company, step: 0.01, class: "form-control" %>
+    </div>
+  </div>
+
+
+  <div class="field">
+    <%= form.label :comment_en %>
+    <%= form.text_field :comment_en, class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :comment_ru %>
+    <%= form.text_field :comment_ru, class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :comment_inner %>
+    <%= form.text_field :comment_inner, class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ref_no %>
+    <%= form.text_field :ref_no, class: "form-control" %>
+  </div>
+
+  <div class="actions mt-2">
+    <%= form.submit 'Save', class: "btn btn-primary" %>
+  </div>
+<% end %>

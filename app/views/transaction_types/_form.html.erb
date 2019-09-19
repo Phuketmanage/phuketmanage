@@ -1,0 +1,37 @@
+<%= form_with(model: transaction_type, local: true) do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
+
+  <div class="field">
+    <%= form.label :name_en %>
+    <%= form.text_field :name_en %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name_ru %>
+    <%= form.text_field :name_ru %>
+  </div>
+
+  <div class="field">
+    <%= form.label :debit_company %>
+    <%= form.check_box :debit_company %>
+  </div>
+
+  <div class="field">
+    <%= form.label :credit_company %>
+    <%= form.check_box :credit_company %>
+  </div>
+
+  <div class="field">
+    <%= form.label :debit_owner %>
+    <%= form.check_box :debit_owner %>
+  </div>
+
+  <div class="field">
+    <%= form.label :credit_owner %>
+    <%= form.check_box :credit_owner %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Transaction Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name en</th>
+      <th>Name ru</th>
+      <th>Debit company</th>
+      <th>Credit company</th>
+      <th>Debit owner</th>
+      <th>Credit owner</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transaction_types.each do |transaction_type| %>
+      <tr>
+        <td><%= transaction_type.name_en %></td>
+        <td><%= transaction_type.name_ru %></td>
+        <td><%= transaction_type.debit_company %></td>
+        <td><%= transaction_type.credit_company %></td>
+        <td><%= transaction_type.debit_owner %></td>
+        <td><%= transaction_type.credit_owner %></td>
+        <td><%= link_to 'Show', transaction_type %></td>
+        <td><%= link_to 'Edit', edit_transaction_type_path(transaction_type) %></td>
+        <td><%= link_to 'Destroy', transaction_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transaction Type', new_transaction_type_path %>

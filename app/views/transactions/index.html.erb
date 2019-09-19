@@ -1,0 +1,64 @@
+<h1>Transactions</h1>
+
+<%= form_with(url: transactions_path, method: :get, local: true) do |form| %>
+  <div class="form-row">
+    <div class="col-md-2">
+      <%= form.select :user_id,
+            User.with_role(['Owner']).map {|u| [u.name, u.id]},
+            { prompt: 'Select owner' },
+            class: "form-control" %>
+    </div>
+    <div class="col-md-2">
+      <%= form.submit 'Show', class: "btn btn-primary" %>
+    </div>
+
+  </div>
+<% end %>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Debit</th>
+      <th>Credit</th>
+      <th>Balance</th>
+      <th>Type</th>
+      <th>House</th>
+      <th>Comment</th>
+      <th>Comment inner</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transactions.each do |t| %>
+      <tr>
+        <td><%= t.date.strftime('%d.%m.%Y') %></td>
+        <% if @owner %>
+          <% debit = t.balance_outs.sum(:debit) %>
+          <% credit = t.balance_outs.sum(:credit) %>
+          <td><%= debit - credit if debit > 0%></td>
+          <td><%= credit if credit > 0 %></td>
+        <% else %>
+          <% debit = t.balances.sum(:debit) %>
+          <% credit = t.balances.sum(:credit) %>
+          <td><%= debit if debit > 0 %></td>
+          <td><%= credit if credit > 0 %></td>
+        <% end %>
+        <td>balance</td>
+        <td><%= t.type.name_en %></td>
+        <td><%= t.house.code %></td>
+        <td><%= t.comment_en %></td>
+        <td><%= t.comment_inner %></td>
+        <td><%= link_to 'Show', t %></td>
+        <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
+        <td><%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transaction', new_transaction_path %>
