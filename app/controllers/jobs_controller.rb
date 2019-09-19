@@ -36,11 +36,11 @@ class JobsController < ApplicationController
     from = params[:from]
     to = params[:to]
     if !from.present? && !to.present?
-      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?) AND (
+      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?,?) AND (
                                           collected IS NULL OR
                                           sent IS NULL OR
                                           rooms IS NULL OR
-                                          price IS NULL)', 'B', 'X')
+                                          price IS NULL)', 'B', 'X', 'L')
                                     .order(:plan)
     elsif from.present? && !to.present? || !from.present? && to.present?
       @error_message = "Both dates should be selected / ควรเลือกวันที่ทั้งสอง"
@@ -48,13 +48,13 @@ class JobsController < ApplicationController
                                           collected IS NULL OR
                                           sent IS NULL OR
                                           rooms IS NULL OR
-                                          price IS NULL)', 'B', 'X')
+                                          price IS NULL)', 'B', 'X', 'L')
                                     .order(:plan)
     elsif from.present? && to.present?
       from = from.to_date
       to = to.to_date
-      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?) AND
-                            plan >= ? AND plan <= ?', 'B', 'X', from, to)
+      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?,?) AND
+                            plan >= ? AND plan <= ?', 'B', 'X', 'L', from, to)
                                     .order(:plan)
 
     end
