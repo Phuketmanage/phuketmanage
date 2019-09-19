@@ -1,7 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :type, class_name: 'TransactionType'
   belongs_to :house, optional: true
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :balances, dependent: :destroy
   has_many :balance_outs, dependent: :destroy
 

@@ -12,10 +12,11 @@ class TransactionsController < ApplicationController
 
     if params[:user_id].present?
       @owner = true
-      @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', from, to, params[:user_id]).all
+      @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', from, to, params[:user_id]).order(date: :desc, created_at: :desc).all
     else
-      @transactions = Transaction.where('date >= ? AND date <= ?', from, to).all
+      @transactions = Transaction.where('date >= ? AND date <= ?', from, to).order(date: :desc, created_at: :desc).all
     end
+    # @transactions.order(date: :desc, created_at: :desc)
   end
 
   # GET /transactions/1

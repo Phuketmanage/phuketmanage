@@ -10,7 +10,7 @@
       <%= form.label :type_id %>
       <%= form.select :type_id,
             TransactionType.all.map {|t| [t.name_en, t.id]},
-                      { prompt: 'Select transaction type' }, class: "form-control" %>
+                      { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
     </div>
     <div class="col-md-2">
       <%= form.label :house_id %>
@@ -25,24 +25,28 @@
             { prompt: 'Select owner' }, class: "form-control" %>
     </div>
   </div>
-  <div class="form-row">
+  <div class="form-row money_fields" style='display:none;'>
     <div class="col-md-1">
-      <%= form.label :inc_owner %>
-      <%= form.number_field :inc_owner, step: 0.01, placeholder: 0, class: "form-control" %>
+      <%= form.label :inc_owner, id: 'de_ow_label' %>
+      <%= form.number_field :inc_owner, step: 0.01, placeholder: 0,
+        class: "form-control money_fields", id: 'de_ow' %>
     </div>
     <div class="col-md-1">
-      <%= form.label :exp_owner %>
-      <%= form.number_field :exp_owner, step: 0.01, placeholder: 0, class: "form-control" %>
+      <%= form.label :exp_owner, id: 'cr_ow_label'  %>
+      <%= form.number_field :exp_owner, step: 0.01, placeholder: 0,
+        class: "form-control money_fields", id: 'cr_ow'  %>
     </div>
   </div>
-  <div class="form-row">
+  <div class="form-row money_fields" style='display:none;'>
     <div class="col-md-1">
-      <%= form.label :inc_company %>
-      <%= form.number_field :inc_company, step: 0.01, placeholder: 0, class: "form-control" %>
+      <%= form.label :inc_company, id: 'de_co_label' %>
+      <%= form.number_field :inc_company, step: 0.01, placeholder: 0,
+        class: "form-control money_fields", id: 'de_co' %>
     </div>
     <div class="col-md-1">
-      <%= form.label :exp_company %>
-      <%= form.number_field :exp_company, step: 0.01, placeholder: 0, class: "form-control" %>
+      <%= form.label :exp_company, id: 'cr_co_label' %>
+      <%= form.number_field :exp_company, step: 0.01, placeholder: 0,
+        class: "form-control money_fields", id: 'cr_co' %>
     </div>
   </div>
 
