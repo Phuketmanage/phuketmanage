@@ -76,6 +76,9 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
           <div class="col-md-1 form-group">
             <%= f.number_field :price, placeholder: 'price', class: 'form-control' %>
           </div>
+          <div class="col-md-2 form-group">
+            <%= f.text_field :comment, placeholder: 'Comment', class: 'form-control' %>
+          </div>
           <div class="col-md-1 form-group">
             <%= f.submit 'Save', class: 'btn btn-primary' %>
           </div>
