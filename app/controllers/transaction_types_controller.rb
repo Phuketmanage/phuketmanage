@@ -31,7 +31,7 @@ class TransactionTypesController < ApplicationController
 
     respond_to do |format|
       if @transaction_type.save
-        format.html { redirect_to @transaction_type, notice: 'Transaction type was successfully created.' }
+        format.html { redirect_to transaction_types_url, notice: 'Transaction type was successfully created.' }
         format.json { render :show, status: :created, location: @transaction_type }
       else
         format.html { render :new }

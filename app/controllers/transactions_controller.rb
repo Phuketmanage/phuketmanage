@@ -11,10 +11,13 @@ class TransactionsController < ApplicationController
     to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
 
     if params[:user_id].present?
-      @owner = true
       @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', from, to, params[:user_id]).order(date: :desc, created_at: :desc).all
+      @view = 'company' if params[:commit] == 'Company view'
+      @view = 'owner' if params[:commit] == 'Owner view'
+      @view = 'accounting' if params[:commit] == 'Accounting view'
     else
       @transactions = Transaction.where('date >= ? AND date <= ?', from, to).order(date: :desc, created_at: :desc).all
+      @view = 'company'
     end
     # @transactions.order(date: :desc, created_at: :desc)
   end
@@ -44,23 +47,14 @@ class TransactionsController < ApplicationController
         cr_ow = params[:transaction][:exp_owner].to_d
         de_co = params[:transaction][:inc_company].to_d
         cr_co = params[:transaction][:exp_company].to_d
-        if de_ow.present? || cr_ow.present?
-          balance_ow = BalanceOut.new(debit: de_ow, credit: cr_ow)
-          @transaction.balance_outs << balance_ow
-          if de_co.present? || cr_co.present?
-            ow_pay_to_co = de_co + cr_co
-            balance_ow = BalanceOut.new(credit: ow_pay_to_co)
-            @transaction.balance_outs << balance_ow
-            balance_co = Balance.new(debit: ow_pay_to_co)
-            @transaction.balances << balance_co
-          end
+        type = TransactionType.find(params[:transaction][:type_id]).name_en
+        @transaction.prepare(type, de_ow, cr_ow, de_co, cr_co)
+        if @transaction.errors.any?
+          @transaction.destroy
+          render :new and return
         end
-        if cr_co.present?
-          balance_co = Balance.new(credit: cr_co)
-          @transaction.balances << balance_co
-        end
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully created.' }
-        format.json { render :show, status: :created, location: @transaction }
+        format.html { redirect_to transactions_path, notice: 'Transaction was successfully created.' }
+        # format.json { render :show, status: :created, location: @transaction }
       else
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }

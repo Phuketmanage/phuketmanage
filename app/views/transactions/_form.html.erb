@@ -12,61 +12,59 @@
             TransactionType.all.map {|t| [t.name_en, t.id]},
                       { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2" id='house_id'>
       <%= form.label :house_id %>
       <%= form.select :house_id,
             House.all.map {|h| [h.code, h.id]},
                       { prompt: 'Select house' }, class: "form-control" %>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2" id='owner_id'>
       <%= form.label :user_id %>
       <%= form.select :user_id,
             User.with_role(['Owner']).map {|u| [u.name, u.id]},
             { prompt: 'Select owner' }, class: "form-control" %>
     </div>
   </div>
-  <div class="form-row money_fields" style='display:none;'>
-    <div class="col-md-1">
+  <div class="form-row">
+    <div class="col-md-2 money_fields", id='de_ow', style='display:none;'>
       <%= form.label :inc_owner, id: 'de_ow_label' %>
       <%= form.number_field :inc_owner, step: 0.01, placeholder: 0,
-        class: "form-control money_fields", id: 'de_ow' %>
+        class: "form-control" %>
     </div>
-    <div class="col-md-1">
-      <%= form.label :exp_owner, id: 'cr_ow_label'  %>
+    <div class="col-md-2 money_fields", id='cr_ow', style='display:none;'>
+      <%= form.label :exp_owner, id: 'cr_ow_label' %>
       <%= form.number_field :exp_owner, step: 0.01, placeholder: 0,
-        class: "form-control money_fields", id: 'cr_ow'  %>
+        class: "form-control" %>
     </div>
-  </div>
-  <div class="form-row money_fields" style='display:none;'>
-    <div class="col-md-1">
-      <%= form.label :inc_company, id: 'de_co_label' %>
-      <%= form.number_field :inc_company, step: 0.01, placeholder: 0,
-        class: "form-control money_fields", id: 'de_co' %>
-    </div>
-    <div class="col-md-1">
+    <div class="col-md-2 money_fields", id='cr_co', style='display:none;'>
       <%= form.label :exp_company, id: 'cr_co_label' %>
       <%= form.number_field :exp_company, step: 0.01, placeholder: 0,
-        class: "form-control money_fields", id: 'cr_co' %>
+        class: "form-control" %>
+    </div>
+    <div class="col-md-2 money_fields", id='de_co', style='display:none;'>
+      <%= form.label :inc_company, id: 'de_co_label' %>
+      <%= form.number_field :inc_company, step: 0.01, placeholder: 0,
+        class: "form-control" %>
     </div>
   </div>
 
 
-  <div class="field">
+  <div class="field" id='comment_en'>
     <%= form.label :comment_en %>
     <%= form.text_field :comment_en, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field" id='comment_ru'>
     <%= form.label :comment_ru %>
     <%= form.text_field :comment_ru, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field" id='comment_inner'>
     <%= form.label :comment_inner %>
     <%= form.text_field :comment_inner, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field" id='ref_no'>
     <%= form.label :ref_no %>
     <%= form.text_field :ref_no, class: "form-control" %>
   </div>

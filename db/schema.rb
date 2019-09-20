@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_19_082451) do
+ActiveRecord::Schema.define(version: 2019_09_19_122946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,7 +262,7 @@ ActiveRecord::Schema.define(version: 2019_09_19_082451) do
     t.string "ref_no"
     t.bigint "house_id"
     t.bigint "type_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "comment_en"
     t.string "comment_ru"
     t.string "comment_inner"
