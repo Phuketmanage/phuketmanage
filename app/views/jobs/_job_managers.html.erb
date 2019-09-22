@@ -3,6 +3,11 @@
     <div>
       <span class='text-muted'>Created:</span>
       <%= " #{job.created_at.strftime('%d.%m.%Y')}" %>
+      <% if current_user.role? :admin %>
+        <span class='text-muted'>For:</span>
+        <%= job.user.name if job.user_id %>
+      <% end %>
+
       <% if (job.creator == current_user) || current_user.role?(:admin) %>
         <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
       <% end %>
@@ -43,12 +48,6 @@
       <div class="d-md-inline-block">
         <span class='text-muted'>Closed:</span>
         <%= job.closed.strftime('%d.%m.%Y') %>
-      </div>
-    <% end %>
-    <% if current_user.role? :admin %>
-      <div class="d-md-inline-block">
-        <span class='text-muted'>Created:</span>
-        <%= job.user.name if job.user_id %>
       </div>
     <% end %>
     <div>

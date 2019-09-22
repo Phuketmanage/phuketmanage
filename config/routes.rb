@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :transactions
+  resources :transaction_types
   get '/employees/list_for_job', to: 'employees#list_for_job'
   resources :employees
   resources :empl_types

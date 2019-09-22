@@ -43,6 +43,7 @@ gem 'jquery-rails'
 gem 'flag-icons-rails'
 gem 'icalendar'
 gem 'http_accept_language'
+gem 'aws-sdk', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

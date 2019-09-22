@@ -2,6 +2,7 @@ class JobsController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_job, only: [:show, :edit, :update, :update_laundry, :destroy]
+  # before_action :set_s3_direct_post, only: [:show, :edit, :update, :update_laundry, :destroy]
   layout 'admin'
 
   # GET /jobs
@@ -143,6 +144,11 @@ class JobsController < ApplicationController
   end
 
   private
+
+    # def set_s3_direct_post
+    #   @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{SecureRandom.uuid}/${filename}", success_action_status: '201', acl: 'public-read')
+    # end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_job
       @job = Job.find(params[:id])

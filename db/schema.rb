@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_121614) do
+ActiveRecord::Schema.define(version: 2019_09_19_122946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "balance_outs", force: :cascade do |t|
+    t.bigint "transaction_id", null: false
+    t.decimal "debit", precision: 9, scale: 2
+    t.decimal "credit", precision: 10, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["transaction_id"], name: "index_balance_outs_on_transaction_id"
+  end
+
+  create_table "balances", force: :cascade do |t|
+    t.bigint "transaction_id", null: false
+    t.decimal "debit", precision: 9, scale: 2
+    t.decimal "credit", precision: 10, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["transaction_id"], name: "index_balances_on_transaction_id"
+  end
 
   create_table "bookings", force: :cascade do |t|
     t.date "start"
@@ -169,6 +187,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_121614) do
     t.date "sent"
     t.integer "rooms"
     t.integer "price"
+    t.string "before"
     t.index ["booking_id"], name: "index_jobs_on_booking_id"
     t.index ["creator_id"], name: "index_jobs_on_creator_id"
     t.index ["employee_id"], name: "index_jobs_on_employee_id"
@@ -228,6 +247,33 @@ ActiveRecord::Schema.define(version: 2019_09_16_121614) do
     t.index ["syncable"], name: "index_sources_on_syncable"
   end
 
+  create_table "transaction_types", force: :cascade do |t|
+    t.string "name_en"
+    t.string "name_ru"
+    t.boolean "debit_company"
+    t.boolean "credit_company"
+    t.boolean "debit_owner"
+    t.boolean "credit_owner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "ref_no"
+    t.bigint "house_id"
+    t.bigint "type_id", null: false
+    t.bigint "user_id"
+    t.string "comment_en"
+    t.string "comment_ru"
+    t.string "comment_inner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "date"
+    t.index ["house_id"], name: "index_transactions_on_house_id"
+    t.index ["type_id"], name: "index_transactions_on_type_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
   create_table "transfers", force: :cascade do |t|
     t.bigint "booking_id"
     t.date "date"
@@ -274,6 +320,8 @@ ActiveRecord::Schema.define(version: 2019_09_16_121614) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "balance_outs", "transactions"
+  add_foreign_key "balances", "transactions"
   add_foreign_key "bookings", "houses"
   add_foreign_key "bookings", "users", column: "tenant_id"
   add_foreign_key "connections", "houses"
@@ -290,5 +338,8 @@ ActiveRecord::Schema.define(version: 2019_09_16_121614) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
+  add_foreign_key "transactions", "houses"
+  add_foreign_key "transactions", "transaction_types", column: "type_id"
+  add_foreign_key "transactions", "users"
   add_foreign_key "transfers", "bookings"
 end

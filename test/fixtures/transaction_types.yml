@@ -1,0 +1,67 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+rental:
+  name_en: Rental
+  name_ru: Аренда
+  debit_company: true
+  credit_company: false
+  debit_owner: true
+  credit_owner: false
+
+maintenance:
+  name_en: Maintenance
+  name_ru: Обслуживание
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
+
+laundry:
+  name_en: Laundry
+  name_ru: Стирка
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
+
+top_up:
+  name_en: Top up
+  name_ru: Пополнение
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
+
+utilities_received:
+  name_en: Utilities received
+  name_ru: Ком платежи с гостей
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
+
+repair:
+  name_en: Repair
+  name_ru: Ремонт
+  debit_company: false
+  credit_company: true
+  debit_owner: true
+  credit_owner: true
+
+purchases:
+  name_en: Purchases
+  name_ru: Покупки
+  debit_company: false
+  credit_company: true
+  debit_owner: true
+  credit_owner: true
+
+utilities:
+  name_en: Utilities
+  name_ru: Ком платежи
+  debit_company: false
+  credit_company: false
+  debit_owner: false
+  credit_owner: true
+
+
