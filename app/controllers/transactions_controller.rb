@@ -43,10 +43,10 @@ class TransactionsController < ApplicationController
     @transaction.set_owner
     respond_to do |format|
       if @transaction.save
-        de_ow = params[:transaction][:inc_owner].to_d
-        cr_ow = params[:transaction][:exp_owner].to_d
-        de_co = params[:transaction][:inc_company].to_d
-        cr_co = params[:transaction][:exp_company].to_d
+        de_ow = params[:transaction][:de_ow].to_d
+        cr_ow = params[:transaction][:cr_ow].to_d
+        de_co = params[:transaction][:de_co].to_d
+        cr_co = params[:transaction][:cr_co].to_d
         type = TransactionType.find(params[:transaction][:type_id]).name_en
         @transaction.prepare(type, de_ow, cr_ow, de_co, cr_co)
         if @transaction.errors.any?

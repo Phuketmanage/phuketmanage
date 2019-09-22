@@ -2,9 +2,6 @@ $(document).on "turbolinks:load", ->
   $('#trsc_type').on 'change', ->
     selected =  $(this).children('option:selected').text()
     $('.money_fields').hide()
-    if selected == 'Maintenance'
-      $("#cr_ow_label").text('Maintenance price')
-      $("#cr_ow").show()
     if selected == 'Rental'
       $("#de_ow_label").text('Received')
       $("#de_ow").show()
@@ -13,6 +10,9 @@ $(document).on "turbolinks:load", ->
     if selected == 'Top up'
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
+    if selected == 'Maintenance'
+      $("#cr_ow_label").text('Maintenance price')
+      $("#cr_ow").show()
     if selected == 'Repair' || selected == 'Purchases'
       $("#cr_ow_label").text('Expences by owner')
       $("#cr_ow").show()

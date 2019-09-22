@@ -18,6 +18,7 @@
   <% end %>
 </div>
 <%= link_to 'New Transaction', new_transaction_path %>
+
 <% if @view == 'company' %>
   <table class='table'>
     <thead>
@@ -39,14 +40,16 @@
       <% de_co_sum = 0 %>
       <% cr_co_sum = 0 %>
       <% @transactions.each do |t| %>
-        <tr>
+        <tr id="trsc_<%= t.id %>_row">
           <td><%= t.date.strftime('%d.%m.%Y') %></td>
           <% de_co = t.balances.sum(:debit) %>
           <% cr_co = t.balances.sum(:credit) %>
+          <% de_ow = t.balance_outs.sum(:debit) %>
+          <% cr_ow = t.balance_outs.sum(:credit) %>
           <% de_co_sum += de_co %>
           <% cr_co_sum += cr_co %>
-          <td><%= de_co if de_co > 0 %></td>
-          <td><%= cr_co if cr_co > 0 %></td>
+          <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
+          <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
           <td>balance</td>
           <td><%= t.type.name_en %></td>
           <td><%= t.house.code if t.house %></td>
@@ -55,16 +58,14 @@
           <td><%= link_to 'Show', t %></td>
           <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
           <td><%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <% debit = t.balance_outs.sum(:debit) %>
-          <% credit = t.balance_outs.sum(:credit) %>
-          <td><%= debit if debit > 0%></td>
-          <td><%= credit if credit > 0 %></td>
+          <td class='de_ow_cell text-right'><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0%></td>
+          <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>
         </tr>
       <% end %>
       <tr>
-        <td clas='text-right font-weight-bold'>Total:</td>
-        <td class="font-weight-bold"><%= de_co_sum %></td>
-        <td class="font-weight-bold"><%= cr_co_sum %></td>
+        <td class='font-weight-bold text-right'>Total:</td>
+        <td class="font-weight-bold text-right" id="de_co_sum"><%= de_co_sum %></td>
+        <td class="font-weight-bold text-right" id="cr_co_sum"><%= cr_co_sum %></td>
         <td></td>
         <td></td>
         <td></td>
@@ -98,14 +99,14 @@
       <% de_ow_sum = 0 %>
       <% cr_ow_sum = 0 %>
       <% @transactions.each do |t| %>
-        <tr>
+        <tr id="trsc_<%= t.id %>_row">
           <td><%= t.date.strftime('%d.%m.%Y') %></td>
           <% de_ow = t.balance_outs.sum(:debit) %>
           <% cr_ow = t.balance_outs.sum(:credit) %>
           <% de_ow_sum += de_ow %>
           <% cr_ow_sum += cr_ow %>
-          <td><%= de_ow - cr_ow if de_ow > 0 %></td>
-          <td><%= cr_ow unless de_ow > 0 %></td>
+          <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
+          <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
           <td>balance</td>
           <td><%= t.type.name_en %></td>
           <td><%= t.house.code if t.house %></td>
@@ -117,9 +118,9 @@
         </tr>
       <% end %>
       <tr>
-        <td clas='text-right font-weight-bold'>Total:</td>
-        <td class="font-weight-bold"><%= de_ow_sum %></td>
-        <td class="font-weight-bold"><%= cr_ow_sum %></td>
+        <td class='font-weight-bold text-right'>Total:</td>
+        <td class="font-weight-bold text-right"><%= de_ow_sum %></td>
+        <td class="font-weight-bold text-right"><%= cr_ow_sum %></td>
         <td></td>
         <td></td>
         <td></td>
@@ -153,16 +154,17 @@
         <% de_ow = t.balance_outs.sum(:debit) %>
         <% cr_ow = t.balance_outs.sum(:credit) %>
         <% de_co = t.balances.sum(:debit) %>
-        <% cr_ow_personal = cr_ow - de_co %>
+        <% cr_co = t.balances.sum(:credit) %>
+        <% cr_ow_personal = cr_ow - de_co  %>
         <% de_ow_sum += de_ow %>
         <% cr_ow_sum += cr_ow_personal %>
         <% de_co_sum += de_co %>
         <% next if (cr_ow - de_co + de_ow ) == 0 %>
-        <tr>
+        <tr id="trsc_<%= t.id %>_row">
           <td><%= t.date.strftime('%d.%m.%Y') %></td>
           <th></th>
-          <td><%= de_ow if de_ow > 0 %></td>
-          <td><%= cr_ow_personal if cr_ow_personal > 0 %></td>
+          <td class='de_ow_cell text-right'><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0 %></td>
+          <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow_personal, precision: 2, unit: '') if cr_ow_personal > 0 %></td>
           <td>balance</td>
           <td><%= t.comment_en %></td>
         </tr>
@@ -173,16 +175,16 @@
           <td><%= Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date.strftime('%d.%m.%Y') %></td>
           <td></td>
           <td></td>
-          <td><%= de_co_sum %></td>
+          <td class='text-right'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
           <td></td>
           <td>Maintenance <%= link_to 'Show invoice details', '#', class: 'd-print-none', data: { toggle: "modal", target: "#modal_invoice" } %></td>
         </tr>
       <% end %>
       <tr>
         <td></td>
-        <td class='text-right font-weight-bold'>Total:</td>
-        <td class="font-weight-bold"><%= de_ow_sum %></td>
-        <td class="font-weight-bold"><%= cr_ow_sum %></td>
+        <td class='text-right font-weight-bold text-right'>Total:</td>
+        <td class="font-weight-bold text-right"><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right"><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
         <td></td>
         <td></td>
       </tr>
@@ -220,27 +222,27 @@
               <% de_co_bvat_sum += de_co_bvat %>
               <% de_co_wvat_sum += de_co_wvat %>
               <% vat_sum += vat %>
-              <tr>
+              <tr id="trsc_<%= t.id %>_iv_row">
                 <td><%= t.date.strftime('%d.%m.%Y') %></td>
                 <td><%= t.comment_en %></td>
-                <td><%= de_co_bvat.round(2) %></td>
-                <td><%= de_co_wvat %></td>
+                <td class="iv_price_bvat_celltext-right"><%= number_to_currency(de_co_bvat.round(2), precision: 2, unit: '') %></td>
+                <td class="iv_price_cell text-right"><%= number_to_currency(de_co_wvat, precision: 2, unit: '') %></td>
               </tr>
             <% end %>
             <tr>
               <td></td>
-              <td class='text-right font-weight-bold'>
+              <td class='text-right font-weight-bold text-right'>
                 Sub total:<br />
                 VAT(7%):<br />
                 Total:<br />
               </td>
-              <td class="font-weight-bold">
-                <%= de_co_bvat_sum.round(2) %><br />
-                <%= vat_sum.round(2) %><br />
-                <%= (de_co_bvat_sum+vat_sum).round(2) %>
+              <td class="font-weight-bold text-right">
+                <%= number_to_currency(de_co_bvat_sum.round(2), precision: 2, unit: '') %><br />
+                <%= number_to_currency(vat_sum.round(2), precision: 2, unit: '') %><br />
+                <%= number_to_currency((de_co_bvat_sum+vat_sum).round(2), precision: 2, unit: '') %>
                 </td>
-              <td class="font-weight-bold">
-                <br /><br /><%= de_co_sum %>
+              <td class="font-weight-bold text-right">
+                <br /><br /><%= number_to_currency(de_co_sum, precision: 2, unit: '') %>
               </td>
             </tr>
           </tbody>
