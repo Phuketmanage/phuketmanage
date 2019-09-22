@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BalanceTest < ActionDispatch::IntegrationTest
+class BalanceAmountTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

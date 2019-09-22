@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class TransactionTypesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
-    @transaction_type = transaction_types(:one)
+    sign_in users(:admin)
+    @transaction_type = transaction_types(:rental)
   end
 
   test "should get index" do
@@ -20,7 +23,7 @@ class TransactionTypesControllerTest < ActionDispatch::IntegrationTest
       post transaction_types_url, params: { transaction_type: { credit_company: @transaction_type.credit_company, credit_owner: @transaction_type.credit_owner, debit_company: @transaction_type.debit_company, debit_owner: @transaction_type.debit_owner, name_en: @transaction_type.name_en, name_ru: @transaction_type.name_ru } }
     end
 
-    assert_redirected_to transaction_type_url(TransactionType.last)
+    assert_redirected_to transaction_types_url
   end
 
   test "should show transaction_type" do

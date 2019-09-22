@@ -1,19 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  date: '10.09.2019'
   ref_no: MyString
-  house: one
-  type: one
-  user: one
+  house: villa_1
+  type: rental
+  user: owner
   comment_en: MyString
   comment_ru: MyString
   comment_inner: MyString
 
 two:
+  date: '10.09.2019'
   ref_no: MyString
-  house: two
-  type: two
-  user: two
+  house: villa_1
+  type: repair
+  user: owner
   comment_en: MyString
   comment_ru: MyString
   comment_inner: MyString
