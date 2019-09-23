@@ -2,20 +2,40 @@
 
 one:
   date: '10.09.2019'
-  ref_no: MyString
+  ref_no:
   house: villa_1
   type: rental
   user: owner
-  comment_en: MyString
+  comment_en: rental
   comment_ru: MyString
   comment_inner: MyString
 
 two:
-  date: '10.09.2019'
-  ref_no: MyString
+  date: '11.09.2019'
+  ref_no:
   house: villa_1
   type: repair
   user: owner
-  comment_en: MyString
+  comment_en: repair
+  comment_ru: MyString
+  comment_inner: MyString
+
+three:
+  date: '12.09.2019'
+  ref_no:
+  house: villa_5
+  type: maintenance
+  user: owner_2
+  comment_en: top_up
+  comment_ru: MyString
+  comment_inner: MyString
+
+four:
+  date: '10.09.2019'
+  ref_no:
+  house:
+  type: utilities
+  user:
+  comment_en: utilities
   comment_ru: MyString
   comment_inner: MyString

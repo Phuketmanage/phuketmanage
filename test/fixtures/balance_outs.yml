@@ -2,10 +2,20 @@
 
 one:
   trsc: one
-  debit: 9.99
-  credit: 9.99
+  debit: 100000.00
+  credit: 20000.00
 
 two:
   trsc: two
-  debit: 9.99
-  credit: 9.99
+  debit: 0.0
+  credit: 2200.99
+
+three:
+  trsc: three
+  debit: 0.0
+  credit: 16050.00
+
+four:
+  trsc: four
+  debit: 0.0
+  credit: 5000

@@ -120,4 +120,19 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert ability.cannot?(:destroy, Job.new(creator: admin))
   end
 
+  test 'owner can see only his own balance' do
+    sign_in users(:owner)
+    get balance_front_path
+    assert_select 'tr.trsc_row', 2
+    assert_select 'td.de_ow_cell', text: '80,000.00', count: 1
+    assert_select 'td.cr_ow_cell', text: '2,200.99', count: 1
+    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 0 #owner_2
+    sign_in users(:owner_2)
+    get balance_front_path
+    assert_select 'tr.trsc_row', 1
+    assert_select 'td.de_ow_cell', text: '80,000.00', count: 0
+    assert_select 'td.cr_ow_cell', text: '2,200.99', count: 0
+    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 1 #owner_2
+  end
+
 end

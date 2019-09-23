@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   resources :transactions
+  get '/balance', to: 'transactions#index_front', as: 'balance_front'
   resources :transaction_types
   get '/employees/list_for_job', to: 'employees#list_for_job'
   resources :employees

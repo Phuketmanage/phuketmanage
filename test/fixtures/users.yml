@@ -16,6 +16,10 @@ owner: #{}
   email: 'owner@test.com'
   roles: owner
 
+owner_2: #{}
+  email: 'owner_2@test.com'
+  roles: owner
+
 tenant: #{}
   email: 'tenant@test.com'
   roles: tenant

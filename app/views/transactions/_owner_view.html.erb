@@ -1,0 +1,67 @@
+<table class='table'>
+  <thead>
+    <tr>
+      <th width="120px">Date</th>
+      <th class="text-right" width="120px">Debit</th>
+      <th class="text-right" width="120px">Credit</th>
+      <% if current_user.role?(['Admin','Manager','Accounting']) %>
+        <th width="120px">Balance</th>
+      <% end %>
+      <th width="150px">Type</th>
+      <% if @one_house %>
+        <th>House</th>
+      <% end %>
+      <th>Comment</th>
+      <% if current_user.role?(['Admin','Manager','Accounting']) %>
+        <th>Comment inner</th>
+        <th>Action</th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% de_ow_sum = 0 %>
+    <% cr_ow_sum = 0 %>
+    <% transactions.each do |t| %>
+      <% de_ow = t.balance_outs.sum(:debit) %>
+      <% cr_ow = t.balance_outs.sum(:credit) %>
+      <% de_ow_sum += de_ow - cr_ow if de_ow > 0 %>
+      <% cr_ow_sum += cr_ow unless de_ow > 0 %>
+      <tr class='trsc_row' id="trsc_<%= t.id %>_row">
+        <td><%= t.date.strftime('%d.%m.%Y') %></td>
+        <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
+        <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
+        <% if current_user.role?(['Admin','Manager','Accounting']) %>
+          <td>balance</td>
+        <% end %>
+        <td><%= t.type.name_en %></td>
+        <% if @one_house %>
+          <td><%= t.house.code if t.house %></td>
+        <% end %>
+        <td><%= t.comment_en %></td>
+        <% if current_user.role?(['Admin','Manager','Accounting']) %>
+          <td><%= t.comment_inner %></td>
+          <td>
+            <%= link_to 'Show', t %> |
+            <%= link_to 'Edit', edit_transaction_path(t) %> |
+            <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+    <tr>
+      <td class='font-weight-bold text-right'>Total:</td>
+      <td class="font-weight-bold text-right"><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right"><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>
+      <% if @one_house %>
+        <td></td>
+      <% end %>
+      <td></td>
+      <% if current_user.role?(['Admin','Manager','Accounting']) %>
+        <td></td>
+        <td></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

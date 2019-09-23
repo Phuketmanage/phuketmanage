@@ -7,20 +7,43 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
-    to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
-
-    if params[:user_id].present?
-      @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', from, to, params[:user_id]).order(date: :desc, created_at: :desc).all
-      @view = 'company' if params[:commit] == 'Company view'
-      @view = 'owner' if params[:commit] == 'Owner view'
-      @view = 'accounting' if params[:commit] == 'Accounting view'
-    else
-      @transactions = Transaction.where('date >= ? AND date <= ?', from, to).order(date: :desc, created_at: :desc).all
-      @view = 'company'
+    @from = params[:from]
+    @to = params[:to]
+    if !@from.present? && !@to.present?
+      @from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
+      @to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
+    elsif !@from.present? || !@to.present?
+      @error = 'Both dates should be selected'
     end
-    # @transactions.order(date: :desc, created_at: :desc)
+
+    if !@error.present?
+      if params[:user_id].present?
+        @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, params[:user_id]).order(:date, :created_at).all
+        @view = 'company' if params[:commit] == 'Company view'
+        @view = 'owner' if params[:commit] == 'Owner view'
+        @view = 'accounting' if params[:commit] == 'Accounting view'
+      else
+        @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+        @view = 'company'
+      end
+    end
   end
+
+  def index_front
+    @from = params[:from]
+    @to = params[:to]
+    if !@from.present? && !@to.present?
+      @from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
+      @to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
+    elsif !@from.present? || !@to.present?
+      @error = 'Both dates should be selected'
+    end
+    @transactions = current_user.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+    @view = 'owner' if params[:commit] == 'Owner view'
+    @one_house = true
+    @one_house = false if current_user.houses.count > 1
+  end
+
 
   # GET /transactions/1
   # GET /transactions/1.json

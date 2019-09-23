@@ -7,7 +7,7 @@ class Ability
     user ||= User.new                          # guest user
     can [:confirmed, :index_supplier, :canceled], Transfer
     if user.role? :owner
-      # can :read, [ House ]
+      can :index_front, [ Transaction ]
     elsif user.role? 'Transfer'
       can :read, Transfer
     elsif user.role? 'Maid'
