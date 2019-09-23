@@ -8,8 +8,8 @@
         <th width="120px">Balance</th>
       <% end %>
       <th width="150px">Type</th>
-      <% if @one_house %>
-        <th>House</th>
+      <% if !one_house %>
+        <th width="60px">House</th>
       <% end %>
       <th>Comment</th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
@@ -35,7 +35,7 @@
           <td>balance</td>
         <% end %>
         <td><%= t.type.name_en %></td>
-        <% if @one_house %>
+        <% if !one_house %>
           <td><%= t.house.code if t.house %></td>
         <% end %>
         <td><%= t.comment_en %></td>
@@ -54,7 +54,7 @@
       <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold" id="ow_balance"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>
-      <% if @one_house %>
+      <% if !one_house %>
         <td></td>
       <% end %>
       <td></td>

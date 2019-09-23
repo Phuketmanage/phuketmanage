@@ -38,7 +38,9 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_in_path_for(resource)
-      if current_user.role?('Guest relation')
+      if current_user.role?('Owner')
+        balance_front_path
+      elsif current_user.role?('Guest relation')
         jobs_path
       elsif current_user.role?('Maid')
         laundry_path

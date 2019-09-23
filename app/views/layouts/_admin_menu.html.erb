@@ -6,8 +6,10 @@
         <li class="nav-item">
           <%= link_to 'Balance', balance_front_path, class: "nav-link" %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_front_path, class: "nav-link" %>
+        </li>
       <% end %>
-
 
       <% if current_user.role? ['Transfer'] %>
         <li class="nav-item">

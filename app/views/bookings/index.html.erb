@@ -1,71 +1,77 @@
-<h1><%= 'Old ' if params[:past].present? %>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
+<h1>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
 
-<%= link_to 'Bookings (timeline view)', bookings_timeline_path(period: 45) %> |
-<% if @house %>
-  <%= link_to 'New Booking', new_house_booking_path(@house.number) %>
-  <% if !params[:past].present? %>
-    | <%= link_to "Old bookings for #{@house.code}", house_bookings_path(@house.number, past: true) %>
-  <% else %>
-    | <%= link_to "Current bookings for #{@house.code}", house_bookings_path(@house.number) %>
-  <% end %>
-  | <%= link_to 'Bookings for all houses', bookings_path %>
-<% else %>
-  <%= link_to 'New Booking', new_booking_path %>
-  <% if !params[:past].present? %>
-    | <%= link_to 'Old bookings', bookings_path(past: true) %>
-  <% else %>
-    | <%= link_to 'Current bookings', bookings_path %>
-  <% end %>
+<%= form_with(url: bookings_path, method: :get, local: true, class: 'form-inline') do |form| %>
+      <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
+      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
+      <%= select_tag :hid,
+            options_for_select(House.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, params[:hid]),
+              { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
+
+      <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
+      <%= link_to 'Drop filter', bookings_path, class: 'btn btn-secondary mb-2 mr-2'  %>
+      <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
+      <% if @house %>
+        <%= link_to 'New Booking', new_house_booking_path(@house.number), class: 'btn btn-info mb-2 mr-2' %>
+      <% else %>
+        <%= link_to 'New Booking', new_booking_path, class: 'btn btn-info mb-2 mr-sm-2' %>
+      <% end %>
 <% end %>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>House</th>
-      <th>Start</th>
-      <th>Finish</th>
-      <th>Client</th>
-      <th>Source</th>
-      <th>Status</th>
-      <th>Sale</th>
-      <th>Agent</th>
-      <th>Comm</th>
-      <th>Comm %</th>
-      <th>Nett</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @bookings.each do |booking| %>
+<% if @error %>
+  <div class="alert alert-warning" role="alert">
+    <%= @error %>
+  </div>
+<% else %>
+  <div class='table_wrapper'>
+  <table class="table table-striped table-sm table-responsive-lg">
+    <thead>
       <tr>
-        <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
-        <td><%= booking.start.strftime('%d.%m.%Y') %></td>
-        <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
-        <td><%= booking.client_details %></td>
-        <td><%= booking.source.name if booking.source %></td>
-        <td><%= booking.status %></td>
-        <td><%= booking.sale %></td>
-        <td><%= booking.agent %></td>
-        <td><%= booking.comm %></td>
-        <td>
-          <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
-        </td>
-        <td><%= booking.nett %></td>
-        <td>
-          <% if !booking.number.nil? %>
-            <%= link_to 'Edit', edit_booking_path(booking) %> |
-          <% else %>
-            <%= link_to 'View', booking_path(booking) %> |
-          <% end %>
-          <% if @house %>
-            <%= link_to 'Destroy', booking_path(booking, hid: @house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
-          <% else %>
-            <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
-          <% end %>
-        </td>
+        <th>House</th>
+        <th>Start</th>
+        <th>Finish</th>
+        <th>Client</th>
+        <th>Source</th>
+        <th>Status</th>
+        <th>Sale</th>
+        <th>Agent</th>
+        <th>Comm</th>
+        <th>Comm %</th>
+        <th>Nett</th>
+        <th>Action</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
+    <tbody>
+      <% @bookings.each do |booking| %>
+        <tr>
+          <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
+          <td><%= booking.start.strftime('%d.%m.%Y') %></td>
+          <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
+          <td><%= booking.client_details %></td>
+          <td><%= booking.source.name if booking.source %></td>
+          <td><%= booking.status %></td>
+          <td><%= booking.sale %></td>
+          <td><%= booking.agent %></td>
+          <td><%= booking.comm %></td>
+          <td>
+            <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
+          </td>
+          <td><%= booking.nett %></td>
+          <td>
+            <% if !booking.number.nil? %>
+              <%= link_to 'Edit', edit_booking_path(booking) %> |
+            <% else %>
+              <%= link_to 'View', booking_path(booking) %> |
+            <% end %>
+            <% if @house %>
+              <%= link_to 'Destroy', booking_path(booking, hid: @house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% else %>
+              <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+<% end %>

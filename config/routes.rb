@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'owner', to: 'admin#index', as: 'owner'
   resources :transactions
-  get '/balance', to: 'transactions#index_front', as: 'balance_front'
+  get 'owner/balance', to: 'transactions#index_front', as: 'balance_front'
   resources :transaction_types
   get '/employees/list_for_job', to: 'employees#list_for_job'
   resources :employees
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
     get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
     patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
     resources :bookings
+    get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :houses do
       resources :prices, only: [:index]
       # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true

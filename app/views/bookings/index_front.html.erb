@@ -1,0 +1,48 @@
+<h1>Bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
+
+<%= form_with(url: bookings_front_path, method: :get, local: true, class: 'form-inline') do |form| %>
+      <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
+      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
+      <% if !@one_house %>
+        <%= select_tag :hid,
+              options_for_select(current_user.houses.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, params[:hid]),
+                { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
+      <% end %>
+      <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
+      <%= link_to 'Drop filter', bookings_front_path, class: 'btn btn-secondary mb-2 mr-2'  %>
+      <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
+<% end %>
+
+<% if @error %>
+  <div class="alert alert-warning" role="alert">
+    <%= @error %>
+  </div>
+<% else %>
+  <div class='table_wrapper'>
+  <table class="table table-striped table-sm table-responsive-lg">
+    <thead>
+      <tr>
+        <% if !@one_house %>
+          <th width="60px">House</th>
+        <% end %>
+        <th width="120px">Start</th>
+        <th width="120px">Finish</th>
+        <th width="120px" class='text-right'>Profit</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @bookings.each do |booking| %>
+        <tr>
+          <td><%= !@house ? link_to(booking.house.code, bookings_front_path(hid: booking.house.number)) : booking.house.code %></td>
+          <td><%= booking.start.strftime('%d.%m.%Y') %></td>
+          <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
+          <td class='text-right'><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
+          <td><%= booking.comment_owner %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+<% end %>

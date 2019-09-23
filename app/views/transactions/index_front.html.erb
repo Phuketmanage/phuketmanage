@@ -7,4 +7,6 @@
       <%= link_to 'Drop filter', balance_front_path, class: 'btn btn-secondary mb-2 mr-2'  %>
 <% end %>
 
-<%= render 'owner_view', transactions: @transactions %>
+<%= render 'owner_view', {transactions: @transactions, one_house: @one_house} %>
+<%= "puts" if @one_house %>
+<%= "123#{@one_house}" %>

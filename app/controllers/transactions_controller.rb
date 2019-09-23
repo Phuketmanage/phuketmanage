@@ -39,7 +39,6 @@ class TransactionsController < ApplicationController
       @error = 'Both dates should be selected'
     end
     @transactions = current_user.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-    @view = 'owner' if params[:commit] == 'Owner view'
     @one_house = true
     @one_house = false if current_user.houses.count > 1
   end

@@ -8,6 +8,7 @@ class Ability
     can [:confirmed, :index_supplier, :canceled], Transfer
     if user.role? :owner
       can :index_front, [ Transaction ]
+      can :index_front, [ Booking ]
     elsif user.role? 'Transfer'
       can :read, Transfer
     elsif user.role? 'Maid'
