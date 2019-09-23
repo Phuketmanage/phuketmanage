@@ -127,12 +127,20 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 1
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 1
     assert_select 'td.cr_ow_cell', text: '16,050.00', count: 0 #owner_2
+    assert_select 'td.de_ow_cell', text: '38,000.00', count: 0 #owner_2
+    assert_select 'td.de_ow_cell', text: '40,000.00', count: 0 #owner_2
+    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
+
     sign_in users(:owner_2)
     get balance_front_path
-    assert_select 'tr.trsc_row', 1
+    assert_select 'tr.trsc_row', 3
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 0
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 0
     assert_select 'td.cr_ow_cell', text: '16,050.00', count: 1 #owner_2
+    assert_select 'td.de_ow_cell', text: '38,000.00', count: 1 #owner_2
+    assert_select 'td.de_ow_cell', text: '40,000.00', count: 1 #owner_2
+    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
+
   end
 
 end

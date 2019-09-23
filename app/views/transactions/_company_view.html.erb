@@ -42,9 +42,9 @@
     <% end %>
     <tr>
       <td class='font-weight-bold text-right'>Total:</td>
-      <td class="font-weight-bold text-right" id="de_co_sum"><%= de_co_sum %></td>
-      <td class="font-weight-bold text-right" id="cr_co_sum"><%= cr_co_sum %></td>
-      <td></td>
+      <td class="font-weight-bold text-right" id="de_co_sum"><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold" id="co_balance"><%= number_to_currency(de_co_sum - cr_co_sum, precision: 2, unit: '') %></td>
       <td></td>
       <td></td>
       <td></td>

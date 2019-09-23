@@ -51,9 +51,9 @@
     <% end %>
     <tr>
       <td class='font-weight-bold text-right'>Total:</td>
-      <td class="font-weight-bold text-right"><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
-      <td class="font-weight-bold text-right"><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
-      <td class="font-weight-bold"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold" id="ow_balance"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>
       <% if @one_house %>
         <td></td>
       <% end %>

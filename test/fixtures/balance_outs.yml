@@ -17,5 +17,10 @@ three:
 
 four:
   trsc: four
-  debit: 0.0
-  credit: 5000
+  debit: 38000.0
+  credit: 0.0
+
+five:
+  trsc: five
+  debit: 50000.0
+  credit: 10000.0

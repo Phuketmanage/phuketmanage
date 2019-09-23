@@ -5,8 +5,9 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
 
   setup do
     sign_in users(:admin)
-    @owner = users(:owner)
+    # @owner = users(:owner)
     @house = houses(:villa_1)
+    @owner = @house.owner
   end
 
   test "transaction allocation" do
@@ -300,12 +301,43 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '3,500.00'
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
-    # Check sums
+    # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { user_id: @owner.id, commit: 'Company view'}
-    de_co_sum = Transaction.where(user_id: @owner.id).joins(:balances).sum('balances.debit')
-    assert_select "#de_co_sum", "#{de_co_sum}"
-    cr_co_sum = Transaction.where(user_id: @owner.id).joins(:balances).sum('balances.credit')
-    assert_select "#cr_co_sum", "#{cr_co_sum}"
+    de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
+    assert_equal 60200.99, de_co_sum
+    assert_select "#de_co_sum", "60,200.99"
+    get transactions_path, params: { user_id: @owner.id, commit: 'Accounting view'}
+    assert_select "#company_maintenance", "60,200.99"
+    assert_select "#iv_de_co_sum", "60,200.99"
+
+    # For specific owner: Owner view(back) totals Owner view(front) totals = Acc view totals = DV totals
+    de_ow_sum = @owner.transactions.joins(:balance_outs).sum('debit')
+    cr_ow_sum = @owner.transactions.joins(:balance_outs).sum('credit')
+    assert_equal 255500, de_ow_sum
+    assert_equal 72200.99.to_d, cr_ow_sum
+    get transactions_path, params: { user_id: @owner.id, commit: 'Owner view'}
+    assert_select "#de_ow_sum", "215,500.00" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#cr_ow_sum", "32,200.99" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#ow_balance", "183,299.01"
+    get transactions_path, params: { user_id: @owner.id, commit: 'Accounting view'}
+    assert_select "#de_ow_sum", "255,500.00"
+    assert_select "#cr_ow_sum", "72,200.99"
+    assert_select "#ow_balance", "183,299.01"
+    sign_in users(:owner)
+    get balance_front_path
+    assert_select "#de_ow_sum", "215,500.00" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#cr_ow_sum", "32,200.99" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#ow_balance", "183,299.01"
+
+    sign_in users(:manager)
+    # All owners: Check company View totals = DB sum
+    get transactions_path
+    de_co_sum = Transaction.joins(:balances).sum('balances.debit')
+    assert_equal 86250.99.to_d, de_co_sum
+    assert_select "#de_co_sum", "86,250.99"
+    cr_co_sum = Transaction.joins(:balances).sum('balances.credit')
+    assert_equal 7000.99, cr_co_sum
+    assert_select "#cr_co_sum", "7,000.99"
 
 
   end
