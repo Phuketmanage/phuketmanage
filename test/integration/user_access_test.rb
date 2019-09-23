@@ -143,4 +143,38 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   end
 
+  test 'transactions aka balance' do
+    sign_in users(:manager)
+    get transactions_path
+    assert_response :success
+    @transaction = transactions(:one)
+    assert_no_difference('Transaction.count') do
+      delete transaction_url(@transaction)
+    end
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner)
+    get transactions_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:tenant)
+    get transactions_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner_tenant)
+    get transactions_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+
+
+  end
+
 end

@@ -64,6 +64,10 @@
         <li class="nav-item">
           <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
+        </li>
+
       <% end %>
 
       <% if current_user.role? ['Admin'] %>

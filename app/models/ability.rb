@@ -23,11 +23,10 @@ class Ability
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Transfer, Source ]
-      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
+                      Connection, JobType, Transfer, Source, Transaction ]
+      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer, Transaction ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job, creator: user
-      can [:index, :index_front], [ Transaction ]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
