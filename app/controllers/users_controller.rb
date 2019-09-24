@@ -70,7 +70,13 @@ class UsersController < ApplicationController
   private
 
   def user_params
-     params.require(:user).permit(:email, :name, :surname, :password, :password_confirmation, { role_ids: []})
+     params.require(:user).permit(:email,
+                                  :name,
+                                  :surname,
+                                  :locale,
+                                  :password,
+                                  :password_confirmation,
+                                  { role_ids: []})
   end
 
 end

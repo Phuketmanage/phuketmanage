@@ -13,4 +13,22 @@ en:
     in_the_past: Begining or End of period can not be in the past
     too_soon: You can book at least 2 days in advance
     too_short: Minimum rental period is 5 days
-
+  sign_out: Log out
+  balance: Balance
+  bookings: Bookings
+  timline: Timeline
+  show: Show
+  drop_filter: Drop filter
+  date_text: Date
+  debit: Debit
+  credit: Credit
+  type: Type
+  house: House
+  comment: Comment
+  total: TOTAL
+  start: Start
+  finish: Finish
+  days: Days
+  profit: Profit
+  to_balance: To balance
+  added_to_balance: Added to balance

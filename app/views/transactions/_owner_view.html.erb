@@ -1,17 +1,17 @@
 <table class='table table-striped table-bordered table-sm table-responsive-lg'>
   <thead>
     <tr>
-      <th width="120px">Date</th>
-      <th class="text-right" width="120px">Debit</th>
-      <th class="text-right" width="120px">Credit</th>
+      <th width="120px"><%= t('date_text') %></th>
+      <th class="text-right" width="120px"><%= t('debit') %></th>
+      <th class="text-right" width="120px"><%= t('credit') %></th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
         <th width="120px">Balance</th>
       <% end %>
-      <th width="150px">Type</th>
+      <th width="150px"><%= t('type') %></th>
       <% if !one_house %>
-        <th width="60px">House</th>
+        <th width="60px"><%= t('house') %></th>
       <% end %>
-      <th>Comment</th>
+      <th><%= t('comment') %></th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
         <th>Comment inner</th>
         <th>Actions</th>
@@ -51,7 +51,7 @@
     <% end %>
     <tfoot>
       <tr>
-        <td class='font-weight-bold text-right'>Total:</td>
+        <td class='font-weight-bold text-right'><%= t('total') %>:</td>
         <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
         <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
         <td class="font-weight-bold" id="ow_balance"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>

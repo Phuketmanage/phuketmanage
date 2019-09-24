@@ -13,6 +13,25 @@ ru:
     in_the_past: Период аренды не может быть в прошлом
     too_soon: Вы можете забронировать минимум за 2 дня
     too_short: Минимальный период аренды 5 дней
+  sign_out: Выйти
+  balance: Баланс
+  bookings: Брони
+  timeline: Календарь
+  show: Показать
+  drop_filter: Сбросить фильтр
+  date_text: Дата
+  debit: Приход
+  credit: Расход
+  type: Тип
+  house: Дом
+  comment: Комментарий
+  total: ИТОГО
+  start: Начало
+  finish: Окончание
+  days: Дни
+  profit: Прибыль
+  to_balance: На баланс
+  added_to_balance: Добавлено на баланс
   activerecord:
     errors:
       models:

@@ -1,12 +1,10 @@
-<h1>Balance</h1>
+<h1><%= t('balance') %></h1>
 
 <%= form_with(url: balance_front_path, method: :get, local: true, class: 'form-inline') do |form| %>
-      <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-2" %>
-      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-2" %>
-      <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
-      <%= link_to 'Drop filter', balance_front_path, class: 'btn btn-secondary mb-2 mr-2'  %>
+      <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-md-2" %>
+      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+      <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
+      <%= link_to t('drop_filter'), balance_front_path, class: 'btn btn-secondary mb-2 mr-md-2'  %>
 <% end %>
 
 <%= render 'owner_view', {transactions: @transactions, one_house: @one_house} %>
-<%= "puts" if @one_house %>
-<%= "123#{@one_house}" %>
