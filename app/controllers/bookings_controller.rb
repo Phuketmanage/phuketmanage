@@ -34,96 +34,60 @@ class BookingsController < ApplicationController
   def index
     @from = params[:from]
     @to = params[:to]
-    if !params[:hid].present?
-      if @from.present? && @to.present?
-        @bookings = Booking.where(' (start >= :from AND start <= :to) OR
-                                    (finish >= :from AND finish <= :to)',
-                                    from: @from, to: @to).order(:start)
-      elsif !@from.present? && !@to.present?
-        @from = Time.zone.now.in_time_zone('Bangkok').to_date
-        @to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-        @to = @from if @to < @from
-        @bookings = Booking.where('finish >= ?', @from).order(:start)
-      elsif !@from.present? || !@to.present?
-        @error = 'Both dates should be selected'
-        @bookings = []
-      end
-    else
-      @house = House.find_by(number: params[:hid])
+    if (@from.present? && !@to.present?) || (!@from.present? && @to.present?)
+      @error = 'Both dates should be selected'
+      @bookings = [] and return
+    end
 
-      @bookings = @house.bookings
-      if @bookings.any?
-        if @from.present? && @to.present?
-          @bookings = @bookings.where(' (start >= :from AND start <= :to) OR
-                                        (finish >= :from AND finish <= :to)',
-                                        from: @from, to: @to).order(:start)
-        elsif !@from.present? && !@to.present?
-          @from = Time.zone.now.in_time_zone('Bangkok').to_date
-          @to = @bookings.maximum(:finish).in_time_zone('Bangkok').to_date
-          @to = @from if @to < @from
-          @bookings = @bookings.where('finish >= ?', Time.zone.now.in_time_zone('Bangkok').to_date).order(:start)
-        elsif !@from.present? || !@to.present?
-          @error = 'Both dates should be selected'
-          @bookings = []
-        end
+    @hid = params[:hid]
+    if @hid.present?
+      house_ids = House.where(number: params[:hid]).ids
+    else
+      house_ids = House.ids
+    end
+    bookings = Booking.where(house_id: house_ids).all
+
+    if !@from.present? && !@to.present?
+      @from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if bookings.any?
+        @to = bookings.maximum(:finish).in_time_zone('Bangkok').to_date
       else
-        @error = 'No bookings for selected house'
+        @to = @from
       end
     end
+    @bookings = bookings.where(' (start >= :from AND start <= :to) OR
+                                (finish >= :from AND finish <= :to)',
+                                from: @from, to: @to).order(:start)
   end
 
   def index_front
-    @houses = current_user.houses
-    @one_house if @houses.count > 1
-    @bookings = Booking.where(house_id: @houses.ids)
     @from = params[:from]
     @to = params[:to]
-    if @bookings.any?
-      if !params[:hid].present?
-        if @from.present? && @to.present?
-          @bookings = Booking.where(house_id: @houses.ids).where(' (start >= :from AND start <= :to) OR
-                                      (finish >= :from AND finish <= :to)',
-                                      from: @from, to: @to).order(:start)
-        elsif !@from.present? && !@to.present?
-          @from = Time.zone.now.in_time_zone('Bangkok').to_date
-          @to = Booking.where(house_id: @houses.ids).maximum(:finish).in_time_zone('Bangkok').to_date
-          @to = @from if @to < @from
-          @bookings = current_user.bookings.where('finish >= ?', @from).order(:start)
-          if !@bookings.any?
-            @error = 'No bookings yet'
-          end
-        elsif !@from.present? || !@to.present?
-          @error = 'Both dates should be selected'
-          @bookings = []
-        end
-      else
-        @house = @houses.find_by(number: params[:hid])
-        @bookings = @house.bookings
-        if @bookings.any?
-          if @from.present? && @to.present?
-            @bookings = @bookings.where(' (start >= :from AND start <= :to) OR
-                                        (finish >= :from AND finish <= :to)',
-                                        from: @from, to: @to).order(:start)
-          elsif !@from.present? && !@to.present?
-            @from = Time.zone.now.in_time_zone('Bangkok').to_date
-            @to = @bookings.maximum(:finish).in_time_zone('Bangkok').to_date
-            @to = @from if @to < @from
-            @bookings = @bookings.where('finish >= ?', @from).order(:start)
-            if !@bookings.any?
-              @error = 'No bookings yet'
-            end
-          elsif !@from.present? || !@to.present?
-            @error = 'Both dates should be selected'
-            @bookings = []
-          end
-        else
-          @error = 'No bookings for selected house'
-        end
-      end
-    else
-      @error = 'No bookings yet'
-      @bookings = []
+    if (@from.present? && !@to.present?) || (!@from.present? && @to.present?)
+      @error = 'Both dates should be selected'
+      @bookings = [] and return
     end
+
+    @hid = params[:hid]
+    if params[:hid].present?
+      house_ids = House.where(number: params[:hid]).ids
+    else
+      house_ids = current_user.houses.ids
+    end
+    bookings = Booking.where(house_id: house_ids).all
+
+    if !@from.present? && !@to.present?
+      @from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if bookings.any?
+        @to = bookings.maximum(:finish).in_time_zone('Bangkok').to_date
+      else
+        @to = @from
+      end
+    end
+    @bookings = bookings.where(' (start >= :from AND start <= :to) OR
+                                (finish >= :from AND finish <= :to)',
+                                from: @from, to: @to).order(:start)
+    @one_house = true if current_user.houses.ids.count == 1
   end
 
   def timeline
@@ -145,14 +109,7 @@ class BookingsController < ApplicationController
       to = params[:to].to_date
     end
     @houses = House.order(:unavailable, :code)
-    # @today = Time.zone.now.in_time_zone('Bangkok').to_date
     @today = from
-    # if params[:period].nil?
-    #   last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-    # else
-    #   last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
-    # end
-    # @days = (last_date - @today).to_i+1
     @days = (to - from).to_i+1
     @job_types_for_bookings = JobType.where.not(for_house_only: true).order(:name)
     @job_types_for_houses = JobType.order(for_house_only: :desc, name: :asc)

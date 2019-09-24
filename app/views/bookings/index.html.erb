@@ -4,7 +4,7 @@
       <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
       <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
       <%= select_tag :hid,
-            options_for_select(House.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, params[:hid]),
+            options_for_select(House.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, @hid),
               { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
 
       <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
@@ -20,6 +20,10 @@
 <% if @error %>
   <div class="alert alert-warning" role="alert">
     <%= @error %>
+  </div>
+<% elsif @bookings.empty? %>
+  <div class="alert alert-warning" role="alert">
+    No bookings
   </div>
 <% else %>
   <div class='table_wrapper'>
@@ -50,13 +54,13 @@
           <td><%= booking.client_details %></td>
           <td><%= booking.source.name if booking.source %></td>
           <td><%= booking.status %></td>
-          <td><%= booking.sale %></td>
-          <td><%= booking.agent %></td>
-          <td><%= booking.comm %></td>
+          <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
+          <td><%= number_to_currency(booking.agent, precision: 0, unit: '') %></td>
+          <td><%= number_to_currency(booking.comm, precision: 0, unit: '') %></td>
           <td>
             <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
           </td>
-          <td><%= booking.nett %></td>
+          <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
           <td>
             <% if !booking.number.nil? %>
               <%= link_to 'Edit', edit_booking_path(booking) %> |
