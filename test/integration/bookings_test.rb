@@ -182,16 +182,16 @@ class BookingsTest < ActionDispatch::IntegrationTest
     sign_in users(:owner)
     get bookings_front_path
     assert_response :success
-    assert_select 'td', text: '30,000', count: 0 #Sale
-    assert_select 'td', text: '6,000', count: 0 #Comm
-    assert_select 'td', text: '24,000', count: 1 #Nett
+    assert_select 'td', text: '100,000', count: 0 #Sale
+    assert_select 'td', text: '20,000', count: 0 #Comm
+    assert_select 'td', text: '80,000', count: 1 #Nett
 
     sign_in users(:manager)
     get bookings_path
     assert_response :success
-    assert_select 'td', text: '30,000', count: 1 #Sale
-    assert_select 'td', text: '6,000', count: 1 #Comm
-    assert_select 'td', text: '24,000', count: 1 #Nett
+    assert_select 'td', text: '100,000', count: 1 #Sale
+    assert_select 'td', text: '20,000', count: 1 #Comm
+    assert_select 'td', text: '80,000', count: 1 #Nett
 
   end
 end

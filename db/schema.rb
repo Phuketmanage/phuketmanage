@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_23_144253) do
+ActiveRecord::Schema.define(version: 2019_09_24_062404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2019_09_23_144253) do
     t.date "check_in"
     t.date "check_out"
     t.string "comment_owner"
+    t.boolean "paid", default: false
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["source_id"], name: "index_bookings_on_source_id"
@@ -270,6 +271,8 @@ ActiveRecord::Schema.define(version: 2019_09_23_144253) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "date"
+    t.bigint "booking_id"
+    t.index ["booking_id"], name: "index_transactions_on_booking_id"
     t.index ["house_id"], name: "index_transactions_on_house_id"
     t.index ["type_id"], name: "index_transactions_on_type_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
@@ -339,6 +342,7 @@ ActiveRecord::Schema.define(version: 2019_09_23_144253) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
+  add_foreign_key "transactions", "bookings"
   add_foreign_key "transactions", "houses"
   add_foreign_key "transactions", "transaction_types", column: "type_id"
   add_foreign_key "transactions", "users"

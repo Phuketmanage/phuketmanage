@@ -13,6 +13,7 @@ class Booking < ApplicationRecord
   belongs_to :source, optional: true
   has_many :jobs, dependent: :destroy
   has_many :transfers, dependent: :destroy
+  has_many :transactions, dependent: :destroy
   validate :price_chain, unless: :allotment?
 
   scope :active, -> { where.not(status: [:canceled]) }

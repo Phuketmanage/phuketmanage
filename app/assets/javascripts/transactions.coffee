@@ -8,6 +8,24 @@ $(document).on "turbolinks:load", ->
   $('#trsc_type').on 'change', ->
     react_to_select_trsc_type($(this).children('option:selected').text())
 
+  $('#transaction_booking_id').on 'change', ->
+    booking_id = $(this).val()
+    $.ajax
+      url: "/bookings/#{booking_id}",
+      type: "get",
+      dataType: "json",
+      data: {},
+      success: (data) ->
+        console.log('Booking was read')
+        start = new Date(data.booking.start)
+        start_f = "#{start.getDate()}.#{start.getMonth()+1}.#{start.getFullYear()}"
+        finish = new Date(data.booking.finish)
+        finish_f = "#{finish.getDate()}.#{finish.getMonth()+1}.#{finish.getFullYear()}"
+        $('#transaction_comment_en').val("Rental #{start_f} - #{finish_f}")
+        $('#transaction_comment_ru').val("Аренда #{start_f} - #{finish_f}")
+      error: (data) ->
+        console.log('Something went wrong')
+
 react_to_select_user_id = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)
@@ -19,42 +37,60 @@ react_to_select_user_id = (selected) ->
 react_to_select_trsc_type = (selected) ->
     $('.money_fields').hide()
     if selected == 'Rental'
+      $("#booking_id").show()
       $("#de_ow_label").text('Received')
       $("#de_ow").show()
       $("#de_co_label").text('Commission')
       $("#de_co").show()
+      $("#check_booking_paid").show()
+      $("#house_id").hide()
+      $("#owner_id").hide()
     if selected == 'Top up'
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
+      $("#house_id").hide()
+      $("#owner_id").show()
     if selected == 'Maintenance'
       $("#cr_ow_label").text('Maintenance price')
       $("#cr_ow").show()
+      $("#house_id").hide()
+      $("#owner_id").show()
     if selected == 'Repair' || selected == 'Purchases'
-      $("#cr_ow_label").text('Expences by owner')
-      $("#cr_ow").show()
-      $("#cr_co_label").text('Expences by company')
-      $("#cr_co").show()
-      $("#de_co_label").text('Company profit')
       if $('input[name="_method"]').val() == 'patch'
         cr_ow = $("#transaction_cr_ow").val() - $("#transaction_de_co").val()
         de_co = $("#transaction_de_co").val() - $("#transaction_cr_co").val()
         $("#transaction_cr_ow").val(cr_ow)
         $("#transaction_de_co").val(de_co)
+      $("#cr_ow_label").text('Expences by owner')
+      $("#cr_ow").show()
+      $("#cr_co_label").text('Expences by company')
+      $("#cr_co").show()
+      $("#de_co_label").text('Company profit')
       $("#de_co").show()
+      $("#house_id").show()
+      $("#owner_id").hide()
     if selected == 'Laundry'
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
+      $("#house_id").show()
+      $("#owner_id").hide()
     if selected == 'Utilities received' #House required
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
+      $("#house_id").show()
+      $("#owner_id").hide()
     if selected == 'Utilities'
       $("#cr_ow_label").text('Paid by owner')
       $("#cr_ow").show()
       $("#cr_co_label").text('Paid by company')
       $("#cr_co").show()
+      $("#house_id").show()
+      $("#owner_id").hide()
     if selected == 'Pest control' || selected == 'Insurance'
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
+      $("#house_id").show()
+      $("#owner_id").show()
     if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Equipment']) != -1
       $("#house_id").hide()
       $("#owner_id").hide()
@@ -63,3 +99,6 @@ react_to_select_trsc_type = (selected) ->
       $("#ref_no").hide()
       $("#cr_co_label").text('Amount')
       $("#cr_co").show()
+      $("#house_id").hide()
+      $("#owner_id").hide()
+

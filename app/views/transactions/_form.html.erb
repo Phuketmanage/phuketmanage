@@ -4,7 +4,8 @@
   <div class="form-row">
     <div class="col-md-2">
       <%= form.label :date %>
-      <%= form.date_field :date, value: Time.now.strftime('%Y-%m-%d'), class: 'form-control' %>
+      <%= transaction.date %>
+      <%= form.date_field :date, value: transaction.date ? transaction.date : Time.zone.now.in_time_zone('Bangkok').to_date, class: 'form-control' %>
     </div>
     <div class="col-md-2">
       <%= form.label :type_id %>
@@ -12,13 +13,13 @@
             TransactionType.all.map {|t| [t.name_en, t.id]},
                       { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
     </div>
-    <div class="col-md-2" id='house_id'>
+    <div class="col-md-2" id='house_id', style='display:none;'>
       <%= form.label :house_id %>
       <%= form.select :house_id,
             House.all.map {|h| [h.code, h.id]},
                       { prompt: 'Select house' }, class: "form-control" %>
     </div>
-    <div class="col-md-2" id='owner_id'>
+    <div class="col-md-2" id='owner_id', style='display:none;'>
       <%= form.label :user_id %>
       <%= form.select :user_id,
             User.with_role(['Owner']).map {|u| [u.name, u.id]},
@@ -26,6 +27,12 @@
     </div>
   </div>
   <div class="form-row">
+    <div class="col-md-2 money_fields" id='booking_id'>
+      <%= form.label :booking_id %>
+      <%= form.select :booking_id,
+            Booking.where('paid = ? OR id = ?', false, transaction.booking_id).all.order(:start).map {|b| ["#{b.house.code} #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]},
+                      { include_blank: 'Select booking' }, class: "form-control" %>
+    </div>
     <div class="col-md-2 money_fields", id='de_ow', style='display:none;'>
       <%= form.label :de_ow, id: 'de_ow_label' %>
       <%= form.number_field :de_ow, step: 0.01, placeholder: 0,
@@ -48,6 +55,11 @@
     </div>
   </div>
 
+  <div class="form-check money_fields mt-2 mb-1" id='check_booking_paid'>
+    <% booking_paid = transaction.booking.paid if transaction.booking_id %>
+    <%= check_box_tag :booking_fully_paid, true, booking_paid, class: 'form-check-input' %>
+    <%= label_tag 'booking_fully_paid',nil, class: "form-check-label" %>
+  </div>
 
   <div class="field" id='comment_en'>
     <%= form.label :comment_en %>
@@ -71,5 +83,6 @@
 
   <div class="actions mt-2">
     <%= form.submit 'Save', class: "btn btn-primary" %>
+    <%= link_to 'Back', transactions_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>

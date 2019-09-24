@@ -8,6 +8,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # @owner = users(:owner)
     @house = houses(:villa_1)
     @owner = @house.owner
+    @booking = bookings(:_1)
   end
 
   test "transaction allocation" do
@@ -17,11 +18,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                               transaction: {
                                 date: Time.now.to_date,
                                 type_id: type.id,
-                                house_id: @house.id,
+                                booking_id: @booking.id,
                                 de_ow: 100000,
                                 de_co: 20000,
+                                booking_fully_paid: true,
                                 comment_en: 'Rental'} }
-    # assert_match 'test', response.body
     t = Transaction.last
     assert_equal 1, t.balance_outs.count
     assert_equal 100000, t.balance_outs.sum(:debit)

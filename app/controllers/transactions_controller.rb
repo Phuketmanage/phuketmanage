@@ -66,7 +66,7 @@ class TransactionsController < ApplicationController
   # POST /transactions.json
   def create
     @transaction = Transaction.new(transaction_params)
-    @transaction.set_owner
+    @transaction.set_owner_and_house
     respond_to do |format|
       if @transaction.save
         de_ow = params[:transaction][:de_ow].to_d
@@ -74,10 +74,13 @@ class TransactionsController < ApplicationController
         de_co = params[:transaction][:de_co].to_d
         cr_co = params[:transaction][:cr_co].to_d
         type = TransactionType.find(params[:transaction][:type_id]).name_en
-        @transaction.prepare(type, de_ow, cr_ow, de_co, cr_co)
+        @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
         if @transaction.errors.any?
           @transaction.destroy
           render :new and return
+        end
+        if params[:booking_fully_paid] == "true"
+          @transaction.booking.update(paid: true)
         end
         format.html { redirect_to transactions_path, notice: 'Transaction was successfully created.' }
         # format.json { render :show, status: :created, location: @transaction }
@@ -93,7 +96,10 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @transaction.update(transaction_params)
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
+        if params[:booking_fully_paid] == "true"
+          @transaction.booking.update(paid: true)
+        end
+        format.html { redirect_to transactions_path, notice: 'Transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @transaction }
       else
         format.html { render :edit }
@@ -120,6 +126,14 @@ class TransactionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_params
-      params.require(:transaction).permit(:date, :ref_no, :house_id, :type_id, :user_id, :comment_en, :comment_ru, :comment_inner)
+      params.require(:transaction).permit(:date,
+                                          :ref_no,
+                                          :house_id,
+                                          :type_id,
+                                          :user_id,
+                                          :booking_id,
+                                          :comment_en,
+                                          :comment_ru,
+                                          :comment_inner)
     end
 end

@@ -131,6 +131,8 @@ class BookingsController < ApplicationController
   # GET /bookings/1
   # GET /bookings/1.json
   def show
+    # booking = Booking.find(params[:id])
+    render json: { booking:  @booking }
   end
 
   # GET /bookings/new

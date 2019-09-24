@@ -35,6 +35,27 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_path
   end
 
+  include Devise::Test::IntegrationHelpers
+
+  test "should create transaction, type = rental" do
+    @booking = bookings(:_1)
+    @house = @booking.house
+    @owner = @booking.house.owner
+    type = TransactionType.find_by(name_en: 'Rental')
+    post transactions_path, params: {
+                              transaction: {
+                                date: Time.now.to_date,
+                                type_id: type.id,
+                                booking_id: @booking.id,
+                                de_ow: 100000,
+                                de_co: 20000,
+                                booking_fully_paid: true,
+                                comment_en: 'Rental'} }
+    t = Transaction.last
+    assert_equal @booking.id, t.booking_id
+    assert_equal @house.id, t.house_id
+    assert_equal @owner.id, t.user_id
+  end
   test "should show transaction" do
     get transaction_url(@transaction)
     assert_response :success
@@ -56,7 +77,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
                                               ref_no: @transaction.ref_no,
                                               type_id: @transaction.type_id,
                                               user_id: @transaction.user_id } }
-    assert_redirected_to transaction_url(@transaction)
+    assert_redirected_to transactions_path
   end
 
   test "should destroy transaction" do

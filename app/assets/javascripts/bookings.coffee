@@ -217,15 +217,11 @@ close_dates = (h) ->
       $("#x"+x+"y"+b.y).addClass('booked')
       $("#x"+x+"y"+b.y).addClass(b.status)
       $("#x"+x+"y"+b.y).attr('data-booking-id', b.id)
-      # $("#x"+x+"y"+b.y).data('booking-id', b.id)
       if x_add == 0
         $("#x"+x+"y"+b.y).css("z-index", 3)
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
-
     allocate_job "#x#{j.x}y#{b.y}", j for j in b.jobs
-    # console.log "Booking jobs #{Object.keys(b.jobs).length}"
   allocate_job "#x#{j.x}y#{h.y}", j for j in h.jobs
-  # console.log "House jobs #{Object.keys(h.jobs).length}"
 
 allocate_job = (cell, j) ->
   jobs_qty = $(cell).data('jobs')
