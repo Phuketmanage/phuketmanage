@@ -56,6 +56,10 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/1/edit
   def edit
+    @de_ow = @transaction.balance_outs.sum(:debit)
+    @cr_ow = @transaction.balance_outs.sum(:credit)
+    @de_co = @transaction.balances.sum(:debit)
+    @cr_co = @transaction.balances.sum(:credit)
   end
 
   # POST /transactions
