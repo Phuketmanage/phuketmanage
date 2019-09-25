@@ -154,6 +154,7 @@ class Booking < ApplicationRecord
           # job[:x] = (j.plan - today).to_i+1
           job[:x] = (j.plan - from).to_i+1
           job[:time] = j.time
+          job[:job] = j.job
           job[:comment] = j.comment
           job[:code] = j.job_type.code
           job[:color] = j.job_type.color
@@ -173,6 +174,7 @@ class Booking < ApplicationRecord
         job[:empl_type_id] = j.employee.type.id if !j.employee.nil?
         job[:x] = (j.plan - from).to_i+1
         job[:time] = j.time
+        job[:job] = j.job
         job[:comment] = j.comment
         job[:code] = j.job_type.code
         job[:color] = j.job_type.color

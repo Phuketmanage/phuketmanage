@@ -210,6 +210,7 @@ $(document).on "turbolinks:load", ->
     booking_id = $(this).data('booking-id')
     $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").addClass('d-none')
 
+  $('[data-toggle="popover"]').popover({container: 'body'})
 
 close_dates = (h) ->
   for b in h.bookings
@@ -235,6 +236,7 @@ allocate_job = (cell, j) ->
           data-job-type-id=#{j.type_id}
           data-employee-id=#{j.employee_id}
           data-empl-type-id=#{j.empl_type_id}
+          title='#{j.job}'
           >
       #{j.code}#{j.time}
     </div>")
