@@ -26,6 +26,14 @@ $(document).on "turbolinks:load", ->
       error: (data) ->
         console.log('Something went wrong')
 
+  $('#link_show_hidden').on 'click', (e) ->
+    e.preventDefault()
+    if $('.hidden_row').is(":hidden")
+      $('.hidden_row').addClass('text-muted')
+      $('.hidden_row').show()
+    else
+      $('.hidden_row').hide()
+
 react_to_select_user_id = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)
@@ -47,6 +55,8 @@ react_to_select_trsc_type = (selected) ->
       $("#owner_id").hide()
     if selected == 'Top up'
       $("#de_ow_label").text('Amount')
+      $('#transaction_comment_en').val("Balance top up")
+      $('#transaction_comment_ru').val("Пополнение баланса")
       $("#de_ow").show()
       $("#house_id").hide()
       $("#owner_id").show()

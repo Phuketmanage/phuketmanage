@@ -4,7 +4,6 @@
   <div class="form-row">
     <div class="col-md-2">
       <%= form.label :date %>
-      <%= transaction.date %>
       <%= form.date_field :date, value: transaction.date ? transaction.date : Time.zone.now.in_time_zone('Bangkok').to_date, class: 'form-control' %>
     </div>
     <div class="col-md-2">
@@ -79,6 +78,11 @@
   <div class="field" id='ref_no'>
     <%= form.label :ref_no %>
     <%= form.text_field :ref_no, class: "form-control" %>
+  </div>
+
+  <div class="form-check">
+    <%= form.check_box :hidden, class: 'form-check-input' %>
+    <%= form.label :hidden, class: "form-check-label" %>
   </div>
 
   <div class="actions mt-2">

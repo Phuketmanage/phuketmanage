@@ -18,7 +18,7 @@
     <% de_co_sum = 0 %>
     <% cr_co_sum = 0 %>
     <% transactions.each do |t| %>
-      <tr id="trsc_<%= t.id %>_row">
+      <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %>>
         <td><%= t.date.strftime('%d.%m.%Y') %></td>
         <% de_co = t.balances.sum(:debit) %>
         <% cr_co = t.balances.sum(:credit) %>
@@ -39,7 +39,6 @@
         </td>
         <td><%= t.comment_inner %></td>
         <td>
-          <%= link_to 'Show', t %> |
           <%= link_to 'Edit', edit_transaction_path(t) %> |
           <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
 
@@ -51,9 +50,11 @@
     <tfoot>
       <tr>
         <td class='font-weight-bold text-right'>Total:</td>
-        <td class="font-weight-bold text-right" id="de_co_sum"><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="de_co_sum">
+          <%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
         <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold" id="co_balance"><%= number_to_currency(de_co_sum - cr_co_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold" id="co_balance">
+          <%= number_to_currency(de_co_sum - cr_co_sum, precision: 2, unit: '') %></td>
         <td></td>
         <td></td>
         <td></td>

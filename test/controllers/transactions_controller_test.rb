@@ -56,10 +56,11 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @house.id, t.house_id
     assert_equal @owner.id, t.user_id
   end
-  test "should show transaction" do
-    get transaction_url(@transaction)
-    assert_response :success
-  end
+
+  # test "should show transaction" do
+  #   get transaction_url(@transaction)
+  #   assert_response :success
+  # end
 
   test "should get edit" do
     get edit_transaction_url(@transaction)

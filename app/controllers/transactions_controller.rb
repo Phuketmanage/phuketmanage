@@ -134,6 +134,7 @@ class TransactionsController < ApplicationController
                                           :booking_id,
                                           :comment_en,
                                           :comment_ru,
-                                          :comment_inner)
+                                          :comment_inner,
+                                          :hidden)
     end
 end

@@ -19,10 +19,10 @@ _2:
   tenant: tenant
   status: confirmed
   number: number_2
-  sale: 10
+  sale: 60000
   agent: 0
-  comm: 2
-  nett: 8
+  comm: 12000
+  nett: 48000
 
 
 _3:
