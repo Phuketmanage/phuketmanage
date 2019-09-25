@@ -135,6 +135,7 @@ $(document).on "turbolinks:load", ->
           employee_id: $('select#job_employee_id').val(),
           booking_id:$('select#job_booking_id').val(),
           house_id: $('select#job_house_id').val(),
+          job: $('input#job_job').val()
           plan: $('input#job_plan').val(),
           time: $('input#job_time').val(),
           comment: $('input#job_comment').val()

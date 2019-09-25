@@ -25,13 +25,7 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
   </div>
 <% else %>
   <div class="form-row d-none d-md-flex">
-    <div class="col-md-1 form-group font-weight-bold">
-      House/บ้าน
-    </div>
-    <div class="col-md-1 form-group font-weight-bold">
-      Job/งาน
-    </div>
-    <div class="col-md-1 form-group font-weight-bold">
+    <div class="col-md-3 form-group font-weight-bold">
       Change/เปลี่ยน
     </div>
     <div class="col-md-2 form-group font-weight-bold">
@@ -57,30 +51,35 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
           <%= render 'shared/error_messages', object: f.object %>
         <% end %>
         <div class="form-row">
-          <div class="col-md-1">
-            <%= l.house.code if l.house %>
-            <%= l.booking.house.code if l.booking %>
-          </div>
-          <div class="col-md-1 form-group">
-            <%= l.job_type.code %>
-          </div>
-          <div class="col-md-1 form-group">
-            <%= l.plan.strftime('%d.%m.%Y') %>
+          <div class="col-md-3 form-group ">
+            <span class='font-weight-bold'>
+              <%= l.plan.strftime('%d.%m.%Y') %> -
+              <%= l.house.code if l.house %>
+              <%= l.booking.house.code if l.booking %>
+              <%= l.job_type.code %>
+            </span>
+            <br />
+            <%= l.job %>
           </div>
           <div class="col-md-2 form-group">
+            <%= f.label 'Collect/รับ', class: 'd-md-none' %>
             <%= f.date_field :collected, class: 'form-control' %>
           </div>
           <div class="col-md-2 form-group">
+            <%= f.label 'Send/ส่ง', class: 'd-md-none' %>
             <%= f.date_field :sent, class: 'form-control' %>
           </div>
           <div class="col-md-1 form-group">
-            <%= f.number_field :rooms, placeholder: 'rooms', class: 'form-control' %>
+            <%= f.label 'Rooms/ห้อง', class: 'd-md-none' %>
+            <%= f.number_field :rooms, class: 'form-control' %>
           </div>
           <div class="col-md-1 form-group">
-            <%= f.number_field :price, placeholder: 'price', class: 'form-control' %>
+            <%= f.label 'Price/ราคา', class: 'd-md-none' %>
+            <%= f.number_field :price, class: 'form-control' %>
           </div>
           <div class="col-md-2 form-group">
-            <%= f.text_field :comment, placeholder: 'Comment', class: 'form-control' %>
+            <%= f.label 'Comment/หมายเหตุ', class: 'd-md-none' %>
+            <%= f.text_field :comment, class: 'form-control' %>
           </div>
           <div class="col-md-1 form-group">
             <%= f.submit 'Save', class: 'btn btn-primary' %>

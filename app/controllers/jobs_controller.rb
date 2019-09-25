@@ -83,7 +83,6 @@ class JobsController < ApplicationController
     @job.creator_id = current_user.id
     respond_to do |format|
       if @job.save
-
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
@@ -115,7 +114,6 @@ class JobsController < ApplicationController
       @job.save
       return
     end
-
     respond_to do |format|
       if @job.update(job_params)
         format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }
