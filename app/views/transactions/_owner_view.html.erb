@@ -31,14 +31,14 @@
       <% balance_sum += de_ow_prev_sum - cr_ow_prev_sum %>
       <tr>
         <td></td>
-        <td class="text-right" id="de_co_prev_sum">
-          <%#= number_to_currency(de_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > 0 %>
+        <td class="text-right" id="de_ow_prev_sum">
+          <%= number_to_currency(de_ow_prev_sum - cr_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > cr_ow_prev_sum %>
         </td>
-        <td class="text-right" id="cr_co_prev_sum">
-          <%#= number_to_currency(cr_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > 0 %>
+        <td class="text-right" id="cr_ow_prev_sum">
+          <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
         </td>
         <% if current_user.role?(['Admin','Manager','Accounting']) %>
-          <td class="text-right" id="co_prev_balance">
+          <td class="text-right" id="ow_prev_balance">
             <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
           </td>
         <% end %>

@@ -1,5 +1,20 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+pre_1:
+  trsc: prev_1
+  debit: 0.0
+  credit: 12000.00
+
+pre_2:
+  trsc: prev_2
+  debit: 0.0
+  credit: 5000.00
+
+pre_3:
+  trsc: prev_3
+  debit: 7000.0
+  credit: 0.0
+
 one:
   trsc: one
   debit: 100000.00

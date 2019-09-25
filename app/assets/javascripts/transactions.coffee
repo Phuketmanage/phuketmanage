@@ -80,11 +80,15 @@ react_to_select_trsc_type = (selected) ->
       $("#house_id").show()
       $("#owner_id").hide()
     if selected == 'Laundry'
+      $('#transaction_comment_en').val("Laundry")
+      $('#transaction_comment_ru').val("Стирка")
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
       $("#owner_id").hide()
     if selected == 'Utilities received' #House required
+      $('#transaction_comment_en').val("Utilities from guests")
+      $('#transaction_comment_ru').val("Ком платежи с гостей")
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").show()

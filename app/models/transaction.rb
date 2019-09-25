@@ -14,7 +14,9 @@ class Transaction < ApplicationRecord
     types3 = ['Top up', 'Utilities received']
     types4 = ['Repair', 'Purchases']
     types5 = ['Utilities', 'Pest control', 'Insurance', 'Salary', 'Gasoline', 'Office', 'Suppliers', 'Equipment']
-    # Может быт сумма будет не нужна если под все операции подойдет одна строка
+    # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
+    balance_outs.destroy_all if balance_outs.any?
+    balances.destroy_all if balances.any?
     if types1.include?(type)
       balance_outs.create!(debit: de_ow, credit: de_co)
       balances.create!(debit: de_co)

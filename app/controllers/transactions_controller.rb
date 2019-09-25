@@ -99,6 +99,20 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @transaction.update(transaction_params)
+        de_ow = params[:transaction][:de_ow].to_d
+        cr_ow = params[:transaction][:cr_ow].to_d
+        de_co = params[:transaction][:de_co].to_d
+        cr_co = params[:transaction][:cr_co].to_d
+        type = TransactionType.find(params[:transaction][:type_id]).name_en
+        @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
+        if @transaction.errors.any?
+          @de_ow = @transaction.balance_outs.sum(:debit)
+          @cr_ow = @transaction.balance_outs.sum(:credit)
+          @de_co = @transaction.balances.sum(:debit)
+          @cr_co = @transaction.balances.sum(:credit)
+          render :edit and return
+        end
+
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end

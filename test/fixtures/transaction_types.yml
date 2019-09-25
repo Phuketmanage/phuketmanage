@@ -60,8 +60,15 @@ utilities:
   name_en: Utilities
   name_ru: Ком платежи
   debit_company: false
-  credit_company: false
+  credit_company: true
   debit_owner: false
   credit_owner: true
 
+pest_control:
+  name_en: Pest control
+  name_ru: Обработка от вредеилей
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: true
 
