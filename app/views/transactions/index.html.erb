@@ -2,7 +2,7 @@
   Balance
   <%= 'company view' if @view == 'company' %>
   <%= 'owner view' if @view == 'owner' %>
-  <%= 'accounting view' if @view == 'accounting' %>
+  <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
 </h1>
 
 <div class="mb-2 d-print-none">
@@ -32,10 +32,10 @@
   </div>
 <% else %>
   <% if @view == 'company' %>
-    <%= render 'company_view', transactions: @transactions %>
+    <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
   <% elsif @view == 'owner' %>
-    <%= render 'owner_view', transactions: @transactions, one_house: false %>
+    <%= render 'owner_view', transactions: @transactions, transactions_before: @transactions_before, one_house: false %>
   <% elsif @view == 'accounting' %>
-    <%= render 'owner_accounting_view', transactions: @transactions %>
+    <%= render 'owner_accounting_view', transactions: @transactions, transactions_before: @transactions_before %>
   <% end %>
 <% end %>

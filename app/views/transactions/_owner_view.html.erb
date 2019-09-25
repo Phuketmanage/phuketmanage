@@ -5,7 +5,7 @@
       <th class="text-right" width="120px"><%= t('debit') %></th>
       <th class="text-right" width="120px"><%= t('credit') %></th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
-        <th width="120px">Balance</th>
+        <th class="text-right" width="120px">Balance</th>
       <% end %>
       <th width="150px"><%= t('type') %></th>
       <% if !one_house %>
@@ -22,23 +22,56 @@
   <tbody>
     <% de_ow_sum = 0 %>
     <% cr_ow_sum = 0 %>
+    <% de_ow_prev_sum = 0 %>
+    <% cr_ow_prev_sum = 0 %>
+    <% balance_sum = 0 %>
+    <% if transactions_before.any? %>
+      <% de_ow_prev_sum = transactions_before.joins(:balance_outs).sum('balance_outs.debit') %>
+      <% cr_ow_prev_sum = transactions_before.joins(:balance_outs).sum('balance_outs.credit') %>
+      <% balance_sum += de_ow_prev_sum - cr_ow_prev_sum %>
+      <tr>
+        <td></td>
+        <td class="text-right" id="de_co_prev_sum">
+          <%#= number_to_currency(de_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > 0 %>
+        </td>
+        <td class="text-right" id="cr_co_prev_sum">
+          <%#= number_to_currency(cr_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > 0 %>
+        </td>
+        <% if current_user.role?(['Admin','Manager','Accounting']) %>
+          <td class="text-right" id="co_prev_balance">
+            <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
+          </td>
+        <% end %>
+        <td></td>
+        <% if !one_house %>
+          <td></td>
+        <% end %>
+        <td><%= t('prev_balance') %></td>
+        <% if current_user.role?(['Admin','Manager','Accounting']) %>
+          <td></td>
+          <td></td>
+        <% end %>
+      <tr>
+    <% end %>
     <% transactions.each do |t| %>
       <% de_ow = t.balance_outs.sum(:debit) %>
       <% cr_ow = t.balance_outs.sum(:credit) %>
       <% de_ow_sum += de_ow - cr_ow if de_ow > 0 %>
       <% cr_ow_sum += cr_ow unless de_ow > 0 %>
+      <% balance_sum += de_ow - cr_ow %>
       <tr class="trsc_row <%= 'text-muted' if t.hidden %>" id="trsc_<%= t.id %>_row" >
         <td><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
         <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
         <% if current_user.role?(['Admin','Manager','Accounting']) %>
-          <td>balance</td>
+          <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
         <% end %>
         <td><%= t.type.name_en %></td>
         <% if !one_house %>
           <td><%= t.house.code if t.house %></td>
         <% end %>
-        <td><%= t.comment_en %></td>
+        <% locale = current_user.locale || I18n.locale  %>
+        <td><%= t.send("comment_#{locale}") %></td>
         <% if current_user.role?(['Admin','Manager','Accounting']) %>
           <td><%= t.comment_inner %></td>
           <td>
@@ -51,9 +84,9 @@
     <tfoot>
       <tr>
         <td class='font-weight-bold text-right'><%= t('total') %>:</td>
-        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold" id="ow_balance"><%= number_to_currency(de_ow_sum - cr_ow_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="ow_balance"><%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %></td>
         <td></td>
         <% if !one_house %>
           <td></td>

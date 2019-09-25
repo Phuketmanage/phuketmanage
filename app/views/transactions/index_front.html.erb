@@ -7,4 +7,4 @@
       <%= link_to t('drop_filter'), balance_front_path, class: 'btn btn-secondary mb-2 mr-md-2'  %>
 <% end %>
 
-<%= render 'owner_view', {transactions: @transactions, one_house: @one_house} %>
+<%= render 'owner_view', {transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house} %>

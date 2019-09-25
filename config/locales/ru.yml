@@ -32,6 +32,7 @@ ru:
   profit: Прибыль
   to_balance: На баланс
   added_to_balance: Добавлено на баланс
+  prev_balance: Баланс с прошлого периода
   activerecord:
     errors:
       models:

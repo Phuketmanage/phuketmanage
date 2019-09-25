@@ -2,9 +2,9 @@
   <thead>
     <tr>
       <th>Date</th>
-      <th>Debit</th>
-      <th>Credit</th>
-      <th>Balance</th>
+      <th class="text-right">Debit</th>
+      <th class="text-right">Credit</th>
+      <th class="text-right">Balance</th>
       <th>Type</th>
       <th>House</th>
       <th>Comment</th>
@@ -17,18 +17,45 @@
   <tbody>
     <% de_co_sum = 0 %>
     <% cr_co_sum = 0 %>
+    <% de_co_prev_sum = 0 %>
+    <% cr_co_prev_sum = 0 %>
+    <% balance_sum = 0 %>
+    <% if transactions_before.any? %>
+      <% de_co_prev_sum = transactions_before.joins(:balances).sum('balances.debit') %>
+      <% cr_co_prev_sum = transactions_before.joins(:balances).sum('balances.credit') %>
+      <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
+      <tr>
+        <td></td>
+        <td class="text-right" id="de_co_prev_sum">
+          <%#= number_to_currency(de_co_prev_sum, precision: 2, unit: '') if de_co_prev_sum > 0 %>
+        </td>
+        <td class="text-right" id="cr_co_prev_sum">
+          <%#= number_to_currency(cr_co_prev_sum, precision: 2, unit: '') if cr_co_prev_sum > 0 %>
+        </td>
+        <td class="text-right" id="co_prev_balance">
+          <%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
+        <td></td>
+        <td></td>
+        <td>Balance from previous period</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
     <% transactions.each do |t| %>
       <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %>>
-        <td><%= t.date.strftime('%d.%m.%Y') %></td>
         <% de_co = t.balances.sum(:debit) %>
         <% cr_co = t.balances.sum(:credit) %>
         <% de_ow = t.balance_outs.sum(:debit) %>
         <% cr_ow = t.balance_outs.sum(:credit) %>
         <% de_co_sum += de_co %>
         <% cr_co_sum += cr_co %>
+        <% balance_sum += de_co - cr_co %>
+        <td><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
-        <td>balance</td>
+        <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
         <td><%= t.type.name_en %></td>
         <td><%= t.house.code if t.house %></td>
         <td>
@@ -51,10 +78,10 @@
       <tr>
         <td class='font-weight-bold text-right'>Total:</td>
         <td class="font-weight-bold text-right" id="de_co_sum">
-          <%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold" id="co_balance">
-          <%= number_to_currency(de_co_sum - cr_co_sum, precision: 2, unit: '') %></td>
+          <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="co_balance">
+          <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
         <td></td>
         <td></td>
         <td></td>

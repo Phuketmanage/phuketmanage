@@ -19,11 +19,13 @@ class TransactionsController < ApplicationController
     if !@error.present?
       if params[:user_id].present?
         @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, params[:user_id]).order(:date, :created_at).all
+        @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, params[:user_id]).all
         @view = 'company' if params[:commit] == 'Company view'
         @view = 'owner' if params[:commit] == 'Owner view'
         @view = 'accounting' if params[:commit] == 'Accounting view'
       else
         @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+        @transactions_before = Transaction.where('date < ?', @from).all
         @view = 'company'
       end
     end
@@ -39,6 +41,7 @@ class TransactionsController < ApplicationController
       @error = 'Both dates should be selected'
     end
     @transactions = current_user.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+    @transactions_before = current_user.transactions.where('date < ?', @from).order(:date, :created_at).all
     @one_house = true
     @one_house = false if current_user.houses.count > 1
   end
