@@ -72,6 +72,12 @@ class TransactionTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_type_params
-      params.require(:transaction_type).permit(:name_en, :name_ru, :debit_company, :credit_company, :debit_owner, :credit_owner)
+      params.require(:transaction_type).permit( :name_en,
+                                                :name_ru,
+                                                :debit_company,
+                                                :credit_company,
+                                                :debit_owner,
+                                                :credit_owner,
+                                                :admin_only)
     end
 end

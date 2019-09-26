@@ -8,9 +8,13 @@
     </div>
     <div class="col-md-2">
       <%= form.label :type_id %>
-      <%= form.select :type_id,
-            TransactionType.all.map {|t| [t.name_en, t.id]},
-                      { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+      <% if current_user.role? ['Admin'] %>
+        <%= form.select :type_id,
+              TransactionType.all.map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+      <% else %>
+        <%= form.select :type_id,
+              TransactionType.where(admin_only: false).map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+      <% end %>
     </div>
     <div class="col-md-2" id='house_id', style='display:none;'>
       <%= form.label :house_id %>

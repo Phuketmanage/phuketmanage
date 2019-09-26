@@ -14,6 +14,7 @@ class Transaction < ApplicationRecord
     types3 = ['Top up', 'Utilities received']
     types4 = ['Repair', 'Purchases']
     types5 = ['Utilities', 'Pest control', 'Insurance', 'Salary', 'Gasoline', 'Office', 'Suppliers', 'Equipment']
+    types6 = ['Other']
     # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
     balance_outs.destroy_all if balance_outs.any?
     balances.destroy_all if balances.any?
@@ -27,11 +28,13 @@ class Transaction < ApplicationRecord
       balance_outs.create!(debit: de_ow)
     elsif types4.include?(type)
       balance_outs.create!(credit: cr_ow + cr_co + de_co)
-      # balance_outs.create!(credit: cr_co + de_co)
       balances.create!(debit: cr_co + de_co, credit: cr_co)
     elsif types5.include?(type)
       balance_outs.create!(credit: cr_ow) if cr_ow > 0
       balances.create!(credit: cr_co) if cr_co > 0
+    elsif types6.include?(type)
+      balance_outs.create!(debit: de_ow, credit: cr_ow)
+      balances.create!(debit: de_co, credit: cr_co)
     else
       errors.add(:base, 'Transaction type is not programmed')
 

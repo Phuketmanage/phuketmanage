@@ -53,18 +53,28 @@ react_to_select_trsc_type = (selected) ->
       $("#check_booking_paid").show()
       $("#house_id").hide()
       $("#owner_id").hide()
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Top up'
       $("#de_ow_label").text('Amount')
-      $('#transaction_comment_en').val("Balance top up")
-      $('#transaction_comment_ru').val("Пополнение баланса")
       $("#de_ow").show()
       $("#house_id").hide()
       $("#owner_id").show()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("Balance top up")
+        $('#transaction_comment_ru').val("Пополнение баланса")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Maintenance'
       $("#cr_ow_label").text('Maintenance price')
       $("#cr_ow").show()
       $("#house_id").hide()
       $("#owner_id").show()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("Maintenance")
+        $('#transaction_comment_ru').val("")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Repair' || selected == 'Purchases'
       if $('input[name="_method"]').val() == 'patch'
         cr_ow = $("#transaction_cr_ow").val() - $("#transaction_de_co").val()
@@ -79,20 +89,28 @@ react_to_select_trsc_type = (selected) ->
       $("#de_co").show()
       $("#house_id").show()
       $("#owner_id").hide()
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Laundry'
-      $('#transaction_comment_en').val("Laundry")
-      $('#transaction_comment_ru').val("Стирка")
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
       $("#owner_id").hide()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("Laundry")
+        $('#transaction_comment_ru').val("Стирка")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Utilities received' #House required
-      $('#transaction_comment_en').val("Utilities from guests")
-      $('#transaction_comment_ru').val("Ком платежи с гостей")
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").show()
       $("#owner_id").hide()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("Utilities from guests")
+        $('#transaction_comment_ru').val("")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Utilities'
       $("#cr_ow_label").text('Paid by owner')
       $("#cr_ow").show()
@@ -100,19 +118,45 @@ react_to_select_trsc_type = (selected) ->
       $("#cr_co").show()
       $("#house_id").show()
       $("#owner_id").hide()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("")
+        $('#transaction_comment_ru').val("")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Pest control' || selected == 'Insurance'
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
       $("#owner_id").show()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val(selected)
+        $('#transaction_comment_ru').val("")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Equipment']) != -1
-      $("#house_id").hide()
-      $("#owner_id").hide()
       $("#comment_ru").hide()
       $("#comment_inner").hide()
       $("#ref_no").hide()
       $("#cr_co_label").text('Amount')
       $("#cr_co").show()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val(selected)
       $("#house_id").hide()
       $("#owner_id").hide()
+    if selected == 'Other'
+      $("#house_id").show()
+      $("#owner_id").show()
+      $("#de_ow_label").text('Debit Owner')
+      $("#de_ow").show()
+      $("#cr_ow_label").text('Credit Owner')
+      $("#cr_ow").show()
+      $("#de_co_label").text('Debit Company')
+      $("#de_co").show()
+      $("#cr_co_label").text('Credit Company')
+      $("#cr_co").show()
+      if $('input[name=_method]').val() == 'post'
+        $('#transaction_comment_en').val("")
+        $('#transaction_comment_ru').val("")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
 

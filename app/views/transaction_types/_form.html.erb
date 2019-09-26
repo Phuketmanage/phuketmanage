@@ -34,4 +34,10 @@
   <div class="actions">
     <%= form.submit %>
   </div>
+
+  <div class="form-check">
+    <%= form.check_box :admin_only, class: 'form-check-input' %>
+    <%= form.label :admin_only, class: "form-check-label" %>
+  </div>
+
 <% end %>
