@@ -67,16 +67,23 @@ class UsersController < ApplicationController
       redirect_to users_path
     end
   end
+
+  def password_reset_request
+    user = User.find(params[:id])
+    user.send_reset_password_instructions
+    redirect_to users_path
+  end
+
   private
 
-  def user_params
-     params.require(:user).permit(:email,
-                                  :name,
-                                  :surname,
-                                  :locale,
-                                  :password,
-                                  :password_confirmation,
-                                  { role_ids: []})
-  end
+    def user_params
+       params.require(:user).permit(:email,
+                                    :name,
+                                    :surname,
+                                    :locale,
+                                    :password,
+                                    :password_confirmation,
+                                    { role_ids: []})
+    end
 
 end

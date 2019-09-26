@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
       if current_user && current_user.locale
         I18n.locale = current_user.locale
       elsif params.key?(:locale)
-        I18n.locale = I18n.available_locales.include?(params[:locale]) ? params[:locale] : I18n.default_locale
+        I18n.locale = I18n.available_locales.map(&:to_s).include?(params[:locale]) ? params[:locale] : I18n.default_locale
       else
         # I18n.locale = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
         I18n.locale = http_accept_language.compatible_language_from(I18n.available_locales)

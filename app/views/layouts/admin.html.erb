@@ -10,7 +10,7 @@
       <%= link_to image_tag_s3("logo.png", { width: 30, class: "d-inline-block align-top"}), root_path, id: "logo_image", class: "navbar-brand  mb-0 h1" %>
       <%= link_to "Phuket Manage", root_path, id: "logo_text", class: "navbar-brand  mb-0 h1" %>
       <span class="navbar-text">
-        <%= "#{current_user.name} #{current_user.surname}" %>
+        <%= "#{current_user.name} #{current_user.surname}" if current_user %>
       </span>
       <button class="btn btn-link admin-nav-toggler d-md-none" type="button" data-toggle="collapse" data-target="#admin-nav" aria-controls="admin-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

@@ -6,6 +6,10 @@ en:
     reservation_phone: "+6687 477 5544"
     reservation_email: "info@phuketmanage.com"
     tagline: "Property Management Phuket Thailand"
+  menu:
+    log_in: Log in
+    log_out: Log out
+    dashboard: Dashboard
   search:
     search: Search
     results: Search results
@@ -13,7 +17,6 @@ en:
     in_the_past: Begining or End of period can not be in the past
     too_soon: You can book at least 2 days in advance
     too_short: Minimum rental period is 5 days
-  sign_out: Log out
   balance: Balance
   bookings: Bookings
   timline: Timeline

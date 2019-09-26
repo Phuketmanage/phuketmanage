@@ -6,7 +6,16 @@
 
 <%= provide(:title,  title) %>
 <h1><%= title %></h1>
-<%= render @users %>
+<%= link_to 'Create new user', new_user_path, class: "btn btn-primary mb-2" %>
+<table class="table">
+  <tr>
+    <th>Email</th>
+    <th>Name</th>
+    <th>Role</th>
+    <th>Actions</th>
+  </tr>
+  <%= render @users %>
+</table>
 
-<%= link_to 'Create new user', new_user_path, { class: "nav-link" } %>
-<%= link_to 'Invite new user', new_user_invitation_path, { class: "nav-link" } %>
+
+<%#= link_to 'Invite new user', new_user_invitation_path, { class: "nav-link" } %>

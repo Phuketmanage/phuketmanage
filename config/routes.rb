@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     devise_for :users
+    resources :users, except: :create
+    post 'create_user', to: 'users#create', as: 'create_user'
+    get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
     get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
     get 'bookings/timeline_data', to: 'bookings#timeline_data'
@@ -38,8 +41,6 @@ Rails.application.routes.draw do
     get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
-    resources :users, except: :create
-    post 'create_user', to: 'users#create', as: 'create_user'
     get 'calendar/ical/:ical_name', to: 'bookings#ical'
     get 'search', to: 'search#index'
     resources :settings
