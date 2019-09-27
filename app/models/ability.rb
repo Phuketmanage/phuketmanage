@@ -6,6 +6,7 @@ class Ability
   def initialize(user)
     user ||= User.new                          # guest user
     can [:confirmed, :index_supplier, :canceled], Transfer
+
     if user.role? :owner
       can :index_front, [ Transaction ]
       can :index_front, [ Booking ]
@@ -13,9 +14,13 @@ class Ability
       can :read, Transfer
     elsif user.role? 'Maid'
       can [:laundry, :update_laundry], Job
+    elsif user.role? 'Accounting'
+      can :manage, [ Transaction ]
+      cannot :destroy, [ Transaction ]
+      can [:timeline, :timeline_data], Booking
     elsif user.role? 'Guest relation'
       can :manage, Job
-      cannot :destroy, Job
+      can [:destroy], Job, creator: user
       can :index, Transfer
       can [:timeline, :timeline_data, :check_in_out, :update_comment_gr], Booking
     elsif user.role? :manager

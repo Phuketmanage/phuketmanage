@@ -23,6 +23,12 @@
         </li>
       <% end %>
 
+      <% if current_user.role? ['Accounting'] %>
+        <li class="nav-item">
+          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
       <% if current_user.role? ['Guest relation'] %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
