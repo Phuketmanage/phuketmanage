@@ -10,19 +10,24 @@ class Ability
     if user.role? :owner
       can :index_front, [ Transaction ]
       can :index_front, [ Booking ]
+      can :index, [ Admin ]
     elsif user.role? 'Transfer'
       can :read, Transfer
+      can :index, [ Admin ]
     elsif user.role? 'Maid'
       can [:laundry, :update_laundry], Job
+      can :index, [ Admin ]
     elsif user.role? 'Accounting'
       can :manage, [ Transaction ]
       cannot :destroy, [ Transaction ]
       can [:timeline, :timeline_data], Booking
+      can :index, [ Admin ]
     elsif user.role? 'Guest relation'
       can :manage, Job
       can [:destroy], Job, creator: user
       can :index, Transfer
       can [:timeline, :timeline_data, :check_in_out, :update_comment_gr], Booking
+      can :index, [ Admin ]
     elsif user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User
@@ -33,6 +38,7 @@ class Ability
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer, Transaction ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job, creator: user
+      can :index, [ Admin ]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
