@@ -24,34 +24,25 @@ class Booking < ApplicationRecord
     if !from.present? && !to.present?
       from = Time.zone.now.in_time_zone('Bangkok').to_date
       to = Booking.maximum(:finish)
-      # bookings = Booking.real.where('finish >= ?', today).all
     elsif from.present? && !to.present?
       from = from.to_date
       to = Booking.maximum(:finish)
-      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, today).all
     elsif !from.present? && to.present?
       from = Time.zone.now.in_time_zone('Bangkok').to_date
       to = to.to_date
-      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, today).all
     elsif from.present? && to.present?
       from = from.to_date
       to = to.to_date
-      # bookings = Booking.real.where('finish >= ? AND start <= ?', from, to).all
     end
-    bookings = Booking.real.where('finish >= ? AND start <= ?', from, to).all
-    # today = Time.zone.now.in_time_zone('Bangkok').to_date
-    # bookings = Booking.real.where('finish >= ?', today).all
+    bookings = Booking.active.where('finish >= ? AND start <= ?', from, to).all
     bookings.each do |b|
-      # puts "#{!b.check_in.present?} && #{b.start} < #{from}"
       unless  b.no_check_in ||
               (!b.check_in.present? && b.start < from) ||
               (b.check_in.present? && (b.check_in < from || b.check_in > to))
-        # puts b.no_check_in
-        # puts "#{!b.check_in.present?} && #{b.start} < #{from}"
-        # puts "#{b.check_in.present?} && #{b.check_in} < #{from}"
         line_in = {}
         line_in[:booking_id] = b.id
         line_in[:type] = 'IN'
+        line_in[:status] = b.status
         line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
         line_in[:house] = b.house.code
         line_in[:client] = b.client_details
@@ -70,6 +61,7 @@ class Booking < ApplicationRecord
         line_out = {}
         line_out[:booking_id] = b.id
         line_out[:type] = 'OUT'
+        line_out[:status] = b.status
         line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
         line_out[:house] = b.house.code
         line_out[:client] = b.client_details
