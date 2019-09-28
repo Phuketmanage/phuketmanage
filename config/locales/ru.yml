@@ -7,7 +7,7 @@ ru:
     reservation_email: "info@phuketmanage.com"
     tagline: "Управление недвижимостью, Пхукет, Таиланд"
   menu:
-    log_in: Вход
+    log_in: Войти
     log_out: Выйти
     dashboard: Кабинет
   search:
@@ -36,6 +36,9 @@ ru:
   to_balance: На баланс
   added_to_balance: Добавлено на баланс
   prev_balance: Баланс с прошлого периода
+  users_mailer:
+    reset_password_instructions:
+      subject: Запрос на смену пароля
   activerecord:
     attributes:
       user:
@@ -59,6 +62,9 @@ ru:
     order: [ !ruby/symbol day, !ruby/symbol month, !ruby/symbol year ]
     month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]
   devise:
+    log_in: Войти на сайт
+    log_out: Выйти
+    change_your_password: Смена пароля
     confirmations:
       confirmed: "Ваша учётная запись успешно подтверждена."
       send_instructions: "В течение нескольких минут вы получите письмо с инструкциями по подтверждению вашей учётной записи."
@@ -93,6 +99,10 @@ ru:
       send_paranoid_instructions: "Если ваш адрес email есть в нашей базе данных, то в течение нескольких минут Вы получите письмо с инструкциями по восстановлению вашего пароля."
       updated: "Ваш пароль успешно изменён. Теперь вы вошли в систему."
       updated_not_active: "Пароль успешно изменён."
+      edit:
+        new_password: Новый пароль
+        confirm_new_password: Повторите пароль
+        сhange_my_password: Изменить пароль
     registrations:
       destroyed: "До свидания! Ваша учётная запись успешно удалена. Надеемся снова увидеть вас."
       signed_up: "Добро пожаловать! Вы успешно зарегистрировались."

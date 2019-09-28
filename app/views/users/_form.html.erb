@@ -3,52 +3,52 @@
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :name %><br />
-    <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
+    <%= f.text_field :name, autofocus: true, autocomplete: "name", class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :surname %><br />
-    <%= f.text_field :surname, autofocus: true, autocomplete: "surname" %>
+    <%= f.text_field :surname, autofocus: true, autocomplete: "surname", class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :locale %><br />
-    <%= f.select :locale, I18n.available_locales, {},class: "form-control" %>
+    <%= f.select :locale, I18n.available_locales, {}, class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-  </div>
+  <% if current_user.role? ['Admin'] %>
+    <div class="form-group">
+      <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+      <%= f.password_field :password, autocomplete: "new-password", class: 'form-control' %>
+      <% if @minimum_password_length %>
+        <br />
+        <em><%= @minimum_password_length %> characters minimum</em>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <div class="form-group">
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
+    </div>
+  <% end %>
 
-  <div class="field">
-    Role:
-    <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |c| %>
-        <div class="form-check form-check-inline">
-          <%= c.check_box(class: "form-check-input") %>
-          <%= c.label(class: "form-check-label" ) %>
-        </div>
-    <% end %>
-  </div>
+  Role:
+  <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |c| %>
+      <div class="form-check form-check-inline">
+        <%= c.check_box(class: "form-check-input") %>
+        <%= c.label(class: "form-check-label" ) %>
+      </div>
+  <% end %>
 
 
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "Update", class: 'btn btn-primary' %>
   </div>
 <% end %>

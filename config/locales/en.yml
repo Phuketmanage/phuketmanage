@@ -36,3 +36,10 @@ en:
   to_balance: To balance
   added_to_balance: Added to balance
   prev_balance: Balance from previous period
+  users_mailer:
+    reset_password_instructions:
+      subject: Password reset request
+  devise:
+    log_in: Log in
+    log_out: Log out
+    change_your_password: Сhange your password
