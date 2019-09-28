@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-2 form-group">
       <%= form.select :house_id,
-            @houses.all.map {|h| [h.code, h.id]},
+            @houses.all.map {|h| ["#{h.code} #{'(not for rent)' if h.unavailable}", h.id]},
                       { prompt: 'Select house' }, { class: "form-control",  } %>
     </div>
     <div class="col-md-2 form-group">

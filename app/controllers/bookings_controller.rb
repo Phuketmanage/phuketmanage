@@ -138,7 +138,7 @@ class BookingsController < ApplicationController
   # GET /bookings/new
   def new
     @booking = Booking.new
-    @houses = House.all.active
+    @houses = House.all
     if params[:hid]
       @booking.house = @houses.find_by(number: params[:hid])
     end
@@ -147,13 +147,13 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/edit
   def edit
-    @houses = House.all.active
+    @houses = House.all
     @tenants = User.with_role('Tenant')
     search = Search.new({rs: @booking.start, rf: @booking.finish})
     @booking_original = nil
     @transfers = @booking.transfers.order(:date)
     @transfer = @booking.transfers.new
-    @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+    @select_items = House.order(:code).map{|h| [h.code, h.number]}
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
     # @transfers_in = @booking.transfers.where(trsf_type: 'IN')
     # @transfers_out = @booking.transfers.where(trsf_type: 'OUT')
@@ -175,7 +175,7 @@ class BookingsController < ApplicationController
     # byebug
     if !answer[:result]
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
-      @houses = House.all.active
+      @houses = House.all
       @tenants = User.with_role('Tenant')
       render :new and return
     end
@@ -192,7 +192,7 @@ class BookingsController < ApplicationController
         format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
-        @houses = House.all.active
+        @houses = House.all
         @tenants = User.with_role('Tenant')
         format.html { render :new }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
@@ -222,14 +222,14 @@ class BookingsController < ApplicationController
     answer = search.is_house_available? house_id, @booking.id
     if !answer[:result]
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
-      @houses = House.all.active
+      @houses = House.all
       @tenants = User.with_role('Tenant')
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
       @booking_original.calc prices
       @transfers = @booking.transfers.all
       @transfer = @booking.transfers.new
-      @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+      @select_items = House.order(:code).map{|h| [h.code, h.number]}
       @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
       render :edit and return
     end
@@ -250,7 +250,7 @@ class BookingsController < ApplicationController
         format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
-        @houses = House.all.active
+        @houses = House.all
         @tenants = User.with_role('Tenant')
         @booking_original = @booking.dup
         search = Search.new({rs: @booking.start, rf: @booking.finish})
@@ -258,7 +258,7 @@ class BookingsController < ApplicationController
         @booking_original.calc prices
         @transfers = @booking.transfers.all
         @transfer = @booking.transfers.new
-        @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
+        @select_items = House.order(:code).map{|h| [h.code, h.number]}
         @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
         format.html { render :edit }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
