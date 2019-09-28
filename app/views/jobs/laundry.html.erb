@@ -45,7 +45,7 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
     </div>
   </div>
   <% @laundry.each do |l| %>
-    <div class="shadow-sm mb-2 p-2 bg-light rounded">
+    <div class="shadow-sm mb-2 p-2 bg-white border rounded">
       <%= form_with model: l, local: true, url: update_laundry_path(l) do |f| %>
         <% if l.errors.any? %>
           <%= render 'shared/error_messages', object: f.object %>

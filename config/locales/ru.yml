@@ -7,7 +7,7 @@ ru:
     reservation_email: "info@phuketmanage.com"
     tagline: "Управление недвижимостью, Пхукет, Таиланд"
   menu:
-    log_in: Войти
+    log_in: Вход
     log_out: Выйти
     dashboard: Кабинет
   search:
@@ -37,13 +37,17 @@ ru:
   added_to_balance: Добавлено на баланс
   prev_balance: Баланс с прошлого периода
   activerecord:
+    attributes:
+      user:
+        email: Эл. почта
+        password: Пароль
+        remember_me: Запомнить меня
     errors:
       models:
         price:
           attributes:
             amount:
               greater_than_or_equal_to: Цена не может быть меньше 0
-      models:
         duration:
           attributes:
             start:

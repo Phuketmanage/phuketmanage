@@ -3,7 +3,7 @@
  <td><%= "#{user.name} #{user.surname}" %></td>
  <td><%= user.roles.map{|role| role.name}.join %></td>
  <td>
-  <%= link_to 'Edit', edit_user_path(user) %>
+  <%= link_to 'Edit', edit_user_path(user) %> |
   <%#= link_to 'Ask password reset', new_invitation_path(user) %>
   <%= link_to 'Ask password reset', password_reset_request_path(user) %>
 </td>
