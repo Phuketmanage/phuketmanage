@@ -23,7 +23,7 @@
                       { prompt: 'Select house' }, class: "form-control" %>
     </div>
     <div class="col-md-2" id='owner_id', style='display:none;'>
-      <%= form.label :user_id %>
+      <%= form.label 'Owner' %>
       <%= form.select :user_id,
             User.with_role(['Owner']).order(:name).map {|u| ["#{u.name} #{u.surname}", u.id]},
             { prompt: 'Select owner' }, class: "form-control" %>

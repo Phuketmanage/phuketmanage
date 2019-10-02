@@ -123,7 +123,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   test 'owner can see only his own balance' do
     sign_in users(:owner)
-    get balance_front_path
+    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
     assert_select 'tr.trsc_row', 2
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 1
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 1
@@ -133,7 +133,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
 
     sign_in users(:owner_2)
-    get balance_front_path
+    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
     assert_select 'tr.trsc_row', 3
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 0
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 0

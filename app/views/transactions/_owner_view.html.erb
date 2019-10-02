@@ -70,7 +70,7 @@
         <% if !one_house %>
           <td><%= t.house.code if t.house %></td>
         <% end %>
-        <% locale = current_user.locale || I18n.locale  %>
+        <% locale = t.user.locale || I18n.locale  %>
         <td><%= t.send("comment_#{locale}") %></td>
         <% if current_user.role?(['Admin','Manager','Accounting']) %>
           <td><%= t.comment_inner %></td>

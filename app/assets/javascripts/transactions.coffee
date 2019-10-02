@@ -1,12 +1,14 @@
 $(document).on "turbolinks:load", ->
-  react_to_select_user_id($('#user_id').val())
-  react_to_select_trsc_type($('#trsc_type').children('option:selected').text())
+  react_to_select_user_id($('#view_user_id').val())
 
-  $('#user_id').on 'change', ->
+  # if $('form').attr('method') == 'post'
+  react_to_select_trsc_type($('#trsc_type').children('option:selected').text(), true)
+
+  $('#view_user_id').on 'change', ->
     react_to_select_user_id($(this).val())
 
   $('#trsc_type').on 'change', ->
-    react_to_select_trsc_type($(this).children('option:selected').text())
+    react_to_select_trsc_type($(this).children('option:selected').text(), false)
 
   $('#transaction_booking_id').on 'change', ->
     booking_id = $(this).val()
@@ -42,9 +44,12 @@ react_to_select_user_id = (selected) ->
     $('#btn_owner_view').attr('disabled', true)
     $('#btn_owner_accounting_view').attr('disabled', true)
 
-react_to_select_trsc_type = (selected) ->
+react_to_select_trsc_type = (selected, init) ->
     $('.money_fields').hide()
     if selected == 'Rental'
+      if init == false
+        $("#transaction_cr_ow").val(0)
+        $("#transaction_cr_co").val(0)
       $("#booking_id").show()
       $("#de_ow_label").text('Received')
       $("#de_ow").show()
@@ -56,26 +61,36 @@ react_to_select_trsc_type = (selected) ->
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Top up'
+      if init == false
+        $("#transaction_cr_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").hide()
       $("#owner_id").show()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Balance top up")
         $('#transaction_comment_ru').val("Пополнение баланса")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Maintenance'
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
       $("#cr_ow_label").text('Maintenance price')
       $("#cr_ow").show()
       $("#house_id").hide()
       $("#owner_id").show()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Maintenance")
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Repair' || selected == 'Purchases'
+      if init == false
+        $("#transaction_de_ow").val(0)
       if $('input[name="_method"]').val() == 'patch'
         cr_ow = $("#transaction_cr_ow").val() - $("#transaction_de_co").val()
         de_co = $("#transaction_de_co").val() - $("#transaction_cr_co").val()
@@ -92,54 +107,73 @@ react_to_select_trsc_type = (selected) ->
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Laundry'
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
-      $("#owner_id").hide()
-      if $('input[name=_method]').val() == 'post'
+      $("#owner_id").show()
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Laundry")
         $('#transaction_comment_ru').val("Стирка")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if selected == 'Utilities received' #House required
+    if selected == 'From guests' #House required
+      if init == false
+        $("#transaction_cr_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").show()
       $("#owner_id").hide()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Utilities from guests")
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Utilities'
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_de_co").val(0)
       $("#cr_ow_label").text('Paid by owner')
       $("#cr_ow").show()
       $("#cr_co_label").text('Paid by company')
       $("#cr_co").show()
       $("#house_id").show()
       $("#owner_id").hide()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("")
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Pest control' || selected == 'Insurance'
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
       $("#owner_id").show()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val(selected)
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Equipment']) != -1
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_cr_ow").val(0)
+        $("#transaction_de_co").val(0)
       $("#comment_ru").hide()
       $("#comment_inner").hide()
       $("#ref_no").hide()
       $("#cr_co_label").text('Amount')
       $("#cr_co").show()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val(selected)
       $("#house_id").hide()
       $("#owner_id").hide()
@@ -154,7 +188,7 @@ react_to_select_trsc_type = (selected) ->
       $("#de_co").show()
       $("#cr_co_label").text('Credit Company')
       $("#cr_co").show()
-      if $('input[name=_method]').val() == 'post'
+      if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("")
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()

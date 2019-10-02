@@ -11,7 +11,7 @@ class Transaction < ApplicationRecord
   def write_to_balance (type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
     types2 = ['Maintenance', 'Laundry']
-    types3 = ['Top up', 'Utilities received']
+    types3 = ['Top up', 'From guests']
     types4 = ['Repair', 'Purchases']
     types5 = ['Utilities', 'Pest control', 'Insurance', 'Salary', 'Gasoline', 'Office', 'Suppliers', 'Equipment']
     types6 = ['Other']
@@ -19,14 +19,18 @@ class Transaction < ApplicationRecord
     balance_outs.destroy_all if balance_outs.any?
     balances.destroy_all if balances.any?
     if types1.include?(type)
+      errors.add(:base, 'Need to select owner or house') and return if house_id.nil? && user_id.nil?
       balance_outs.create!(debit: de_ow, credit: de_co)
       balances.create!(debit: de_co)
     elsif types2.include?(type)
+      errors.add(:base, 'Need to select owner or house') and return if house_id.nil? && user_id.nil?
       balance_outs.create!(credit: cr_ow)
       balances.create!(debit: cr_ow)
     elsif types3.include?(type)
+      errors.add(:base, 'Need to select owner or house') and return if house_id.nil? && user_id.nil?
       balance_outs.create!(debit: de_ow)
     elsif types4.include?(type)
+      errors.add(:base, 'Need to select house') and return if house_id.nil?
       balance_outs.create!(credit: cr_ow + cr_co + de_co)
       balances.create!(debit: cr_co + de_co, credit: cr_co)
     elsif types5.include?(type)
@@ -36,7 +40,7 @@ class Transaction < ApplicationRecord
       balance_outs.create!(debit: de_ow, credit: cr_ow)
       balances.create!(debit: de_co, credit: cr_co)
     else
-      errors.add(:base, 'Transaction type is not programmed')
+      errors.add(:base, 'Transaction type is not programmed yet')
 
     end
   end

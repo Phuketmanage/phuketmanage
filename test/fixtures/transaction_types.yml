@@ -33,8 +33,8 @@ top_up:
   credit_owner: false
 
 utilities_received:
-  name_en: Utilities received
-  name_ru: Ком платежи с гостей
+  name_en: From guests
+  name_ru: Платежи с гостей
   debit_company: true
   credit_company: false
   debit_owner: false

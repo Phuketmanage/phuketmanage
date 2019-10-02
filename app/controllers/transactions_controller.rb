@@ -9,6 +9,8 @@ class TransactionsController < ApplicationController
   def index
     @from = params[:from]
     @to = params[:to]
+    session[:from] = params[:from]
+    session[:to] = params[:to]
     if !@from.present? && !@to.present?
       @from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
       @to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
@@ -17,16 +19,23 @@ class TransactionsController < ApplicationController
     end
 
     if !@error.present?
-      if params[:user_id].present?
-        @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, params[:user_id]).order(:date, :created_at).all
-        @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, params[:user_id]).all
+      if params[:view_user_id].present?
+        @view_user_id = params[:view_user_id]
+        session[:view_user_id] = params[:view_user_id]
+        @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
+        @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
         @view = 'company' if params[:commit] == 'Company view'
         @view = 'owner' if params[:commit] == 'Owner view'
         @view = 'accounting' if params[:commit] == 'Accounting view'
+        session[:commit] = params[:commit]
+        session[:view] = @view
       else
         @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
         @transactions_before = Transaction.where('date < ?', @from).all
         @view = 'company'
+        session.delete(:view_user_id)
+        session[:commit] = params[:commit]
+        session[:view] = @view
       end
     end
   end
@@ -85,9 +94,18 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
-        format.html { redirect_to transactions_path, notice: 'Transaction was successfully created.' }
+        format.html { redirect_to transactions_path(
+                                    from: session[:from],
+                                    to: session[:to],
+                                    view_user_id: session[:view_user_id],
+                                    commit: session[:commit]),
+                                    notice: 'Transaction was successfully created.' }
         # format.json { render :show, status: :created, location: @transaction }
       else
+        # @from = session[:from] if session[:from].present?
+        # @to = session[:to] if  session[:from].present?
+        # @user_id =  session[:from] if session[:user_id].present?
+        # @view = session[:view] if session[:view].present?
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
@@ -117,7 +135,12 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
-        format.html { redirect_to transactions_path, notice: 'Transaction was successfully updated.' }
+        format.html { redirect_to transactions_path(
+                                    from: session[:from],
+                                    to: session[:to],
+                                    view_user_id: session[:view_user_id],
+                                    commit: session[:commit]),
+                                    notice: 'Transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @transaction }
       else
         format.html { render :edit }
