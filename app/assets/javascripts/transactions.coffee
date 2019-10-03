@@ -151,7 +151,7 @@ react_to_select_trsc_type = (selected, init) ->
       $("#cr_co_label").text('Paid by company')
       $("#cr_co").show()
       $("#house_id").show()
-      $("#owner_id").hide()
+      $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("")
         $('#transaction_comment_ru').val("")
