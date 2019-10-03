@@ -49,6 +49,7 @@ class Transaction < ApplicationRecord
     if user_id.nil? && !house_id.nil?
       self.user_id = House.find(house_id).owner.id
     end
+
     if user_id.nil? && !booking_id.nil?
       house = Booking.find(booking_id).house
       self.house_id = house.id

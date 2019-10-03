@@ -116,8 +116,10 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1.json
   def update
     respond_to do |format|
-      @transaction.set_owner_and_house
+
       if @transaction.update(transaction_params)
+        @transaction.set_owner_and_house
+        @transaction.save
         de_ow = params[:transaction][:de_ow].to_d
         cr_ow = params[:transaction][:cr_ow].to_d
         de_co = params[:transaction][:de_co].to_d

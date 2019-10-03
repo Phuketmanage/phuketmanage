@@ -20,13 +20,13 @@
       <%= form.label :house_id %>
       <%= form.select :house_id,
             House.all.order(:code).map {|h| [h.code, h.id]},
-                      { prompt: 'Select house' }, class: "form-control" %>
+                      { include_blank: 'Select house' }, class: "form-control" %>
     </div>
     <div class="col-md-2" id='owner_id', style='display:none;'>
       <%= form.label 'Owner' %>
       <%= form.select :user_id,
             User.with_role(['Owner']).order(:name).map {|u| ["#{u.name} #{u.surname}", u.id]},
-            { prompt: 'Select owner' }, class: "form-control" %>
+            { include_blank: 'Select owner' }, class: "form-control" %>
     </div>
   </div>
   <div class="form-row">
