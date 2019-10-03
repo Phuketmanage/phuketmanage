@@ -157,7 +157,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if selected == 'Pest control' || selected == 'Insurance'
+    if selected == 'Pest control' || selected == 'Insurance' || selected == 'To owner'
       if init == false
         $("#transaction_de_ow").val(0)
         $("#transaction_de_co").val(0)

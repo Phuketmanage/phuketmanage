@@ -7,7 +7,7 @@ class TransactionTypesController < ApplicationController
   # GET /transaction_types
   # GET /transaction_types.json
   def index
-    @transaction_types = TransactionType.all
+    @transaction_types = TransactionType.all.order(:name_en)
   end
 
   # GET /transaction_types/1
