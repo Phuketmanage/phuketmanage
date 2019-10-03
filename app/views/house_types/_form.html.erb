@@ -1,15 +1,5 @@
 <%= form_with(model: house_type, local: true) do |form| %>
-  <% if house_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(house_type.errors.count, "error") %> prohibited this house_type from being saved:</h2>
-
-      <ul>
-        <% house_type.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'shared/error_messages', object: form.object %>
 
   <div class="field">
     <%= form.label :name_en %>
