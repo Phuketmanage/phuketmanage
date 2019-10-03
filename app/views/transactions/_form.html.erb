@@ -10,7 +10,7 @@
       <%= form.label :type_id %>
       <% if current_user.role? ['Admin'] %>
         <%= form.select :type_id,
-              TransactionType.all.map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+              TransactionType.order(:name_en).all.map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
       <% else %>
         <%= form.select :type_id,
               TransactionType.where(admin_only: false).map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
