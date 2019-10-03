@@ -19,7 +19,7 @@
     <div class="col-md-2" id='house_id', style='display:none;'>
       <%= form.label :house_id %>
       <%= form.select :house_id,
-            House.all.order(:title_en).map {|h| [h.code, h.id]},
+            House.all.order(:code).map {|h| [h.code, h.id]},
                       { prompt: 'Select house' }, class: "form-control" %>
     </div>
     <div class="col-md-2" id='owner_id', style='display:none;'>
