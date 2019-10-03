@@ -10,6 +10,10 @@
         <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-2" %>
         <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-2" %>
         <%= form.select :view_user_id,
+              House.order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
+              { include_blank: 'Company', selected: @view_user_id },
+              class: "form-control mb-2 mr-sm-2" %>
+        <%#= form.select :view_user_id,
               User.with_role(['Owner']).order(:name).map {|u| ["#{u.name} #{u.surname} (#{u.houses.map{|uh| uh.code}.join(', ')})", u.id]},
               { include_blank: 'Company', selected: @view_user_id },
               class: "form-control mb-2 mr-sm-2" %>
