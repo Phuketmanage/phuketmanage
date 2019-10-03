@@ -10,6 +10,12 @@ $(document).on "turbolinks:load", ->
   $('#trsc_type').on 'change', ->
     react_to_select_trsc_type($(this).children('option:selected').text(), false)
 
+  $('#transaction_house_id').on 'change', ->
+    $('#transaction_user_id').val('')
+
+  $('#transaction_user_id').on 'change', ->
+    $('#transaction_house_id').val('')
+
   $('#transaction_booking_id').on 'change', ->
     booking_id = $(this).val()
     $.ajax
