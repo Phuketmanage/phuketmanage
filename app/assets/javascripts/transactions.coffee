@@ -142,22 +142,22 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if selected == 'Utilities'
-      if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_de_co").val(0)
-      $("#cr_ow_label").text('Paid by owner')
-      $("#cr_ow").show()
-      $("#cr_co_label").text('Paid by company')
-      $("#cr_co").show()
-      $("#house_id").show()
-      $("#owner_id").show()
-      if $('form').attr('method') == 'post' && init == false
-        $('#transaction_comment_en').val("")
-        $('#transaction_comment_ru').val("")
-      $("#comment_ru").show()
-      $("#comment_inner").show()
-    if jQuery.inArray(selected, ['Pest control','Insurance','To owner','Common area']) != -1
+    # if selected == 'Utilities'
+    #   if init == false
+    #     $("#transaction_de_ow").val(0)
+    #     $("#transaction_de_co").val(0)
+    #   $("#cr_ow_label").text('Paid by owner')
+    #   $("#cr_ow").show()
+    #   $("#cr_co_label").text('Paid by company')
+    #   $("#cr_co").show()
+    #   $("#house_id").show()
+    #   $("#owner_id").show()
+    #   if $('form').attr('method') == 'post' && init == false
+    #     $('#transaction_comment_en').val("")
+    #     $('#transaction_comment_ru').val("")
+    #   $("#comment_ru").show()
+    #   $("#comment_inner").show()
+    if jQuery.inArray(selected, ['Utilities', 'Pest control','Insurance','To owner','Common area', 'Consumables', 'Transfer']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
         $("#transaction_de_co").val(0)
@@ -171,7 +171,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Equipment']) != -1
+    if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Eqp & Cons']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
         $("#transaction_cr_ow").val(0)

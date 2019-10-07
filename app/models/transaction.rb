@@ -13,8 +13,9 @@ class Transaction < ApplicationRecord
     types2 = ['Maintenance', 'Laundry']
     types3 = ['Top up', 'From guests']
     types4 = ['Repair', 'Purchases']
-    types5 = ['Utilities', 'Pest control', 'Insurance', 'To owner', 'Common area', 'Salary', 'Gasoline', 'Office', 'Suppliers', 'Equipment']
-    types6 = ['Other']
+    types5 = ['Utilities', 'Pest control', 'Insurance', 'To owner', 'Common area', 'Consumables', 'Transfer']
+    types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons']
+    types7 = ['Other']
     # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
     balance_outs.destroy_all if balance_outs.any?
     balances.destroy_all if balances.any?
@@ -36,9 +37,11 @@ class Transaction < ApplicationRecord
       balance_outs.create!(credit: cr_ow + cr_co + de_co)
       balances.create!(debit: cr_co + de_co, credit: cr_co)
     elsif types5.include?(type)
+      errors.add(:base, 'Need to select house') and return if house_id.nil?
       balance_outs.create!(credit: cr_ow) if cr_ow > 0
-      balances.create!(credit: cr_co) if cr_co > 0
     elsif types6.include?(type)
+      balances.create!(credit: cr_co) if cr_co > 0
+    elsif types7.include?(type)
       balance_outs.create!(debit: de_ow, credit: cr_ow)
       balances.create!(debit: de_co, credit: cr_co)
     else
