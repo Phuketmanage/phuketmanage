@@ -373,7 +373,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select '#co_prev_balance', '1,000.00'
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select "#company_maintenance", "60,200.99" #Because of hidden trsc it less 6000
+    assert_select "#de_co_bvat_sum", "56,262.61"
+    assert_select "#vat_sum", "3,938.38"
     assert_select "#iv_de_co_sum", "60,200.99" #Because of hidden trsc  it less 6000
+    assert_select "#iv_de_co_sum_2", "60,200.99"
 
     # For specific owner: Owner view(back) totals Owner view(front) totals = Acc view totals = DV totals
     de_ow_sum = @owner.transactions.joins(:balance_outs).sum('debit')
