@@ -19,6 +19,7 @@ class Ability
       can :index, [ Admin ]
     elsif user.role? 'Accounting'
       can :manage, [ Transaction ]
+      can [:laundry], Job
       cannot :destroy, [ Transaction ]
       can [:timeline, :timeline_data], Booking
       can :index, [ Admin ]
