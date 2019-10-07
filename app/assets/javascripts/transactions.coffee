@@ -92,8 +92,8 @@ react_to_select_trsc_type = (selected, init) ->
       $("#house_id").show()
       $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false
-        $('#transaction_comment_en').val("Maintenance")
-        $('#transaction_comment_ru').val("")
+        $('#transaction_comment_en').val("Maintenance ")
+        $('#transaction_comment_ru').val("Обслуживание ")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'Repair' || selected == 'Purchases'
@@ -124,8 +124,8 @@ react_to_select_trsc_type = (selected, init) ->
       $("#house_id").show()
       $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false
-        $('#transaction_comment_en').val("Laundry")
-        $('#transaction_comment_ru').val("Стирка")
+        $('#transaction_comment_en').val("Laundry ")
+        $('#transaction_comment_ru').val("Стирка ")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'From guests' #House required
@@ -139,24 +139,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#owner_id").hide()
       if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Utilities from guests")
-        $('#transaction_comment_ru').val("")
+        $('#transaction_comment_ru').val("Ком платежи с гостей")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    # if selected == 'Utilities'
-    #   if init == false
-    #     $("#transaction_de_ow").val(0)
-    #     $("#transaction_de_co").val(0)
-    #   $("#cr_ow_label").text('Paid by owner')
-    #   $("#cr_ow").show()
-    #   $("#cr_co_label").text('Paid by company')
-    #   $("#cr_co").show()
-    #   $("#house_id").show()
-    #   $("#owner_id").show()
-    #   if $('form').attr('method') == 'post' && init == false
-    #     $('#transaction_comment_en').val("")
-    #     $('#transaction_comment_ru').val("")
-    #   $("#comment_ru").show()
-    #   $("#comment_inner").show()
     if jQuery.inArray(selected, ['Utilities', 'Pest control','Insurance','To owner','Common area', 'Consumables', 'Transfer']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
