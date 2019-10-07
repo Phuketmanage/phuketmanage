@@ -12,8 +12,8 @@ class Transaction < ApplicationRecord
     types1 = ['Rental']
     types2 = ['Maintenance', 'Laundry']
     types3 = ['Top up', 'From guests']
-    types4 = ['Repair', 'Purchases']
-    types5 = ['Utilities', 'Pest control', 'Insurance', 'To owner', 'Common area', 'Consumables', 'Transfer']
+    types4 = ['Repair', 'Purchases', 'Consumables']
+    types5 = ['Utilities', 'Pest control', 'Insurance', 'To owner', 'Common area', 'Transfer']
     types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons']
     types7 = ['Other']
     # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
