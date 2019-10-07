@@ -197,7 +197,7 @@ Address:
                   </span>
                   <br />
                   <span id='vat_sum'>
-                    <%= number_to_currency(vat_sum.round(2), precision: 2, unit: '') %><br />
+                    <%= number_to_currency(vat_sum.round(2), precision: 2, unit: '') %>
                   </span>
                   <br />
                   <span id="iv_de_co_sum"><%= number_to_currency((de_co_bvat_sum+vat_sum).round(2), precision: 2, unit: '') %></span>
