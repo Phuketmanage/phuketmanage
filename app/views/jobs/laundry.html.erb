@@ -44,7 +44,12 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
       Comment/หมายเหตุ
     </div>
   </div>
+  <% ladunry_totals = {} %>
   <% @laundry.each do |l| %>
+    <% house_code = l.house.code if l.house %>
+    <% house_code = l.booking.house.code if l.booking %>
+    <% ladunry_totals[house_code] = 0 if !ladunry_totals.key?(house_code) %>
+    <% ladunry_totals[house_code] += l.price if !l.price.nil? %>
     <div class="shadow-sm mb-2 p-2 bg-white border rounded">
       <%= form_with model: l, local: true, url: update_laundry_path(l) do |f| %>
         <% if l.errors.any? %>
@@ -88,27 +93,17 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
       <% end %>
     </div>
   <% end %>
-  <div class="form-row d-none d-md-flex">
-    <div class="col-md-1 form-group font-weight-bold">
-
-    </div>
-    <div class="col-md-1 form-group font-weight-bold">
-
-    </div>
-    <div class="col-md-1 form-group font-weight-bold">
-
-    </div>
-    <div class="col-md-2 form-group font-weight-bold">
-
-    </div>
-    <div class="col-md-2 form-group font-weight-bold">
-
-    </div>
-    <div class="col-md-1 form-group font-weight-bold text-right">
+  <div class="form-row">
+    <div class="col-md-8 form-group font-weight-bold text-right">
       Total:
     </div>
-    <div class="col-md-1 form-group font-weight-bold">
+    <div class="col-md-4 form-group font-weight-bold">
       <%= @laundry.sum(:price) %>
+      <% ladunry_totals.each do |k, v| %>
+      <br /><%= "#{k} - #{v}" %>
+      <% end %>
     </div>
   </div>
 <% end %>
+
+
