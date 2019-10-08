@@ -10,8 +10,8 @@
       <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
       <%= link_to 'Drop filter', bookings_path, class: 'btn btn-secondary mb-2 mr-2'  %>
       <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
-      <% if @house %>
-        <%= link_to 'New Booking', new_house_booking_path(@house.number), class: 'btn btn-info mb-2 mr-2' %>
+      <% if @hid %>
+        <%= link_to 'New Booking', new_house_booking_path(@hid), class: 'btn btn-info mb-2 mr-2' %>
       <% else %>
         <%= link_to 'New Booking', new_booking_path, class: 'btn btn-info mb-2 mr-sm-2' %>
       <% end %>
@@ -26,7 +26,7 @@
     No bookings
   </div>
 <% else %>
-  <table class='table bg-white table-striped table-bordered table-sm table-responsive-lg'>
+  <table class='table bg-white table-bordered table-sm table-responsive-lg'>
     <thead>
       <tr>
         <th>House</th>
@@ -46,7 +46,7 @@
 
     <tbody>
       <% @bookings.each do |booking| %>
-        <tr>
+        <tr class='bg-light'>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
           <td><%= booking.start.strftime('%d.%m.%Y') %></td>
           <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
@@ -62,17 +62,25 @@
           <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
           <td>
             <% if !booking.number.nil? %>
-              <%= link_to 'Edit', edit_booking_path(booking) %> |
+              <%= link_to 'Edit', edit_booking_path(booking) %>
             <% else %>
-              <%= link_to 'View', booking_path(booking) %> |
+              <%= link_to 'View', booking_path(booking) %>
             <% end %>
-            <% if @house %>
-              <%= link_to 'Destroy', booking_path(booking, hid: @house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
-            <% else %>
-              <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% if current_user.role?('Admin') %>
+              | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% end %>
           </td>
         </tr>
+        <% if booking.comment || booking.comment_owner || booking.comment_gr %>
+          <tr>
+            <td colspan='12'>
+
+              <div><%= "Comment inner: #{booking.comment}" if booking.comment.present? %></div>
+              <div><%= "Comment owner: #{booking.comment_owner}" if booking.comment_owner.present? %></div>
+              <div><%= "Comment gr: #{booking.comment_gr}" if booking.comment_gr.present? %></div>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

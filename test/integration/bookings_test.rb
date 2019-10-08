@@ -17,7 +17,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Booking.count' do
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
-                                              house_id: house.id} }
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     end
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_1"]'
 
@@ -27,7 +30,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Booking.count' do
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
-                                              house_id: house.id} }
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     end
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_1"]'
 
@@ -37,20 +43,55 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Booking.count' do
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
-                                              house_id: house.id} }
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     end
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_1"]'
 
-    # House available
+    # House not available have confirmed booking
     start = "20.07.#{year}".to_date
     finish = "28.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
-                                              house_id: house.id} }
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     end
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_1"]'
+
+    # House not available have temporary booking
+    start = "26.07.#{year}".to_date
+    finish = "05.08.#{year}".to_date
+    house = houses(:villa_1)
+    assert_no_difference 'Booking.count' do
+      post bookings_path params: { booking: { start: start,
+                                              finish: finish,
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
+    end
+    assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_6"]'
+
+    # House not available have block booking
+    start = "27.07.#{year}".to_date
+    finish = "10.08.#{year}".to_date
+    house = houses(:villa_3)
+    assert_no_difference 'Booking.count' do
+      post bookings_path params: { booking: { start: start,
+                                              finish: finish,
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
+    end
+    assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_7"]'
+
 
     # Can create new booking
     start = "22.07.#{year}"
@@ -59,7 +100,11 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_difference 'Booking.count', 1 do
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
-                                              house_id: house.id} }
+                                              house_id: house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
+
     end
     assert_redirected_to edit_booking_path(Booking.last)
     follow_redirect!
@@ -73,7 +118,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
       post bookings_path params: { booking: { start: start,
                                               finish: finish,
                                               house_id: house.id,
-                                              status: 'confirmed'} }
+                                              status: 'confirmed',
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     end
     assert_redirected_to edit_booking_path(Booking.last)
     follow_redirect!
@@ -88,14 +136,20 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_start = "29.06.#{year}".to_date
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: @booking.finish,
-                                              house_id: @booking.house.id } }
+                                              house_id: @booking.house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_4"]'
 
     # Change only dates - house available for manager even dtnb = 2
     new_start = "30.06.#{year}".to_date
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: @booking.finish,
-                                              house_id: @booking.house.id } }
+                                              house_id: @booking.house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
@@ -105,7 +159,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     house = houses(:villa_1)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: @booking.finish,
-                                              house_id: @booking.house.id } }
+                                              house_id: @booking.house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
@@ -116,7 +173,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_3)
     put booking_path(@booking.id), params: {  booking: { start: @booking.start,
                                               finish: @booking.finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_2"]'
     assert_equal @booking.reload.house_id, old_house.id
 
@@ -124,7 +184,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_2)
     put booking_path(@booking.id), params: {  booking: { start: @booking.start,
                                               finish: @booking.finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
@@ -136,7 +199,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_3)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: new_finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_2"]'
 
     # Change dates and house - house is not available because dtnb = 2
@@ -145,7 +211,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_3)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: new_finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_select 'div.alert li', text: 'House is not available for this period, overlapped with bookings: ["number_2"]'
 
     # Change dates and house - house is available even dtnb = 2
@@ -154,7 +223,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_3)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: new_finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
@@ -167,7 +239,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     new_house = houses(:villa_2)
     put booking_path(@booking.id), params: {  booking: { start: new_start,
                                               finish: new_finish,
-                                              house_id: new_house.id } }
+                                              house_id: new_house.id,
+                                              status: 'confirmed',
+                                              client_details: 'Test client'
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'

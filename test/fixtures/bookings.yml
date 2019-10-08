@@ -4,7 +4,7 @@ _1:
   start: 10.07.<%= Time.now.year+1 %>
   finish: 20.07.<%= Time.now.year+1 %>
   house: villa_1
-  tenant: tenant
+  client_details: tenant
   status: confirmed
   number: number_1
   sale: 100000
@@ -16,7 +16,7 @@ _2:
   start: 15.07.<%= Time.now.year+1 %>
   finish: 25.07.<%= Time.now.year+1 %>
   house: villa_3
-  tenant: tenant
+  client_details: tenant
   status: confirmed
   number: number_2
   sale: 60000
@@ -29,7 +29,7 @@ _3:
   start: 1.08.<%= Time.now.year+1 %>
   finish: 11.08.<%= Time.now.year+1 %>
   house: villa_2
-  tenant: tenant
+  client_details: tenant
   status: confirmed
   number: number_3
   sale: 10
@@ -41,7 +41,7 @@ _4:
   start: 15.06.<%= Time.now.year+1 %>
   finish: 29.06.<%= Time.now.year+1 %>
   house: villa_1
-  tenant: tenant
+  client_details: tenant
   status: confirmed
   number: number_4
   sale: 10
@@ -53,10 +53,34 @@ _5:
   start: 17.07.<%= Time.now.year+1 %>
   finish: 24.08.<%= Time.now.year+1 %>
   house: villa_2
-  tenant: tenant
+  client_details: tenant
   status: canceled
   number: number_5
+  sale: 0
+  agent: 0
+  comm: 0
+  nett: 0
+
+_6:
+  start: 05.08.<%= Time.now.year+1 %>
+  finish: 16.08.<%= Time.now.year+1 %>
+  house: villa_1
+  client_details: tenant
+  status: temporary
+  number: number_6
   sale: 10
   agent: 0
   comm: 2
   nett: 8
+
+_7:
+  start: 03.08.<%= Time.now.year+1 %>
+  finish: 11.08.<%= Time.now.year+1 %>
+  house: villa_3
+  client_details: tenant
+  status: block
+  number: number_7
+  sale: 0
+  agent: 0
+  comm: 0
+  nett: 0

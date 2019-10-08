@@ -61,7 +61,7 @@
             <%= booking.comment_owner %>
             <% if booking.transactions.any? %>
               <%= '|' if booking.comment_owner %>
-              <%= t('added_to_balance') %>: <%= booking.transactions.order(:date).map{|t| "#{t.date.strftime('%d.%m.%Y')}"}.join ',' %>
+              <%= t('added_to_balance') %>: <%= booking.transactions.order(:date).map{|t| "#{t.date.strftime('%d.%m.%Y')}"}.join ', ' %>
             <% end %>
           </td>
         </tr>

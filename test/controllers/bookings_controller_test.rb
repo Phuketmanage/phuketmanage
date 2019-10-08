@@ -28,8 +28,29 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should create booking" do
+    assert_difference('Booking.count', 1) do
+      post bookings_path, params: { booking: {
+                                      start: "10.09.#{Time.now.year+1}".to_date,
+                                      finish: "20.09.#{Time.now.year+1}".to_date,
+                                      house_id: houses(:villa_1).id,
+                                      status: 'confirmed',
+                                      client_details: 'Test client'
+                                      } }
+    end
+    booking = Booking.last
+    assert_redirected_to edit_booking_path(booking)
+  end
+
   test "should update booking" do
-    patch booking_url(@booking), params: { booking: { finish: @booking.finish, house_id: @booking.house_id, start: @booking.start, tenant_id: @booking.tenant_id } }
+    patch booking_url(@booking), params: { booking: {
+                                            start: @booking.start,
+                                            finish: @booking.finish,
+                                            house_id: @booking.house_id,
+                                            status: 'confirmed',
+                                            client_details: 'Test client'
+
+                                            } }
     assert_redirected_to edit_booking_path(@booking)
   end
 
