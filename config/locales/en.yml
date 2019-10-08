@@ -45,4 +45,6 @@ en:
     change_your_password: Сhange your password
     passwords:
       edit:
-        сhange_my_password: Change pssword
+        new_password: New password
+        confirm_new_password: Repeat new password
+        сhange_my_password: Change password
