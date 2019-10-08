@@ -62,8 +62,14 @@
 
   <div class="row">
     <div class="col form-group">
-      <%= form.label 'Comment' %>
+      <%= form.label 'Comment inner (owner will not see)' %>
       <%= form.text_area :comment, class: 'form-control', rows: 2 %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col form-group">
+      <%= form.label 'Comment for owner' %>
+      <%= form.text_area :comment_owner, class: 'form-control', rows: 2 %>
     </div>
   </div>
   <div class="row">

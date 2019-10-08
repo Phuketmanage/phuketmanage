@@ -3,12 +3,12 @@ class UsersController < ApplicationController
   layout 'admin'
   def index
     if params['role']
-      @users = User.with_role(params['role'])
+      @users = User.with_role(params['role']).order(:name)
     else
       if current_user.role? :admin
-        @users = User.all
+        @users = User.all.order(:name)
       elsif current_user.role? :manager
-        @users = User.with_role(['Owner', 'Tenant'])
+        @users = User.with_role(['Owner', 'Tenant']).order(:name)
       end
     end
   end
