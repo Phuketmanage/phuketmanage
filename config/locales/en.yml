@@ -43,3 +43,6 @@ en:
     log_in: Log in
     log_out: Log out
     change_your_password: Сhange your password
+    passwords:
+      edit:
+        сhange_my_password: Change pssword
