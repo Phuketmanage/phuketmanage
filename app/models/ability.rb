@@ -20,7 +20,7 @@ class Ability
     elsif user.role? 'Accounting'
       can :manage, [ Transaction ]
       can [:laundry], Job
-      cannot :destroy, [ Transaction ]
+      cannot :edit, :update, :destroy, [ Transaction ]
       can [:timeline, :timeline_data], Booking
       can :index, [ Admin ]
     elsif user.role? 'Guest relation'

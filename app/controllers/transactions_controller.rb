@@ -100,12 +100,7 @@ class TransactionsController < ApplicationController
                                     view_user_id: session[:view_user_id],
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully created.' }
-        # format.json { render :show, status: :created, location: @transaction }
       else
-        # @from = session[:from] if session[:from].present?
-        # @to = session[:to] if  session[:from].present?
-        # @user_id =  session[:from] if session[:user_id].present?
-        # @view = session[:view] if session[:view].present?
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
