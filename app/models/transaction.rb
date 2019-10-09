@@ -14,7 +14,7 @@ class Transaction < ApplicationRecord
     types3 = ['Top up', 'From guests']
     types4 = ['Repair', 'Purchases', 'Consumables']
     types5 = ['Utilities', 'Pest control', 'Insurance', 'To owner', 'Common area', 'Transfer']
-    types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons']
+    types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons', 'Taxes & Accounting']
     types7 = ['Other']
     # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
     balance_outs.destroy_all if balance_outs.any?
