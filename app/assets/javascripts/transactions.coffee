@@ -27,12 +27,14 @@ $(document).on "turbolinks:load", ->
       data: {},
       success: (data) ->
         console.log('Booking was read')
-        start = new Date(data.booking.start)
+        b = data.booking
+        start = new Date(b.start)
         start_f = "#{start.getDate()}.#{start.getMonth()+1}.#{start.getFullYear()}"
-        finish = new Date(data.booking.finish)
+        finish = new Date(b.finish)
         finish_f = "#{finish.getDate()}.#{finish.getMonth()+1}.#{finish.getFullYear()}"
         $('#transaction_comment_en').val("Rental #{start_f} - #{finish_f}")
         $('#transaction_comment_ru').val("Аренда #{start_f} - #{finish_f}")
+        $("#booking_details").html("Sale #{b.sale} - Agent #{b.agent} = #{b.sale-b.agent}/2 = #{(b.sale-b.agent)/2}, Comm: #{b.comm}/2 = #{b.comm/2}, Nett: #{b.nett}/2 = #{b.nett/2}")
       error: (data) ->
         console.log('Something went wrong')
 
@@ -43,6 +45,13 @@ $(document).on "turbolinks:load", ->
       $('.hidden_row').show()
     else
       $('.hidden_row').hide()
+
+  $('#transaction_de_ow').on 'change', ->
+    if $('#trsc_type').children('option:selected').text() == 'Rental'
+      $('#rental_calcs').html("To owner: #{$(this).val() - $('#transaction_de_co').val()}")
+  $('#transaction_de_co').on 'change', ->
+    if $('#trsc_type').children('option:selected').text() == 'Rental'
+      $('#rental_calcs').html("To owner: #{$('#transaction_de_ow').val() - $(this).val()}")
 
 react_to_select_user_id = (selected) ->
   if selected > 0
@@ -63,6 +72,7 @@ react_to_select_trsc_type = (selected, init) ->
       $("#de_ow").show()
       $("#de_co_label").text('Commission')
       $("#de_co").show()
+      $("#booking_support_div").show()
       $("#check_booking_paid").show()
       $("#house_id").hide()
       $("#owner_id").hide()
