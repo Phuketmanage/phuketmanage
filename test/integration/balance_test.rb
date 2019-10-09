@@ -309,7 +309,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '3,500.00'
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
-    # Add hidden transaction
+    # Add hidden from acc transaction
     @booking_2 = bookings(:_2)
     type = TransactionType.find_by(name_en: 'Rental')
     assert_difference('Transaction.count', 1) do
@@ -353,12 +353,56 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
+    # Add only for acc transaction
+    owner = users(:owner)
+    type = TransactionType.find_by(name_en: 'Other')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: '31.08.2019'.to_date,
+                                  type_id: type.id,
+                                  user_id: owner.id,
+                                  cr_ow: 10000,
+                                  comment_en: 'To align balance',
+                                  comment_inner: 'Hidden from owner',
+                                  for_acc: true} }
+    end
+    t = Transaction.last
+    assert_equal 1, t.balance_outs.count
+    assert_equal 0, t.balance_outs.sum(:debit)
+    assert_equal 10000, t.balance_outs.sum(:credit)
+    assert_equal 0, t.balances.count
+    assert_equal 0, t.balances.sum(:debit)
+    assert_equal 0, t.balances.sum(:credit)
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    get transactions_path, params: { commit: 'Company view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
+    from = '2019-08-01'
+    to = Time.now.to_date
+    get transactions_path, params: {  from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
+    assert_response :success
+    assert_select "tr.for_acc_row", count: 1
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '10,000.00'
+    assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
+
     #
     # Check sums
     #
     # 24.09.2019 Standart cases
     # 25.09.2019 Hidden transactions (added within this test)
-    # (in process) 25.09.2019 Previous transactions (from fixtures)
+    # 25.09.2019 Previous transactions (from fixtures)
+    # 09.10.2019 Hidden from owner transactions (added within this test)
 
     from = '2019-09-01'
     to = Time.now.to_date
@@ -378,9 +422,9 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#iv_de_co_sum", "60,200.99" #Because of hidden trsc  it less 6000
     assert_select "#iv_de_co_sum_2", "60,200.99"
 
-    # For specific owner: Owner view(back) totals Owner view(front) totals = Acc view totals = DV totals
-    de_ow_sum = @owner.transactions.joins(:balance_outs).sum('debit')
-    cr_ow_sum = @owner.transactions.joins(:balance_outs).sum('credit')
+    # For specific owner: Owner view(back) totals Owner view(front)totals = Acc view totals = DB totals
+    de_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('debit')
+    cr_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('credit')
     assert_equal 292500, de_ow_sum
     assert_equal 95200.99.to_d, cr_ow_sum
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Owner view'}
@@ -392,16 +436,16 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#ow_balance", "197,299.01"
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select '#de_ow_prev_sum', ''
-    assert_select '#cr_ow_prev_sum', '17,000.00'
-    assert_select '#ow_prev_balance', '-17,000.00'
+    assert_select '#cr_ow_prev_sum', '27,000.00'
+    assert_select '#ow_prev_balance', '-27,000.00'
     assert_select "#de_ow_sum", "255,500.00"
     assert_select "#de_ow_hidden_sum", "30,000.00"
     assert_select "#de_ow_sum_and_hidden", "285,500.00"
-    assert_select "#cr_ow_sum", "89,200.99"
+    assert_select "#cr_ow_sum", "99,200.99"
     assert_select "#cr_ow_hidden_sum", "6,000.00"
-    assert_select "#cr_ow_sum_and_hidden", "95,200.99"
-    assert_select "#ow_balance", "166,299.01"
-    assert_select "#ow_balance_and_hidden", "190,299.01"
+    assert_select "#cr_ow_sum_and_hidden", "105,200.99"
+    assert_select "#ow_balance", "156,299.01"
+    assert_select "#ow_balance_and_hidden", "180,299.01"
 
     sign_in users(:owner)
     get balance_front_path, params: { from: from, to: to}

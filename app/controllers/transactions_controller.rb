@@ -178,6 +178,7 @@ class TransactionsController < ApplicationController
                                           :comment_en,
                                           :comment_ru,
                                           :comment_inner,
-                                          :hidden)
+                                          :hidden,
+                                          :for_acc)
     end
 end

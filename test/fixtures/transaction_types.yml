@@ -72,3 +72,11 @@ pest_control:
   debit_owner: false
   credit_owner: true
 
+other:
+  name_en: Other
+  name_ru:
+  debit_company: true
+  credit_company: true
+  debit_owner: true
+  credit_owner: true
+

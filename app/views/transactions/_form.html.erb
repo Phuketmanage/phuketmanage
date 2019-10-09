@@ -90,10 +90,16 @@
     <%= form.text_field :ref_no, class: "form-control" %>
   </div>
 
-  <div class="form-check">
-    <%= form.check_box :hidden, class: 'form-check-input' %>
-    <%= form.label :hidden, class: "form-check-label" %>
-  </div>
+  <% if current_user.role? 'Admin' %>
+    <div class="form-check">
+      <%= form.check_box :hidden, class: 'form-check-input' %>
+      <%= form.label :hidden, class: "form-check-label" %>
+    </div>
+    <div class="form-check">
+      <%= form.check_box :for_acc, class: 'form-check-input' %>
+      <%= form.label 'Only for acc', class: "form-check-label" %>
+    </div>
+  <% end %>
 
   <div class="actions mt-2">
     <%= form.submit 'Save', class: "btn btn-primary" %>

@@ -21,8 +21,8 @@
     <% cr_co_prev_sum = 0 %>
     <% balance_sum = 0 %>
     <% if transactions_before.any? %>
-      <% de_co_prev_sum = transactions_before.joins(:balances).sum('balances.debit') %>
-      <% cr_co_prev_sum = transactions_before.joins(:balances).sum('balances.credit') %>
+      <% de_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.debit') %>
+      <% cr_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.credit') %>
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
       <tr>
         <td></td>
@@ -44,6 +44,7 @@
       </tr>
     <% end %>
     <% transactions.each do |t| %>
+      <% next if t.for_acc %>
       <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %>>
         <% de_co = t.balances.sum(:debit) %>
         <% cr_co = t.balances.sum(:credit) %>
