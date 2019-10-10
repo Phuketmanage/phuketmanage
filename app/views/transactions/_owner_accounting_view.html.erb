@@ -83,7 +83,7 @@ Address:
     <% if de_co_sum > 0 %>
       <% cr_ow_sum += de_co_sum %>
       <tr>
-        <td><%= Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date.strftime('%d.%m.%Y') %></td>
+        <td><%= @to.to_date.strftime('%d.%m.%Y') %></td>
         <td></td>
         <td></td>
         <td class='text-right' id='company_maintenance'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
