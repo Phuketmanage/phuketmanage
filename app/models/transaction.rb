@@ -48,7 +48,11 @@ class Transaction < ApplicationRecord
     elsif types6.include?(type)
       balances.create!(credit: cr_co) if cr_co > 0
     elsif types7.include?(type)
-      balance_outs.create!(debit: de_ow, credit: cr_ow) if de_ow > 0 || cr_ow > 0
+      if de_ow > 0 || cr_ow > 0
+      errors.add(:base, 'Need to select owner or house') and return if house_id.nil? || user_id.nil?
+      return if errors.any?
+      balance_outs.create!(debit: de_ow, credit: cr_ow)
+      end
       balances.create!(debit: de_co, credit: cr_co) if de_co > 0 || cr_co > 0
     else
       errors.add(:base, 'Transaction type is not programmed yet')

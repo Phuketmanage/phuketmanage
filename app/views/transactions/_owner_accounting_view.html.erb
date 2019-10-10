@@ -43,7 +43,7 @@ Address:
           <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
         </td>
         <td class="text-right" id="ow_prev_balance"><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
-        <td><%= t('prev_balance') %></td>
+        <td>Balance from previous period</td>
         <td></td>
     <% end %>
     <% transactions.each do |t| %>
