@@ -147,10 +147,27 @@ class TransactionsController < ApplicationController
   end
 
   def update_invoice_ref
-    from = session[:from]
-    to = session[:to]
-    view_user_id = session[:view_user_id]
-    commit = session[:commit]
+    if session[:from].to_date.month != session[:to].to_date.month
+      redirect_to transactions_path(from: session[:from],
+                                    to: session[:to],
+                                    view_user_id: session[:view_user_id],
+                                    commit: session[:commit]),
+                                    notice: 'Can update invoice ref_no only with in one month'
+      return
+    end
+    # view_user_id = session[:view_user_id]
+    # commit = session[:commit]
+    @transactions = Transaction.joins(:balances).where(
+      'date >= ? AND date <= ? AND user_id = ? AND balances.debit > 0',
+      session[:from], session[:to], session[:view_user_id]).all
+    # @transactions.each do |t|
+    #   t.balances.update(ref_no: params[:ref_no])
+    # end
+    redirect_to transactions_path(from: session[:from],
+                                  to: session[:to],
+                                  view_user_id: session[:view_user_id],
+                                  commit: session[:commit]),
+                                  notice: 'Ref no was successfully updated.'
 
   end
 

@@ -84,7 +84,9 @@ Address:
       <% cr_ow_sum += de_co_sum %>
       <tr>
         <td><%= @to.to_date.strftime('%d.%m.%Y') %></td>
-        <td></td>
+        <td><small>
+          <%= transactions.joins(:balances).where('balances.debit > 0').pluck('balances.ref_no').uniq.join(', ') %></small>
+        </td>
         <td></td>
         <td class='text-right' id='company_maintenance'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
         <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum - de_co_sum, precision: 2, unit: '') %></td>
@@ -211,6 +213,11 @@ Address:
             </tfoot>
           </tbody>
         </table>
+        <%= form_with url: update_invoice_ref_path, local: true do |f| %>
+          <%= label_tag :ref_no %>
+          <%= text_field_tag :ref_no,nil, class: "form-control" %>
+          <%= submit_tag 'Save', class: "btn btn-primary" %>
+        <% end %>
       </div>
     </div>
   </div>

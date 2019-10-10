@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   get 'owner', to: 'admin#index', as: 'owner'
   resources :transactions, except: [:show]
+  post 'transactions/update_invoice_ref', to: 'transactions#update_invoice_ref', as: 'update_invoice_ref'
   get 'owner/balance', to: 'transactions#index_front', as: 'balance_front'
   resources :transaction_types
   get '/employees/list_for_job', to: 'employees#list_for_job'
