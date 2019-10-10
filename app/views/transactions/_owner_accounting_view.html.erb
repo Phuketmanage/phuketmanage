@@ -95,8 +95,8 @@ Address:
     <tfoot>
       <tr>
         <td></td>
-        <td class='font-weight-bold text-right'>Total:</td>
-        <td class="font-weight-bold text-right">
+        <td class='font-weight-bold text-right d-print-none'>Total:</td>
+        <td class="font-weight-bold text-right d-print-none">
           <div id='de_ow_sum'>
             <%= number_to_currency(de_ow_prev_sum + de_ow_sum, precision: 2, unit: '') %>
           </div>
@@ -109,7 +109,7 @@ Address:
             </div>
           <% end %>
         </td>
-        <td class="font-weight-bold text-right">
+        <td class="font-weight-bold text-right d-print-none">
           <div id='cr_ow_sum'>
             <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum, precision: 2, unit: '') %>
           </div>
@@ -122,15 +122,15 @@ Address:
             </div>
           <% end %>
         </td>
-        <td class="font-weight-bold text-right">
+        <td class="font-weight-bold text-right d-print-none">
           <div id="ow_balance">
             <%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %>
           </div>
           <% if de_ow_hidden_sum > 0 || cr_ow_hidden_sum > 0 %>
-            <div class="text-muted" id="ow_hidden_balance">
+            <div class="text-muted" id="ow_hidden_balance d-print-none">
               <%= number_to_currency(de_ow_hidden_sum - cr_ow_hidden_sum, precision: 2, unit: '') %>
             </div>
-            <div class="text-muted" id="ow_balance_and_hidden">
+            <div class="text-muted d-print-none" id="ow_balance_and_hidden">
               <%= number_to_currency((de_ow_prev_sum + de_ow_sum + de_ow_hidden_sum) - (cr_ow_prev_sum + cr_ow_sum + cr_ow_hidden_sum), precision: 2, unit: '') %>
             </div>
           <% end %>
