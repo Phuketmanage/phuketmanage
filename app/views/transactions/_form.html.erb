@@ -13,7 +13,7 @@
               TransactionType.order(:name_en).all.map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
       <% else %>
         <%= form.select :type_id,
-              TransactionType.where(admin_only: false).map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+              TransactionType.where(admin_only: false).order(:name_en).map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
       <% end %>
     </div>
     <div class="col-md-2" id='house_id', style='display:none;'>

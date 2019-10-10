@@ -146,6 +146,14 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def update_invoice_ref
+    from = session[:from]
+    to = session[:to]
+    view_user_id = session[:view_user_id]
+    commit = session[:commit]
+
+  end
+
   # DELETE /transactions/1
   # DELETE /transactions/1.json
   def destroy
