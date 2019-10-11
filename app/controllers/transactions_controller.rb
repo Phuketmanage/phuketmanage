@@ -160,9 +160,9 @@ class TransactionsController < ApplicationController
     @transactions = Transaction.joins(:balances).where(
       'date >= ? AND date <= ? AND user_id = ? AND balances.debit > 0',
       session[:from], session[:to], session[:view_user_id]).all
-    # @transactions.each do |t|
-    #   t.balances.update(ref_no: params[:ref_no])
-    # end
+    @transactions.each do |t|
+      t.balances.update(ref_no: params[:ref_no])
+    end
     redirect_to transactions_path(from: session[:from],
                                   to: session[:to],
                                   view_user_id: session[:view_user_id],
