@@ -18,9 +18,14 @@ class Ability
       can [:laundry, :update_laundry], Job
       can :index, [ Admin ]
     elsif user.role? 'Accounting'
-      can :manage, [ Transaction ]
+      can [:index, :new, :create, :update_invoice_ref] , Transaction
+      can [:edit, :update], Transaction do |t|
+        t.date > (Date.today-30.days).beginning_of_month
+      end
+      can [:destroy], Transaction do |t|
+        t.date > Date.today-1.days
+      end
       can [:laundry], Job
-      # cannot [:edit, :update, :destroy], [ Transaction ]
       can [:timeline, :timeline_data], Booking
       can :index, [ Admin ]
     elsif user.role? 'Guest relation'
@@ -35,11 +40,18 @@ class Ability
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Transfer, Source, Transaction ]
-      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer, Transaction ]
+                      Connection, JobType, Transfer, Source ]
+      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job, creator: user
       can :index, [ Admin ]
+      can [:index, :new, :create, :update_invoice_ref] , Transaction
+      can [:edit, :update], Transaction do |t|
+        t.date > (Date.today-30.days).beginning_of_month
+      end
+      can [:destroy], Transaction do |t|
+        t.date > Date.today-1.days
+      end
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

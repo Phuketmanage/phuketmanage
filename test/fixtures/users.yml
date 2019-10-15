@@ -12,6 +12,10 @@ manager: #{}
   email: 'manager@test.com'
   roles: manager
 
+accounting: #{}
+  email: 'assr@test.com'
+  roles: accounting
+
 owner: #{}
   email: 'owner@test.com'
   roles: owner

@@ -6,6 +6,9 @@ admin:
 manager:
   name: Manager
 
+accounting:
+  name: Accounting
+
 owner:
   name: Owner
 

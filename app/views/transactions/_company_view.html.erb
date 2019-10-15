@@ -61,15 +61,22 @@
         <td><%= t.house.code if t.house %></td>
         <td>
           <%= t.comment_en %>
-          <% if t.user && t.user.locale == 'ru' && !t.comment_ru.present? %>
+          <% if t.user && t.user.locale == 'ru' && !t.comment_ru.present? && current_user.role?(['Admin', 'Manager'])%>
             <%= link_to 'Translate', edit_transaction_path(t) %>
           <% end %>
         </td>
         <td><%= t.comment_inner %></td>
         <td>
-          <%= link_to 'Edit', edit_transaction_path(t) %> |
-          <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
-
+          <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
+            <%= link_to 'Edit', edit_transaction_path(t) %>
+          <% end %>
+          <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
+            | <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
+          <% if current_user.role?('Admin') && t.date > Date.today-30.days %>
+            <%= link_to 'Edit', edit_transaction_path(t) %> |
+            <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
         </td>
         <td class='de_ow_cell text-right'><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0%></td>
         <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>

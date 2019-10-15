@@ -174,8 +174,174 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
+    #Manager and Accounting can edit only until 1st of previous month
+    sign_in users(:accounting)
+    # old transaction
+    @transaction = transactions(:prev_3)
+    patch transaction_url(@transaction),  params: {
+                                            transaction: {
+                                              date: @transaction.date,
+                                              comment_en: @transaction.comment_en,
+                                              comment_inner: @transaction.comment_inner,
+                                              comment_ru: @transaction.comment_ru,
+                                              house_id: @transaction.house_id,
+                                              ref_no: @transaction.ref_no,
+                                              type_id: @transaction.type_id,
+                                              user_id: @transaction.user_id } }
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+    sign_out :user
 
+    sign_in users(:manager)
+    @transaction = transactions(:prev_3)
+    patch transaction_url(@transaction),  params: {
+                                            transaction: {
+                                              date: @transaction.date,
+                                              comment_en: @transaction.comment_en,
+                                              comment_inner: @transaction.comment_inner,
+                                              comment_ru: @transaction.comment_ru,
+                                              house_id: @transaction.house_id,
+                                              ref_no: @transaction.ref_no,
+                                              type_id: @transaction.type_id,
+                                              user_id: @transaction.user_id } }
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+    sign_out :user
 
+    # upload transaction that happened 10 days ago
+    sign_in users(:accounting)
+    get transactions_path
+    type = TransactionType.find_by(name_en: 'Utilities')
+    house = houses(:villa_1)
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Time.now-10.days,
+                                  type_id: type.id,
+                                  house_id: house.id,
+                                  cr_ow: 3500,
+                                  comment_en: 'Electricity 08.2019'} }
+    end
+    new_transaction = Transaction.last
+    # accounting can edit
+    patch transaction_url(new_transaction),  params: {
+                                            transaction: {
+                                              cr_ow: 3500,
+                                              comment_en: 'New comment_en',
+                                              comment_inner: 'New comment_inner',
+                                              comment_ru: 'New comment_ru',
+                                              house_id: new_transaction.house_id,
+                                              ref_no: new_transaction.ref_no,
+                                              type_id: new_transaction.type_id,
+                                              user_id: new_transaction.user_id } }
+    assert_redirected_to transactions_path
+    follow_redirect!
+    assert_select 'div.alert', 'Transaction was successfully updated.'
+    sign_out :user
+
+    # manager can edit
+    sign_in users(:manager)
+    get transactions_path
+    patch transaction_url(new_transaction),  params: {
+                                            transaction: {
+                                              cr_ow: 3500,
+                                              comment_en: 'New comment_en',
+                                              comment_inner: 'New comment_inner',
+                                              comment_ru: 'New comment_ru',
+                                              house_id: new_transaction.house_id,
+                                              ref_no: new_transaction.ref_no,
+                                              type_id: new_transaction.type_id,
+                                              user_id: new_transaction.user_id } }
+    assert_redirected_to transactions_path
+    follow_redirect!
+    assert_select 'div.alert', 'Transaction was successfully updated.'
+    sign_out :user
+
+    #Manager and Accounting can edit only with in 1 day
+
+    # create transaction that happened 2 days ago
+    sign_in users(:accounting)
+    get transactions_path
+    type = TransactionType.find_by(name_en: 'Utilities')
+    house = houses(:villa_1)
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Date.today-2.days,
+                                  type_id: type.id,
+                                  house_id: house.id,
+                                  cr_ow: 3500,
+                                  comment_en: 'Electricity 08.2019'} }
+    end
+    new_transaction = Transaction.last
+    # accounting can not delete
+    assert_no_difference('Transaction.count') do
+      delete transaction_url(new_transaction)
+    end
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+    sign_out :user
+    # manager can not delete
+    sign_in users(:accounting)
+    assert_no_difference('Transaction.count') do
+      delete transaction_url(new_transaction)
+    end
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+    sign_out :user
+
+    # create transaction that happened today
+    sign_in users(:accounting)
+    get transactions_path
+    type = TransactionType.find_by(name_en: 'Utilities')
+    house = houses(:villa_1)
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Date.today,
+                                  type_id: type.id,
+                                  house_id: house.id,
+                                  cr_ow: 3500,
+                                  comment_en: 'Electricity 08.2019'} }
+    end
+    new_transaction = Transaction.last
+    # accounting can delete
+    assert_difference('Transaction.count', -1) do
+      delete transaction_url(new_transaction)
+    end
+    assert_redirected_to transactions_path
+    follow_redirect!
+    assert_select 'div.alert', 'Transaction was successfully destroyed.'
+    sign_out :user
+
+    # create transaction that happened today
+    sign_in users(:accounting)
+    get transactions_path
+    type = TransactionType.find_by(name_en: 'Utilities')
+    house = houses(:villa_1)
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Date.today,
+                                  type_id: type.id,
+                                  house_id: house.id,
+                                  cr_ow: 3500,
+                                  comment_en: 'Electricity 08.2019'} }
+    end
+    new_transaction = Transaction.last
+    # manager can delete
+    sign_in users(:accounting)
+    assert_difference('Transaction.count', -1) do
+      delete transaction_url(new_transaction)
+    end
+    assert_redirected_to transactions_path
+    follow_redirect!
+    assert_select 'div.alert', 'Transaction was successfully destroyed.'
+    sign_out :user
   end
 
 end

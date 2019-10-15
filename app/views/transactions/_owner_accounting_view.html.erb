@@ -74,8 +74,16 @@ Address:
         <td><%= t.comment_en %></td>
         <td>
           <div class="d-print-none">
-            <%= link_to 'Edit', edit_transaction_path(t) %> |
-            <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
+              <%= link_to 'Edit', edit_transaction_path(t) %>
+            <% end %>
+            <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
+              | <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% end %>
+            <% if current_user.role?('Admin') && t.date > Date.today-30.days %>
+              <%= link_to 'Edit', edit_transaction_path(t) %> |
+              <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% end %>
           </div>
         </td>
       </tr>

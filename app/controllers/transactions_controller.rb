@@ -147,12 +147,18 @@ class TransactionsController < ApplicationController
   end
 
   def update_invoice_ref
+    if !session[:view_user_id].present?
+      error = 'Need to select Owner'
+    end
     if session[:from].to_date.month != session[:to].to_date.month
+      error = 'Can update invoice ref_no only with in one month'
+    end
+    if error.present?
       redirect_to transactions_path(from: session[:from],
                                     to: session[:to],
                                     view_user_id: session[:view_user_id],
                                     commit: session[:commit]),
-                                    notice: 'Can update invoice ref_no only with in one month'
+                                    notice: error
       return
     end
     # view_user_id = session[:view_user_id]
