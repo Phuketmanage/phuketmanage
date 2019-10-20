@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
       # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
     end
+    get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'
     delete 'houses/:house_id/delete_duration', to: 'prices#destroy_duration', as: 'delete_duration'
