@@ -3,7 +3,6 @@ class HousesController < ApplicationController
 
   before_action :set_house, only: [ :show, :edit, :update, :destroy,
                                     :create_connection]
-  before_action :set_s3_direct_post, only: [:new, :edit, :create, :update, :test_upload]
   layout 'admin'
 
   # GET /houses
@@ -133,8 +132,4 @@ class HousesController < ApplicationController
                                     )
     end
 
-    def set_s3_direct_post
-      @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{SecureRandom.uuid}/${filename}", success_action_status: '201', acl: 'public-read')
-      # @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{Time.now}/${filename}", success_action_status: '201', acl: 'public-read')
-  end
 end

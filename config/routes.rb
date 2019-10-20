@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  # namespace :house do
+  #   get 'photos/index'
+  # end
   get 'owner', to: 'admin#index', as: 'owner'
   resources :transactions, except: [:show]
   post 'transactions/update_invoice_ref', to: 'transactions#update_invoice_ref', as: 'update_invoice_ref'
@@ -26,6 +29,8 @@ Rails.application.routes.draw do
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :houses do
       resources :prices, only: [:index]
+      get 'photos', to: 'photos#index', as: 'photos'
+      get 'photos/add', to: 'photos#add'
       # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
       # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
     end
