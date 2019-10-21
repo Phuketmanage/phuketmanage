@@ -27,7 +27,8 @@
         <td>
           <%= link_to 'Bookings', house_bookings_path(house.number) %> |
           <%= link_to 'Prices', house_prices_path(house.number) %> |
-          <%= link_to 'Edit', edit_house_path(house.number) %> |
+          <%= link_to 'Details', edit_house_path(house.number) %> |
+          <%= link_to 'Photos', house_photos_path(house.number) %> |
           <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>

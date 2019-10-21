@@ -13,7 +13,6 @@ class HousePhotosController < ApplicationController
     url = params[:photo_url]
     preview = params[:preview]
     if preview
-      byebug
       S3_BUCKET.object(@house.image).delete if @house.image
       @house.update(image: url)
       file_name = url.match(/^.*[\/](.*)$/)
