@@ -2,7 +2,7 @@ $(document).on 'turbolinks:load', ->
   $ ->
     progressBar  = $('.progress-bar.thumb');
     progressBar_preview  = $('.progress-bar.preview');
-
+    console.log  $('#photoupload').data('url')
     $('#photoupload').fileupload
       # // fileInput:       fileInput,
       dropZone:        $('#photoupload'),
