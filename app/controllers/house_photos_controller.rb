@@ -7,7 +7,6 @@ class HousePhotosController < ApplicationController
   def index
     @photos = @house.photos
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}", success_action_status: '201', acl: 'public-read')
-
   end
 
   def add

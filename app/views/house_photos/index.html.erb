@@ -14,7 +14,6 @@
 
   <div class="col-xl-9">
     <%= form_with(local: true, id: 'photoupload', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |form| %>
-      <%#= render 'shared/error_messages', object: form.object %>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="customFile" multiple>
         <label class="custom-file-label" for="customFile">Choose photos</label>
