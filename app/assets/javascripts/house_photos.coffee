@@ -30,7 +30,7 @@ $(document).on 'turbolinks:load', ->
 
       done: (e, data) ->
         key   = $(data.jqXHR.responseXML).find("Key").text();
-        console.log key
+        # console.log key
         $('#photoupload_thumb').fileupload('add', {files: data.files} );
 
         hid = $('input[name=hid]').val()
@@ -89,14 +89,14 @@ $(document).on 'turbolinks:load', ->
         url_parts = regex.exec(url)
         file_name = url_parts[2]
         original_url = url_parts[1]+url_parts[2]
-        console.log url_parts[1]
-        console.log url_parts[2]
-        console.log url_parts[1]+url_parts[2]
+        # console.log url_parts[1]
+        # console.log url_parts[2]
+        # console.log url_parts[1]+url_parts[2]
 
         # $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<img src='#{url}'' width='80px', height='80px' />")
         # console.log "div[data-file-name='#{file_name}'] div.photo_thumb"
         # console.log "<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>"
-        $("div.photo_thumb[data-file-name='#{file_name}']").html("<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>")
+        $("div.photo_thumb[data-file-name='#{file_name}']").append("<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>")
 
     $('#photoupload_preview').fileupload
       dropZone:        $('#photoupload_preview'),
