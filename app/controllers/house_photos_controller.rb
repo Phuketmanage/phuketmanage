@@ -15,7 +15,6 @@ class HousePhotosController < ApplicationController
     if preview
       S3_BUCKET.object(@house.image).delete if @house.image
       @house.update(image: url)
-      file_name = url.match(/^.*[\/](.*)$/)
       render json: {status: :ok} and return
     else
       if HousePhoto.find_by(url: url)

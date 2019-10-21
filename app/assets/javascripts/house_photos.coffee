@@ -94,6 +94,8 @@ $(document).on 'turbolinks:load', ->
         console.log url_parts[1]+url_parts[2]
 
         # $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<img src='#{url}'' width='80px', height='80px' />")
+        console.log "div[data-file-name='#{file_name}'] div.photo_thumb"
+        console.log "<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>"
         $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>")
 
     $('#photoupload_preview').fileupload
@@ -128,8 +130,6 @@ $(document).on 'turbolinks:load', ->
       done: (e, data) ->
         key   = $(data.jqXHR.responseXML).find("Key").text();
         url   = '//' + $('#photoupload').data('host') + '/' + key;
-        console.log key
-        console.log url
         hid = $('input[name=hid]').val()
         $.ajax
           url: "/houses/#{hid}/photos/add",
