@@ -41,6 +41,7 @@ class Ability
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
                       Connection, JobType, Transfer, Source ]
+      can [:index, :add, :delete], HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job, creator: user

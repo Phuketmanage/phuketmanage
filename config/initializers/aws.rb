@@ -3,5 +3,6 @@ Aws.config.update({
   credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY']),
 })
 
+
 S3_BUCKET = Aws::S3::Resource.new.bucket(ENV['S3_BUCKET'])
-S3_HOST = '//phuketmanage.s3-ap-southeast-1.amazonaws.com/'
+S3_HOST = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/'

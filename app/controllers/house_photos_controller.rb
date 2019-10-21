@@ -1,4 +1,6 @@
 class HousePhotosController < ApplicationController
+  load_and_authorize_resource id_param: :number
+
   before_action :get_house
   layout 'admin'
 
