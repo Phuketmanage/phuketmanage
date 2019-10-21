@@ -14,6 +14,16 @@ Rails.application.routes.draw do
   get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
   get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
   get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
+  resources :houses do
+    resources :prices, only: [:index]
+    get 'photos', to: 'house_photos#index', as: 'photos'
+    get 'photos/add', to: 'house_photos#add'
+    # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
+    # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
+  end
+  delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
+  patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
+
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     devise_for :users
@@ -27,14 +37,6 @@ Rails.application.routes.draw do
     patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
     resources :bookings
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
-    resources :houses do
-      resources :prices, only: [:index]
-      get 'photos', to: 'house_photos#index', as: 'photos'
-      get 'photos/add', to: 'house_photos#add'
-      # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
-      # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
-    end
-    delete 'photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'

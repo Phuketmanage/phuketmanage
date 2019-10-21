@@ -1,11 +1,12 @@
 class HousePhotosController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :get_house
+  before_action :get_house, only: [:index, :add]
+  before_action :get_photo, only: [:update]
   layout 'admin'
 
   def index
-    @photos = @house.photos
+    @photos = @house.photos.order(:url)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}", success_action_status: '201', acl: 'public-read')
   end
 
@@ -27,6 +28,14 @@ class HousePhotosController < ApplicationController
 
   end
 
+  def update
+    @photo.update(house_photo_params)
+    render json: {status: :ok}
+    # respond_to do |format|
+    #   format.js
+    # end
+  end
+
   def delete
     @photo = HousePhoto.find(params[:id])
     S3_BUCKET.object(@photo.key).delete
@@ -43,6 +52,14 @@ class HousePhotosController < ApplicationController
 
     def get_house
       @house = House.find_by(number: params[:house_id])
+    end
+
+    def get_photo
+      @photo = HousePhoto.find(params[:id])
+    end
+
+    def house_photo_params
+      params.require(:house_photo).permit(:title_en, :title_ru)
     end
 
 end

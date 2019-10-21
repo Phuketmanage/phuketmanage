@@ -2,7 +2,7 @@ $(document).on 'turbolinks:load', ->
   $ ->
     progressBar  = $('.progress-bar.thumb');
     progressBar_preview  = $('.progress-bar.preview');
-    console.log  $('#photoupload').data('url')
+    # console.log  $('#photoupload').data('url')
     $('#photoupload').fileupload
       # // fileInput:       fileInput,
       dropZone:        $('#photoupload'),
@@ -42,14 +42,25 @@ $(document).on 'turbolinks:load', ->
             photo_url: key
           },
           success: (data) ->
-            preview = " <div class='row photo_row mb-1' id='photo_id_#{data.id}''>
-                          <div class='col-md-1 photo_thumb' data-file-name='#{data.file_name}'></div>
-                          <div class='col-md-5 photo_title_en'></div>
-                          <div class='col-md-5 photo_title_en'></div>
-                          <div class='col-md-1 photo_title_en'>
-                            <a data-confirm='Are you sure?' data-remote='true' rel='nofollow' data-method='delete' href='/photos/#{data.id}'>Delete</a>
+            authenticity_token = $("input[name='authenticity_token']").val()
+            preview = "
+                        <form class='update_photo' action='/house_photos/#{data.id}' accept-charset='UTF-8' data-remote='true' method='post'>
+                          <input name='utf8' type='hidden' value='✓'>
+                          <input type='hidden' name='_method' value='patch'>
+                          <input type='hidden' name='authenticity_token' value='#{authenticity_token}'>
+                          <div class='row photo_row mb-3' id='photo_id_#{data.id}''>
+                            <div class='col-md-1 photo_thumb' data-file-name='#{data.file_name}'></div>
+                            <div class='col-md-9 photo_titles'>
+                              <input placeholder='Title EN' class='form-control mb-1' type='text' name='house_photo[title_en]'' id='house_photo_title_en'>
+                              <input placeholder='Title RU' class='form-control' type='text' name='house_photo[title_ru]'' id='house_photo_title_ru'>
+                            </div>
+                            <div class='col-md-2 photo_actions'>
+                              <input type='submit' name='commit' value='Update' class='btn btn-primary btn-sm btn-block mb-1' data-disable-with='Updating...''>
+                              <a data-confirm='Are you sure?' class='btn btn-danger btn-sm btn-block' role='button' data-remote='true' rel='nofollow' data-method='delete' href='/house_photos/#{data.id}'>Delete</a>
+                            </div>
                           </div>
-                        </div>"
+                        </form>"
+
             $('#photo_previews').append(preview)
 
           error: (data) ->

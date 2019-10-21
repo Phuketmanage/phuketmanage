@@ -4,8 +4,11 @@
 <% @houses.each do |h| %>
   <% next if @prices[h.id].nil? %>
   <div class="row shadow-sm mb-2 p-2 bg-white border rounded">
-    <div class="col-md-3 preview"><%= image_tag h.preview if h.preview %></div>
-    <div class="col-md-7 house"><%= h.send("title_#{I18n.locale}") %> (Code: <%= h.code %>)</div>
+    <div class="col-md-3 preview">
+      <%= image_tag h.preview if h.preview %>
+      Code: <%= h.code %>
+    </div>
+    <div class="col-md-7 house"><%= h.send("title_#{I18n.locale}") %></div>
     <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
   </div>
 <% end %>
