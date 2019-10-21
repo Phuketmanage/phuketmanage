@@ -1,2 +1,0 @@
-module House::PhotosHelper
-end

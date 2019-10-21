@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class House::PhotoTest < ActiveSupport::TestCase
+class HousePhotoTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

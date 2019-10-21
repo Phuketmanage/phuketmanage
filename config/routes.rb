@@ -29,11 +29,12 @@ Rails.application.routes.draw do
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :houses do
       resources :prices, only: [:index]
-      get 'photos', to: 'photos#index', as: 'photos'
-      get 'photos/add', to: 'photos#add'
+      get 'photos', to: 'house_photos#index', as: 'photos'
+      get 'photos/add', to: 'house_photos#add'
       # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
       # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
     end
+    delete 'photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'

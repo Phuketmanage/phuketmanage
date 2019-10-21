@@ -1,0 +1,39 @@
+<h1>Houses</h1>
+
+<%= link_to 'New House', new_house_path, class: 'btn btn-primary mb-2' %>
+
+<table class='table table-striped table-bordered table-sm bg-white table-responsive-lg'>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Title en</th>
+      <th>Title ru</th>
+      <th>Owner</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @houses.each do |house| %>
+      <% if house.unavailable %>
+        <tr class="text-muted">
+      <% else %>
+        <tr>
+      <% end %>
+        <td><%= house.code %></td>
+        <td><%= house.title_en %></td>
+        <td><%= house.title_ru %></td>
+        <td><%= "#{house.owner.name} #{house.owner.surname}" %></td>
+        <td>
+          <%= link_to 'Bookings', house_bookings_path(house.number) %> |
+          <%= link_to 'Prices', house_prices_path(house.number) %> |
+          <%= link_to 'Edit', edit_house_path(house.number) %> |
+          <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

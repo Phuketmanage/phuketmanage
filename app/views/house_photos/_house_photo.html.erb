@@ -1,0 +1,7 @@
+
+<div class="row photo_row mb-1" id="photo_id_<%= house_photo.id %>">
+  <div class="col-md-1 photo_thumb"><%= image_tag house_photo.thumb if house_photo.thumb %></div>
+  <div class="col-md-5 photo_title_en"><%= house_photo.url %><%= house_photo.title_en %></div>
+  <div class="col-md-5 photo_title_en"><%= house_photo.title_en %></div>
+  <div class="col-md-1"><%= link_to 'Delete', house_photo_delete_path(house_photo), remote: true, method: :delete, data: { confirm: 'Are you sure?' } %></div>
+</div>

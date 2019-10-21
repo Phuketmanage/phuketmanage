@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title en:</strong>
+  <%= @house.title_en %>
+</p>
+
+<p>
+  <strong>Title ru:</strong>
+  <%= @house.title_ru %>
+</p>
+
+<p>
+  <strong>Description en:</strong>
+  <%= @house.description_en %>
+</p>
+
+<p>
+  <strong>Description ru:</strong>
+  <%= @house.description_ru %>
+</p>
+
+<p>
+  <strong>Owner:</strong>
+  <%= @house.owner_id %>
+</p>
+
+<%= link_to 'Edit prices', house_prices_path(@house) %>
+
+<%= link_to 'Edit', edit_house_path(@house) %> |
+<%= link_to 'Back', houses_path %>

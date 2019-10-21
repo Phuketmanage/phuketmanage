@@ -39,25 +39,36 @@ $(document).on 'turbolinks:load', ->
 
         # // extract key and generate URL from response
         key   = $(data.jqXHR.responseXML).find("Key").text();
-        url   = '//' + $('#photoupload').data('host') + '/' + key;
+        # url   = '//' + $('#photoupload').data('host') + '/' + key;
 
         # // create hidden field
-        input = $("<input />", { type:'hidden', name: 'house[photo][]', value: url })
-        $('#photoupload').append(input);
+        # input = $("<input />", { type:'hidden', name: 'house[photo][]', value: url })
+        # $('#photoupload').append(input);
 
         # // console.log("done done");
 
-        $('#photoupload_thumb').fileupload('add', {files: data.files});
+        $('#photoupload_thumb').fileupload('add', {files: data.files} );
+
         hid = $('input[name=hid]').val()
         $.ajax
           url: "/houses/#{hid}/photos/add",
           type: "get",
           dataType: "json",
           data: {
-            photo_url: url
+            photo_url: key
           },
           success: (data) ->
             # console.log('Photo saved')
+            preview = " <div class='row photo_row mb-1' id='photo_id_#{data.id}' data-file-name='#{data.file_name}'>
+                          <div class='col-md-1 photo_thumb'></div>
+                          <div class='col-md-5 photo_title_en'></div>
+                          <div class='col-md-5 photo_title_en'></div>
+                          <div class='col-md-1 photo_title_en'>
+                            <a data-confirm='Are you sure?' data-remote='true' rel='nofollow' data-method='delete' href='/photos/#{data.id}'>Delete</a>
+                          </div>
+                        </div>"
+            $('#photo_previews').append(preview)
+
           error: (data) ->
             console.log('Something went wrong')
       ,
@@ -96,19 +107,9 @@ $(document).on 'turbolinks:load', ->
         key   = $(data.jqXHR.responseXML).find("Key").text();
         url   = '//' + $('#photoupload').data('host') + '/' + key;
 
-        # // var preview_cell = $("</div>")
-        preview = " <div class='row' data-photo-id='#{}''>
-                        <div class='col-md-2'>
-                          <img src=#{url} width='80px', height='80px' />
-                        </div>
-                        <div class='col-md-5'>
-
-                        </div>
-                        <div class='col-md-5'>
-
-                        </div>
-                    </div>"
-        $('#photo_previews').append(preview)
+        regex = /^.*[\/]thumb_(.*)$/i
+        file_name = regex.exec(key)[1]
+        $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<img src=#{url} width='80px', height='80px' />")
 
 
 

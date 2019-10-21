@@ -9,7 +9,9 @@
   <div class="progress mt-1">
     <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
   </div>
-  <div id='photo_previews' class='mt-1'></div>
+  <div id='photo_previews' class='mt-1'>
+    <%= render @photos %>
+  </div>
   <%= hidden_field_tag 'hid', @house.number %>
 
   <div class="actions mt-1">
