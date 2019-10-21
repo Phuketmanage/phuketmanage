@@ -1,25 +1,39 @@
 <h1><%= @house.code %> photos</h1>
 
-<%= form_with(local: true, id: 'photoupload', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |form| %>
-  <%#= render 'shared/error_messages', object: form.object %>
-  <div class="custom-file">
-    <input type="file" class="custom-file-input" id="customFile" multiple>
-    <label class="custom-file-label" for="customFile">Choose file</label>
+<div class="row">
+  <div class="col-xl-3 mb-2">
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" id="photoupload_preview" multiple>
+      <label class="custom-file-label" for="customFile">Choose preview</label>
+    </div>
+    <div class="progress mt-1">
+      <div class="progress-bar bg-info preview" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div id='house_preview' class='mt-1'><%= image_tag @house.preview %></div>
   </div>
-  <div class="progress mt-1">
-    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
-  <div id='photo_previews' class='mt-1'>
-    <%= render @photos %>
-  </div>
-  <%= hidden_field_tag 'hid', @house.number %>
 
-  <div class="actions mt-1">
-    <%#= form.submit 'Save House', class: 'btn btn-primary' %>
-    <%= link_to 'Back', houses_path, class: 'btn btn-secondary' %>
-  </div>
-<% end %>
+  <div class="col-xl-9">
+    <%= form_with(local: true, id: 'photoupload', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |form| %>
+      <%#= render 'shared/error_messages', object: form.object %>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="customFile" multiple>
+        <label class="custom-file-label" for="customFile">Choose photos</label>
+      </div>
+      <div class="progress mt-1">
+        <div class="progress-bar bg-info thumb" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div id='photo_previews' class='mt-1'>
+        <%= render @photos %>
+      </div>
+      <%= hidden_field_tag 'hid', @house.number %>
 
+      <div class="actions mt-1">
+        <%#= form.submit 'Save House', class: 'btn btn-primary' %>
+        <%= link_to 'Back', houses_path, class: 'btn btn-secondary' %>
+      </div>
+    <% end %>
+  </div>
+</div>
 
   <div class="custom-file d-none">
     <input type="file" class="custom-file-input" id="photoupload_thumb" multiple>

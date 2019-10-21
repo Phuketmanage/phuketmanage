@@ -15,6 +15,11 @@ class House < ApplicationRecord
   scope :active, -> { where(unavailable: false) }
   scope :for_rent, -> { where(unavailable: false) }
 
+  def preview
+    return "#{S3_HOST}#{image}"
+  end
+
+
   # Was used after filed number added
   # def add_numbers
   #   houses = House.all

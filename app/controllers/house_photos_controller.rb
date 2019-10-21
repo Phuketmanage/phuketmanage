@@ -10,13 +10,20 @@ class HousePhotosController < ApplicationController
 
   def add
     url = params[:photo_url]
-    if HousePhoto.find_by(url: url)
-      render json: {status: 'Photo url already exist in DB'}
+    preview = params[:preview]
+    if preview
+      S3_BUCKET.object(@house.image).delete
+      @house.update(image: url)
+      file_name = url.match(/^.*[\/](.*)$/)
+      render json: {status: :ok} and return
+    else
+      if HousePhoto.find_by(url: url)
+        render json: {status: 'Photo url already exist in DB'}
+      end
+      photo = @house.photos.create!(url: url, title_en: '', title_ru: '')
+      file_name = photo.url.match(/^.*[\/](.*)$/)
+      render json: {status: :ok, id: photo.id, file_name: file_name[1]} and return
     end
-    photo = @house.photos.create!(url: url, title_en: '', title_ru: '')
-    file_name = photo.url.match(/^.*[\/](.*)$/)
-    render json: {status: :ok, id: photo.id, file_name: file_name[1]}
-
 
   end
 
