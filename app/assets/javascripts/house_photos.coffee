@@ -16,7 +16,7 @@ $(document).on 'turbolinks:load', ->
       imageMaxWidth: 2500,
       imageMaxHeight: 2500,
       imageCrop: true,
-      imageQuality: 0.8,
+      imageQuality: 0.9,
 
       progressall: (e, data) ->
         progress = parseInt(data.loaded / data.total * 100, 10);
@@ -30,7 +30,7 @@ $(document).on 'turbolinks:load', ->
 
       done: (e, data) ->
         key   = $(data.jqXHR.responseXML).find("Key").text();
-
+        console.log key
         $('#photoupload_thumb').fileupload('add', {files: data.files} );
 
         hid = $('input[name=hid]').val()
@@ -108,7 +108,7 @@ $(document).on 'turbolinks:load', ->
       disableImageResize: false,
       imageMaxWidth: 250,
       imageMaxHeight: 250,
-      imageQuality: 0.8,
+      imageQuality: 0.9,
       imageCrop: true,
 
       progressall: (e, data) ->
@@ -128,7 +128,8 @@ $(document).on 'turbolinks:load', ->
       done: (e, data) ->
         key   = $(data.jqXHR.responseXML).find("Key").text();
         url   = '//' + $('#photoupload').data('host') + '/' + key;
-
+        console.log key
+        console.log url
         hid = $('input[name=hid]').val()
         $.ajax
           url: "/houses/#{hid}/photos/add",
