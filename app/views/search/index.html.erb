@@ -1,11 +1,11 @@
 <h1><%= t('search.results') %></h1>
 <%= render 'form', search: @search %>
-<div class="duration"><%= @search.duration %> days</div>
+<div class="duration">Total rental period: <%= @search.duration %> days</div>
 <% @houses.each do |h| %>
   <% next if @prices[h.id].nil? %>
-  <div class="row shadow-sm mb-2 p-2 bg-light rounded">
-    <div class="col-md-1 code"><%= h.code %></div>
-    <div class="col-md-6 house"><%= h.send("title_#{I18n.locale}") %></div>
-    <div class="col-md-5 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
+  <div class="row shadow-sm mb-2 p-2 bg-white border rounded">
+    <div class="col-md-3 preview"><%= image_tag h.preview if h.preview %></div>
+    <div class="col-md-7 house"><%= h.send("title_#{I18n.locale}") %> (Code: <%= h.code %>)</div>
+    <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
   </div>
 <% end %>

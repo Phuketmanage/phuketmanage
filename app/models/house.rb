@@ -16,7 +16,7 @@ class House < ApplicationRecord
   scope :for_rent, -> { where(unavailable: false) }
 
   def preview
-    return "#{S3_HOST}#{image}"
+    return  image ? "#{S3_HOST}#{image}" : ""
   end
 
 

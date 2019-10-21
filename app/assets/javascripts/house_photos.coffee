@@ -42,8 +42,8 @@ $(document).on 'turbolinks:load', ->
             photo_url: key
           },
           success: (data) ->
-            preview = " <div class='row photo_row mb-1' id='photo_id_#{data.id}' data-file-name='#{data.file_name}'>
-                          <div class='col-md-1 photo_thumb'></div>
+            preview = " <div class='row photo_row mb-1' id='photo_id_#{data.id}''>
+                          <div class='col-md-1 photo_thumb' data-file-name='#{data.file_name}'></div>
                           <div class='col-md-5 photo_title_en'></div>
                           <div class='col-md-5 photo_title_en'></div>
                           <div class='col-md-1 photo_title_en'>
@@ -94,9 +94,9 @@ $(document).on 'turbolinks:load', ->
         console.log url_parts[1]+url_parts[2]
 
         # $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<img src='#{url}'' width='80px', height='80px' />")
-        console.log "div[data-file-name='#{file_name}'] div.photo_thumb"
-        console.log "<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>"
-        $("div[data-file-name='#{file_name}'] div.photo_thumb").html("<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>")
+        # console.log "div[data-file-name='#{file_name}'] div.photo_thumb"
+        # console.log "<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>"
+        $("div.photo_thumb[data-file-name='#{file_name}']").html("<a data-fancybox='gallery' href='#{original_url}'><img src='#{url}'></a>")
 
     $('#photoupload_preview').fileupload
       dropZone:        $('#photoupload_preview'),
