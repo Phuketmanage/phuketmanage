@@ -1,31 +1,27 @@
+<% provide(:title, @house.send("title_#{I18n.locale}")) %>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title en:</strong>
-  <%= @house.title_en %>
-</p>
+<h1><%= @house.send("title_#{I18n.locale}") %></h1>
+
+<div class="row">
+  <div class="col">
+    <%= link_to image_tag(@house.preview), "javascript:;", id: 'gallery_preview' %>
+    <div id="lightgallery" class="d-none">
+      <% @house.photos.each do |photo| %>
+        <% house_title = @house.send("title_#{I18n.locale}") %>
+        <% photo_title = photo.send("title_#{I18n.locale}") %>
+
+        <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
+        <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
+          <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
+        </a>
+      <% end %>
+    </div>
+  </div>
+
+</div>
 
 <p>
-  <strong>Title ru:</strong>
-  <%= @house.title_ru %>
+  <strong><%= t('house.description') %></strong>
+  <%= @house.send("description_#{I18n.locale}") %>
 </p>
-
-<p>
-  <strong>Description en:</strong>
-  <%= @house.description_en %>
-</p>
-
-<p>
-  <strong>Description ru:</strong>
-  <%= @house.description_ru %>
-</p>
-
-<p>
-  <strong>Owner:</strong>
-  <%= @house.owner_id %>
-</p>
-
-<%= link_to 'Edit prices', house_prices_path(@house) %>
-
-<%= link_to 'Edit', edit_house_path(@house) %> |
-<%= link_to 'Back', houses_path %>

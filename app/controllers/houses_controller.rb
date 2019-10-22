@@ -3,7 +3,7 @@ class HousesController < ApplicationController
 
   before_action :set_house, only: [ :show, :edit, :update, :destroy,
                                     :create_connection]
-  layout 'admin'
+  layout 'admin', except: :show
 
   # GET /houses
   # GET /houses.json
@@ -18,6 +18,8 @@ class HousesController < ApplicationController
   # GET /houses/1
   # GET /houses/1.json
   def show
+    # Front end
+
   end
 
   # GET /houses/new

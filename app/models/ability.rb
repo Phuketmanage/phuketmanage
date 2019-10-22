@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     user ||= User.new                          # guest user
     can [:confirmed, :index_supplier, :canceled], Transfer
-
+    can :show, House
     if user.role? :owner
       can :index_front, [ Transaction ]
       can :index_front, [ Booking ]

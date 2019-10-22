@@ -12,11 +12,10 @@ $(document).on 'turbolinks:load', ->
       formData:         $('#photoupload').data('form-data'),
       paramName:        'file', #// S3 does not like nested name fields i.e. name="user[avatar_url]"
       dataType:         'XML',  #// S3 returns XML if success_action_status is set to 201
-      disableImageResize: false,
-      imageMaxWidth: 2500,
-      imageMaxHeight: 2500,
-      imageCrop: true,
-      imageQuality: 0.9,
+      # disableImageResize: false,
+      # imageMaxWidth: 2500,
+      # imageMaxHeight: 2500,
+      # imageQuality: 0.9,
 
       progressall: (e, data) ->
         progress = parseInt(data.loaded / data.total * 100, 10);
@@ -86,6 +85,7 @@ $(document).on 'turbolinks:load', ->
       disableImageResize: false,
       imageMaxWidth: 80,
       imageMaxHeight: 80,
+      imageCrop: true,
 
       submit: (e, data) ->
         data.files[0].name = 'thumb_' + data.files[0].name
@@ -172,3 +172,10 @@ $(document).on 'turbolinks:load', ->
           text("Failed");
 
         # // console.log(data.messages);
+
+  lightGallery document.getElementById('lightgallery'),
+    download: false
+
+  $("#gallery_preview").on "click", (e) ->
+    e.preventDefault()
+    $("#lightgallery a:first-child > img").trigger("click");

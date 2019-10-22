@@ -8,7 +8,9 @@
       <%= image_tag h.preview if h.preview %>
       Code: <%= h.code %>
     </div>
-    <div class="col-md-7 house"><%= h.send("title_#{I18n.locale}") %></div>
+    <div class="col-md-7 house">
+      <%= link_to h.send("title_#{I18n.locale}"), house_path(h.number), target: "_blank" %>
+    </div>
     <div class="col-md-2 price"> <%= "#{@prices[h.id][:total]} THB" %></div>
   </div>
 <% end %>
