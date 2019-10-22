@@ -37,12 +37,21 @@ class HousePhotosController < ApplicationController
   end
 
   def delete
-    @photo = HousePhoto.find(params[:id])
-    S3_BUCKET.object(@photo.key).delete
-    S3_BUCKET.object(@photo.thumb_key).delete
-    @photo.destroy
-    respond_to do |format|
-      format.js
+
+    if params[:hid]
+      house = House.find_by(number: params[:hid])
+      S3_BUCKET.objects({prefix:"house_photos/#{house.number}"}).batch_delete!
+      house.photos.destroy_all
+      house.update(image: nil)
+      redirect_to house_photos_path(house.number)
+    else
+      @photo = HousePhoto.find(params[:id])
+      S3_BUCKET.object(@photo.key).delete
+      S3_BUCKET.object(@photo.thumb_key).delete
+      @photo.destroy
+      respond_to do |format|
+        format.js
+      end
     end
 
   end

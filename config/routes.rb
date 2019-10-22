@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
   get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
   get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
-  resources :houses do
+  resources :houses, except: :show do
     resources :prices, only: [:index]
     get 'photos', to: 'house_photos#index', as: 'photos'
     get 'photos/add', to: 'house_photos#add'
@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
   end
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
+  delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
 
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
     resources :users, except: :create
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
+    resources :houses, only: :show
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
     get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
     get 'bookings/timeline_data', to: 'bookings#timeline_data'

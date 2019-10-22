@@ -12,9 +12,9 @@ $(document).on 'turbolinks:load', ->
       formData:         $('#photoupload').data('form-data'),
       paramName:        'file', #// S3 does not like nested name fields i.e. name="user[avatar_url]"
       dataType:         'XML',  #// S3 returns XML if success_action_status is set to 201
-      # disableImageResize: false,
-      # imageMaxWidth: 2500,
-      # imageMaxHeight: 2500,
+      disableImageResize: false,
+      imageMaxWidth: 2500,
+      imageMaxHeight: 2500,
       # imageQuality: 0.9,
 
       progressall: (e, data) ->

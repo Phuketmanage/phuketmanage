@@ -23,5 +23,6 @@
 
 <p>
   <strong><%= t('house.description') %></strong>
+  <%= I18n.locale %>
   <%= @house.send("description_#{I18n.locale}") %>
 </p>
