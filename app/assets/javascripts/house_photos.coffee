@@ -58,8 +58,7 @@ $(document).on 'turbolinks:load', ->
                                 <input placeholder='Подпись' class='form-control mb-1 photo_title_input' type='text' name='house_photo[title_ru]'' id='house_photo_title_ru' data-photo-id='#{data.id}'>
                               </div>
                               <div class='col-md-2 photo_actions text-right'>
-                                <input type='submit' name='commit' value='Update' class='btn btn-primary btn-sm btn-block' data-disable-with='Updating...''>
-                                <input type='submit' name='commit' value='Use as default' class='btn btn-success btn-sm btn-block mt-md-1'>
+                                <input type='submit' name='commit' value='Use as default' class='btn btn-primary btn-sm btn-block mt-md-1'>
                                 <a data-confirm='Are you sure?' class='btn btn-danger btn-sm btn-block mt-md-1' role='button' data-remote='true' rel='nofollow' data-method='delete' href='/house_photos/#{data.id}'>Delete</a>
                               </div>
                             </div>

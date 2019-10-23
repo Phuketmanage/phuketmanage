@@ -10,8 +10,8 @@
       <%= f.text_field :title_ru, placeholder: 'Подпись', class: 'form-control mb-1 photo_title_input', data: {photo_id: house_photo.id} %>
     </div>
     <div class="col-md-2 photo_actions text-right">
-      <%= f.submit 'Update', class: 'btn btn-primary btn-sm btn-block' %>
-      <%= f.submit 'Use as default', class: 'btn btn-success btn-sm btn-block mt-md-1' %>
+      <%#= f.submit 'Update', class: 'btn btn-primary btn-sm btn-block' %>
+      <%= f.submit 'Use as default', class: 'btn btn-primary btn-sm btn-block mt-md-1' %>
       <%= link_to 'Delete', house_photo_delete_path(house_photo), remote: true, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block mt-md-1', role: 'button' %>
     </div>
   </div>
