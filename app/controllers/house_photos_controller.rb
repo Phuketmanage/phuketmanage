@@ -13,24 +13,27 @@ class HousePhotosController < ApplicationController
   def add
     url = params[:photo_url]
     preview = params[:preview]
-    if preview
-      S3_BUCKET.object(@house.image).delete if @house.image
-      @house.update(image: url)
-      render json: {status: :ok} and return
-    else
-      if HousePhoto.find_by(url: url)
-        render json: {status: 'Photo url already exist in DB'}
-      end
-      photo = @house.photos.create!(url: url, title_en: '', title_ru: '')
-      file_name = photo.url.match(/^.*[\/](.*)$/)
-      render json: {status: :ok, id: photo.id, file_name: file_name[1]} and return
+    if HousePhoto.find_by(url: url)
+      render json: {status: 'duplicate'} and return
     end
+    photo = @house.photos.create!(url: url, title_en: '', title_ru: '')
+    # If preview is empty set it to first uploaded image
+    if !@house.image.present?
+      @house.update(image: url)
+    end
+    file_name = photo.url.match(/^.*[\/](.*)$/)
+    render json: {status: :ok, id: photo.id, file_name: file_name[1]} and return
 
   end
 
   def update
     @photo.update(house_photo_params)
+    if params[:commit] == "Use as default"
+      @photo.house.update(image: @photo.url)
+      redirect_to house_photos_path(@photo.house.number) and return
+    end
     render json: {status: :ok}
+
     # respond_to do |format|
     #   format.js
     # end

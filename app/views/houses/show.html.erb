@@ -5,9 +5,13 @@
 
 <div class="row">
   <div class="col">
-    <%= link_to image_tag(@house.preview), "javascript:;", id: 'gallery_preview' %>
+    <div class="house_main_photo_parent" onclick="">
+      <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
+        <span class='gallery_text'><%= t('house.see_all_photos') %></span>
+      </div>
+    </div>
     <div id="lightgallery" class="d-none">
-      <% @house.photos.each do |photo| %>
+      <% @house.photos.order(:url).each do |photo| %>
         <% house_title = @house.send("title_#{I18n.locale}") %>
         <% photo_title = photo.send("title_#{I18n.locale}") %>
 
@@ -18,9 +22,7 @@
       <% end %>
     </div>
   </div>
-
 </div>
-
 <p>
   <strong><%= t('house.description') %></strong>
   <%= I18n.locale %>

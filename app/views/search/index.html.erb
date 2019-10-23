@@ -5,7 +5,7 @@
   <% next if @prices[h.id].nil? %>
   <div class="row shadow-sm mb-2 p-2 bg-white border rounded">
     <div class="col-md-3 preview">
-      <%= image_tag h.preview if h.preview %>
+      <%= image_tag h.preview, class: 'img-fluid' if h.preview %>
       Code: <%= h.code %>
     </div>
     <div class="col-md-7 house">

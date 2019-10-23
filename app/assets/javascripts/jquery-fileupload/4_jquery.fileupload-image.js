@@ -187,6 +187,7 @@
         if (options.disabled || !(data.canvas || data.img)) {
           return data;
         }
+
         // eslint-disable-next-line no-param-reassign
         options = $.extend({ canvas: true }, options);
         var that = this,
@@ -211,7 +212,6 @@
             options.orientation = data.exif.get('Orientation');
           }
           if (options.thumbnail) {
-            // console.log('in resize')
             thumbnail = data.exif.get('Thumbnail');
             if (thumbnail) {
               loadImage(thumbnail, resolve, options);

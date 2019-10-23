@@ -16,7 +16,17 @@ class House < ApplicationRecord
   scope :for_rent, -> { where(unavailable: false) }
 
   def preview
-    return  image ? "#{S3_HOST}#{image}" : ""
+    if image.present?
+      url_parts = image.match(/^(.*[\/])(.*)$/)
+      image = "#{S3_HOST}#{url_parts[1]}thumb_#{url_parts[2]}"
+    else
+      image = ""
+    end
+    return image
+  end
+
+  def main_photo
+    return image.present? ? "#{S3_HOST}#{image}" : ""
   end
 
 

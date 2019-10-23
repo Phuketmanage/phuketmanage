@@ -3,14 +3,7 @@
 <div class="row">
   <div class="col-xl-3 mb-2">
     <div class="shadow-sm mb-2 p-2 bg-white border rounded">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="photoupload_preview" multiple>
-        <label class="custom-file-label" for="customFile">Choose preview</label>
-      </div>
-      <div class="progress mt-2" style="height:3px;">
-        <div class="progress-bar bg-info preview" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-      <div id='house_preview' class='mt-2'><%= image_tag @house.preview if @house.preview.present? %></div>
+      <div id='house_preview'><%= image_tag @house.preview, class: 'img-fluid', id: 'house_preview_img' if @house.preview.present? %></div>
       <div class="actions mt-2 text-right">
         <%#= form.submit 'Save House', class: 'btn btn-primary' %>
         <%= link_to 'Delete all photos', house_photo_delete_all_path(@house.number), remote: false, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block', role: 'button' %>
