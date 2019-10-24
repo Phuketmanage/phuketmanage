@@ -24,7 +24,7 @@
 
   </div>
 
-  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>English</strong>
     <hr>
     <div class="row">
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Русский</strong>
     <hr>
     <div class="row">
@@ -57,7 +57,7 @@
       </div>
     </div>
   </div>
-  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>General details</strong>
     <hr>
     <div class="row">
@@ -72,6 +72,10 @@
     </div>
     <div class="row">
       <div class="col-1 form-group">
+        <%= form.label :capacity %>
+        <%= form.number_field :capacity, class: 'form-control' %>
+      </div>
+      <div class="col-1 form-group">
         <%= form.label :rooms %>
         <%= form.number_field :rooms, class: 'form-control' %>
       </div>
@@ -80,11 +84,23 @@
         <%= form.number_field :bathrooms, class: 'form-control' %>
       </div>
       <div class="col-1 form-group">
-        <%= form.label :size %>
-        <%= form.number_field :size, class: 'form-control' %>
+        <%= form.label :kingBed, 'King beds' %>
+        <%= form.number_field :kingBed, class: 'form-control' %>
       </div>
       <div class="col-1 form-group">
-        <%= form.label :plot_size %>
+        <%= form.label :queenBed, 'Queen beds' %>
+        <%= form.number_field :queenBed, class: 'form-control' %>
+      </div>
+      <div class="col-1 form-group">
+        <%= form.label :singleBed, 'Single beds' %>
+        <%= form.number_field :singleBed, class: 'form-control' %>
+      </div>
+      <div class="col-2 form-group">
+        <%= form.label :size, 'Size, sq.m.' %>
+        <%= form.number_field :size, class: 'form-control' %>
+      </div>
+      <div class="col-2 form-group">
+        <%= form.label :plot_size, 'Plot size, sq.m.' %>
         <%= form.number_field :plot_size, class: 'form-control' %>
       </div>
     </div>
@@ -128,9 +144,61 @@
         <%= form.number_field :parking_size, class: 'form-control' %>
       </div>
     </div>
+    <div class="row">
+      <div class="col-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :seaview, { class: 'form-check-input',
+                                  id: 'seaview_check_box' } %>
+          <%= form.label :seaview, {     class: 'form-check-label',
+                                  for: 'seaview_check_box' } %>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="shadow-sm mb-2 p-2 bg-light rounded">
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Options</strong>
+    <hr>
+    <%= form.collection_check_boxes :option_ids, Option.order(:zindex).all, :id, :title_en do |o| %>
+        <div class="form-check form-check-inline">
+          <%= o.check_box(class: "form-check-input") %>
+          <%= o.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Included in price</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :priceInclude_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :priceInclude_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Сancellation Policy</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :cancellationPolicy_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :cancellationPolicy_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Employees:</strong>
     <hr>
 
@@ -176,13 +244,13 @@
                             for: 'unavailable_check_box' } %>
   </div>
 
-  <div class="actions">
+  <div class="actions mb-2">
     <%= form.submit 'Save House', class: 'btn btn-primary' %>
     <%= link_to 'Back', houses_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>
 
-<div class="shadow-sm mb-2 p-2 bg-light rounded mt-2">
+<div class="shadow-sm mb-2 p-2 bg-white border rounded">
   <strong>Connections</strong>
   <hr>
   <% @connections.each do |c| %>

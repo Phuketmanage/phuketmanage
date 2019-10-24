@@ -39,7 +39,7 @@ class HousesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update house" do
     patch house_url(@house.number), params: { house: { description_en: @house.description_en, description_ru: @house.description_ru, owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru } }
-    assert_redirected_to houses_url
+    assert_redirected_to edit_house_url(@house.number)
   end
 
   test "should destroy house" do

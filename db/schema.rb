@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_20_191024) do
+ActiveRecord::Schema.define(version: 2019_10_24_135625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,17 @@ ActiveRecord::Schema.define(version: 2019_10_20_191024) do
     t.index ["house_id", "employee_id"], name: "index_employees_houses_on_house_id_and_employee_id", unique: true
   end
 
+  create_table "house_options", force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.bigint "option_id", null: false
+    t.string "comment_en"
+    t.string "comment_ru"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_house_options_on_house_id"
+    t.index ["option_id"], name: "index_house_options_on_option_id"
+  end
+
   create_table "house_photos", force: :cascade do |t|
     t.bigint "house_id", null: false
     t.string "url"
@@ -163,6 +174,15 @@ ActiveRecord::Schema.define(version: 2019_10_20_191024) do
     t.string "address"
     t.string "google_map"
     t.string "image"
+    t.integer "capacity"
+    t.boolean "seaview", default: false
+    t.integer "kingBed"
+    t.integer "queenBed"
+    t.integer "singleBed"
+    t.text "priceInclude_en"
+    t.text "priceInclude_ru"
+    t.text "cancellationPolicy_en"
+    t.text "cancellationPolicy_ru"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
@@ -208,6 +228,14 @@ ActiveRecord::Schema.define(version: 2019_10_20_191024) do
     t.index ["house_id"], name: "index_jobs_on_house_id"
     t.index ["job_type_id"], name: "index_jobs_on_job_type_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
+  end
+
+  create_table "options", force: :cascade do |t|
+    t.string "title_en"
+    t.string "title_ru"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "zindex"
   end
 
   create_table "prices", force: :cascade do |t|
@@ -347,6 +375,8 @@ ActiveRecord::Schema.define(version: 2019_10_20_191024) do
   add_foreign_key "connections", "sources"
   add_foreign_key "durations", "houses"
   add_foreign_key "employees", "empl_types", column: "type_id"
+  add_foreign_key "house_options", "houses"
+  add_foreign_key "house_options", "options"
   add_foreign_key "house_photos", "houses"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"

@@ -53,6 +53,7 @@ class Ability
       can [:destroy], Transaction do |t|
         t.date > Date.today-1.days
       end
+    can :manage, [Option, HouseOption]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

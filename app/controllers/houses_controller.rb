@@ -45,6 +45,7 @@ class HousesController < ApplicationController
   # POST /houses
   # POST /houses.json
   def create
+    options = params[:options] ? params[:options] : nil
     @house = House.new(house_params)
     number_unique = false
     until number_unique do
@@ -76,7 +77,9 @@ class HousesController < ApplicationController
   def update
     respond_to do |format|
       if @house.update(house_params)
-        format.html { redirect_to houses_path, notice: 'House was successfully updated.' }
+        if params[:copy_options]
+        end
+        format.html { redirect_to edit_house_path(@house.number), notice: 'House was successfully updated.' }
         format.json { render :show, status: :ok, location: @house }
       else
         @owners = User.with_role('Owner')
@@ -130,7 +133,17 @@ class HousesController < ApplicationController
                                     :address,
                                     :google_map,
                                     { employee_ids: [] },
-                                    :image
+                                    :image,
+                                    :capacity,
+                                    :seaview,
+                                    :kingBed,
+                                    :queenBed,
+                                    :singleBed,
+                                    :priceInclude_en,
+                                    :priceInclude_ru,
+                                    :cancellationPolicy_en,
+                                    :cancellationPolicy_ru,
+                                    { option_ids: [] }
                                     )
     end
 

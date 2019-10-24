@@ -7,7 +7,7 @@
       <div class="actions mt-2 text-right">
         <%#= form.submit 'Save House', class: 'btn btn-primary' %>
         <%= link_to 'Delete all photos', house_photo_delete_all_path(@house.number), remote: false, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block', role: 'button' %>
-        <%= link_to 'Back', edit_house_path(@house.number), class: 'btn btn-secondary btn-block' %>
+        <%= link_to 'Back', houses_path, class: 'btn btn-secondary btn-block' %>
       </div>
     </div>
   </div>

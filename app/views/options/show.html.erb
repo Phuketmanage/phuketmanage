@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title en:</strong>
+  <%= @option.title_en %>
+</p>
+
+<p>
+  <strong>Title ru:</strong>
+  <%= @option.title_ru %>
+</p>
+
+<%= link_to 'Edit', edit_option_path(@option) %> |
+<%= link_to 'Back', options_path %>

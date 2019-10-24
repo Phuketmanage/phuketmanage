@@ -9,6 +9,8 @@ class House < ApplicationRecord
   has_many :jobs, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :photos, dependent: :destroy, class_name: 'HousePhoto'
+  has_many :house_options, dependent: :destroy
+  has_many :options, through: :house_options
   has_and_belongs_to_many :employees
   validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
 
