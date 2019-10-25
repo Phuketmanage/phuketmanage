@@ -107,7 +107,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-1 form-group">
+      <div class="col-md-1 form-group">
         <div class="form-check">
           <%= form.check_box :pool, { class: 'form-check-input',
                                   id: 'pool_check_box' } %>
@@ -115,7 +115,7 @@
                                   for: 'pool_check_box' } %>
         </div>
       </div>
-      <div class="col-2 form-group">
+      <div class="col-md-1 form-group">
         <div class="form-check">
           <%= form.check_box :communal_pool, { class: 'form-check-input',
                                   id: 'communal_pool_check_box' } %>
@@ -125,13 +125,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-2 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label 'Pool size, sq m' %>
         <%= form.number_field :pool_size, class: 'form-control' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <div class="form-check">
           <%= form.check_box :parking, { class: 'form-check-input',
                                   id: 'parking_check_box' } %>
@@ -141,7 +141,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-2 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label 'Parking size, how many cars' %>
         <%= form.number_field :parking_size, class: 'form-control' %>
       </div>
