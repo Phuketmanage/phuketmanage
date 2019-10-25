@@ -85,8 +85,8 @@ $(document).on 'turbolinks:load', ->
       paramName:        'file', #// S3 does not like nested name fields i.e. name="user[avatar_url]"
       dataType:         'XML',  #// S3 returns XML if success_action_status is set to 201
       disableImageResize: false,
-      imageMaxWidth: 450,
-      imageMaxHeight: 450,
+      imageMaxWidth: 720,
+      imageMaxHeight: 720,
 
       submit: (e, data) ->
         data.files[0].name = 'thumb_' + data.files[0].name
