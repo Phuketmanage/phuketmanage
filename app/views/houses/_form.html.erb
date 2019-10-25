@@ -6,13 +6,13 @@
 
   <div class="row form-group">
     <%#= form.label :owner_id, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2">
+    <div class="col-md-2 mb-2">
       <%= form.select :owner_id,
             @owners.order(:name, :surname).all.map {|o| ["#{o.name} #{o.surname}", o.id]},
                       { prompt: 'Select owner' }, { class: "form-control"  } %>
     </div>
     <%#= form.label :type_id, class: 'col-md-1 col-form-label' %>
-    <div class="col-md-2">
+    <div class="col-md-2 mb-2">
       <%= form.select :type_id,
             @types.order(:name_en).all.map {|t| [t.send("name_#{I18n.locale}"), t.id]},
                       { prompt: 'Select type' }, { class: "form-control"  } %>
