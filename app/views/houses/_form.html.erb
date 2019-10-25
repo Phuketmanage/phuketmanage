@@ -28,7 +28,7 @@
     <strong>English</strong>
     <hr>
     <div class="row">
-      <div class="col-6 form-group">
+      <div class="col form-group">
         <%= form.label :title_en %>
         <%= form.text_field :title_en, class: 'form-control' %>
       </div>
@@ -45,7 +45,7 @@
     <strong>Русский</strong>
     <hr>
     <div class="row">
-      <div class="col-6 form-group">
+      <div class="col form-group">
       <%= form.label 'Заголовок' %>
       <%= form.text_field :title_ru, class: 'form-control'%>
       </div>
@@ -71,35 +71,37 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :capacity %>
         <%= form.number_field :capacity, class: 'form-control' %>
       </div>
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :rooms %>
         <%= form.number_field :rooms, class: 'form-control' %>
       </div>
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :bathrooms %>
         <%= form.number_field :bathrooms, class: 'form-control' %>
       </div>
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :kingBed, 'King beds' %>
         <%= form.number_field :kingBed, class: 'form-control' %>
       </div>
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :queenBed, 'Queen beds' %>
         <%= form.number_field :queenBed, class: 'form-control' %>
       </div>
-      <div class="col-1 form-group">
+      <div class="col-md-2 form-group">
         <%= form.label :singleBed, 'Single beds' %>
         <%= form.number_field :singleBed, class: 'form-control' %>
       </div>
-      <div class="col-2 form-group">
-        <%= form.label :size, 'Size, sq.m.' %>
+    </div>
+    <div class="row">
+      <div class="col-md-3 form-group">
+        <%= form.label :size, 'House size, sq.m.' %>
         <%= form.number_field :size, class: 'form-control' %>
       </div>
-      <div class="col-2 form-group">
+      <div class="col-md-3 form-group">
         <%= form.label :plot_size, 'Plot size, sq.m.' %>
         <%= form.number_field :plot_size, class: 'form-control' %>
       </div>
