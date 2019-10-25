@@ -40,7 +40,7 @@ class Ability
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Transfer, Source ]
+                      Connection, JobType, Transfer, Source, Option, HouseOption, Location ]
       can [:index, :add, :delete], HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
@@ -53,7 +53,6 @@ class Ability
       can [:destroy], Transaction do |t|
         t.date > Date.today-1.days
       end
-    can :manage, [Option, HouseOption]
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

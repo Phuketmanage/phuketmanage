@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :locations
   resources :options, except: :show
   # namespace :house do
   #   get 'photos/index'

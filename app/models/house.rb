@@ -12,6 +12,7 @@ class House < ApplicationRecord
   has_many :house_options, dependent: :destroy
   has_many :options, through: :house_options
   has_and_belongs_to_many :employees
+  has_and_belongs_to_many :locations
   validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
 
   scope :active, -> { where(unavailable: false) }
@@ -31,6 +32,11 @@ class House < ApplicationRecord
     return image.present? ? "#{S3_HOST}#{image}" : ""
   end
 
+  def option(title_en)
+    option = Option.find_by(title_en: title_en)
+    return false if !option
+    options.where(id: option.id).any? ? true : false
+  end
 
   # Was used after filed number added
   # def add_numbers

@@ -143,7 +143,8 @@ class HousesController < ApplicationController
                                     :priceInclude_ru,
                                     :cancellationPolicy_en,
                                     :cancellationPolicy_ru,
-                                    { option_ids: [] }
+                                    { option_ids: [] },
+                                    { location_ids: [] }
                                     )
     end
 

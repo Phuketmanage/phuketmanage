@@ -73,7 +73,7 @@
           <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
             | <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
           <% end %>
-          <% if current_user.role?('Admin') && t.date > Date.today-30.days %>
+          <% if current_user.role?('Admin') %>
             <%= link_to 'Edit', edit_transaction_path(t) %> |
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
           <% end %>

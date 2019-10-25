@@ -17,6 +17,24 @@ en:
     in_the_past: Begining or End of period can not be in the past
     too_soon: You can book at least 2 days in advance
     too_short: Minimum rental period is 5 days
+  houses:
+    location: Location
+    capacity:
+      one: "1 person"
+      other: "%{count} persons"
+    rooms:
+      one: "1 room"
+      other: "%{count} rooms"
+    bathrooms:
+      one: "1 bathroom"
+      other: "%{count} bathrooms"
+    pool: "Private pool"
+    communalPool: "Communal pool"
+    ac: "Air conditioner"
+    internet: "Internet"
+    kitchen: "Kitchen"
+    seaview: "Seaview"
+
   balance: Balance
   bookings: Bookings
   timline: Timeline

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_24_135625) do
+ActiveRecord::Schema.define(version: 2019_10_25_054428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,12 @@ ActiveRecord::Schema.define(version: 2019_10_24_135625) do
     t.index ["unavailable"], name: "index_houses_on_unavailable"
   end
 
+  create_table "houses_locations", id: false, force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.bigint "location_id", null: false
+    t.index ["house_id", "location_id"], name: "index_houses_locations_on_house_id_and_location_id"
+  end
+
   create_table "job_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -228,6 +234,15 @@ ActiveRecord::Schema.define(version: 2019_10_24_135625) do
     t.index ["house_id"], name: "index_jobs_on_house_id"
     t.index ["job_type_id"], name: "index_jobs_on_job_type_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name_en"
+    t.string "name_ru"
+    t.text "descr_en"
+    t.text "descr_ru"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "options", force: :cascade do |t|

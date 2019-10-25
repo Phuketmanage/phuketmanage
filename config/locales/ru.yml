@@ -17,6 +17,30 @@ ru:
     in_the_past: Период аренды не может быть в прошлом
     too_soon: Вы можете забронировать минимум за 2 дня
     too_short: Минимальный период аренды 5 дней
+  houses:
+    location: Район
+    capacity:
+      one: "человек"
+      few: "%{count} человека"
+      many: "%{count} человек"
+      other: "%{count} человек"
+    rooms:
+      one: "1 комната"
+      few: "%{count} комнаты"
+      many: "%{count} комнат"
+      other: "%{count} комнат"
+    bathrooms:
+      one: "1 ванная"
+      few: "%{count} ванных"
+      many: "%{count} ванных"
+      other: "%{count} ванных"
+    pool: "Частный бассейн"
+    communalPool: "Общий бассейн"
+    ac: "Кондиционер"
+    internet: "Интернет"
+    kitchen: "Кухня"
+    seaview: "Вид на море"
+
   balance: Баланс
   bookings: Брони
   timeline: Календарь
