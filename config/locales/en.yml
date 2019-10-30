@@ -18,6 +18,9 @@ en:
     too_soon: You can book at least 2 days in advance
     too_short: Minimum rental period is 5 days
     per_day: day
+    price: Price
+    period: Rental period
+    book: Make reservation
   houses:
     description: Description
     beds: Sleeping arrangements

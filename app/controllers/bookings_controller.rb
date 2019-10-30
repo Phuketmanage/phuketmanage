@@ -74,7 +74,7 @@ class BookingsController < ApplicationController
     else
       house_ids = current_user.houses.ids
     end
-    bookings = Booking.where(house_id: house_ids).all
+    bookings = Booking.where(house_id: house_ids, status: Booking.statuses[:confirmed]).all
 
     if !@from.present? && !@to.present?
       @from = Time.zone.now.in_time_zone('Bangkok').to_date
@@ -84,7 +84,7 @@ class BookingsController < ApplicationController
         @to = @from
       end
     end
-    @bookings = bookings.where(' (start >= :from AND start <= :to) OR
+    @bookings = bookings.where('(start >= :from AND start <= :to) OR
                                 (finish >= :from AND finish <= :to)',
                                 from: @from, to: @to).order(:start)
     @one_house = true if current_user.houses.ids.count == 1

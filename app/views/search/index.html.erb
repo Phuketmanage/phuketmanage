@@ -10,30 +10,28 @@
       <div class="col-md-3 preview">
         <%= image_tag h.preview, class: 'img-fluid' if h.preview %>
       </div>
-      <div class="col-md-7 house">
-
-          <h5 class="mt-1 mt-md-0">
-            <%= link_to h.send("title_#{I18n.locale}"), house_path(h.number), target: "_blank" %>
-
-          </h5>
-
-        <%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
-        <p>
-          <%= t('houses.capacity', count: h.capacity) %>, <%= t('houses.rooms', count: h.rooms) %>, <%= t('houses.bathrooms', count: h.bathrooms) %>
-        <br />
-          <%= h.pool ? "#{t('houses.pool')}, " : '' %>
-          <%= h.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
-          <%= h.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
-          <%= h.option('Internet') ? "#{t('houses.internet')}, " : '' %>
-          <%= h.option('Kitchen') ? t('houses.kitchen') : '' %>
-
-        </p>
-      </div>
-
-      <div class="col-md-2 price text-right">
-
-        <h5><%= "#{number_to_currency(@prices[h.id][:total], precision: 0, unit: '฿', separator: ' ', format: '%u%n')}" %></h5>
-        <%= "#{number_to_currency(@prices[h.id][:per_day], precision: 0, unit: '฿', separator: ' ', format: '%u%n')} / #{t('search.per_day')}" %>
+      <div class="col-md-9 house">
+        <div class="row">
+          <div class="col h5"><%= link_to h.send("title_#{I18n.locale}"), house_path(h.number, params: {rs: @search.rs, rf: @search.rf}), target: "_blank" %></div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
+            <p>
+              <%= t('houses.capacity', count: h.capacity) %>, <%= t('houses.rooms', count: h.rooms) %>, <%= t('houses.bathrooms', count: h.bathrooms) %>
+            <br />
+              <%= h.pool ? "#{t('houses.pool')}, " : '' %>
+              <%= h.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
+              <%= h.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
+              <%= h.option('Internet') ? "#{t('houses.internet')}, " : '' %>
+              <%= h.option('Kitchen') ? t('houses.kitchen') : '' %>
+            </p>
+          </div>
+          <div class="col-md-4 price text-right">
+            <h5><%= "#{number_to_currency(@prices[h.id][:total], precision: 0, unit: '฿')}" %></h5>
+            <%= "#{number_to_currency(@prices[h.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

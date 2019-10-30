@@ -48,9 +48,9 @@
 <hr />
 <h6><%= t('houses.beds') %></h6>
 <p>
-  <%= "#{t('houses.kingBed')} - #{@house.kingBed}" %>&emsp;
-  <%= "#{t('houses.queenBed')} - #{@house.queenBed}" %>&emsp;
-  <%= "#{t('houses.singleBed')} - #{@house.singleBed}" %>
+  <%= "#{t('houses.kingBed')} - #{@house.kingBed}" if @house.kingBed %>&emsp;
+  <%= "#{t('houses.queenBed')} - #{@house.queenBed}" if @house.queenBed %>&emsp;
+  <%= "#{t('houses.singleBed')} - #{@house.singleBed}" if @house.singleBed %>
 </p>
 
 <hr />
@@ -72,4 +72,19 @@
 <p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
 <% end %>
 
-<div class="fixed-bottom p-3 bg-light">Стоимость: B1000 бат за ночь</div>
+<div class="fixed-bottom p-4 bg-info text-white">
+  <div class="row">
+    <div class="col-6">
+      <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>&emsp;
+      <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+      <div>
+        <%= @search.rs.strftime('%d.%m.%Y') %> -
+        <%= @search.rf.strftime('%d.%m.%Y') %>
+      </div>
+
+    </div>
+    <div class="col-6 text-right">
+      <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary' %>
+    </div>
+  </div>
+</div>
