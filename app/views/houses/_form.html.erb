@@ -180,7 +180,7 @@
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
-    <strong>Included in price</strong>
+    <strong>Price include/exclude</strong>
     <hr>
     <div class="row">
       <div class="col-md-6 form-group">
@@ -195,7 +195,7 @@
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
-    <strong>Сancellation Policy</strong>
+    <strong>Booking policy</strong>
     <hr>
     <div class="row">
       <div class="col-md-6 form-group">
@@ -205,6 +205,21 @@
       <div class="col-md form-group">
         <%= form.label 'Русский' %>
         <%= form.text_area :cancellationPolicy_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Rules</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :rules_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :rules_ru, class: 'form-control', rows: 6  %>
       </div>
     </div>
   </div>

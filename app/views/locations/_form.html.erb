@@ -13,25 +13,26 @@
 
   <div class="field">
     <%= form.label :name_en %>
-    <%= form.text_field :name_en %>
+    <%= form.text_field :name_en, class: "form-control" %>
   </div>
 
   <div class="field">
     <%= form.label :name_ru %>
-    <%= form.text_field :name_ru %>
+    <%= form.text_field :name_ru, class: "form-control" %>
   </div>
 
   <div class="field">
     <%= form.label :descr_en %>
-    <%= form.text_area :descr_en %>
+    <%= form.text_area :descr_en, class: "form-control" %>
   </div>
 
   <div class="field">
     <%= form.label :descr_ru %>
-    <%= form.text_area :descr_ru %>
+    <%= form.text_area :descr_ru, class: "form-control" %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="actions mt-2">
+    <%= form.submit 'Save', class: "btn btn-primary" %>
+    <%= link_to 'Back', locations_path, class: 'btn btn-secondary' %>
   </div>
 <% end %>

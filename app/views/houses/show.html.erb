@@ -3,28 +3,73 @@
 
 <h1><%= @house.send("title_#{I18n.locale}") %></h1>
 
-<div class="row">
-  <div class="col">
-    <div class="house_main_photo_parent" onclick="">
-      <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
-        <span class='gallery_text'><%= t('house.see_all_photos') %></span>
-      </div>
-    </div>
-    <div id="lightgallery" class="d-none">
-      <% @house.photos.order(:url).each do |photo| %>
-        <% house_title = @house.send("title_#{I18n.locale}") %>
-        <% photo_title = photo.send("title_#{I18n.locale}") %>
-
-        <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
-        <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
-          <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
-        </a>
-      <% end %>
-    </div>
+<div class="house_main_photo_parent mb-2" onclick="">
+  <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
+    <span class='gallery_text'><%= t('house.see_all_photos') %></span>
   </div>
 </div>
+<div id="lightgallery" class="d-none">
+  <% @house.photos.order(:url).each do |photo| %>
+    <% house_title = @house.send("title_#{I18n.locale}") %>
+    <% photo_title = photo.send("title_#{I18n.locale}") %>
+
+    <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
+    <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
+      <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
+    </a>
+  <% end %>
+</div>
+
 <p>
-  <strong><%= t('house.description') %></strong>
-  <%= I18n.locale %>
-  <%= @house.send("description_#{I18n.locale}") %>
+  <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
 </p>
+<p>
+  <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
+<br />
+  <%= @house.pool ? "#{t('houses.pool')}, " : '' %>
+  <%= @house.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
+  <%= @house.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
+  <%= @house.option('Internet') ? "#{t('houses.internet')}, " : '' %>
+  <%= @house.option('Kitchen') ? t('houses.kitchen') : '' %>
+
+</p>
+<p>
+  <%= simple_format @house.send("description_#{I18n.locale}") %>
+</p>
+
+<hr />
+<h6><%= t('houses.amenities') %></h6>
+<p>
+  <% @house.options.each do |o| %>
+  - <%= o.send("title_#{I18n.locale}") %><br />
+  <% end %>
+</p>
+
+<hr />
+<h6><%= t('houses.beds') %></h6>
+<p>
+  <%= "#{t('houses.kingBed')} - #{@house.kingBed}" %>&emsp;
+  <%= "#{t('houses.queenBed')} - #{@house.queenBed}" %>&emsp;
+  <%= "#{t('houses.singleBed')} - #{@house.singleBed}" %>
+</p>
+
+<hr />
+<h6><%= t('houses.included') %></h6>
+<p><%= simple_format @house.send("priceInclude_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.policy') %></h6>
+<p><%= simple_format @house.send("cancellationPolicy_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.rules') %></h6>
+<p><%= simple_format @house.send("rules_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.location') %></h6>
+<%  @house.locations.each do |l| %>
+<%= l.send("name_#{I18n.locale}") %>
+<p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
+<% end %>
+
+<div class="fixed-bottom p-3 bg-light">Стоимость: B1000 бат за ночь</div>

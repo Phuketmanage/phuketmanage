@@ -1,4 +1,7 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-light">
+
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
   <%= link_to image_tag_s3("logo.png", { width: 30, class: "d-inline-block align-top"}), root_path, id: "logo_image", class: "navbar-brand  mb-0 h1" %>
   <%= link_to "Phuket Manage", root_path, id: "logo_text", class: "navbar-brand  mb-0 h1" %>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,23 +12,12 @@
       <li class="nav-item">
         <%= link_to t('menu.property'), root_path, class: "nav-link" %>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <% if I18n.locale == :en %>
-            <%= flag_icon(:us) %>
-          <% else %>
-            <%= flag_icon(:ru) %>
-          <% end %>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <% if I18n.locale == :en %>
-            <a href="/en" class="dropdown-item disabled"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
-            <a href="/ru" class="dropdown-item"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
-          <% else %>
-            <a href="/en" class="dropdown-item"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
-            <a href="/ru" class="dropdown-item disabled"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
-          <% end %>
-        </div>
+      <li class="nav-item">
+        <% if I18n.locale == :en %>
+          <a href="/ru" class="nav-link"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
+        <% else %>
+          <a href="/en" class="nav-link"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
+        <% end %>
       </li>
       <% if signed_in? %>
         <li class="nav-item">
@@ -48,3 +40,4 @@
     <%= mail_to t('app.reservation_email') %>
   </div>
 </nav>
+

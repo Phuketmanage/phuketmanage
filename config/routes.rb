@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :locations
+  get 'test', to: 'pages#test'
+  resources :locations, except: :show
   resources :options, except: :show
   # namespace :house do
   #   get 'photos/index'
