@@ -19,11 +19,13 @@ class HousesController < ApplicationController
   # GET /houses/1.json
   def show
     # Front end
-    @search = Search.new( rs: params[:rs],
-                          rf: params[:rf],
-                          dtnb: @settings['dtnb'])
-    @houses = [@house]
-    @prices = @search.get_prices @houses
+    if params[:rs].present? && params[:rf].present?
+      @search = Search.new( rs: params[:rs],
+                            rf: params[:rf],
+                            dtnb: @settings['dtnb'])
+      @houses = [@house]
+      @prices = @search.get_prices @houses
+    end
     # byebug
 
   end

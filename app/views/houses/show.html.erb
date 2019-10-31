@@ -72,19 +72,21 @@
 <p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
 <% end %>
 
-<div class="fixed-bottom p-4 bg-info text-white">
-  <div class="row">
-    <div class="col-6">
-      <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>&emsp;
-      <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
-      <div>
-        <%= @search.rs.strftime('%d.%m.%Y') %> -
-        <%= @search.rf.strftime('%d.%m.%Y') %>
-      </div>
+<% if @search %>
+  <div class="fixed-bottom p-4 bg-info text-white">
+    <div class="row">
+      <div class="col-6">
+        <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>&emsp;
+        <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+        <div>
+          <%= @search.rs.strftime('%d.%m.%Y') %> -
+          <%= @search.rf.strftime('%d.%m.%Y') %>
+        </div>
 
-    </div>
-    <div class="col-6 text-right">
-      <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary' %>
+      </div>
+      <div class="col-6 text-right">
+        <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary' %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>

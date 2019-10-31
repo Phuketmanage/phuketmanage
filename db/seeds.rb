@@ -3,9 +3,9 @@
 end
 
 admin = Role.find_by(name: 'Admin').users.create!(
-                                    email:'admin@test.com',
-                                    password: '123456',
-                                    password_confirmation: '123456')
+                                    email:'bytheair@gmail.com',
+                                    password: 'qweasd',
+                                    password_confirmation: 'qweasd')
 
 manager = Role.find_by(name: 'Manager').users.create!(
                                     email:'manager@test.com',

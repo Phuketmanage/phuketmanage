@@ -10,9 +10,9 @@
       <div class="col-md-3 preview">
         <%= image_tag h.preview, class: 'img-fluid' if h.preview %>
       </div>
-      <div class="col-md-9 house">
+      <div class="col-md-9 ">
         <div class="row">
-          <div class="col h5"><%= link_to h.send("title_#{I18n.locale}"), house_path(h.number, params: {rs: @search.rs, rf: @search.rf}), target: "_blank" %></div>
+          <div class="col h5 house"><%= link_to h.send("title_#{I18n.locale}"), house_path(h.number, params: {rs: @search.rs, rf: @search.rf}), target: "_blank" %></div>
         </div>
         <div class="row">
           <div class="col-md-8">
@@ -27,8 +27,8 @@
               <%= h.option('Kitchen') ? t('houses.kitchen') : '' %>
             </p>
           </div>
-          <div class="col-md-4 price text-right">
-            <h5><%= "#{number_to_currency(@prices[h.id][:total], precision: 0, unit: '฿')}" %></h5>
+          <div class="col-md-4 text-right">
+            <span class="price"><h5><%= "#{number_to_currency(@prices[h.id][:total], precision: 0, unit: '฿')}" %></h5></span>
             <%= "#{number_to_currency(@prices[h.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
           </div>
         </div>

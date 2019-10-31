@@ -48,7 +48,7 @@
         <% end %>
         <% nett_sum += booking.nett %>
         <% profit_sum += profit %>
-        <tr>
+        <tr class="booking_row" data-booking-no="<%= booking.number %>">
           <% if !@one_house %>
             <td><%= !@house ? link_to(booking.house.code, bookings_front_path(hid: booking.house.number)) : booking.house.code %></td>
           <% end %>

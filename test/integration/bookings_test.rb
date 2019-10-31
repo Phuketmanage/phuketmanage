@@ -261,12 +261,24 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'td', text: '20,000', count: 0 #Comm
     assert_select 'td', text: '80,000', count: 1 #Nett
 
+    # Owner can see only confirmed and block but not canceled
+    assert_select 'tr.booking_row', count: 5
+    assert_select 'tr[data-booking-no=number_1]', count: 1
+    assert_select 'tr[data-booking-no=number_2]', count: 1
+    assert_select 'tr[data-booking-no=number_3]', count: 1
+    assert_select 'tr[data-booking-no=number_4]', count: 1
+    assert_select 'tr[data-booking-no=number_7]', count: 1
+
+
     sign_in users(:manager)
     get bookings_path
     assert_response :success
     assert_select 'td', text: '100,000', count: 1 #Sale
     assert_select 'td', text: '20,000', count: 1 #Comm
     assert_select 'td', text: '80,000', count: 1 #Nett
+
+
+
 
   end
 end
