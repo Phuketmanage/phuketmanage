@@ -21,6 +21,9 @@ en:
     price: Price
     period: Rental period
     book: Make reservation
+    send: Send
+    done: Request was sent successfully
+    booking_no: Booking number
   houses:
     description: Description
     beds: Sleeping arrangements
@@ -47,7 +50,14 @@ en:
     internet: "Internet"
     kitchen: "Kitchen"
     seaview: "Seaview"
-
+  client:
+    name: Name
+    surname: Surname
+    adult: Adult
+    children: Children
+    phone: Phone
+    email: Email
+    comment: Comment
   balance: Balance
   bookings: Bookings
   timline: Timeline

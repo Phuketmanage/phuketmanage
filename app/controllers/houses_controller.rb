@@ -25,6 +25,7 @@ class HousesController < ApplicationController
                             dtnb: @settings['dtnb'])
       @houses = [@house]
       @prices = @search.get_prices @houses
+      @booking = Booking.new
     end
     # byebug
 

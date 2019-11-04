@@ -12,13 +12,6 @@
       <li class="nav-item">
         <%= link_to t('menu.property'), root_path, class: "nav-link" %>
       </li>
-      <li class="nav-item">
-        <% if I18n.locale == :en %>
-          <a href="/ru" class="nav-link"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
-        <% else %>
-          <a href="/en" class="nav-link"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
-        <% end %>
-      </li>
       <% if signed_in? %>
         <li class="nav-item">
           <%= link_to t('menu.dashboard'), dashboard_path, class: "nav-link" %>
@@ -31,6 +24,13 @@
           <%= link_to t('menu.log_in'), new_user_session_path, { class: "nav-link" } %>
         </li>
       <% end %>
+      <li class="nav-item">
+        <% if I18n.locale == :en %>
+          <a href="/ru" class="nav-link"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
+        <% else %>
+          <a href="/en" class="nav-link"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
+        <% end %>
+      </li>
     </ul>
   </div>
   <div class="d-none d-lg-block">

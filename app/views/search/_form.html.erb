@@ -4,10 +4,10 @@
   <% end %>
   <div class="row ">
     <div class="col-md-3 form-group">
-      <%= f.date_field :rs, class: 'form-control' %>
+      <%= f.date_field :rs, min: Time.zone.now.in_time_zone('Bangkok').to_date+1.day, class: 'form-control' %>
     </div>
     <div class="col-md-3 form-group">
-      <%= f.date_field :rf, class: 'form-control' %>
+      <%= f.date_field :rf, min: Time.zone.now.in_time_zone('Bangkok').to_date+7.day, class: 'form-control' %>
     </div>
     <div class="col-md-3 form-group">
       <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary"%>

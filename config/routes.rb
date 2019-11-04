@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
-
+  post 'booking/new', to: 'bookings#create_front'
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     devise_for :users

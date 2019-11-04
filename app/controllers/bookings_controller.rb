@@ -167,16 +167,17 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
-    @booking = Booking.new(booking_params)
-    search = Search.new(rs: @booking.start,
-                        rf: @booking.finish,
-                        dtnb: 0) #dtnb: @settings['dtnb'])
+    @search = Search.new( rs: params[:rs],
+                          rf: params[:rf],
+                          dtnb: @settings['dtnb'])
     answer = search.is_house_available? @booking.house_id
     # byebug
     if !answer[:result]
+      if controller_name == 'houses'
+      end
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
       @houses = House.all
-      @tenants = User.with_role('Tenant')
+      # @tenants = User.with_role('Tenant')
       render :new and return
     end
     if @booking.block?
@@ -193,11 +194,35 @@ class BookingsController < ApplicationController
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
-        @tenants = User.with_role('Tenant')
+        # @tenants = User.with_role('Tenant')
         format.html { render :new }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def create_front
+    search = Search.new( rs: params[:booking][:start],
+                          rf: params[:booking][:finish],
+                          dtnb: @settings['dtnb'])
+    house = House.find_by(number: params[:booking][:hid])
+    answer = search.is_house_available? house.id
+    byebug
+    prices = search.get_prices [house]
+    client_details =  "#{params[:booking][:name]} #{params[:booking][:surname]} "&
+                      "#{params[:booking][:adult]}+#{params[:booking][:children]}, "&
+                      "#{params[:booking][:phone]}, #{params[:booking][:email]}"
+    comment = "#{params[:booking][:flight_no]}-#{params[:booking][:flight_time]} / #{params[:booking][:comment]}"
+    @booking = house.bookings.new( start: params[:booking][:start],
+                            finish: params[:booking][:finish],
+                            # house_id: house.id,
+                            client_details: client_details,
+                            comment: comment,
+                            status: 'pending')
+    @booking.calc prices
+    @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
+    @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
+    # @booking.save
   end
 
   def sync

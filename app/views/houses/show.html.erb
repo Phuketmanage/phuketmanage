@@ -73,7 +73,7 @@
 <% end %>
 
 <% if @search %>
-  <div class="fixed-bottom p-4 bg-info text-white">
+  <div class="fixed-bottom p-4 bg-info text-white" id="booking_footer">
     <div class="row">
       <div class="col-6">
         <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>&emsp;
@@ -85,8 +85,120 @@
 
       </div>
       <div class="col-6 text-right">
-        <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary' %>
+        <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary', data: {toggle: "modal", target: "#makeBooking"} %>
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="makeBooking" tabindex="-1" role="dialog" aria-labelledby="makeBookingLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="makeBookingLabel">
+            <%= @house.send("title_#{I18n.locale}") %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_with(model: @booking, url: '/booking/new') do |f| %>
+          <div class="modal-body">
+            <p>
+              <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %><br />
+              <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
+            </p>
+            <div class="row">
+              <div class="col-8 h5">
+              <%= l(@search.rs, format: '%d %b %Y') %> -
+              <%= l(@search.rf, format: '%d %b %Y') %>
+              </div>
+              <div class="col-4 text-right h5">
+                <%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %>
+              </div>
+            </div>
+            <hr />
+              <div class="form-row">
+                <div class="col-4">
+                  <%= f.label :name %>
+                  <%= f.text_field :name, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-4">
+                  <%= f.label :surname %>
+                  <%= f.text_field :surname, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-2">
+                  <%= f.label :adult %>
+                  <%= f.text_field :adult, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-2">
+                  <%= f.label :children %>
+                  <%= f.text_field :children, required: true, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-6">
+                  <%= f.label :phone %>
+                  <%= f.text_field :phone, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :email %>
+                  <%= f.text_field :email, required: true, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-6">
+                  <%= f.label :flight_no %>
+                  <%= f.text_field :flight_no, class: 'form-control' %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :flight_time %>
+                  <%= f.text_field :flight_time, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <%= f.label :comment %>
+                  <%= f.text_area :comment, class: 'form-control' %>
+                </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <%= f.hidden_field :start, value: @search.rs %>
+            <%= f.hidden_field :finish, value: @search.rf %>
+            <%= f.hidden_field :hid, value: @house.number %>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= f.submit t('search.send'), class: "btn btn-primary"%>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="BookingDone" tabindex="-1" role="dialog" aria-labelledby="BookingDoneLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="BookingDoneLabel">
+            <%= t('search.done') %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body">
+            <span class="h5"><%= t('search.booking_no') %>: </span><span class="h5" id="booking_number"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
 <% end %>
+
+
+

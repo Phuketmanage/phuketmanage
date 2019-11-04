@@ -21,6 +21,9 @@ ru:
     price: Стоимость
     period: Период аренды
     book: Забронировать
+    send: Отправить
+    done: Запрос был успешно отправлен
+    booking_no: Номер брони
   houses:
     description: Описание
     beds: Спальные места
@@ -53,6 +56,14 @@ ru:
     internet: "Интернет"
     kitchen: "Кухня"
     seaview: "Вид на море"
+  client:
+    name: Имя
+    surname: Фамилия
+    adult: Взр
+    children: Дет
+    phone: Телефон
+    email: Эл. почта
+    comment: Комментарий
 
   balance: Баланс
   bookings: Брони

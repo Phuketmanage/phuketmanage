@@ -34,7 +34,7 @@ $(document).on "turbolinks:load", ->
         finish_f = "#{finish.getDate()}.#{finish.getMonth()+1}.#{finish.getFullYear()}"
         $('#transaction_comment_en').val("Rental #{start_f} - #{finish_f}")
         $('#transaction_comment_ru').val("Аренда #{start_f} - #{finish_f}")
-        $("#booking_details").html("Sale #{b.sale} - Agent #{b.agent} = #{b.sale-b.agent}/2 = #{(b.sale-b.agent)/2}, Comm: #{b.comm}/2 = #{b.comm/2}, Nett: #{b.nett}/2 = #{b.nett/2}")
+        $("#booking_details").html("Sale #{b.sale} - Agent #{b.agent} = #{b.sale-b.agent}/2 = #{(b.sale-b.agent)/2}, Comm: #{b.comm}/2 = #{b.comm/2}, Nett: #{b.nett}/2 = #{b.nett/2}, Client: #{b.client_details}")
       error: (data) ->
         console.log('Something went wrong')
 

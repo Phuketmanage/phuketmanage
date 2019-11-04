@@ -916,6 +916,8 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.12.2)
+    momentjs-rails (2.20.1)
+      railties (>= 3.1)
     msgpack (1.3.1)
     nio4r (2.5.2)
     nokogiri (1.10.4)
@@ -1044,6 +1046,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
+  momentjs-rails
   pg (>= 0.18, < 2.0)
   puma (~> 3.11)
   rails (~> 6.0.0.rc1)
