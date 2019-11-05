@@ -101,7 +101,7 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
       Total:
     </div>
     <div class="col-md-4 form-group font-weight-bold">
-      <%= @laundry.sum(:price) %>
+      <%= "Nett #{@laundry.sum(:price)} / Sale #{@laundry.sum(:price)*1.07}" %>
       <% if !current_user.role? ['Maid'] %>
         <% ladunry_totals.each do |k, v| %>
           <br />
