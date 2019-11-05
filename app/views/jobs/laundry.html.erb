@@ -101,14 +101,17 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
       Total:
     </div>
     <div class="col-md-4 form-group font-weight-bold">
-      <%= "Nett #{@laundry.sum(:price)} / Sale #{@laundry.sum(:price)*1.07}" %>
+      <%= @laundry.sum(:price) %>
       <% if !current_user.role? ['Maid'] %>
+        <% total_sale = 0 %>
         <% ladunry_totals.each do |k, v| %>
           <br />
           <span style="color:<%= v[:color] %>">
             <%= "#{k}, #{v[:qty]} rooms = Nett #{v[:price]} / Sale #{v[:qty]*300*1.07}" %>
+            <% total_sale += v[:qty]*300*1.07 %>
           </span>
         <% end %>
+        <br /><span>Sale: <%= total_sale %></span>
       <% end %>
     </div>
   </div>
