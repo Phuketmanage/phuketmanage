@@ -152,7 +152,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("Ком платежи с гостей")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if jQuery.inArray(selected, ['Utilities', 'Pest control','Insurance','To owner','Common area', 'Transfer']) != -1
+    if jQuery.inArray(selected, ['Utilities', 'Yearly contracts','Insurance','To owner','Common area', 'Transfer']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
         $("#transaction_de_co").val(0)
