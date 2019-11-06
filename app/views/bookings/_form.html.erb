@@ -15,7 +15,7 @@
                       { prompt: 'Select house' }, { class: "form-control",  } %>
     </div>
     <div class="col-md-2 form-group">
-      <%= form.select :status, ['temporary','confirmed', 'block', 'canceled'], {}, { class: "form-control"} %>
+      <%= form.select :status, ['temporary','pending','confirmed', 'block', 'canceled'], {}, { class: "form-control"} %>
     </div>
     <div class="col-md-2 form-group">
       <%= form.select :source_id,

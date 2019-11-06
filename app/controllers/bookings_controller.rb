@@ -167,9 +167,10 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
-    @search = Search.new( rs: params[:rs],
-                          rf: params[:rf],
-                          dtnb: @settings['dtnb'])
+    # byebug
+    search = Search.new( rs: params[:booking][:start],
+                          rf: params[:booking][:finish],
+                          dtnb: 0)
     answer = search.is_house_available? @booking.house_id
     # byebug
     if !answer[:result]
@@ -188,6 +189,7 @@ class BookingsController < ApplicationController
     end
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
+
     respond_to do |format|
       if @booking.save
         format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully created.' }
@@ -207,10 +209,10 @@ class BookingsController < ApplicationController
                           dtnb: @settings['dtnb'])
     house = House.find_by(number: params[:booking][:hid])
     answer = search.is_house_available? house.id
-    byebug
+    # byebug
     prices = search.get_prices [house]
-    client_details =  "#{params[:booking][:name]} #{params[:booking][:surname]} "&
-                      "#{params[:booking][:adult]}+#{params[:booking][:children]}, "&
+    client_details =  "#{params[:booking][:name]} #{params[:booking][:surname]} "+
+                      "#{params[:booking][:adult]}+#{params[:booking][:children]}, "+
                       "#{params[:booking][:phone]}, #{params[:booking][:email]}"
     comment = "#{params[:booking][:flight_no]}-#{params[:booking][:flight_time]} / #{params[:booking][:comment]}"
     @booking = house.bookings.new( start: params[:booking][:start],
@@ -222,7 +224,7 @@ class BookingsController < ApplicationController
     @booking.calc prices
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
-    # @booking.save
+    @booking.save
   end
 
   def sync
