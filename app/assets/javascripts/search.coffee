@@ -6,4 +6,3 @@ $(document).on "turbolinks:load", ->
     $('#search_rf').attr('min', rf_min)
     $('#search_rf').val(rf_min)
 
-  $('#makeBooking').modal()
