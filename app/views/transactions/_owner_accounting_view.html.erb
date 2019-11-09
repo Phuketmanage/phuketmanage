@@ -10,11 +10,11 @@ Address:
 <table class='table table-striped table-bordered table-sm bg-white table-responsive-lg'>
   <thead>
     <tr>
-      <th width="120px">Date</th>
+      <th width="80px">Date</th>
       <th width="320px">Ref No</th>
-      <th class="text-right" width="120px">Debit</th>
-      <th class="text-right" width="120px">Credit</th>
-      <th class="text-right" width="120px">Balance</td>
+      <th class="text-right" width="105px">Debit</th>
+      <th class="text-right" width="105px">Credit</th>
+      <th class="text-right" width="105px">Balance</td>
       <th>Comment</th>
       <th colspan="3"><span class='d-print-none'>Actions</span></th>
     </tr>
@@ -78,10 +78,10 @@ Address:
               <%= link_to 'Edit', edit_transaction_path(t) %>
             <% end %>
             <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
-              | <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+              <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% end %>
             <% if current_user.role?('Admin') %>
-              <%= link_to 'Edit', edit_transaction_path(t) %> |
+              <%= link_to 'Edit', edit_transaction_path(t) %>
               <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% end %>
           </div>

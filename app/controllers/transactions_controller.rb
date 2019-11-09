@@ -22,16 +22,28 @@ class TransactionsController < ApplicationController
       if params[:view_user_id].present?
         @view_user_id = params[:view_user_id]
         session[:view_user_id] = params[:view_user_id]
-        @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
-        @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+        if current_user.role?(['Admin'])
+          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
+          @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+        else
+          salary = TransactionType.find_by(name_en:'Salary')
+          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ? AND type_id !=?', @from, @to, @view_user_id, salary.id).order(:date, :created_at).all
+          @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+        end
         @view = 'company' if params[:commit] == 'Company view'
         @view = 'owner' if params[:commit] == 'Owner view'
         @view = 'accounting' if params[:commit] == 'Accounting view'
         session[:commit] = params[:commit]
         session[:view] = @view
       else
-        @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-        @transactions_before = Transaction.where('date < ?', @from).all
+        if current_user.role?(['Admin'])
+          @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+          @transactions_before = Transaction.where('date < ?', @from).all
+        else
+          salary = TransactionType.find_by(name_en:'Salary')
+          @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
+          @transactions_before = Transaction.where('date < ?', @from).all
+        end
         @view = 'company'
         session.delete(:view_user_id)
         session[:commit] = params[:commit]

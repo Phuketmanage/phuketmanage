@@ -1,11 +1,11 @@
 <table class='table table-striped table-bordered table-sm bg-white table-responsive-lg'>
   <thead>
     <tr>
-      <th width="120px"><%= t('date_text') %></th>
-      <th class="text-right" width="120px"><%= t('debit') %></th>
-      <th class="text-right" width="120px"><%= t('credit') %></th>
+      <th width="80px"><%= t('date_text') %></th>
+      <th class="text-right" width="105px"><%= t('debit') %></th>
+      <th class="text-right" width="105px"><%= t('credit') %></th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
-        <th class="text-right" width="120px">Balance</th>
+        <th class="text-right" width="105px">Balance</th>
       <% end %>
       <th width="150px"><%= t('type') %></th>
       <% if !one_house %>
@@ -80,10 +80,10 @@
               <%= link_to 'Edit', edit_transaction_path(t) %>
             <% end %>
             <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
-              | <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+              <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% end %>
             <% if current_user.role?('Admin') %>
-              <%= link_to 'Edit', edit_transaction_path(t) %> |
+              <%= link_to 'Edit', edit_transaction_path(t) %>
               <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% end %>
           </td>
