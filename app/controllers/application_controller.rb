@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
       if current_user.role?('Owner')
         balance_front_path
       elsif current_user.role?('Accounting')
-        balance_front_path
+        transactions_path
       elsif current_user.role?('Guest relation')
         jobs_path
       elsif current_user.role?('Maid')

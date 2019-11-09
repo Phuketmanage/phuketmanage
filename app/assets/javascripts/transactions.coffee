@@ -197,3 +197,4 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_ru").show()
       $("#comment_inner").show()
 
+

@@ -80,3 +80,11 @@ other:
   debit_owner: true
   credit_owner: true
 
+salary:
+  name_en: Salary
+  name_ru:
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+
