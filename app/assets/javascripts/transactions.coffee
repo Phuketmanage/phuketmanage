@@ -37,6 +37,12 @@ $(document).on "turbolinks:load", ->
         $("#booking_details").html("Sale #{b.sale} - Agent #{b.agent} = #{b.sale-b.agent}/2 = #{(b.sale-b.agent)/2}, Comm: #{b.comm}/2 = #{b.comm/2}, Nett: #{b.nett}/2 = #{b.nett/2}, Client: #{b.client_details}")
       error: (data) ->
         console.log('Something went wrong')
+  $ ->
+    $("#balance_table").DataTable(
+      scrollX: true,
+      paging: false
+    )
+
 
   $('#link_show_hidden').on 'click', (e) ->
     e.preventDefault()
@@ -198,8 +204,3 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
 
 
-  $ ->
-    $("#balance_table").DataTable(
-      scrollX: true,
-      paging: false
-    )
