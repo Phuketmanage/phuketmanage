@@ -1,4 +1,4 @@
-<table class='table table-striped table-bordered table-sm bg-white table-responsive-md'>
+<table id="balabce_table" class='table table-striped table-bordered table-sm bg-white table-responsive-md'>
   <thead>
     <tr>
       <th width="80px"><%= t('date_text') %></th>
@@ -13,7 +13,7 @@
       <% end %>
       <th><%= t('comment') %></th>
       <% if current_user.role?(['Admin','Manager','Accounting']) %>
-        <th>Comment inner</th>
+        <th>Com. inner</th>
         <th>Actions</th>
       <% end %>
     </tr>
