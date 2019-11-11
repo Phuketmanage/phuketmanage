@@ -199,7 +199,7 @@ react_to_select_trsc_type = (selected, init) ->
 
 
   $ ->
-    $("#balabce_table").DataTable(
+    $("#balance_table").DataTable(
       scrollX: true,
       paging: false
     )
