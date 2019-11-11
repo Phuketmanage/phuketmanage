@@ -84,6 +84,7 @@ ru:
   to_balance: На баланс
   added_to_balance: Добавлено на баланс
   prev_balance: Баланс с прошлого периода
+  transactions_by_type: Суммы по статьям расходов
   users_mailer:
     reset_password_instructions:
       subject: Запрос на смену пароля

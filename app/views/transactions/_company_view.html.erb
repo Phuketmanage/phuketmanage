@@ -83,26 +83,27 @@
         <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>
       </tr>
     <% end %>
-    <tfoot>
-      <tr>
-        <td class='font-weight-bold text-right'>Total:</td>
-        <td class="font-weight-bold text-right" id="de_co_sum">
-          <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id="co_balance">
-          <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tfoot>
   </tbody>
+  <tfoot>
+    <tr>
+      <td class='font-weight-bold text-right'>Total:</td>
+      <td class="font-weight-bold text-right" id="de_co_sum">
+        <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
+      <td class="font-weight-bold text-right" id="co_balance">
+        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tfoot>
 </table>
 
+<h5><%= t('transactions_by_type') %></h5>
 <table class='table table-striped table-bordered table-sm bg-white table-responsive'>
   <tr>
     <th>Transaction type</th>
