@@ -1,15 +1,15 @@
 
-<table class='table table-striped table-bordered table-sm bg-white table-responsive-md'>
+<table id="company_balabce_table" class='cell-border display compact stripe bg-white'>
   <thead>
     <tr>
-      <th width="105px">Date</th>
-      <th class="text-right" width="105px">Debit</th>
-      <th class="text-right" width="105px">Credit</th>
-      <th class="text-right" width="105px">Balance</th>
+      <th width="70px">Date</th>
+      <th class="text-right" width="95px">Debit</th>
+      <th class="text-right" width="95px">Credit</th>
+      <th class="text-right" width="95px">Balance</th>
       <th>Type</th>
       <th>House</th>
       <th width="300px">Comment</th>
-      <th>Comment inner</th>
+      <th width="90px">Com. inner</th>
       <th>Actions</th>
       <th width="105px">Debit</th>
       <th width="105px">Credit</th>
@@ -86,10 +86,10 @@
     <tfoot>
       <tr>
         <td class='font-weight-bold text-right'>Total:</td>
-        <td class="font-weight-bold text-right" id="de_co_sum" style="white-space:nowrap;">
+        <td class="font-weight-bold text-right" id="de_co_sum">
           <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id="cr_co_sum" style="white-space:nowrap;"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id="co_balance" style="white-space:nowrap;">
+        <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="co_balance">
           <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
         <td></td>
         <td></td>

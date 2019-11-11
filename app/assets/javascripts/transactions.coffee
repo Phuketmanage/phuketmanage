@@ -198,3 +198,8 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
 
 
+  $ ->
+    $("#company_balabce_table").DataTable(
+      scrollX: true,
+      paging: false
+    )
