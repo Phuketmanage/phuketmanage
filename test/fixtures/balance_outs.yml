@@ -15,6 +15,11 @@ pre_3:
   debit: 7000.0
   credit: 0.0
 
+pre_4:
+  trsc: prev_4
+  debit: 30000.0
+  credit: 6000.0
+
 one:
   trsc: one
   debit: 100000.00

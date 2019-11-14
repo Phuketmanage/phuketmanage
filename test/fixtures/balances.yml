@@ -5,6 +5,11 @@ prev_1:
   debit: 1000.00
   credit: 0.0
 
+prev_2:
+  trsc: prev_4
+  debit: 6000.00
+  credit: 0.0
+
 one:
   trsc: one
   debit: 20000.00

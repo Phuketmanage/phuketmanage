@@ -25,6 +25,10 @@ class TransactionsController < ApplicationController
         @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
         @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
         @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+        type_rental_id = TransactionType.find_by(name_en: 'Rental').id
+        # @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
+        @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
+        # @cr_rental = 0
         @view = 'company' if params[:commit] == 'Company view'
         @view = 'owner' if params[:commit] == 'Owner view'
         @view = 'owner' if params[:commit] == 'Owner front view'
@@ -63,6 +67,9 @@ class TransactionsController < ApplicationController
     @transactions = current_user.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
     @transactions_before = current_user.transactions.where('date < ?', @from).order(:date, :created_at).all
     @transactions_by_cat = current_user.transactions.joins(:balance_outs).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
+    type_rental_id = TransactionType.find_by(name_en: 'Rental').id
+    # @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
+    @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
     @one_house = true
     @one_house = false if current_user.houses.count > 1
   end

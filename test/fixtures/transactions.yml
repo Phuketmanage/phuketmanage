@@ -31,6 +31,17 @@ prev_3:
   comment_inner: cash
   hidden: true
 
+prev_4:
+  date: '14.08.2019'
+  ref_no:
+  house: villa_1
+  type: rental
+  user: owner
+  comment_en: Rental 14.08-14.09
+  comment_ru: Аренда 14.08-14.09
+  comment_inner:
+  hidden: false
+
 one:
   date: '10.09.2019'
   ref_no:

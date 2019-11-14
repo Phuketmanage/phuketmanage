@@ -403,18 +403,21 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 25.09.2019 Hidden transactions (added within this test)
     # 25.09.2019 Previous transactions (from fixtures)
     # 09.10.2019 Hidden from owner transactions (added within this test)
+    # 14.11.2019 Rental credit deducted from Owner totals
 
     from = '2019-09-01'
+    # from = Time.now.beginning_of_month.to_date
+    # from = '2019-10-01'
     to = Time.now.to_date
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Company view'}
     de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
     # assert_equal '123', response.body
-    assert_equal 67200.99.to_d, de_co_sum
-    assert_select "#de_co_sum", "67,200.99"
-    assert_select '#de_co_prev_sum', '1,000.00'
+    assert_equal 73200.99.to_d, de_co_sum
+    assert_select "#de_co_sum", "73,200.99"
+    assert_select '#de_co_prev_sum', '7,000.00'
     assert_select '#cr_co_prev_sum', ''
-    assert_select '#co_prev_balance', '1,000.00'
+    assert_select '#co_prev_balance', '7,000.00'
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select "#company_maintenance", "60,200.99" #Because of hidden trsc it less 6000
     assert_select "#de_co_bvat_sum", "56,262.61"
@@ -425,33 +428,33 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # For specific owner: Owner view(back) totals Owner view(front)totals = Acc view totals = DB totals
     de_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('debit')
     cr_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('credit')
-    assert_equal 292500, de_ow_sum
-    assert_equal 95200.99.to_d, cr_ow_sum
+    assert_equal 322500, de_ow_sum
+    assert_equal 101200.99.to_d, cr_ow_sum
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Owner view'}
-    assert_select '#de_ow_prev_sum', ''
-    assert_select '#cr_ow_prev_sum', '10,000.00'
-    assert_select '#ow_prev_balance', '-10,000.00'
-    assert_select "#de_ow_sum", "246,500.00" #Rental credit deducted from bebit for owner right away in owner view
+    assert_select '#de_ow_prev_sum', '14,000.00'
+    assert_select '#cr_ow_prev_sum', ''
+    assert_select '#ow_prev_balance', '14,000.00'
+    assert_select "#de_ow_sum", "270,500.00" #Rental credit deducted from bebit for owner right away in owner view
     assert_select "#cr_ow_sum", "49,200.99" #Rental credit not counted because was deducted from bebit in owner view
-    assert_select "#ow_balance", "197,299.01"
+    assert_select "#ow_balance", "221,299.01"
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select '#de_ow_prev_sum', ''
-    assert_select '#cr_ow_prev_sum', '27,000.00'
-    assert_select '#ow_prev_balance', '-27,000.00'
-    assert_select "#de_ow_sum", "255,500.00"
+    assert_select '#cr_ow_prev_sum', '3,000.00'
+    assert_select '#ow_prev_balance', '-3,000.00'
+    assert_select "#de_ow_sum", "285,500.00"
     assert_select "#de_ow_hidden_sum", "30,000.00"
-    assert_select "#de_ow_sum_and_hidden", "285,500.00"
-    assert_select "#cr_ow_sum", "99,200.99"
+    assert_select "#de_ow_sum_and_hidden", "315,500.00"
+    assert_select "#cr_ow_sum", "105,200.99"
     assert_select "#cr_ow_hidden_sum", "6,000.00"
-    assert_select "#cr_ow_sum_and_hidden", "105,200.99"
-    assert_select "#ow_balance", "156,299.01"
-    assert_select "#ow_balance_and_hidden", "180,299.01"
+    assert_select "#cr_ow_sum_and_hidden", "111,200.99"
+    assert_select "#ow_balance", "180,299.01"
+    assert_select "#ow_balance_and_hidden", "204,299.01"
 
     sign_in users(:owner)
     get balance_front_path, params: { from: from, to: to}
-    assert_select "#de_ow_sum", "246,500.00" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#de_ow_sum", "270,500.00" #Rental credit 40000 deducted from bebit for owner right away in owner view
     assert_select "#cr_ow_sum", "49,200.99" #Rental credit 40000 deducted from bebit for owner right away in owner view
-    assert_select "#ow_balance", "197,299.01"
+    assert_select "#ow_balance", "221,299.01"
 
     sign_in users(:manager)
     # All owners: Check company View totals = DB sum
@@ -459,8 +462,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     to = Transaction.maximum(:date)
     get transactions_path, params: {from: from, to: to }
     de_co_sum = Transaction.joins(:balances).sum('balances.debit')
-    assert_equal 93250.99.to_d, de_co_sum
-    assert_select "#de_co_sum", "93,250.99"
+    assert_equal 99250.99.to_d, de_co_sum
+    assert_select "#de_co_sum", "99,250.99"
     cr_co_sum = Transaction.joins(:balances).sum('balances.credit')
     assert_equal 7000.99, cr_co_sum
     assert_select "#cr_co_sum", "7,000.99"

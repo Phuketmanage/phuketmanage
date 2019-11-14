@@ -24,7 +24,9 @@
       <% if transactions_before.any? %>
         <% de_ow_prev_sum = transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.debit') %>
         <% cr_ow_prev_sum = transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.credit') %>
+        <% cr_rental = de_ow_prev_sum - cr_ow_prev_sum %>
         <% balance_sum += de_ow_prev_sum - cr_ow_prev_sum %>
+
         <tr>
           <td></td>
           <td class="text-right" id="de_ow_prev_sum">
@@ -64,9 +66,9 @@
     <tfoot>
       <tr>
         <td class='font-weight-bold text-right'><%= t('total') %>:</td>
-        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum, precision: 2, unit: '') %></td>
-        <td></td>
+        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id="ow_balance"><%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %></td>
         <% if !one_house %>
           <td></td>
         <% end %>
@@ -164,12 +166,11 @@
         </tr>
       <% end %>
     </tbody>
-
     <tfoot>
       <tr>
         <td class='font-weight-bold text-right'><%= t('total') %>:</td>
-        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum, precision: 2, unit: '') %></td>
-        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
+        <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
         <td class="font-weight-bold text-right" id="ow_balance"><%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %></td>
         <td></td>
         <% if !one_house %>
