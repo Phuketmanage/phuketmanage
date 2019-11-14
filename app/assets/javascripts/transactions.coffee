@@ -62,9 +62,11 @@ $(document).on "turbolinks:load", ->
 react_to_select_user_id = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)
+    $('#btn_owner_front_view').attr('disabled', false)
     $('#btn_owner_accounting_view').attr('disabled', false)
   else
     $('#btn_owner_view').attr('disabled', true)
+    $('#btn_owner_front_view').attr('disabled', true)
     $('#btn_owner_accounting_view').attr('disabled', true)
 
 react_to_select_trsc_type = (selected, init) ->

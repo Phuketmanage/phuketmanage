@@ -7,26 +7,33 @@
 
 <div class="mb-2 d-print-none">
   <%= form_with(url: transactions_path, method: :get, local: true, class: 'form-inline') do |form| %>
-        <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-2" %>
-        <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-2" %>
+        <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
+        <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
         <%= form.select :view_user_id,
               House.order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
               { include_blank: 'Company', selected: @view_user_id },
               class: "form-control mb-2 mr-sm-2" %>
-        <%#= form.select :view_user_id,
-              User.with_role(['Owner']).order(:name).map {|u| ["#{u.name} #{u.surname} (#{u.houses.map{|uh| uh.code}.join(', ')})", u.id]},
-              { include_blank: 'Company', selected: @view_user_id },
-              class: "form-control mb-2 mr-sm-2" %>
-        <%= form.submit 'Company view', class: "btn btn-primary mb-2 mr-2",
-                                        id: 'btn_company_view' %>
-        <%= form.submit 'Owner view', class: "btn btn-primary mb-2 mr-2",
-                                        id: 'btn_owner_view',
-                                        disabled: true %>
-        <%= form.submit 'Accounting view', class: "btn btn-primary mb-2 mr-2",
-                                        id: 'btn_owner_accounting_view',
-                                        disabled: true %>
-        <%= link_to 'Drop filter', transactions_path, class: 'btn btn-secondary mb-2 mr-2' %>
-        <%= link_to 'New Transaction', new_transaction_path, class: 'btn btn-info mb-2 mr-2' %>
+        <%= form.submit 'Company view',
+              class: "btn btn-primary mb-2 mr-2 btn-sm",
+              id: 'btn_company_view' %>
+        <%= form.submit 'Owner view',
+              class: "btn btn-primary mb-2 mr-2 btn-sm",
+              id: 'btn_owner_view',
+              disabled: true %>
+        <% if current_user.role?(['Admin']) %>
+          <%= form.submit 'Owner front view',
+                class: "btn btn-primary mb-2 mr-2 btn-sm",
+                id: 'btn_owner_front_view',
+                disabled: true %>
+        <% end %>
+        <%= form.submit 'Accounting view',
+              class: "btn btn-primary mb-2 mr-2 btn-sm",
+              id: 'btn_owner_accounting_view',
+              disabled: true %>
+        <%= link_to 'Drop filter', transactions_path,
+              class: 'btn btn-secondary mb-2 mr-2 btn-sm' %>
+        <%= link_to 'New Transaction', new_transaction_path,
+              class: 'btn btn-info mb-2 mr-2 btn-sm' %>
   <% end %>
 </div>
 

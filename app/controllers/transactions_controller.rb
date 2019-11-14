@@ -27,6 +27,8 @@ class TransactionsController < ApplicationController
         @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
         @view = 'company' if params[:commit] == 'Company view'
         @view = 'owner' if params[:commit] == 'Owner view'
+        @view = 'owner' if params[:commit] == 'Owner front view'
+        @owner_front_view = true if params[:commit] == 'Owner front view'
         @view = 'accounting' if params[:commit] == 'Accounting view'
         session[:commit] = params[:commit]
         session[:view] = @view

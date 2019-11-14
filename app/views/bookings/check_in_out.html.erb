@@ -15,23 +15,6 @@
   </div>
 <% end %>
 
-
-<div class="d-none d-lg-block mb-2 p-2 ">
-  <div class="row font-weight-bold">
-    <div class="col-lg-2">
-      Date/Type
-    </div>
-    <div class="col-lg-1">
-      House
-    </div>
-    <div class="col-lg-5">
-      Client
-    </div>
-    <div class="col-lg-4">
-      Our transfer
-    </div>
-  </div>
-</div>
 <% date = '' %>
 <% @result.each do |r| %>
   <%#= "#{date} != #{r[:date]}"  %>
@@ -40,64 +23,43 @@
     <% date = r[:date] %>
   <% end %>
 
-  <div class="row shadow-sm mb-2 p-1 bg-white border rounded">
-    <div class="col">
-      <div class="row">
-        <div class="col-lg-2">
-          <span class="<%= css %>"><%=  "#{r[:date]} #{r[:type]} (#{r[:status]})" %></span>
-        </div>
-        <div class="col-lg-1">
-          <span class="d-lg-none">House: </span>
-          <%=  r[:house] %>
-        </div>
-        <div class="col-lg-5">
-          <span class="d-lg-none">Client: </span>
-          <%=  r[:client] %>
-        </div>
-        <div class="col-lg-4">
-          <span class="d-lg-none">Our transfer: </span>
-          <% r[:transfers].each do |t| %>
-            <%= t %><br />
-          <% end %>
-        </div>
-      </div>
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <span class="<%= css %>">
+      <%=  "#{r[:date]} #{r[:type]} #{r[:house]} (#{r[:status]})" %>
+    </span><br />
+      Client: <%=  r[:client] %><br />
+      Our transfer:
+      <% r[:transfers].each do |t| %>
+        <%= t %><br />
+      <% end %>
+      <br />
       <% booking = Booking.find(r[:booking_id]) %>
       <% if r[:type] == "IN" %>
-        <div class="row">
-          <div class="col">
-              Period: <%= " #{booking.start.strftime('%d.%m.%Y')} -
-                            #{booking.finish.strftime('%d.%m.%Y')} /
-                            #{(booking.finish-booking.start).to_i} days" %>
-                            <br />
-              Price: <%= booking.sale %><br />
-              Source: <%= booking.source.name if booking.source %>
-          </div>
+        Period: <%= " #{booking.start.strftime('%d.%m.%Y')} -
+                      #{booking.finish.strftime('%d.%m.%Y')} /
+                      #{(booking.finish-booking.start).to_i} days" %>
+                      <br />
+        Price: <%= booking.sale %><br />
+        Source: <%= booking.source.name if booking.source %>
+      <% end %>
+      <%=  "Comment: #{r[:comment]}" %>
+      <%= link_to "Edit comment", '', class: 'edit_comment',
+                                      data: { booking_id: r[:booking_id] } %>
+      <%= form_with model: booking,
+                    url: update_booking_comment_gr_path(r[:booking_id]),
+                    local: true,
+                    class: 'form_edit_comment_gr d-none',
+                    data: { booking_id: r[:booking_id] } do |f| %>
+        <div class="form-group">
+          <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
+        </div>
+        <div class="form-group text-right">
+          <%= f.submit "Save", class: 'btn btn-primary' %>
+          <%= link_to "Cancel", '#',
+                class: 'btn btn-secondary cancel_edit_comment',
+                data: { booking_id: r[:booking_id] }
+           %>
         </div>
       <% end %>
-      <div class="row">
-        <div class="col">
-
-            <%=  "Comment: #{r[:comment]}" %>
-            <%= link_to "Edit comment", '', class: 'edit_comment',
-                                            data: { booking_id: r[:booking_id] } %>
-            <%= form_with model: booking,
-                          url: update_booking_comment_gr_path(r[:booking_id]),
-                          local: true,
-                          class: 'form_edit_comment_gr d-none',
-                          data: { booking_id: r[:booking_id] } do |f| %>
-              <div class="form-group">
-                <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
-              </div>
-              <div class="form-group text-right">
-                <%= f.submit "Save", class: 'btn btn-primary' %>
-                <%= link_to "Cancel", '#',
-                      class: 'btn btn-secondary cancel_edit_comment',
-                      data: { booking_id: r[:booking_id] }
-                 %>
-              </div>
-            <% end %>
-        </div>
-      </div>
-    </div>
   </div>
 <% end %>
