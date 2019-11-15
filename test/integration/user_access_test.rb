@@ -121,7 +121,8 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert ability.cannot?(:destroy, Job.new(creator: admin))
   end
 
-  test 'owner can see only his own balance' do
+  test 'Balance' do
+    # owner can see only his own balance
     sign_in users(:owner)
     get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
     assert_select 'tr.trsc_row', 2
@@ -142,6 +143,9 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_select 'td.de_ow_cell', text: '40,000.00', count: 1 #owner_2
     assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
 
+    # Owner can not see edit links
+    assert_select 'a', text: 'Edit', count: 0
+    assert_select 'a', text: 'Delete', count: 0
   end
 
   test 'transactions aka balance' do

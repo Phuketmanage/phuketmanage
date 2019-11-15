@@ -34,7 +34,8 @@ class TransactionsController < ApplicationController
       elsif current_user.role?(['Admin','Manager','Accounting']) &&
       params[:view_user_id].present?
         @view_user_id = params[:view_user_id]
-        @locale = User.find(@view_user_id).locale
+        owner = User.find(@view_user_id)
+        @locale = owner.locale
         session[:view_user_id] = params[:view_user_id]
         @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
         @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
@@ -54,6 +55,8 @@ class TransactionsController < ApplicationController
         @view = 'accounting' if params[:commit] == 'Accounting view'
         session[:commit] = params[:commit]
         session[:view] = @view
+        @one_house = true
+        @one_house = false if owner.houses.count > 1
       elsif current_user.role?(['Admin','Manager','Accounting'])
         if current_user.role?(['Admin'])
           @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
@@ -72,20 +75,6 @@ class TransactionsController < ApplicationController
       end
     end
   end
-
-  def index_front
-    @from = params[:from]
-    @to = params[:to]
-    @locale = current_user.locale
-    if !@from.present? && !@to.present?
-      @from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
-      @to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
-    elsif !@from.present? || !@to.present?
-      @error = 'Both dates should be selected'
-    end
-    byebug
-  end
-
 
   # GET /transactions/1
   # GET /transactions/1.json

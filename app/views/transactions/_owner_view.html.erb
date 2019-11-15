@@ -7,7 +7,7 @@
           <th class="text-right" width="105px"><%= t('credit') %></th>
           <th width="105px"><%= t('balance') %></th>
           <th width="150px"><%= t('type') %></th>
-          <% if !one_house %>
+          <% if !@one_house %>
             <th width="60px"><%= t('house') %></th>
           <% end %>
           <th><%= t('comment') %></th>
@@ -40,7 +40,7 @@
                 <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
             </td>
             <td></td>
-            <% if !one_house %>
+            <% if !@one_house %>
               <td></td>
             <% end %>
             <td><%= t('prev_balance') %></td>
@@ -63,7 +63,7 @@
             <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
             <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
             <td><%= t.type.send("name_#{@locale}") %></td>
-            <% if !one_house %>
+            <% if !@one_house %>
               <td><%= t.house.code if t.house %></td>
             <% end %>
             <% locale = t.user.locale || I18n.locale  %>
