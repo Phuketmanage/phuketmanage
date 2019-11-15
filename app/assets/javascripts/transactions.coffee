@@ -40,7 +40,9 @@ $(document).on "turbolinks:load", ->
   $ ->
     $("#balance_table").DataTable(
       scrollX: true,
-      paging: false
+      paging: false,
+      columnDefs: [ { type: 'date', 'targets': [1] } ],
+      order: [[ 1, 'desc' ]]
     )
 
 

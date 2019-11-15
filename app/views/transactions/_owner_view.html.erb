@@ -58,7 +58,7 @@
           <% cr_ow_sum += cr_ow unless de_ow > 0 %>
           <% balance_sum += de_ow - cr_ow %>
           <tr class="trsc_row <%= 'text-muted' if t.hidden %>" id="trsc_<%= t.id %>_row" >
-            <td data-sort="<%= t.date.strftime("%Y%m%d") %>"><%= t.date.strftime('%d.%m.%Y') %></td>
+            <td><%= t.date.strftime('%d.%m.%Y') %></td>
             <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
             <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
             <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>

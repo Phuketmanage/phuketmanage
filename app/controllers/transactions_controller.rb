@@ -41,7 +41,7 @@ class TransactionsController < ApplicationController
         @one_house = true
         @one_house = false if owner.houses.count > 1
         today = Time.zone.now.in_time_zone('Bangkok')
-        future_booking_ids = owner.houses.joins(:bookings).where('bookings.start >?', Date.today).pluck('bookings.id')
+        future_booking_ids = owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
         future_booking_de = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.debit')
         future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
         @bookings_prepayment = future_booking_de - future_booking_cr
