@@ -54,7 +54,7 @@
         <% de_co_sum += de_co %>
         <% cr_co_sum += cr_co %>
         <% balance_sum += de_co - cr_co %>
-        <td><%= t.date.strftime('%d.%m.%Y') %></td>
+        <td data-sort="<%= t.date.strftime("%Y%m%d") %>"><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
         <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>

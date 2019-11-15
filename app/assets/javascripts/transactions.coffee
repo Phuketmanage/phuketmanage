@@ -41,8 +41,8 @@ $(document).on "turbolinks:load", ->
     $("#balance_table").DataTable(
       scrollX: true,
       paging: false,
-      columnDefs: [ { type: 'date', 'targets': [1] } ],
-      order: [[ 1, 'desc' ]]
+      columnDefs: [ { type: 'date', 'targets': [0] } ],
+      order: [[ 0, 'desc' ]]
     )
 
 
