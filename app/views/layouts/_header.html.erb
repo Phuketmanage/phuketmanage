@@ -9,9 +9,6 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <%= link_to t('menu.property'), root_path, class: "nav-link" %>
-      </li>
       <% if signed_in? %>
         <li class="nav-item">
           <%= link_to t('menu.dashboard'), dashboard_path, class: "nav-link" %>
