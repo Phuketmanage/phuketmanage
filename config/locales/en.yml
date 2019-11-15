@@ -79,6 +79,8 @@ en:
   added_to_balance: Added to balance
   prev_balance: Balance from previous period
   transactions_by_type: Transaction sums by type for selected period
+  prepaid_bookings: Prepayment for upcoming bookings
+  available_balance: Available balance
   users_mailer:
     reset_password_instructions:
       subject: Password reset request

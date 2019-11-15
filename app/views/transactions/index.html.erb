@@ -8,7 +8,13 @@
         <%= link_to t('drop_filter'), balance_front_path, class: 'btn btn-secondary mb-2 mr-md-2'  %>
   <% end %>
 
-  <%= render 'owner_view', {transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house} %>
+  <% if @error %>
+    <div class="alert alert-warning" role="alert">
+      <%= @error %>
+    </div>
+  <% else %>
+    <%= render 'owner_view', {transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house} %>
+  <% end %>
 <% else %>
   <h1>
     Balance
@@ -51,7 +57,7 @@
     <% if @view == 'company' %>
       <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
     <% elsif @view == 'owner' %>
-      <%= render 'owner_view', transactions: @transactions, transactions_before: @transactions_before, one_house: false %>
+      <%= render 'owner_view', transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house %>
     <% elsif @view == 'accounting' %>
       <%= render 'owner_accounting_view', transactions: @transactions, transactions_before: @transactions_before %>
     <% end %>

@@ -85,7 +85,9 @@ ru:
   to_balance: На баланс
   added_to_balance: Добавлено на баланс
   prev_balance: Баланс с прошлого периода
-  transactions_by_type: Суммы по статьям расходов за выбранный период
+  transactions_by_type: Суммы по статьям за выбранный период
+  prepaid_bookings: Предоплаты по еще не наступившим проням
+  available_balance: Доступный баланс
   users_mailer:
     reset_password_instructions:
       subject: Запрос на смену пароля

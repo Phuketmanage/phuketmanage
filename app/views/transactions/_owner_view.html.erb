@@ -1,13 +1,13 @@
   <% I18n.with_locale(@locale) do  %>
-    <table class='table table-striped table-bordered table-sm bg-white table-responsive'>
+    <table id="balance_table" class='table table-striped table-bordered table-sm bg-white table-responsive'>
       <thead>
         <tr>
           <th width="70px"><%= t('date_text') %></th>
-          <th class="text-right" width="105px"><%= t('debit') %></th>
-          <th class="text-right" width="105px"><%= t('credit') %></th>
-          <th class="text-right" width="105px"><%= t('balance') %></th>
+          <th class="text-right" width="95px"><%= t('debit') %></th>
+          <th class="text-right" width="95px"><%= t('credit') %></th>
+          <th class="text-right" width="95px"><%= t('balance') %></th>
           <th width="150px"><%= t('type') %></th>
-          <% if !@one_house %>
+          <% if !one_house %>
             <th width="60px"><%= t('house') %></th>
           <% end %>
           <th><%= t('comment') %></th>
@@ -40,7 +40,7 @@
                 <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
             </td>
             <td></td>
-            <% if !@one_house %>
+            <% if !one_house %>
               <td></td>
             <% end %>
             <td><%= t('prev_balance') %></td>
@@ -58,12 +58,12 @@
           <% cr_ow_sum += cr_ow unless de_ow > 0 %>
           <% balance_sum += de_ow - cr_ow %>
           <tr class="trsc_row <%= 'text-muted' if t.hidden %>" id="trsc_<%= t.id %>_row" >
-            <td><%= t.date.strftime('%d.%m.%Y') %></td>
+            <td data-sort="<%= t.date.strftime("%Y%m%d") %>"><%= t.date.strftime('%d.%m.%Y') %></td>
             <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
             <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
             <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
             <td><%= t.type.send("name_#{@locale}") %></td>
-            <% if !@one_house %>
+            <% if !one_house %>
               <td><%= t.house.code if t.house %></td>
             <% end %>
             <% locale = t.user.locale || I18n.locale  %>
@@ -106,6 +106,14 @@
       </tfoot>
     </table>
 
+    <% if @bookings_prepayment > 0 %>
+      <%= t('prepaid_bookings') %>:
+      <%= number_to_currency(@bookings_prepayment, precision: 2, unit: '') %> <br />
+      <strong>
+        <%= t('available_balance') %>:
+        <%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum - @bookings_prepayment, precision: 2, unit: '') %>
+      </strong>
+    <% end %>
     <hr />
     <h5><%= t('transactions_by_type') %></h5>
     <table class='table table-striped table-bordered table-sm bg-white table-responsive'>
@@ -118,8 +126,8 @@
         <% debit_sum = t.debit_sum || 0 %>
         <% credit_sum = t.credit_sum || 0 %>
         <% if t.type.name_en == 'Rental' %>
-          <% debit_sum -= (@cr_prev_rental+@cr_rental) %>
-          <% credit_sum -= (@cr_prev_rental+@cr_rental)  %>
+          <% debit_sum -= @cr_rental %>
+          <% credit_sum -= @cr_rental  %>
         <% end %>
         <tr>
           <td><%= t.type.send("name_#{@locale}") %></td>
