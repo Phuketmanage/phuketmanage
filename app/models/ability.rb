@@ -8,7 +8,7 @@ class Ability
     can [:confirmed, :index_supplier, :canceled], Transfer
     can :show, House
     if user.role? :owner
-      can :index_front, [ Transaction ]
+      can :index, [ Transaction ]
       can :index_front, [ Booking ]
       can :index, [ Admin ]
     elsif user.role? 'Transfer'
@@ -41,7 +41,7 @@ class Ability
       cannot :destroy, User
       can :manage, [  HouseType, House, Duration, Season, Price, Booking,
                       Connection, JobType, Transfer, Source, Option, HouseOption, Location ]
-      can [:index, :add, :delete], HousePhoto
+      can :manage, HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job #, creator: user

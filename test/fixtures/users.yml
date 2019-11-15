@@ -7,27 +7,34 @@
 admin: #{}
   email: 'admin@test.com'
   roles: admin
+  locale: en
 #
 manager: #{}
   email: 'manager@test.com'
   roles: manager
+  locale: en
 
 accounting: #{}
   email: 'assr@test.com'
   roles: accounting
+  locale: en
 
 owner: #{}
   email: 'owner@test.com'
   roles: owner
+  locale: en
 
 owner_2: #{}
   email: 'owner_2@test.com'
   roles: owner
+  locale: en
 
 tenant: #{}
   email: 'tenant@test.com'
   roles: tenant
+  locale: ru
 
 owner_tenant: #{}
   email: 'owner_tenant@test.com'
   roles: owner, tenant
+  locale: ru

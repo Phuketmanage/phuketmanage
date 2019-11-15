@@ -1,52 +1,59 @@
-<h1>
-  Balance
-  <%= 'company view' if @view == 'company' %>
-  <%= 'owner view' if @view == 'owner' %>
-  <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
-</h1>
+<% if current_user.role?(['Owner']) %>
+  <h1><%= t('balance') %></h1>
 
-<div class="mb-2 d-print-none">
-  <%= form_with(url: transactions_path, method: :get, local: true, class: 'form-inline') do |form| %>
-        <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
-        <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
-        <%= form.select :view_user_id,
-              House.order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
-              { include_blank: 'Company', selected: @view_user_id },
-              class: "form-control mb-2 mr-sm-2" %>
-        <%= form.submit 'Company view',
-              class: "btn btn-primary mb-2 mr-2 btn-sm",
-              id: 'btn_company_view' %>
-        <%= form.submit 'Owner view',
-              class: "btn btn-primary mb-2 mr-2 btn-sm",
-              id: 'btn_owner_view',
-              disabled: true %>
-        <% if current_user.role?(['Admin']) %>
-          <%= form.submit 'Owner front view',
-                class: "btn btn-primary mb-2 mr-2 btn-sm",
-                id: 'btn_owner_front_view',
-                disabled: true %>
-        <% end %>
-        <%= form.submit 'Accounting view',
-              class: "btn btn-primary mb-2 mr-2 btn-sm",
-              id: 'btn_owner_accounting_view',
-              disabled: true %>
-        <%= link_to 'Drop filter', transactions_path,
-              class: 'btn btn-secondary mb-2 mr-2 btn-sm' %>
-        <%= link_to 'New Transaction', new_transaction_path,
-              class: 'btn btn-info mb-2 mr-2 btn-sm' %>
+  <%= form_with(url: balance_front_path, method: :get, local: true, class: 'form-inline d-print-none') do |form| %>
+        <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-md-2" %>
+        <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+        <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
+        <%= link_to t('drop_filter'), balance_front_path, class: 'btn btn-secondary mb-2 mr-md-2'  %>
   <% end %>
-</div>
 
-<% if @error %>
-  <div class="alert alert-warning" role="alert">
-    <%= @error %>
-  </div>
+  <%= render 'owner_view', {transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house} %>
 <% else %>
-  <% if @view == 'company' %>
-    <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
-  <% elsif @view == 'owner' %>
-    <%= render 'owner_view', transactions: @transactions, transactions_before: @transactions_before, one_house: false %>
-  <% elsif @view == 'accounting' %>
-    <%= render 'owner_accounting_view', transactions: @transactions, transactions_before: @transactions_before %>
+  <h1>
+    Balance
+    <%= 'company view' if @view == 'company' %>
+    <%= 'owner view' if @view == 'owner' %>
+    <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
+  </h1>
+
+  <div class="mb-2 d-print-none">
+    <%= form_with(url: transactions_path, method: :get, local: true, class: 'form-inline') do |form| %>
+          <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
+          <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
+          <%= form.select :view_user_id,
+                House.order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
+                { include_blank: 'Company', selected: @view_user_id },
+                class: "form-control mb-2 mr-sm-2" %>
+          <%= form.submit 'Company view',
+                class: "btn btn-primary mb-2 mr-2 btn-sm",
+                id: 'btn_company_view' %>
+          <%= form.submit 'Owner view',
+                class: "btn btn-primary mb-2 mr-2 btn-sm",
+                id: 'btn_owner_view',
+                disabled: true %>
+          <%= form.submit 'Accounting view',
+                class: "btn btn-primary mb-2 mr-2 btn-sm",
+                id: 'btn_owner_accounting_view',
+                disabled: true %>
+          <%= link_to 'Drop filter', transactions_path,
+                class: 'btn btn-secondary mb-2 mr-2 btn-sm' %>
+          <%= link_to 'New Transaction', new_transaction_path,
+                class: 'btn btn-info mb-2 mr-2 btn-sm' %>
+    <% end %>
+  </div>
+
+  <% if @error %>
+    <div class="alert alert-warning" role="alert">
+      <%= @error %>
+    </div>
+  <% else %>
+    <% if @view == 'company' %>
+      <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
+    <% elsif @view == 'owner' %>
+      <%= render 'owner_view', transactions: @transactions, transactions_before: @transactions_before, one_house: false %>
+    <% elsif @view == 'accounting' %>
+      <%= render 'owner_accounting_view', transactions: @transactions, transactions_before: @transactions_before %>
+    <% end %>
   <% end %>
 <% end %>

@@ -156,19 +156,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
-    sign_in users(:owner)
-    get transactions_path
-    assert_redirected_to root_path
-    follow_redirect!
-    assert_select 'div.alert', 'You are not authorized to access this page.'
-
     sign_in users(:tenant)
-    get transactions_path
-    assert_redirected_to root_path
-    follow_redirect!
-    assert_select 'div.alert', 'You are not authorized to access this page.'
-
-    sign_in users(:owner_tenant)
     get transactions_path
     assert_redirected_to root_path
     follow_redirect!
