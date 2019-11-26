@@ -29,28 +29,29 @@
   <table class='table bg-white table-bordered table-sm table-responsive-lg'>
     <thead>
       <tr>
-        <th>House</th>
-        <th>Start</th>
-        <th>Finish</th>
-        <th>Client</th>
-        <th>Source</th>
-        <th>Status</th>
-        <th>Sale</th>
-        <th>Agent</th>
-        <th>Comm</th>
-        <th>Comm %</th>
-        <th>Nett</th>
-        <th>Action</th>
+        <th width="70px">House</th>
+        <th width="170px">Period</th>
+        <th width="100px">Source</th>
+        <th width="100px">Status</th>
+        <th width="95px">Sale</th>
+        <th width="95px">Agent</th>
+        <th width="95px">Comm</th>
+        <th width="95px">Comm %</th>
+        <th width="95px">Nett</th>
+        <th width="95px">To owner</th>
       </tr>
     </thead>
 
     <tbody>
       <% @bookings.each do |booking| %>
+        <% income = booking.transactions.joins(:balance_outs).sum(:debit) %>
+        <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
+        <% to_owner = income - comm %>
+
         <tr class='bg-light'>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
-          <td><%= booking.start.strftime('%d.%m.%Y') %></td>
-          <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
-          <td><%= booking.client_details %></td>
+          <td><%= booking.start.strftime('%d.%m.%Y') %> -
+          <%= booking.finish.strftime('%d.%m.%Y') %></td>
           <td><%= booking.source.name if booking.source %></td>
           <td><%= booking.status %></td>
           <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
@@ -60,27 +61,40 @@
             <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
           </td>
           <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
-          <td>
-            <% if !booking.number.nil? %>
-              <%= link_to 'Edit', edit_booking_path(booking) %>
-            <% else %>
-              <%= link_to 'View', booking_path(booking) %>
-            <% end %>
-            <% if current_user.role?('Admin') %>
-              | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
-            <% end %>
-          </td>
+          <td><%= number_to_currency(to_owner, precision: 0, unit: '') %></td>
         </tr>
-        <% if booking.comment || booking.comment_owner || booking.comment_gr %>
-          <tr>
-            <td colspan='12'>
-
+        <tr>
+          <td colspan="10">
+            <%= booking.client_details %>
+            <% if booking.comment || booking.comment_owner || booking.comment_gr %>
               <div><%= "Comment inner: #{booking.comment}" if booking.comment.present? %></div>
               <div><%= "Comment owner: #{booking.comment_owner}" if booking.comment_owner.present? %></div>
               <div><%= "Comment gr: #{booking.comment_gr}" if booking.comment_gr.present? %></div>
-            </td>
-          </tr>
-        <% end %>
+            <% end %>
+            <% if booking.transactions.any? %>
+              Payment history:
+              <div>
+
+                <% booking.transactions.each do |b| %>
+                  <% recieved = BalanceOut.where(transaction_id: b.id).first.debit %>
+                  <% comm = BalanceOut.where(transaction_id: b.id).first.credit %>
+                  <%= b.date.strftime('%d.%m.%Y') %> -
+                  Received <%= number_to_currency(recieved, precision: 0, unit: '') %>,
+                  To owner <%= number_to_currency(recieved - comm, precision: 0, unit: '') %><br />
+                <% end %>
+            <% end %>
+            <div>
+              <% if !booking.number.nil? %>
+                <%= link_to 'Edit', edit_booking_path(booking) %>
+              <% else %>
+                <%= link_to 'View', booking_path(booking) %>
+              <% end %>
+              <% if current_user.role?('Admin') %>
+                | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
       <% end %>
     </tbody>
   </table>

@@ -2,58 +2,8 @@
   <div class="collapse navbar-collapse" id="admin-nav">
     <ul class="navbar-nav flex-column">
 
-      <% if current_user.role? ['Owner'] %>
-        <li class="nav-item">
-          <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('bookings'), bookings_front_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if current_user.role? ['Transfer'] %>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if current_user.role? ['Maid'] %>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if current_user.role? ['Accounting'] %>
-        <li class="nav-item">
-          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if current_user.role? ['Guest relation'] %>
-        <li class="nav-item">
-          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-      <% end %>
 
       <% if current_user.role? ['Manager'] %>
-        <li class="nav-item">
-          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Houses', houses_path, class: "nav-link" %>
-        </li>
         <li class="nav-item">
           <%= link_to 'Owners', users_path(role: 'Owner'), class: "nav-link" %>
         </li>
@@ -68,30 +18,12 @@
         </li>
         <li class="nav-item">
           <%= link_to 'Sources', sources_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
 
       <% end %>
 
       <% if current_user.role? ['Admin'] %>
         <li class="nav-item">
-          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
           <%= link_to 'Houses', houses_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
@@ -108,15 +40,6 @@
         </li>
         <li class="nav-item">
           <%= link_to 'Sources', sources_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
           <%= link_to 'Job types', job_types_path, class: "nav-link" %>
