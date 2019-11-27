@@ -70,7 +70,7 @@ three:
   user: owner_2
   comment_en: maintenance
   comment_ru: MyString
-  comment_inner: MyString
+  comment_inner: Hidden comment
 
 four:
   date: '12.09.2019'

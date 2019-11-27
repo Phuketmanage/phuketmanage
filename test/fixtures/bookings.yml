@@ -11,6 +11,9 @@ _1:
   agent: 0
   comm: 20000
   nett: 80000
+  comment_owner: Comment for all
+  comment: Inner comment
+  comment_gr: Comment for GR
 
 _2:
   start: 15.07.<%= Time.now.year+1 %>

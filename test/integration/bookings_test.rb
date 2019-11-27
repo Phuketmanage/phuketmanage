@@ -277,8 +277,17 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'td', text: '20,000', count: 1 #Comm
     assert_select 'td', text: '80,000', count: 1 #Nett
 
-
-
-
   end
+
+  test 'owner at front can see only regular comments' do
+    sign_in users(:owner)
+    get bookings_front_path
+
+    # Owner can not see comment inner
+    assert_match 'Comment for all', response.body
+    assert_no_match 'Inner comment', response.body
+    assert_no_match 'Comment for GR', response.body
+  end
+
+
 end

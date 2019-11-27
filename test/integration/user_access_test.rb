@@ -146,6 +146,9 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     # Owner can not see edit links
     assert_select 'a', text: 'Edit', count: 0
     assert_select 'a', text: 'Delete', count: 0
+
+    # Owner can not see comment inner
+    assert_no_match 'Hidden comment', response.body
   end
 
   test 'transactions aka balance' do

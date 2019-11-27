@@ -3,9 +3,9 @@
       <thead>
         <tr>
           <th width="70px"><%= t('date_text') %></th>
-          <th class="text-right" width="95px"><%= t('debit') %></th>
-          <th class="text-right" width="95px"><%= t('credit') %></th>
-          <th class="text-right" width="95px"><%= t('balance') %></th>
+          <th class="text-right" width="105px"><%= t('debit') %></th>
+          <th class="text-right" width="105px"><%= t('credit') %></th>
+          <th class="text-right" width="105px"><%= t('balance') %></th>
           <th width="150px"><%= t('type') %></th>
           <% if !one_house %>
             <th width="60px"><%= t('house') %></th>
@@ -81,7 +81,7 @@
               </td>
             <% end %>
           </tr>
-          <% if t.comment_inner.present? %>
+          <% if t.comment_inner.present? && current_user.role?(['Admin', 'Accounting', 'Manager']) %>
             <tr><td colspan="7"><%= t.comment_inner %></td></tr>
           <% end %>
         <% end %>
