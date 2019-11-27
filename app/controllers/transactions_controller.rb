@@ -27,6 +27,7 @@ class TransactionsController < ApplicationController
             return
           end
           @view_user_id = params[:view_user_id]
+          session[:view_user_id] = params[:view_user_id]
           owner = User.find(@view_user_id)
         end
         @locale = owner.locale
@@ -46,6 +47,7 @@ class TransactionsController < ApplicationController
         future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
         @bookings_prepayment = future_booking_de - future_booking_cr
         @view = 'owner'
+        session[:commit] = params[:commit]
       elsif current_user.role?(['Admin','Manager','Accounting']) &&
       params[:commit] == 'Accounting view'
         if !params[:view_user_id].present?

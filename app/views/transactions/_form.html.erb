@@ -103,6 +103,11 @@
 
   <div class="actions mt-2">
     <%= form.submit 'Save', class: "btn btn-primary" %>
-    <%= link_to 'Back', transactions_path, class: 'btn btn-secondary' %>
+    <%= link_to 'Back', transactions_path(
+                          from: session[:from],
+                          to: session[:to],
+                          view_user_id: session[:view_user_id],
+                          commit: session[:commit]),
+                        class: 'btn btn-secondary' %>
   </div>
 <% end %>
