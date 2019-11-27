@@ -1,7 +1,8 @@
 
-<table id="balance_table" class='cell-border display compact stripe bg-white'>
+<table id="balance_table_with_details" class='cell-border display compact stripe bg-white'>
   <thead>
     <tr>
+      <th></th>
       <th width="70px">Date</th>
       <th class="text-right" width="95px">Debit</th>
       <th class="text-right" width="95px">Credit</th>
@@ -9,7 +10,6 @@
       <th>Type</th>
       <th>House</th>
       <th width="300px">Comment</th>
-      <th width="90px">Com. inner</th>
       <th>Actions</th>
       <th width="95px">Debit</th>
       <th width="95px">Credit</th>
@@ -27,6 +27,7 @@
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
       <tr>
         <td></td>
+        <td></td>
         <td class="text-right" id="de_co_prev_sum">
           <%= number_to_currency(de_co_prev_sum - cr_co_prev_sum, precision: 2, unit: '') if de_co_prev_sum > cr_co_prev_sum %>
         </td>
@@ -41,12 +42,11 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
       </tr>
     <% end %>
     <% transactions.each do |t| %>
       <% next if t.for_acc %>
-      <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %>>
+      <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
         <% de_co = t.balances.sum(:debit) %>
         <% cr_co = t.balances.sum(:credit) %>
         <% de_ow = t.balance_outs.sum(:debit) %>
@@ -54,6 +54,11 @@
         <% de_co_sum += de_co %>
         <% cr_co_sum += cr_co %>
         <% balance_sum += de_co - cr_co %>
+        <% if t.comment_inner.present? %>
+          <td class="details-control"><%= fa_icon "plus-circle" %></td>
+        <% else %>
+          <td></td>
+        <% end %>
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
@@ -66,7 +71,6 @@
             <%= link_to 'Translate', edit_transaction_path(t) %>
           <% end %>
         </td>
-        <td><%= t.comment_inner %></td>
         <td>
           <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
@@ -86,13 +90,13 @@
   </tbody>
   <tfoot>
     <tr>
+      <td></td>
       <td class='font-weight-bold text-right'>Total:</td>
       <td class="font-weight-bold text-right" id="de_co_sum">
         <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold text-right" id="co_balance">
         <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
-      <td></td>
       <td></td>
       <td></td>
       <td></td>

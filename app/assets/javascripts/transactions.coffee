@@ -45,6 +45,30 @@ $(document).on "turbolinks:load", ->
       order: [[ 0, 'desc' ]]
     )
 
+  $ ->
+    table = $("#balance_table_with_details").DataTable(
+      scrollX: true,
+      paging: false,
+      columnDefs: [ { type: 'date', 'targets': [1] } ],
+      order: [[ 1, 'asc' ]]
+    )
+
+    $('#balance_table_with_details tbody').on 'click', 'td.details-control', ->
+      tr = $(this).closest('tr')
+      row = table.row( tr )
+
+      if row.child.isShown()
+        # // This row is already open - close it
+        row.child.hide()
+        # tr.removeClass('shown')
+        tr.find('i').removeClass('fa-minus-circle').addClass('fa-plus-circle')
+      else
+        # // Open this row
+        row.child( tr.data('child-comment-inner') ).show();
+        # tr.addClass('shown')
+        tr.find('i').removeClass('fa-plus-circle').addClass('fa-minus-circle')
+
+
 
   $('#link_show_hidden').on 'click', (e) ->
     e.preventDefault()

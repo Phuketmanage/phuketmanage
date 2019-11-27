@@ -12,7 +12,6 @@
           <% end %>
           <th><%= t('comment') %></th>
           <% if current_user.role?(['Admin', 'Accounting', 'Manager']) %>
-            <th width="90px">Com. inner</th>
             <th>Actions</th>
           <% end %>
         </tr>
@@ -46,7 +45,6 @@
             <td><%= t('prev_balance') %></td>
             <% if current_user.role?(['Admin', 'Accounting', 'Manager'])%>
               <td></td>
-              <td></td>
             <% end %>
           </tr>
         <% end %>
@@ -69,7 +67,6 @@
             <% locale = t.user.locale || I18n.locale  %>
             <td><%= t.send("comment_#{locale}") %></td>
             <% if current_user.role?(['Admin', 'Accounting', 'Manager'])%>
-              <td><%= t.comment_inner %></td>
               <td>
                 <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
                   <%= link_to 'Edit', edit_transaction_path(t) %>
@@ -84,6 +81,9 @@
               </td>
             <% end %>
           </tr>
+          <% if t.comment_inner.present? %>
+            <tr><td colspan="7"><%= t.comment_inner %></td></tr>
+          <% end %>
         <% end %>
       </tbody>
 
@@ -99,7 +99,6 @@
           <% end %>
           <td></td>
           <% if current_user.role?(['Admin', 'Accounting', 'Manager'])%>
-            <td></td>
             <td></td>
           <% end %>
         </tr>

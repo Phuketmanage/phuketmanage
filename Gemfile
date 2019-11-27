@@ -48,6 +48,7 @@ gem 'http_accept_language'
 gem 'aws-sdk-s3', '~> 1.0.0.rc2'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'momentjs-rails'
+gem 'font_awesome5_rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
