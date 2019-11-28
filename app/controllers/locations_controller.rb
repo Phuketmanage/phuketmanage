@@ -8,7 +8,7 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.all
+    @locations = Location.all.order(:name_en)
   end
 
   # GET /locations/1
