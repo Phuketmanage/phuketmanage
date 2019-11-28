@@ -131,8 +131,10 @@ react_to_select_trsc_type = (selected, init) ->
         $("#transaction_de_ow").val(0)
         $("#transaction_de_co").val(0)
         $("#transaction_cr_co").val(0)
-      $("#cr_ow_label").text('Maintenance price')
+      $("#cr_ow_label").text('Pay to outside')
       $("#cr_ow").show()
+      $("#de_co_label").text('Pay to Phaethon')
+      $("#de_co").show()
       $("#house_id").show()
       $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false

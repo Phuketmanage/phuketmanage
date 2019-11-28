@@ -56,7 +56,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                 date: Time.now.to_date,
                                 type_id: type.id,
                                 house_id: @house.id,
-                                cr_ow: 15000,
+                                de_co: 15000,
                                 comment_en: 'Maintenance'} }
     # assert_match 'test', response.body
     t = Transaction.last
@@ -91,7 +91,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                 date: Time.now.to_date,
                                 type_id: type.id,
                                 house_id: @house.id,
-                                cr_ow: 300,
+                                de_co: 300,
                                 comment_en: 'Laundry'} }
     # assert_match 'test', response.body
     t = Transaction.last
