@@ -15,7 +15,7 @@
   <% else %>
     <%= render 'owner_view', {transactions: @transactions, transactions_before: @transactions_before, one_house: @one_house} %>
   <% end %>
-<% else %>
+<% elsif current_user.role?(['Admin', 'Accounting', 'Manager']) %>
   <h1>
     Balance
     <%= 'company view' if @view == 'company' %>
@@ -44,8 +44,13 @@
                 disabled: true %>
           <%= link_to 'Drop filter', transactions_path,
                 class: 'btn btn-secondary mb-2 mr-2 btn-sm' %>
-          <%= link_to 'New Transaction', new_transaction_path,
-                class: 'btn btn-info mb-2 mr-2 btn-sm' %>
+          <% if !@view_user_id %>
+            <%= link_to 'New Transaction', new_transaction_path,
+                  class: 'btn btn-info mb-2 mr-2 btn-sm' %>
+          <% else %>
+            <%= link_to 'New Transaction', new_transaction_path(user_id: @view_user_id),
+                  class: 'btn btn-info mb-2 mr-2 btn-sm' %>
+          <% end %>
     <% end %>
   </div>
 

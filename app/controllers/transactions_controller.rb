@@ -103,6 +103,13 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     @transaction = Transaction.new
+    if params[:user_id].present?
+      owner = User.find(params[:user_id])
+      @transaction.user_id = owner.id
+      if owner.houses.count == 1
+        @transaction.house_id = owner.houses.first.id
+      end
+    end
   end
 
   # GET /transactions/1/edit
