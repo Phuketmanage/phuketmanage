@@ -83,7 +83,8 @@ class UsersController < ApplicationController
                                     :locale,
                                     :password,
                                     :password_confirmation,
-                                    { role_ids: []})
+                                    { role_ids: []},
+                                    :comment)
     end
 
 end

@@ -19,6 +19,12 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :comment %>
+    <%= f.text_area :comment, class: 'form-control', rows: 6 %>
+  </div>
+
+
+  <div class="form-group">
     <%= f.label :locale %><br />
     <%= f.select :locale, I18n.available_locales, {}, class: "form-control" %>
   </div>
