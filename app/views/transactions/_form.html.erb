@@ -33,7 +33,7 @@
     <div class="col-md-2 money_fields" id='booking_id'>
       <%= form.label :booking_id %>
       <%= form.select :booking_id,
-            Booking.where('paid = ? OR id = ?', false, transaction.booking_id).all.order(:start).map {|b| ["#{b.house.code} #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]},
+            @bookings.map {|b| ["#{b.code} #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]},
                       { include_blank: 'Select booking' }, class: "form-control" %>
     </div>
     <div class="col-md-2 money_fields", id='de_ow', style='display:none;'>

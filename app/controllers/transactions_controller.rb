@@ -103,12 +103,16 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     @transaction = Transaction.new
+
     if params[:user_id].present?
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
       if owner.houses.count == 1
         @transaction.house_id = owner.houses.first.id
       end
+      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
+    else
+      @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
     end
   end
 
@@ -118,6 +122,8 @@ class TransactionsController < ApplicationController
     @cr_ow = @transaction.balance_outs.sum(:credit)
     @de_co = @transaction.balances.sum(:debit)
     @cr_co = @transaction.balances.sum(:credit)
+    owner = @transaction.user
+    @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
   end
 
   # POST /transactions
