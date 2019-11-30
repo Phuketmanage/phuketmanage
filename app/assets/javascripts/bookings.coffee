@@ -1,4 +1,6 @@
 $(document).on "turbolinks:load", ->
+  $('[data-toggle="tooltip"]').tooltip()
+
   $('.calcs').change ->
     sale = parseInt($('#booking_sale').val())
     agent = parseInt($('#booking_agent').val())

@@ -52,7 +52,11 @@
         <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
         <% to_owner = income - comm %>
 
-        <tr class='bg-light'>
+        <% if booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett %>
+          <tr class="bg-light table-danger" data-toggle="tooltip" data-placement="right" title="No payment to owner">
+        <% else %>
+          <tr class="bg-light">
+        <% end %>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
           <td><%= booking.start.strftime('%d.%m.%Y') %> -
           <%= booking.finish.strftime('%d.%m.%Y') %></td>

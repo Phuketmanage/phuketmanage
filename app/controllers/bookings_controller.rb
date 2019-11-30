@@ -39,9 +39,12 @@ class BookingsController < ApplicationController
       @bookings = [] and return
     end
 
+    @oid = params[:oid]
     @hid = params[:hid]
     if @hid.present?
-      house_ids = House.where(number: params[:hid]).ids
+      house_ids = House.where(number: @hid).ids
+    elsif @oid.present?
+      house_ids = User.find(@oid).houses.ids
     else
       house_ids = House.ids
     end
