@@ -124,9 +124,7 @@ class TransactionsController < ApplicationController
   # POST /transactions.json
   def create
     @transaction = Transaction.new(transaction_params)
-    byebug
     @transaction.set_owner_and_house
-    byebug
     respond_to do |format|
       if @transaction.save
         de_ow = params[:transaction][:de_ow].to_d
