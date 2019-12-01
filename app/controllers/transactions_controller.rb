@@ -144,6 +144,17 @@ class TransactionsController < ApplicationController
         @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
         if @transaction.errors.any?
           @transaction.destroy
+          if params[:user_id].present?
+            owner = User.find(params[:user_id])
+            @transaction.user_id = owner.id
+            if owner.houses.count == 1
+              @transaction.house_id = owner.houses.first.id
+            end
+            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          else
+            @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          end
+
           render :new and return
         end
         if params[:booking_fully_paid] == "true"
