@@ -46,8 +46,7 @@ class Transaction < ApplicationRecord
       balance_outs.create!(credit: cr_ow + cr_co + de_co)
       balances.create!(debit: cr_co + de_co, credit: cr_co)
     elsif types5.include?(type)
-      errors.add(:base, 'Need to select owner or house') and return if !user_id.nil? && User.find(user_id).houses.count > 1 && house_id.nil?
-      errors.add(:base, 'Need to select house') and return if !user_id.nil? && User.find(user_id).houses.count == 1 && house_id.nil?
+      errors.add(:base, 'Need to select owner or house') and return if user_id.nil? || house_id.nil?
       errors.add(:base, 'Amount can not be blank') and return if cr_ow == 0
       balance_outs.create!(credit: cr_ow) if cr_ow > 0
     elsif types6.include?(type)
