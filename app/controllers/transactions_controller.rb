@@ -195,6 +195,16 @@ class TransactionsController < ApplicationController
                                     notice: 'Transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @transaction }
       else
+        @de_ow = @transaction.balance_outs.sum(:debit)
+        @cr_ow = @transaction.balance_outs.sum(:credit)
+        @de_co = @transaction.balances.sum(:debit)
+        @cr_co = @transaction.balances.sum(:credit)
+        @bookings = []
+        if @transaction.user
+          owner = @transaction.user
+          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+        end
+
         format.html { render :edit }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
