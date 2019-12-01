@@ -274,7 +274,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     get bookings_path
     assert_response :success
     assert_select 'td', text: '100,000', count: 1 #Sale
-    assert_select 'td', text: '20,000', count: 1 #Comm
+    assert_select 'tr#number_1 td.comm', text: '20,000 (20.0%)', count: 1 #Comm
     assert_select 'td', text: '80,000', count: 1 #Nett
 
   end

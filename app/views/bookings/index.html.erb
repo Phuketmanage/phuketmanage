@@ -51,10 +51,10 @@
         <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
         <% to_owner = income - comm %>
 
-        <% if booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett %>
-          <tr class="bg-light table-danger" data-toggle="tooltip" data-placement="right" title="Problem with payment to owner">
+        <% if booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett && booking.status != 'canceled' %>
+          <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Problem with payment to owner">
         <% else %>
-          <tr class="bg-light">
+          <tr class="bg-light" id="<%= booking.number %>">
         <% end %>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
           <td>
@@ -72,15 +72,16 @@
           <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
           <td><%= number_to_currency(booking.agent, precision: 0, unit: '') %></td>
           <td>
-            <%= number_to_currency(booking.sale - booking.agent, precision: 0, unit: '') if booking.agent > 0%><br />
-            <small>
-              (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 0, unit: '') if booking.agent > 0%>)
-            </small>
+            <% if booking.agent > 0 %>
+              <%= number_to_currency(booking.sale - booking.agent, precision: 0, unit: '') %><br />
+              <small>
+                (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 0, unit: '') %>)
+              </small>
+            <% end %>
           </td>
-          <td>
+          <td class="comm">
             <nobr>
-              <%= number_to_currency(booking.comm, precision: 0, unit: '') %>
-              (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
+              <%= number_to_currency(booking.comm, precision: 0, unit: '') %> (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
             </nobr>
           </td>
           <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
