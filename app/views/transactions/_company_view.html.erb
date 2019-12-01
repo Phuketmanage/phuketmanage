@@ -54,7 +54,7 @@
       <% balance_sum += de_co - cr_co %>
 
       <% next if t.for_acc %>
-      <% if cr_ow > 0 && cr_ow == de_co %>
+      <% if (de_ow.nil? || de_ow == 0) && (cr_ow > 0 && cr_ow == de_co) %>
         <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit = Company debit">
       <% elsif cr_ow > 0 && cr_ow < de_co %>
         <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit < Company debit">
