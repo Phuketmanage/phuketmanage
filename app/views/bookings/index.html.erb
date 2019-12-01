@@ -38,10 +38,9 @@
         <th width="100px">Status</th>
         <th width="95px">Sale</th>
         <th width="95px">Agent</th>
-        <th width="95px">Nett IN</th>
-        <th width="95px">Comm</th>
-        <th width="95px">Comm %</th>
-        <th width="95px">Nett OUT</th>
+        <th width="95px">Net IN</th>
+        <th width="110px">Comm</th>
+        <th width="95px">Net OUT</th>
         <th width="95px">To owner</th>
       </tr>
     </thead>
@@ -58,22 +57,37 @@
           <tr class="bg-light">
         <% end %>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
-          <td><%= booking.start.strftime('%d.%m.%Y') %> -
-          <%= booking.finish.strftime('%d.%m.%Y') %></td>
-          <td><%= booking.source.name if booking.source %></td>
+          <td>
+            <nobr>
+              <%= booking.start.strftime('%d.%m.%Y') %> -
+              <%= booking.finish.strftime('%d.%m.%Y') %>
+            </nobr>
+          </td>
+          <td>
+            <small>
+              <%= booking.source.name if booking.source %>
+            <small>
+          </td>
           <td><%= booking.status %></td>
           <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
           <td><%= number_to_currency(booking.agent, precision: 0, unit: '') %></td>
-          <td><%= number_to_currency(booking.sale - booking.agent, precision: 0, unit: '') if booking.agent > 0%></td>
-          <td><%= number_to_currency(booking.comm, precision: 0, unit: '') %></td>
           <td>
-            <%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>
+            <%= number_to_currency(booking.sale - booking.agent, precision: 0, unit: '') if booking.agent > 0%><br />
+            <small>
+              (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 0, unit: '') if booking.agent > 0%>)
+            </small>
+          </td>
+          <td>
+            <nobr>
+              <%= number_to_currency(booking.comm, precision: 0, unit: '') %>
+              (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
+            </nobr>
           </td>
           <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
           <td><%= number_to_currency(to_owner, precision: 0, unit: '') %></td>
         </tr>
         <tr>
-          <td colspan="11">
+          <td colspan="10">
             <%= booking.client_details %>
             <% if booking.comment || booking.comment_owner || booking.comment_gr %>
               <div><%= "Comment inner: #{booking.comment}" if booking.comment.present? %></div>
