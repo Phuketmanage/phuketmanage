@@ -122,8 +122,11 @@ class TransactionsController < ApplicationController
     @cr_ow = @transaction.balance_outs.sum(:credit)
     @de_co = @transaction.balances.sum(:debit)
     @cr_co = @transaction.balances.sum(:credit)
-    owner = @transaction.user
-    @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+    @bookings = []
+    if @transaction.user
+      owner = @transaction.user
+      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+    end
   end
 
   # POST /transactions
