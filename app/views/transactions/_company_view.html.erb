@@ -114,11 +114,25 @@
     <th>Debit</th>
     <th>Credit</th>
   </tr>
+  <% i = 0 %>
+  <% debit_total = 0 %>
+  <% credit_total = 0 %>
   <% @transactions_by_cat.each do |t| %>
+    <% i += 1 %>
+    <% debit_total += t.debit_sum if !t.debit_sum.nil? %>
+    <% credit_total += t.credit_sum if !t.credit_sum.nil? %>
     <tr>
       <td><%= t.type.name_en %></td>
       <td><%= number_to_currency(t.debit_sum, precision: 2, unit: '') %></td>
       <td><%= number_to_currency(t.credit_sum, precision: 2, unit: '') %></td>
     </tr>
+
+    <% if i == @transactions_by_cat.size %>
+      <tr>
+        <td><%= number_to_currency(debit_total-credit_total, precision: 2, unit: '') %></td>
+        <td><%= number_to_currency(debit_total, precision: 2, unit: '') %></td>
+        <td><%= number_to_currency(credit_total, precision: 2, unit: '') %></td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
