@@ -45,15 +45,23 @@
       </tr>
     <% end %>
     <% transactions.each do |t| %>
+      <% de_co = t.balances.sum(:debit) %>
+      <% cr_co = t.balances.sum(:credit) %>
+      <% de_ow = t.balance_outs.sum(:debit) %>
+      <% cr_ow = t.balance_outs.sum(:credit) %>
+      <% de_co_sum += de_co %>
+      <% cr_co_sum += cr_co %>
+      <% balance_sum += de_co - cr_co %>
+
       <% next if t.for_acc %>
-      <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
-        <% de_co = t.balances.sum(:debit) %>
-        <% cr_co = t.balances.sum(:credit) %>
-        <% de_ow = t.balance_outs.sum(:debit) %>
-        <% cr_ow = t.balance_outs.sum(:credit) %>
-        <% de_co_sum += de_co %>
-        <% cr_co_sum += cr_co %>
-        <% balance_sum += de_co - cr_co %>
+      <% if cr_ow > 0 && cr_ow == de_co %>
+        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit = Company debit">
+      <% elsif cr_ow > 0 && cr_ow < de_co %>
+        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit < Company debit">
+
+      <% else %>
+        <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
+      <% end %>
         <% if t.comment_inner.present? %>
           <td class="details-control"><%= fa_icon "plus-circle" %></td>
         <% else %>
