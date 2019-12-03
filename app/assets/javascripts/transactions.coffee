@@ -142,6 +142,22 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("Обслуживание ")
       $("#comment_ru").show()
       $("#comment_inner").show()
+    if selected == 'Laundry'
+      if init == false
+        $("#transaction_de_ow").val(0)
+        $("#transaction_de_co").val(0)
+        $("#transaction_cr_co").val(0)
+      $("#cr_ow_label").text('Pay to outside')
+      $("#cr_ow").show()
+      $("#de_co_label").text('Pay to Phaethon')
+      $("#de_co").show()
+      $("#house_id").show()
+      $("#owner_id").show()
+      if $('form').attr('method') == 'post' && init == false
+        $('#transaction_comment_en').val("Laundry ")
+        $('#transaction_comment_ru').val("Стирка ")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
     if selected == 'Repair' || selected == 'Purchases' || selected == 'Consumables'
       if init == false
         $("#transaction_de_ow").val(0)
@@ -158,20 +174,6 @@ react_to_select_trsc_type = (selected, init) ->
       $("#de_co").show()
       $("#house_id").show()
       $("#owner_id").hide()
-      $("#comment_ru").show()
-      $("#comment_inner").show()
-    if selected == 'Laundry'
-      if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
-      $("#cr_ow_label").text('Amount')
-      $("#cr_ow").show()
-      $("#house_id").show()
-      $("#owner_id").show()
-      if $('form').attr('method') == 'post' && init == false
-        $('#transaction_comment_en').val("Laundry ")
-        $('#transaction_comment_ru').val("Стирка ")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if selected == 'From guests' #House required
