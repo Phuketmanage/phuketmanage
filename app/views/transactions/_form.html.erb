@@ -4,7 +4,11 @@
   <div class="form-row">
     <div class="col-md-2">
       <%= form.label :date %>
-      <%= form.date_field :date, min: (Date.today-30.days).beginning_of_month, max: Date.today, class: 'form-control' %>
+      <% if current_user.role? ['Admin'] %>
+        <%= form.date_field :date, class: 'form-control' %>
+      <% else %>
+        <%= form.date_field :date, min: (Date.today-30.days).beginning_of_month, max: Date.today, class: 'form-control' %>
+      <% end %>
     </div>
     <div class="col-md-2">
       <%= form.label :type_id %>
