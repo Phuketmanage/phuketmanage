@@ -167,6 +167,13 @@ class TransactionsController < ApplicationController
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully created.' }
       else
+        if params[:user_id].present?
+          owner = User.find(params[:user_id])
+          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+        else
+          @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+        end
+
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
