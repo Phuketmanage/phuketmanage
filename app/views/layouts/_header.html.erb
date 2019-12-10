@@ -123,11 +123,13 @@
       </li>
     </ul>
   </div>
-  <div class="d-none d-lg-block">
-    <%= t('app.tagline') %> |
-    <%= link_to t('app.reservation_phone'),
-      "tel:#{t('app.reservation_phone')}" %> |
-    <%= mail_to t('app.reservation_email') %>
-  </div>
+  <% if signed_in? && !current_user.role?(['Admin','Manager','Accounting','Guest relation']) %>
+    <div class="d-none d-lg-block">
+      <%= t('app.tagline') %> |
+      <%= link_to t('app.reservation_phone'),
+        "tel:#{t('app.reservation_phone')}" %> |
+      <%= mail_to t('app.reservation_email') %>
+    </div>
+  <% end %>
 </nav>
 
