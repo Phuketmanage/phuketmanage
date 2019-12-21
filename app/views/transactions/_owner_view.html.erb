@@ -30,13 +30,19 @@
           <tr>
             <td></td>
             <td class="text-right" id="de_ow_prev_sum">
-              <%= number_to_currency(de_ow_prev_sum - cr_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > cr_ow_prev_sum %>
+              <nobr>
+                <%= number_to_currency(de_ow_prev_sum - cr_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > cr_ow_prev_sum %>
+              </nobr>
             </td>
             <td class="text-right" id="cr_ow_prev_sum">
-              <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
+              <nobr>
+                <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
+              </nobr>
             </td>
             <td class="text-right" id="ow_prev_balance">
+              <nobr>
                 <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
+              </nobr>
             </td>
             <td></td>
             <% if !one_house %>
@@ -57,9 +63,21 @@
           <% balance_sum += de_ow - cr_ow %>
           <tr class="trsc_row <%= 'text-muted' if t.hidden %>" id="trsc_<%= t.id %>_row" >
             <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
-            <td class='de_ow_cell text-right'><%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %></td>
-            <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %></td>
-            <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
+            <td class='de_ow_cell text-right'>
+              <nobr>
+                <%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %>
+              </nobr>
+            </td>
+            <td class='cr_ow_cell text-right'>
+              <nobr>
+                <%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %>
+              </nobr>
+            </td>
+            <td class='balance_sum_cell text-right'>
+              <nobr>
+                <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
+              </nobr>
+            </td>
             <td><%= t.type.send("name_#{@locale}") %></td>
             <% if !one_house %>
               <td><%= t.house.code if t.house %></td>
@@ -82,7 +100,7 @@
             <% end %>
           </tr>
           <% if t.comment_inner.present? && current_user.role?(['Admin', 'Accounting', 'Manager']) %>
-            <tr><td colspan="7"><%= t.comment_inner %></td></tr>
+            <tr><td colspan="8"><%= t.comment_inner %></td></tr>
           <% end %>
         <% end %>
       </tbody>
@@ -90,9 +108,21 @@
       <tfoot>
         <tr>
           <td class='font-weight-bold text-right'><%= t('total') %>:</td>
-          <td class="font-weight-bold text-right" id='de_ow_sum'><%= number_to_currency(de_ow_prev_sum + de_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
-          <td class="font-weight-bold text-right" id='cr_ow_sum'><%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %></td>
-          <td class="font-weight-bold text-right" id="ow_balance"><%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %></td>
+          <td class="font-weight-bold text-right" id='de_ow_sum'>
+            <nobr>
+              <%= number_to_currency(de_ow_prev_sum + de_ow_sum - @cr_prev_rental, precision: 2, unit: '') %>
+            </nobr>
+          </td>
+          <td class="font-weight-bold text-right" id='cr_ow_sum'>
+            <nobr>
+              <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %>
+            </nobr>
+          </td>
+          <td class="font-weight-bold text-right" id="ow_balance">
+            <nobr>
+              <%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %>
+            </nobr>
+          </td>
           <td></td>
           <% if !one_house %>
             <td></td>
@@ -130,8 +160,16 @@
         <% end %>
         <tr>
           <td><%= t.type.send("name_#{@locale}") %></td>
-          <td class="text-right"><%= number_to_currency(debit_sum, precision: 2, unit: '') if debit_sum > 0 %></td>
-          <td class="text-right"><%= number_to_currency(credit_sum, precision: 2, unit: '') if credit_sum > 0 %></td>
+          <td class="text-right">
+            <nobr>
+              <%= number_to_currency(debit_sum, precision: 2, unit: '') if debit_sum > 0 %>
+            </nobr>
+          </td>
+          <td class="text-right">
+            <nobr>
+              <%= number_to_currency(credit_sum, precision: 2, unit: '') if credit_sum > 0 %>
+            </nobr>
+          </td>
         </tr>
       <% end %>
     </table>
