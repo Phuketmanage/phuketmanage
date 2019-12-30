@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  when: 2019-12-21 22:48:45
+  who: one
+  where: MyString
+  before: MyText
+  after: MyText
+
+two:
+  when: 2019-12-21 22:48:45
+  who: two
+  where: MyString
+  before: MyText
+  after: MyText

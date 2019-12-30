@@ -160,6 +160,7 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
+
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
@@ -185,6 +186,7 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
 
+      state_before = @transaction
       if @transaction.update(transaction_params)
         @transaction.set_owner_and_house
         @transaction.save
@@ -210,6 +212,16 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
+        # Log.create!(
+        #   when: Time.zone.now.in_time_zone('Bangkok'),
+        #   who: "#{current_user.name} #{current_user.surname}",
+        #   where: controller_name,
+        #   action: action_name,
+        #   before: state_before.inspect,
+        #   after: @transaction.changed_attributes)
+
+
+
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
@@ -295,4 +307,5 @@ class TransactionsController < ApplicationController
                                           :hidden,
                                           :for_acc)
     end
+
 end

@@ -8,13 +8,15 @@ class Transaction < ApplicationRecord
 
   validates :date, :type, :comment_en, presence: true
 
+  # before_save :log
+
   def write_to_balance (type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
     types2 = ['Maintenance', 'Laundry']
     types3 = ['Top up', 'From guests']
     types4 = ['Repair', 'Purchases', 'Consumables']
     types5 = ['Utilities', 'Yearly contracts', 'Insurance', 'To owner', 'Common area', 'Transfer']
-    types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance']
+    types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance', 'Materials']
     types7 = ['Other']
     # Может быт balances и balance_outs будут не нужна если под все операции подойдет одна строка в Transactions
     balance_outs.destroy_all if balance_outs.any?
@@ -77,4 +79,9 @@ class Transaction < ApplicationRecord
       self.user_id = house.owner.id if user_id.nil?
     end
   end
+
+  # def log
+  #   logger.info self.changes
+  # end
+
 end

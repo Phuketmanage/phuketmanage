@@ -204,7 +204,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance']) != -1
+    if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance', 'Materials']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
         $("#transaction_cr_ow").val(0)

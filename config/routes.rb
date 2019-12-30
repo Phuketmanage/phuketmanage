@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'logs', to: 'logs#index'
   get 'test', to: 'pages#test'
   resources :locations, except: :show
   resources :options, except: :show
