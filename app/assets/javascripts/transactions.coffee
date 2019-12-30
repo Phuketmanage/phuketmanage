@@ -158,7 +158,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_ru').val("Стирка ")
       $("#comment_ru").show()
       $("#comment_inner").show()
-    if jQuery.inArray(selected, ['Repair', 'Purchases', 'Consumables', 'Improvements']) != -1
+    if jQuery.inArray(selected, ['Repair','Purchases', 'Consumables', 'Improvements']) != -1
       if init == false
         $("#transaction_de_ow").val(0)
       if $('input[name="_method"]').val() == 'patch'
