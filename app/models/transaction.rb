@@ -14,7 +14,7 @@ class Transaction < ApplicationRecord
     types1 = ['Rental']
     types2 = ['Maintenance', 'Laundry']
     types3 = ['Top up', 'From guests']
-    types4 = ['Repair', 'Purchases', 'Consumables']
+    types4 = ['Repair', 'Purchases', 'Consumables', 'Improvements']
     types5 = ['Utilities', 'Yearly contracts', 'Insurance', 'To owner', 'Common area', 'Transfer']
     types6 = ['Salary', 'Gasoline', 'Office', 'Suppliers', 'Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance', 'Materials']
     types7 = ['Other']
