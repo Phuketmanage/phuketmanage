@@ -27,7 +27,6 @@ class Transaction < ApplicationRecord
       balances.create!(debit: de_co)
     elsif types2.include?(type)
       errors.add(:base, '"Pay to outside" and "Pay to Phaethon" can not be blank both') if (cr_ow.nil? || cr_ow == 0) && (de_co.nil? || de_co == 0)
-      errors.add(:base, 'Can not pay outside and to Phaethon same time') if cr_ow > 0 && de_co > 0
       errors.add(:base, 'Need to select owner or house') if house_id.nil? && user_id.nil?
       errors.add(:base, 'Need to select house') if user_id.nil?
       return if errors.any?
