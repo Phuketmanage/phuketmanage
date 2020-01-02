@@ -54,10 +54,10 @@
       <% balance_sum += de_co - cr_co %>
 
       <% next if t.for_acc %>
-      <% if (de_ow.nil? || de_ow == 0) && (cr_ow > 0 && cr_ow == de_co) %>
-        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit = Company debit">
+      <% if (de_ow.nil? || de_ow == 0) && (cr_ow > 0 && cr_ow == de_co && (cr_co.nil? || cr_co == 0) && !t.type.name_en.in?(['Maintenance','Laundry'])) %>
+        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Owner debit = Company debit <%= t.type.name_en %>">
       <% elsif cr_ow > 0 && cr_ow < de_co %>
-        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="left" title="Owner debit < Company debit">
+        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Owner debit < Company debit">
 
       <% else %>
         <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
