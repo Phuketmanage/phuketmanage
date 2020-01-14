@@ -14,6 +14,7 @@ _1:
   comment_owner: Comment for all
   comment: Inner comment
   comment_gr: Comment for GR
+  allotment: false
 
 _2:
   start: 15.07.<%= Time.now.year+1 %>
@@ -26,6 +27,7 @@ _2:
   agent: 0
   comm: 12000
   nett: 48000
+  allotment: false
 
 
 _3:
@@ -39,6 +41,7 @@ _3:
   agent: 0
   comm: 2
   nett: 8
+  allotment: false
 
 _4:
   start: 15.06.<%= Time.now.year+1 %>
@@ -51,6 +54,7 @@ _4:
   agent: 0
   comm: 2
   nett: 8
+  allotment: false
 
 _5:
   start: 17.07.<%= Time.now.year+1 %>
@@ -63,6 +67,7 @@ _5:
   agent: 0
   comm: 0
   nett: 0
+  allotment: false
 
 _6:
   start: 05.08.<%= Time.now.year+1 %>
@@ -75,6 +80,7 @@ _6:
   agent: 0
   comm: 2
   nett: 8
+  allotment: false
 
 _7:
   start: 03.08.<%= Time.now.year+1 %>
@@ -87,3 +93,4 @@ _7:
   agent: 0
   comm: 0
   nett: 0
+  allotment: false

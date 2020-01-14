@@ -103,6 +103,12 @@
     <%= form.label :no_check_out, {     class: 'form-check-label',
                             for: 'no_check_out_check_box' } %>
   </div>
+  <div class="form-check form-check-inline">
+    <%= form.check_box :paid, { class: 'form-check-input',
+                            id: 'no_check_out_check_box' } %>
+    <%= form.label :paid, {     class: 'form-check-label',
+                            for: 'no_check_out_check_box' } %>
+  </div>
 
   <%#= hidden_field_tag :house_id, @booking.house.id if @booking %>
   <div  class='mt-3'>
