@@ -7,7 +7,7 @@
     <tr>
       <th>Code</th>
       <th>Title en</th>
-      <th>Title ru</th>
+      <th>Address</th>
       <th>Owner</th>
       <th>Actions</th>
     </tr>
@@ -22,7 +22,7 @@
       <% end %>
         <td><%= house.code %></td>
         <td><%= house.title_en %></td>
-        <td><%= house.title_ru %></td>
+        <td><%= house.address %></td>
         <td><%= "#{house.owner.name} #{house.owner.surname}" %></td>
         <td>
           <%= link_to 'Bookings', house_bookings_path(house.number) %> |

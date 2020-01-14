@@ -209,6 +209,7 @@ react_to_select_trsc_type = (selected, init) ->
         $("#transaction_de_ow").val(0)
         $("#transaction_cr_ow").val(0)
         $("#transaction_de_co").val(0)
+      $("#transaction_user_id").val([])
       $("#comment_ru").hide()
       $("#comment_inner").hide()
       $("#ref_no").hide()
