@@ -39,8 +39,9 @@ class BookingsController < ApplicationController
       @bookings = [] and return
     end
 
-    @oid = params[:oid]
+    # @oid = params[:oid]
     @hid = params[:hid]
+
     if @hid.present?
       house_ids = House.where(number: @hid).ids
     elsif @oid.present?
@@ -72,12 +73,24 @@ class BookingsController < ApplicationController
     end
 
     @hid = params[:hid]
-    if params[:hid].present?
-      house_ids = House.where(number: params[:hid]).ids
+    @oid = params[:oid]
+    if @hid.present? && current_user.role?('Admin')
+      # Admin look bookings for selected house
+      house_ids = House.where(number: @hid).ids
+      @oid = House.find_by(number: @hid).owner.id
+    elsif @oid.present? && current_user.role?('Admin')
+      # Admin look bookings for selected owner
+      house_ids = User.find(@oid).houses.ids
+    elsif @hid.present? && current_user.houses.where(number: @hid).any?
+      # Owner look bookings for selected hgouse
+      house_ids = House.where(number: @hid).ids
     else
+      # Owner look bookings
+      @hid = nil if !current_user.houses.where(number: @hid).any?
       house_ids = current_user.houses.ids
     end
     bookings = Booking.where(house_id: house_ids, status: ['confirmed', 'block'], allotment: false).all
+
 
     if !@from.present? && !@to.present?
       @from = Time.zone.now.in_time_zone('Bangkok').to_date
@@ -86,6 +99,7 @@ class BookingsController < ApplicationController
       else
         @to = @from
       end
+      @to = @from if @to < @from
     end
 
     @bookings = bookings.where('(start >= :from AND start <= :to) OR
