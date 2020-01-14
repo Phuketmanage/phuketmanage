@@ -16,14 +16,14 @@
           <% options_for_select_hid = current_user.houses.where(unavailable: false).order(:code).map{|h| [h.code, h.number]} %>
         <% end %>
         <%= select_tag :hid,
-              options_for_select(options_for_select_hid, params[:hid]),
+              options_for_select(options_for_select_hid, @hid),
                 { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
       <% end %>
       <% if current_user.role?('Admin') %>
         <%= hidden_field_tag :oid, @oid %>
       <% end %>
       <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
-      <%= link_to t('drop_filter'), bookings_front_path, class: 'btn btn-secondary mb-2 mr-2'  %>
+      <%= link_to t('drop_filter'), bookings_front_path(oid: @oid), class: 'btn btn-secondary mb-2 mr-2'  %>
       <%#= link_to t('timeline'), bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
 <% end %>
 

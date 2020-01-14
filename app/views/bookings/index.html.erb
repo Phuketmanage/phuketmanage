@@ -9,7 +9,8 @@
 
       <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
       <% if current_user.role?('Admin') %>
-        <%= link_to 'Owner view', bookings_front_path(hid: @hid), class: "btn btn-primary mb-2 mr-2", target: "_blank" %>
+        <% !@hid.present? ? disabled_class = "disabled" : disabled_class = "" %>
+        <%= link_to 'Owner view', bookings_front_path(hid: @hid), class: "btn btn-primary mb-2 mr-2 #{disabled_class}", target: "_blank" %>
       <% end %>
       <%= link_to 'Drop filter', bookings_path, class: 'btn btn-secondary mb-2 mr-2'  %>
       <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
@@ -107,6 +108,10 @@
                   To owner <%= number_to_currency(recieved - comm, precision: 0, unit: '') %><br />
                 <% end %>
             <% end %>
+            <%= "Booking number: #{booking.number}" %>
+            <% if booking.allotment? %>
+              <span class="badge badge-info">Allotment</span>
+            <% end %>
             <div>
               <% if !booking.number.nil? %>
                 <%= link_to 'Edit', edit_booking_path(booking) %>
@@ -117,10 +122,6 @@
                 | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
               <% end %>
             </div>
-            <%= "Booking number: #{booking.number}" %>
-            <% if booking.allotment? %>
-              <br /><span class="badge badge-info">Allotment</span>
-            <% end %>
           </td>
         </tr>
       <% end %>
