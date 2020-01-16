@@ -103,12 +103,20 @@
     <%= form.label :no_check_out, {     class: 'form-check-label',
                             for: 'no_check_out_check_box' } %>
   </div>
-  <div class="form-check form-check-inline">
-    <%= form.check_box :paid, { class: 'form-check-input',
-                            id: 'no_check_out_check_box' } %>
-    <%= form.label :paid, {     class: 'form-check-label',
-                            for: 'no_check_out_check_box' } %>
-  </div>
+  <% if current_user.role?('Admin') %>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :paid, { class: 'form-check-input',
+                              id: 'paid_check_box' } %>
+      <%= form.label :paid, {     class: 'form-check-label',
+                              for: 'paid_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :ignore_warnings, { class: 'form-check-input',
+                              id: 'ignore_warnings_check_box' } %>
+      <%= form.label :ignore_warnings, {     class: 'form-check-label',
+                              for: 'ignore_warnings_check_box' } %>
+    </div>
+  <% end %>
 
   <%#= hidden_field_tag :house_id, @booking.house.id if @booking %>
   <div  class='mt-3'>

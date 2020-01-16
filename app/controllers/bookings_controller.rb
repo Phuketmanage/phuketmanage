@@ -365,7 +365,8 @@ class BookingsController < ApplicationController
                                       :no_check_out,
                                       :check_in,
                                       :check_out,
-                                      :paid )
+                                      :paid,
+                                      :ignore_warnings )
     end
 
 
