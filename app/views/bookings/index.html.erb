@@ -52,7 +52,7 @@
         <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
         <% to_owner = income - comm %>
 
-        <% if booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett && booking.status != 'canceled' && !booking.paid?%>
+        <% if booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett && booking.status != 'canceled' && !booking.paid %>
           <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Problem with payment to owner">
         <% else %>
           <tr class="bg-light" id="<%= booking.number %>">
