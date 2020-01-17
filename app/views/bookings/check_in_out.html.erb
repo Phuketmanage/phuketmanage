@@ -46,6 +46,7 @@
         Balance: <%= number_to_currency(booking.sale - paid, precision: 0, unit: '') %><br />
         Source: <%= booking.source.name if booking.source %>
       <% end %>
+      <br />
       <%=  "Comment: #{r[:comment]}" %>
       <%= link_to "Edit comment", '', class: 'edit_comment',
                                       data: { booking_id: r[:booking_id] } %>
