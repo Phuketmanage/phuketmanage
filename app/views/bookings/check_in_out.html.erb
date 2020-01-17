@@ -39,7 +39,11 @@
                       #{booking.finish.strftime('%d.%m.%Y')} /
                       #{(booking.finish-booking.start).to_i} days" %>
                       <br />
-        Price: <%= booking.sale %><br />
+        <% paid = booking.transactions.joins(:balance_outs).sum(:debit) %>
+
+        Total: <%= number_to_currency(booking.sale, precision: 0, unit: '') %>
+        Paid: <%= number_to_currency(paid, precision: 0, unit: '') %>
+        Balance: <%= number_to_currency(booking.sale - paid, precision: 0, unit: '') %><br />
         Source: <%= booking.source.name if booking.source %>
       <% end %>
       <%=  "Comment: #{r[:comment]}" %>
