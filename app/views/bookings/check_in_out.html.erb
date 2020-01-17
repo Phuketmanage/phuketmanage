@@ -40,10 +40,10 @@
                       #{(booking.finish-booking.start).to_i} days" %>
                       <br />
         <% paid = booking.transactions.joins(:balance_outs).sum(:debit) %>
-
-        Total: <%= number_to_currency(booking.sale, precision: 0, unit: '') %>
+        <% nett_in = booking.sale - booking.agent %>
+        Total nett IN: <%= number_to_currency(nett_in, precision: 0, unit: '') %>
         Paid: <%= number_to_currency(paid, precision: 0, unit: '') %>
-        Balance: <%= number_to_currency(booking.sale - paid, precision: 0, unit: '') %><br />
+        Balance: <%= number_to_currency(nett_in - paid, precision: 0, unit: '') %><br />
         Source: <%= booking.source.name if booking.source %>
       <% end %>
       <br />
