@@ -66,6 +66,11 @@
 <p><%= simple_format @house.send("rules_#{I18n.locale}") %></p>
 
 <hr />
+<h6><%= t('houses.other') %></h6>
+<p><%= simple_format @house.send("other_#{I18n.locale}") %></p>
+
+
+<hr />
 <h6><%= t('houses.location') %></h6>
 <%  @house.locations.each do |l| %>
 <%= l.send("name_#{I18n.locale}") %>

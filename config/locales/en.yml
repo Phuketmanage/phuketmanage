@@ -34,6 +34,7 @@ en:
     included: Price include/exclude
     policy: Booking policy
     rules: House rules
+    other: Other
     location: Location
     capacity:
       one: "1 person"

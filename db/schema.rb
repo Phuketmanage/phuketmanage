@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_16_054032) do
+ActiveRecord::Schema.define(version: 2020_01_27_085757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,6 +186,8 @@ ActiveRecord::Schema.define(version: 2020_01_16_054032) do
     t.text "cancellationPolicy_ru"
     t.text "rules_en"
     t.text "rules_ru"
+    t.text "other_ru"
+    t.text "other_en"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"

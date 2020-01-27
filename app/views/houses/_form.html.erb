@@ -225,6 +225,22 @@
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Other</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :other_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :other_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Employees:</strong>
     <hr>
 

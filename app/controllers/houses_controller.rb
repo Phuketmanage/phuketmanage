@@ -155,7 +155,9 @@ class HousesController < ApplicationController
                                     { option_ids: [] },
                                     { location_ids: [] },
                                     :rules_en,
-                                    :rules_ru
+                                    :rules_ru,
+                                    :other_en,
+                                    :other_ru
                                     )
     end
 
