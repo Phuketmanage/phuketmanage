@@ -57,7 +57,7 @@
         <% elsif !booking.ignore_warnings && to_owner > booking.nett %>
           <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Overpayment to owner">
         <% else %>
-          <tr class="bg-light" id="<%= booking.number %>">
+          <tr class="bg-light <%= 'text-muted' if booking.status == 'canceled' %>" id="<%= booking.number %>">
         <% end %>
           <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
           <td>
@@ -71,7 +71,8 @@
               <%= booking.source.name if booking.source %>
             <small>
           </td>
-          <td><%= booking.status %></td>
+
+          <td class="<%= booking.status %>_text"><%= booking.status %></td>
           <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
           <td><%= number_to_currency(booking.agent, precision: 0, unit: '') %></td>
           <td>
@@ -90,7 +91,7 @@
           <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
           <td><%= number_to_currency(to_owner, precision: 0, unit: '') %></td>
         </tr>
-        <tr>
+        <tr class="<%= 'text-muted' if booking.status == 'canceled' %>">
           <td colspan="10">
             <%= booking.client_details %>
             <% if booking.comment || booking.comment_owner || booking.comment_gr %>

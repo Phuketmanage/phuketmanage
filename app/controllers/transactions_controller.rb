@@ -110,9 +110,9 @@ class TransactionsController < ApplicationController
       if owner.houses.count == 1
         @transaction.house_id = owner.houses.first.id
       end
-      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
     else
-      @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
     end
   end
 
@@ -125,7 +125,7 @@ class TransactionsController < ApplicationController
     @bookings = []
     if @transaction.user
       owner = @transaction.user
-      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block, :canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
     end
   end
 
@@ -150,9 +150,9 @@ class TransactionsController < ApplicationController
             if owner.houses.count == 1
               @transaction.house_id = owner.houses.first.id
             end
-            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block, :canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
           else
-            @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
           end
 
           render :new and return
@@ -170,9 +170,9 @@ class TransactionsController < ApplicationController
       else
         if params[:user_id].present?
           owner = User.find(params[:user_id])
-          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
         else
-          @bookings = Booking.joins(:house).where('paid = ? AND status != ?', false, Booking.statuses[:block]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
         end
 
         format.html { render :new }
@@ -204,7 +204,7 @@ class TransactionsController < ApplicationController
           @bookings = []
           if @transaction.user
             owner = @transaction.user
-            @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
           end
           render :edit and return
         end
@@ -237,7 +237,7 @@ class TransactionsController < ApplicationController
         @bookings = []
         if @transaction.user
           owner = @transaction.user
-          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
         end
 
         format.html { render :edit }
