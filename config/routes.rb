@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   post 'booking/new', to: 'bookings#create_front'
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
+    get '/about', to: 'pages#about', as: 'page_about'
     devise_for :users
     resources :users, except: :create
     post 'create_user', to: 'users#create', as: 'create_user'

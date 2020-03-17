@@ -119,7 +119,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               finish: finish,
                                               house_id: house.id,
                                               status: 'confirmed',
-                                              status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
     end

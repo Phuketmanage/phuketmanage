@@ -2,15 +2,17 @@
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-  <div class="row ">
-    <div class="col-md-3 form-group">
+  <div class="form-row">
+    <div class="col-md-4">
+      <%= f.label :rs %>
       <%= f.date_field :rs, min: Time.zone.now.in_time_zone('Bangkok').to_date+1.day, class: 'form-control' %>
     </div>
-    <div class="col-md-3 form-group">
+    <div class="col-md-4">
+      <%= f.label :rf %>
       <%= f.date_field :rf, min: Time.zone.now.in_time_zone('Bangkok').to_date+7.day, class: 'form-control' %>
     </div>
-    <div class="col-md-3 form-group">
-      <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary"%>
+    <div class="col-md-4 d-flex align-items-end pt-2">
+      <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
     </div>
   </div>
 <% end %>

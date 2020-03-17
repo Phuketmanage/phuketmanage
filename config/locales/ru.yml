@@ -10,7 +10,9 @@ ru:
     log_in: Войти
     log_out: Выйти
     dashboard: Кабинет
+    about: О компании
   search:
+    title: Поиск недвижимости в аренду
     search: Поиск
     results: Результаты поиска
     rf_less_rs: Начало аренды не может быть позже окончания
@@ -65,7 +67,6 @@ ru:
     phone: Телефон
     email: Эл. почта
     comment: Комментарий
-
   balance: Баланс
   bookings: Брони
   timeline: Календарь
@@ -111,6 +112,11 @@ ru:
       messages:
         required: обязательное поле
         blank: не может быть пустым
+  activemodel:
+    attributes:
+      search:
+        rs: Начало
+        rf: Окончание
   date:
     order: [ !ruby/symbol day, !ruby/symbol month, !ruby/symbol year ]
     month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]

@@ -10,7 +10,10 @@ en:
     log_in: Log in
     log_out: Log out
     dashboard: Dashboard
+    about: About
   search:
+    title: Search for property for rent
+    rs: Start
     search: Search
     results: Search results
     rf_less_rs: End of stay can not be less then beginig
@@ -85,6 +88,11 @@ en:
   users_mailer:
     reset_password_instructions:
       subject: Password reset request
+  activemodel:
+    attributes:
+      search:
+        rs: From
+        rf: To
   devise:
     log_in: Log in
     log_out: Log out
