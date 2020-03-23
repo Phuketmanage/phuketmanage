@@ -9,11 +9,12 @@ class Search
   def initialize(attributes = {})
     super
     return if attributes.empty?
+    # return if !rs.present? || !rf.present?
     @rs = rs.to_date
     @rf = rf.to_date
-    @rs_e = rs - dtnb.to_i.days
-    @rf_e = rf + dtnb.to_i.days
-    @duration = (rf-rs).to_i
+    @rs_e = rs - dtnb.to_i.days if !rs.nil?
+    @rf_e = rf + dtnb.to_i.days if !rf.nil?
+    @duration = (rf-rs).to_i if !rs.nil? || !rs.nil?
   end
 
   def is_house_available? house_id, booking_id = nil

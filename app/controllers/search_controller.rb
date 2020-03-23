@@ -4,6 +4,9 @@ class SearchController < ApplicationController
                           rf: params[:search][:rf],
                           dtnb: @settings['dtnb'])
     # byebug
+    # byebug
+    redirect_to root_path and return if !@search.valid?
+
     if @search.stage == nil || @search.stage == '1'
       @houses = []
       if !@search.valid?

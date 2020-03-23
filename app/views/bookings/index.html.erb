@@ -73,23 +73,23 @@
           </td>
 
           <td class="<%= booking.status %>_text"><%= booking.status %></td>
-          <td><%= number_to_currency(booking.sale, precision: 0, unit: '') %></td>
-          <td><%= number_to_currency(booking.agent, precision: 0, unit: '') %></td>
+          <td><%= number_to_currency(booking.sale, precision: 2, unit: '') %></td>
+          <td><%= number_to_currency(booking.agent, precision: 2, unit: '') %></td>
           <td>
             <% if booking.agent > 0 %>
-              <%= number_to_currency(booking.sale - booking.agent, precision: 0, unit: '') %><br />
+              <%= number_to_currency(booking.sale - booking.agent, precision: 2, unit: '') %><br />
               <small>
-                (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 0, unit: '') %>)
+                (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 2, unit: '') %>)
               </small>
             <% end %>
           </td>
           <td class="comm">
             <nobr>
-              <%= number_to_currency(booking.comm, precision: 0, unit: '') %> (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
+              <%= number_to_currency(booking.comm, precision: 2, unit: '') %> (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
             </nobr>
           </td>
-          <td><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
-          <td><%= number_to_currency(to_owner, precision: 0, unit: '') %></td>
+          <td><%= number_to_currency(booking.nett, precision: 2, unit: '') %></td>
+          <td><%= number_to_currency(to_owner, precision: 2, unit: '') %></td>
         </tr>
         <tr class="<%= 'text-muted' if booking.status == 'canceled' %>">
           <td colspan="10">
@@ -107,8 +107,8 @@
                   <% recieved = BalanceOut.where(transaction_id: b.id).first.debit %>
                   <% comm = BalanceOut.where(transaction_id: b.id).first.credit %>
                   <%= b.date.strftime('%d.%m.%Y') %> -
-                  Received <%= number_to_currency(recieved, precision: 0, unit: '') %>,
-                  To owner <%= number_to_currency(recieved - comm, precision: 0, unit: '') %><br />
+                  Received <%= number_to_currency(recieved, precision: 2, unit: '') %>,
+                  To owner <%= number_to_currency(recieved - comm, precision: 2, unit: '') %><br />
                 <% end %>
             <% end %>
             <%= "Booking number: #{booking.number}" %>
