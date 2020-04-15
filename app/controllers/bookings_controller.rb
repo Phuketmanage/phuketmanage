@@ -136,7 +136,6 @@ class BookingsController < ApplicationController
 
   def timeline_data
     # puts params[:period].nil?
-    # byebug
     timeline = Booking.timeline_data params[:from], params[:to], params[:period]
     render json: { timeline:  timeline }
   end

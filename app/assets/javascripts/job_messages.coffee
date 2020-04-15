@@ -1,6 +1,6 @@
 $(document).on "turbolinks:load", ->
-  objDiv = document.getElementById("job_messages")
-  objDiv.scrollTop = objDiv.scrollHeight;
+  if objDiv = document.getElementById("job_messages")
+    objDiv.scrollTop = objDiv.scrollHeight
   $ ->
     progressBar  = $('.progress-bar.thumb');
     progressBar_preview  = $('.progress-bar.preview');
