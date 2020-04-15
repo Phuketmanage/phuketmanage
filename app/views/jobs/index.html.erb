@@ -42,7 +42,7 @@
           </div>
 
         </div>
-        <% if @messages.any? %>
+        <% if @active_job.present? %>
           <%= form_with(model: @message, url: job_messages_path, id: 'fileupload_message', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |f| %>
             <%= hidden_field_tag 'job_id', @active_job.id %>
             <div class="input-group">
@@ -53,7 +53,7 @@
               </div>
             </div>
             <input type="file" id="selectFile" multiple style="display: none;">
-            <div class="progress mt-2" style="height:3px;">
+            <div class="progress" style="height:3px;">
               <div class="progress-bar bg-info thumb" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           <% end %>
