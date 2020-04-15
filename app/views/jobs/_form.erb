@@ -17,6 +17,19 @@
       <%= form.label :plan %>
       <%= form.date_field :plan, class: "form-control" %>
     </div>
+    <div class="col-md-2 form-group">
+      <%= form.label :house %>
+      <%= form.select :house_id,
+            @houses.map {|h| ["#{h.code} #{'(not for rent)' if h.unavailable}", h.id]},
+                      { prompt: 'Select house' }, { class: "form-control",  } %>
+    </div>
+    <div class="col-md-2 form-group">
+      <%= form.label :status %>
+      <%= form.select :status,
+            [["inbox", 0],["archived", 5]],
+                      { prompt: 'Select house' }, { class: "form-control",  } %>
+    </div>
+
   </div>
   <div class="form-row">
     <div class="col form-group">

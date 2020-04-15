@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_27_085757) do
+ActiveRecord::Schema.define(version: 2020_04_13_122851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,18 @@ ActiveRecord::Schema.define(version: 2020_01_27_085757) do
     t.index ["house_id", "location_id"], name: "index_houses_locations_on_house_id_and_location_id"
   end
 
+  create_table "job_messages", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.bigint "sender_id", null: false
+    t.text "message"
+    t.boolean "is_system"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "file", default: false
+    t.index ["job_id"], name: "index_job_messages_on_job_id"
+    t.index ["sender_id"], name: "index_job_messages_on_sender_id"
+  end
+
   create_table "job_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -233,11 +245,14 @@ ActiveRecord::Schema.define(version: 2020_01_27_085757) do
     t.integer "rooms"
     t.integer "price"
     t.string "before"
+    t.integer "status", default: 0
+    t.boolean "urgent", default: false
     t.index ["booking_id"], name: "index_jobs_on_booking_id"
     t.index ["creator_id"], name: "index_jobs_on_creator_id"
     t.index ["employee_id"], name: "index_jobs_on_employee_id"
     t.index ["house_id"], name: "index_jobs_on_house_id"
     t.index ["job_type_id"], name: "index_jobs_on_job_type_id"
+    t.index ["status"], name: "index_jobs_on_status"
     t.index ["user_id"], name: "index_jobs_on_user_id"
   end
 
@@ -412,6 +427,8 @@ ActiveRecord::Schema.define(version: 2020_01_27_085757) do
   add_foreign_key "house_photos", "houses"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
+  add_foreign_key "job_messages", "jobs"
+  add_foreign_key "job_messages", "users", column: "sender_id"
   add_foreign_key "jobs", "bookings"
   add_foreign_key "jobs", "employees"
   add_foreign_key "jobs", "houses"

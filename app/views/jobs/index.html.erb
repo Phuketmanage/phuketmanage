@@ -16,12 +16,55 @@
     <% else %>
       <%= link_to 'Closed Jobs', jobs_path(closed: 1) %>
     <% end %>
-    <% @jobs.each do |job| %>
-      <div id="job_<%= job.id %>">
-        <%= render 'job_managers', job: job %>
+    <div class="row">
+      <div class="col-md-6">
+        <% @jobs.each do |job| %>
+          <%= render 'job_managers', job: job %>
+        <% end %>
       </div>
-    <% end %>
+      <div class="col-md-6">
 
+
+        <div class="shadow-sm mb-2 p-2 bg-white border rounded" id="job_messages" style="overflow-y: scroll; height: 400px;">
+          <% @messages.each do |m| %>
+            <%= render 'job_messages/message', message: m %>
+          <% end %>
+          <div id="message_image" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <% if @messages.any? %>
+          <%= form_with(model: @message, url: job_messages_path, id: 'fileupload_message', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |f| %>
+            <%= hidden_field_tag 'job_id', @active_job.id %>
+            <div class="input-group">
+              <%= f.text_field :message, class: "form-control" %>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Send</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('selectFile').click();">File</button>
+              </div>
+            </div>
+            <input type="file" id="selectFile" multiple style="display: none;">
+            <div class="progress mt-2" style="height:3px;">
+              <div class="progress-bar bg-info thumb" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          <% end %>
+          <%= link_to "In progress", job_path(@active_job.id, params: { job: { status: 'in_progress' } }), method: :patch %> |
+          <%= link_to "Done", job_path(@active_job, params: { job: { status: 'done' } }), method: :patch %> |
+          <%= link_to "Paused", job_path(@active_job, params: { job: { status: 'paused' } }), method: :patch %> |
+          <%= link_to "Cancelled", job_path(@active_job, params: { job: { status: 'cancelled' } }), method: :patch %> |
+          <%= link_to "Archived", job_path(@active_job, params: { job: { status: 'archived' } }), method: :patch %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>
 

@@ -9,6 +9,7 @@ class JobsController < ApplicationController
   # GET /jobs.json
   def index
     @job = Job.new
+    @message = JobMessage.new
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
       if params[:closed].present?
@@ -22,6 +23,12 @@ class JobsController < ApplicationController
       else
         @jobs = current_user.jobs.where(closed: nil).order(:plan)
       end
+    end
+    @messages = []
+    if params['job_id'].present?
+      @active_job = Job.find(params['job_id'])
+      @messages = @active_job.job_messages.last(10)
+      @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@active_job.id}/${filename}", success_action_status: '201', acl: 'public-read')
     end
   end
 
@@ -65,15 +72,19 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET /jobs/1.json
   def show
+
   end
 
   # GET /jobs/new
   def new
     @job = Job.new
+    @houses = House.all.order(:code)
+
   end
 
   # GET /jobs/1/edit
   def edit
+    @houses = House.all.order(:code)
   end
 
   # POST /jobs
@@ -97,6 +108,7 @@ class JobsController < ApplicationController
                                     },
                               status: :ok }
       else
+        @houses = House.all.order(:code)
         format.html { render  :new }
         format.json { render  json: @job.errors,
                               status: :unprocessable_entity }
@@ -116,6 +128,16 @@ class JobsController < ApplicationController
     end
     respond_to do |format|
       if @job.update(job_params)
+        changes = @job.saved_changes
+        changes.each do |key, value|
+          puts "#{key} - #{value}"
+          unless key == "updated_at"
+            @job.job_messages.create!(sender: current_user,
+              message: "#{key} changed from #{value[0]} to #{value[1]}",
+              is_system: 1)
+          end
+        end
+
         format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }
         format.json { render :index, status: :ok, location: @job }
         format.js
@@ -168,6 +190,7 @@ class JobsController < ApplicationController
                                   :collected,
                                   :sent,
                                   :rooms,
-                                  :price )
+                                  :price,
+                                  :status )
     end
 end

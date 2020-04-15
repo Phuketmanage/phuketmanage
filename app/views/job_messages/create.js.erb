@@ -1,0 +1,4 @@
+$('div#job_messages').append("<%= j render 'job_messages/message', message: @message %>")
+$('#job_message_message').val('')
+objDiv = document.getElementById("job_messages");
+objDiv.scrollTop = objDiv.scrollHeight;

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job: one
+  sender: one
+  message: MyText
+  is_system: false
+
+two:
+  job: two
+  sender: two
+  message: MyText
+  is_system: false

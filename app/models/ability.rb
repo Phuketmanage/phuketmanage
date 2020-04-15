@@ -45,7 +45,7 @@ class Ability
       can :manage, HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
       can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
-      can [:destroy], Job #, creator: user
+      can [:destroy], Job , creator: user
       can :index, [ Admin ]
       can [:index, :new, :create, :update_invoice_ref] , Transaction
       can [:edit, :update], Transaction do |t|

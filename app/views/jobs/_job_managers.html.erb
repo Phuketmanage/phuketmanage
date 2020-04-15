@@ -1,59 +1,32 @@
-<div class="row shadow-sm mb-2 p-2 bg-white border rounded" id="job_<%= job.id %>">
-  <div class="col">
-    <div>
-      <span class='text-muted'>Created:</span>
-      <%= " #{job.created_at.strftime('%d.%m.%Y')}" %>
-      <% if current_user.role? :admin %>
-        <span class='text-muted'>For:</span>
-        <%= job.user.name if job.user_id %>
-      <% end %>
+<% bg_color = 'bg-white' %>
+<% link_text = 'Open' %>
+<% if @active_job_id == job.id %>
+<% bg_color = 'bg-light' %>
+<% link_text = 'Active' %>
+<% end %>
 
-      <% if (job.creator == current_user) || current_user.role?(:admin) %>
-        <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
-      <% end %>
+<div class="shadow-sm mb-2 p-2 border rounded <%= bg_color %>" id="job_<%= job.id %>">
+  <% if current_user.role? :admin %>
+    <%= "#{job.user.name}:" if job.user_id %>
+  <% end %>
+  <%= "#{job.house.code} - " if job.house %>
+  <%= job.job %>
+  <%= "(#{job.plan.strftime('%d.%m.%Y')})" if job.plan.present? %>
+  <%= link_to link_text, jobs_path(job_id: job.id), class: "open_job_chat", data: {job_id: job.id} %> |
+  <% if (job.creator == current_user) || current_user.role?(:admin) %>
+    <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %> |
+    <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
+  <% end %>
 
-      <% if job.closed.nil? %>
-        <%= link_to 'Done', job_path(job, done: true), method: :put, remote: true %>
-      <% else %>
-        <%= link_to 'Undone', job_path(job, done: false), method: :put, remote: true %>
-      <% end %>
-    </div>
-    <div class="d-inline-block">
-      <span class='text-muted'>Plan:</span>
-      <% if job.plan %>
-        <% if job.closed.nil? %>
-          <% if (job.plan - Time.zone.now.in_time_zone('Bangkok').to_date).to_i > 2 %>
-            <% job_class = 'have_time' %>
-          <% else %>
-            <% job_class = 'need_to_hurry' %>
-          <% end %>
-          <span class=<%= job_class %>>
-            <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" %>
-          </span>
-        <% else %>
-          <%= "#{job.plan.strftime('%d.%m.%Y')} #{job.time}" %>
-        <% end %>
-      <% end %>
-      <%= link_to 'Edit', '#', id: "edit_plan", data: {job_id: job.id}  %>
-    </div>
-    <div class="mt-2" style="display: none;" id="form_edit_plan_<%= job.id %>">
-      <%= form_with(model: job, class: "update_job") do |f| %>
-        <%= f.date_field :plan, class: "form-control" %>
-        <%= f.submit 'Save', {  class: "btn btn-primary mt-2"} %>
+  <% if job.closed.nil? %>
+    <%= link_to 'Done', job_path(job, done: true), method: :put, remote: true %>
+  <% else %>
+    <%= link_to 'Undone', job_path(job, done: false), method: :put, remote: true %>
+  <% end %>
+  S: <%= job.status %>
+</div>
 
-      <% end %>
-    </div>
 
-    <% if job.closed %>
-      <div class="d-md-inline-block">
-        <span class='text-muted'>Closed:</span>
-        <%= job.closed.strftime('%d.%m.%Y') %>
-      </div>
-    <% end %>
-    <div>
-      <span class='text-muted'>Job:</span> <%= job.job %>
-      <% if (job.creator == current_user) || current_user.role?(:admin) %>
-        <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %>
         <div class="mt-2" style="display: none;" id="form_edit_job_<%= job.id %>">
           <%= form_with(model: job, class: "update_job") do |f| %>
             <%= f.text_area :job, class: 'form-control', row: 2,
@@ -62,19 +35,3 @@
 
           <% end %>
         </div>
-      <% end %>
-    </div>
-    <div>
-      <span class='text-muted'>Comment:</span>
-      <%= job.comment %>
-      <%= link_to 'Edit','#', id: "edit_comment", data: {job_id: job.id} %>
-    </div>
-    <div class="mt-2" style="display: none;" id="form_edit_comment_<%= job.id %>">
-      <%= form_with(model: job, class: "update_job") do |f| %>
-        <%= f.text_area :comment, class: 'form-control', row: 2,
-          data: {job_id: job.id, field: 'comment'} %>
-        <%= f.submit 'Save', {  class: "btn btn-primary mt-2"} %>
-      <% end %>
-    </div>
-  </div>
-</div>

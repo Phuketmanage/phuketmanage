@@ -1,0 +1,32 @@
+<% if message.sender_id == current_user.id %>
+  <% align = 'justify-content-end' %>
+  <% color = 'bg-info text-white' %>
+<% else %>
+  <% text_align = 'justify-content-start' %>
+  <% color = 'bg-light text-dark' %>
+<% end %>
+<% if message.is_system %>
+  <% align = 'justify-content-center' %>
+  <% color = 'bg-light text-muted' %>
+<% end %>
+
+<div class="d-flex <%= align %>" data-message-id="<%= message.id %>">
+  <div class="shadow-sm mb-2 p-2 border rounded <%= color %>" style="width: 70%">
+  <strong><%= message.sender.name %></strong><br />
+  <% if message.file %>
+    <% if File.extname(message.url) == ".pdf" %>
+      <iframe src="https://docs.google.com/viewer?url=http:<%= message.url %>&embedded=true" frameborder="0" height="400px" width="100%"></iframe>
+    <% else %>
+      <a href="http:<%= message.url %>" data-link-to-image><img src="http:<%= message.url %>" width="100%"></a>
+    <% end %>
+  <% else %>
+    <%= message.message %>
+  <% end %>
+  <span class="text-muted">
+    <%= message.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %>
+    <% if Time.zone.now - message.created_at <= 10.minutes %>
+    <%= link_to 'Destroy', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
+    <% end %>
+  </span>
+  </div>
+</div>

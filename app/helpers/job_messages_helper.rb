@@ -1,0 +1,2 @@
+module JobMessagesHelper
+end
