@@ -94,6 +94,10 @@ class JobsController < ApplicationController
     @job.creator_id = current_user.id
     respond_to do |format|
       if @job.save
+        @job.job_messages.create!(sender: current_user,
+          message: "Job was created",
+          is_system: 1)
+
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
@@ -130,7 +134,6 @@ class JobsController < ApplicationController
       if @job.update(job_params)
         changes = @job.saved_changes
         changes.each do |key, value|
-          puts "#{key} - #{value}"
           unless key == "updated_at"
             @job.job_messages.create!(sender: current_user,
               message: "#{key} changed from #{value[0]} to #{value[1]}",
