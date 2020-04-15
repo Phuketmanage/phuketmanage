@@ -20,7 +20,7 @@
   <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
 <% end %>
 
-<div class="timeline">
+<div class="timeline" id="timeline">
   <div class="timeline_top_container">
     <% @days.times do |i| %>
       <% date = @today+i.days %>
