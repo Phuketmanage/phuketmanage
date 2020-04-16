@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-
+  get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
+  get 'laundry', to: 'jobs#laundry', as: 'laundry'
+  patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'
+  resources :jobs, except: :show
+  resources :job_types, except: :show
   post 'job_messages', to: 'job_messages#create'
   delete 'job_message', to: 'job_messages#destroy'
   get 'logs', to: 'logs#index'
@@ -66,11 +70,6 @@ Rails.application.routes.draw do
     resources :house_types
     resources :sources, except: :show
     resources :connections, only: [:create, :destroy]
-    get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
-    get 'laundry', to: 'jobs#laundry', as: 'laundry'
-    patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'
-    resources :jobs, except: :show
-    resources :job_types, except: :show
     get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
     resources :transfers
     end

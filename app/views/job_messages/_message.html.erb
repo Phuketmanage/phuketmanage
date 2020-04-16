@@ -1,9 +1,13 @@
 <% if message.sender_id == current_user.id %>
+  <% is_own_message = true %>
   <% align = 'justify-content-end' %>
-  <% color = 'bg-info text-white' %>
+  <% color = 'bg-info text-light' %>
+  <% time_color = 'text-white-50' %>
 <% else %>
+  <% is_own_message = false %>
   <% text_align = 'justify-content-start' %>
   <% color = 'bg-light text-dark' %>
+  <% time_color = 'text-black-50' %>
 <% end %>
 <% if message.is_system %>
   <% align = 'justify-content-center' %>
@@ -12,7 +16,9 @@
 
 <div class="d-flex <%= align %>" data-message-id="<%= message.id %>">
   <div class="shadow-sm mb-2 p-2 border rounded <%= color %>" style="width: 70%">
-  <strong><%= message.sender.name %></strong><br />
+  <% if message.sender != current_user %>
+    <strong><%= message.sender.name %></strong><br />
+  <% end %>
   <% if message.file %>
     <% if File.extname(message.url) == ".pdf" %>
       <iframe src="https://docs.google.com/viewer?url=http:<%= message.url %>&embedded=true" frameborder="0" height="400px" width="100%"></iframe>
@@ -22,11 +28,12 @@
   <% else %>
     <%= message.message %>
   <% end %>
-  <span class="text-muted">
+  <br />
+  <span class="<%= time_color %> d-flex justify-content-end">
     <%= message.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %>
-    <% if Time.zone.now - message.created_at <= 10.minutes %>
-    <%= link_to 'Destroy', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
-    <% end %>
   </span>
+  <% if is_own_message && Time.zone.now - message.created_at <= 1000000.minutes %>
+    <%= link_to 'Delete', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "d-flex justify-content-end text-warning" %>
+  <% end %>
   </div>
 </div>
