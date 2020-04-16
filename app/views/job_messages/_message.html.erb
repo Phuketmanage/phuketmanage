@@ -15,7 +15,7 @@
   <% time_color = 'text-black-50' %>
 <% end %>
 
-<div class="d-flex <%= align %>" data-message-id="<%= message.id %>">
+<div class="d-flex <%= align %>" data-message-id="<%= message.id %>" >
   <div class="shadow-sm mb-2 p-2 border rounded <%= color %>" style="width: 70%">
   <% if message.sender != current_user %>
     <strong><%= message.sender.name %></strong><br />
