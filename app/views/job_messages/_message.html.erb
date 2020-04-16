@@ -32,7 +32,7 @@
   <span class="<%= time_color %> d-flex justify-content-end">
     <%= message.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %>
   </span>
-  <% if is_own_message && Time.zone.now - message.created_at <= 1000000.minutes %>
+  <% if is_own_message && Time.zone.now - message.created_at <= 10.minutes %>
     <%= link_to 'Delete', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "d-flex justify-content-end text-warning" %>
   <% end %>
   </div>
