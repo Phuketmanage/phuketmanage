@@ -136,7 +136,7 @@ class JobsController < ApplicationController
         changes.each do |key, value|
           unless key == "updated_at"
             @job.job_messages.create!(sender: current_user,
-              message: "#{key} changed from #{value[0]} to #{value[1]}",
+              message: "#{key} changed: #{value[0]} -> #{value[1]}",
               is_system: 1)
           end
         end
