@@ -6,24 +6,18 @@
 <% end %>
 
 <div class="shadow-sm mb-2 p-2 border rounded <%= bg_color %>" id="job_<%= job.id %>">
+  <% job_link = '' %>
   <% if current_user.role? :admin %>
-    <%= "#{job.user.name}:" if job.user_id %>
+    <% job_link = "#{job.user.name}:" if job.user_id %>
   <% end %>
-  <%= "#{job.house.code} - " if job.house %>
-  <%= job.job %>
-  <%= "(#{job.plan.strftime('%d.%m.%Y')})" if job.plan.present? %>
-  <%= link_to link_text, jobs_path(job_id: job.id), class: "open_job_chat", data: {job_id: job.id} %> |
+  <% job_link += "#{job.house.code} - " if job.house %>
+  <% job_link_plan = "(#{job.plan.strftime('%d.%m.%Y')})" if job.plan.present? %>
+  <%= link_to "#{job_link} #{job.job} #{job_link_plan}", jobs_path(job_id: job.id, status: @status), class: "open_job_chat text-dark", data: {job_id: job.id} %>
+
   <% if (job.creator == current_user) || current_user.role?(:admin) %>
     <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %> |
     <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
   <% end %>
-
-  <% if job.closed.nil? %>
-    <%= link_to 'Done', job_path(job, done: true), method: :put, remote: true %>
-  <% else %>
-    <%= link_to 'Undone', job_path(job, done: false), method: :put, remote: true %>
-  <% end %>
-  S: <%= job.status %>
 </div>
 
 

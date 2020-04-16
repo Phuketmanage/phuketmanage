@@ -2,7 +2,8 @@ class JobsController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_job, only: [:show, :edit, :update, :update_laundry, :destroy]
-  # before_action :set_s3_direct_post, only: [:show, :edit, :update, :update_laundry, :destroy]
+  after_action :system_message_create, only: [:create]
+  after_action :system_message_update, only: [:update]
   layout 'admin'
 
   # GET /jobs
@@ -12,15 +13,17 @@ class JobsController < ApplicationController
     @message = JobMessage.new
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
-      if params[:closed].present?
+      if params[:status].present?
         @jobs = Job.where.not(user_id: maids, closed: nil).order(closed: :desc)
       else
         @jobs = Job.where(closed: nil).where.not(user_id: maids).order(:plan)
       end
     else
-      if params[:closed].present?
-        @jobs = current_user.jobs.where.not(closed: nil).order(closed: :desc)
+      if params[:status].present?
+        @status = params[:status]
+        @jobs = current_user.jobs.order(updated_at: :desc)
       else
+        @inbox = current_user.jobs.inbox
         @jobs = current_user.jobs.where(closed: nil).order(:plan)
       end
     end
@@ -94,10 +97,6 @@ class JobsController < ApplicationController
     @job.creator_id = current_user.id
     respond_to do |format|
       if @job.save
-        @job.job_messages.create!(sender: current_user,
-          message: "Job was created",
-          is_system: 1)
-
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
         format.json { render  json: { job: {
                                         id: @job.id,
@@ -132,16 +131,7 @@ class JobsController < ApplicationController
     end
     respond_to do |format|
       if @job.update(job_params)
-        changes = @job.saved_changes
-        changes.each do |key, value|
-          unless key == "updated_at"
-            @job.job_messages.create!(sender: current_user,
-              message: "#{key} changed: #{value[0]} -> #{value[1]}",
-              is_system: 1)
-          end
-        end
-
-        format.html { redirect_to jobs_path, notice: 'Job was successfully updated.' }
+        format.html { redirect_to jobs_path(job_id: @job.id), notice: 'Job was successfully updated.' }
         format.json { render :index, status: :ok, location: @job }
         format.js
       else
@@ -168,9 +158,22 @@ class JobsController < ApplicationController
 
   private
 
-    # def set_s3_direct_post
-    #   @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{SecureRandom.uuid}/${filename}", success_action_status: '201', acl: 'public-read')
-    # end
+    def system_message_create
+      @job.job_messages.create!(sender: current_user,
+        message: "Job created",
+        is_system: 1)
+    end
+
+    def system_message_update
+      changes = @job.saved_changes
+      changes.each do |key, value|
+        unless key == "updated_at"
+          @job.job_messages.create!(sender: current_user,
+            message: "#{key} changed: #{value[0]} -> #{value[1]}",
+            is_system: 1)
+        end
+      end
+    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_job
