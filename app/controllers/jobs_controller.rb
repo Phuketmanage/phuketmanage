@@ -14,7 +14,9 @@ class JobsController < ApplicationController
     @status = params[:status]
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
-      @jobs = Job.where.not(user_id: maids).order(updated_at: :desc)
+      @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
+    else
+      @jobs = current_user.jobs.order(updated_at: :desc)
     end
     @messages = []
     if params['job_id'].present?

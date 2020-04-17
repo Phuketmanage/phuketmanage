@@ -6,7 +6,7 @@
       <div class="col-md-2 form-group">
         <%= form.label :Employee %>
         <%= form.select :user_id,
-              User.with_role(['Manager', 'Guest relation', 'Accounting']).map {|u| [u.name, u.id]},
+              User.with_role(['Admin', 'Manager', 'Guest relation', 'Accounting']).map {|u| [u.name, u.id]},
               { prompt: 'Select employee' },
               class: "form-control" %>
       </div>
