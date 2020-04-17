@@ -34,7 +34,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update job" do
     patch job_url(@job), params: { job: { booking_id: @job.booking_id, comment: @job.comment, plan: @job.plan, house_id: @job.house_id, job_type_id: @job.job_type_id, time: @job.time } }
-    assert_redirected_to jobs_url(job_id: @job.id)
+    assert_redirected_to job_url(@job)
   end
 
   test "should destroy job" do
