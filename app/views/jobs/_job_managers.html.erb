@@ -18,7 +18,7 @@
     <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %> |
     <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
   <% end %>
-  <%= job.done? %>
+  <%= job.closed? %>
 </div>
 
 
