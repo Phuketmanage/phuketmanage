@@ -6,7 +6,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav mr-auto">
       <% if signed_in? && current_user.role?(['Owner']) %>
         <li class="nav-item">
           <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
@@ -125,14 +125,27 @@
         <% end %>
       </li>
     </ul>
+    <% if signed_in? && current_user.role?(['owner']) %>
+      <div class="d-none d-lg-block">
+        <%= t('app.tagline') %> |
+        <%= link_to t('app.reservation_phone'),
+          "tel:#{t('app.reservation_phone')}" %> |
+        <%= mail_to t('app.reservation_email') %>
+      </div>
+    <% elsif signed_in? %>
+      <span class="navbar-text">
+        <%= current_user.name %>
+      </span>
+    <% else %>
+      <div class="d-none d-lg-block">
+        <%= t('app.tagline') %> |
+        <%= link_to t('app.reservation_phone'),
+          "tel:#{t('app.reservation_phone')}" %> |
+        <%= mail_to t('app.reservation_email') %>
+      </div>
+    <% end %>
   </div>
-  <% if signed_in? && !current_user.role?(['Admin','Manager','Accounting','Guest relation']) %>
-    <div class="d-none d-lg-block">
-      <%= t('app.tagline') %> |
-      <%= link_to t('app.reservation_phone'),
-        "tel:#{t('app.reservation_phone')}" %> |
-      <%= mail_to t('app.reservation_email') %>
-    </div>
-  <% end %>
+
+
 </nav>
 

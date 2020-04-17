@@ -8,7 +8,7 @@
 <div class="shadow-sm mb-2 p-2 border rounded <%= bg_color %>" id="job_<%= job.id %>">
   <% job_link = '' %>
   <% if current_user.role? :admin %>
-    <% job_link = "#{job.user.name}:" if job.user_id %>
+    <% job_link = "#{job.user.name}: " if job.user_id %>
   <% end %>
   <% job_link += "#{job.house.code} - " if job.house %>
   <% job_link_plan = "(#{job.plan.strftime('%d.%m.%Y')})" if job.plan.present? %>
@@ -18,7 +18,6 @@
     <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %> |
     <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
   <% end %>
-  <%= job.closed? %>
 </div>
 
 

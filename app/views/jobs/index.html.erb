@@ -17,7 +17,7 @@
 
     <div class="row">
       <div class="col-md-6">
-        <% if @status == 'active' %>
+        <% if @status == 'active' || !@status.present? %>
           INBOX
           <% @jobs.inbox.each do |job| %>
             <%= render 'job_managers', job: job %>

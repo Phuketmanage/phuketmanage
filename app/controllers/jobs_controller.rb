@@ -11,21 +11,10 @@ class JobsController < ApplicationController
   def index
     @job = Job.new
     @message = JobMessage.new
+    @status = params[:status]
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
-      if params[:status].present?
-        @jobs = Job.where.not(user_id: maids, closed: nil).order(closed: :desc)
-      else
-        @jobs = Job.where(closed: nil).where.not(user_id: maids).order(:plan)
-      end
-    else
-      if params[:status].present?
-        @status = params[:status]
-        @jobs = current_user.jobs.order(updated_at: :desc)
-      else
-        @inbox = current_user.jobs.inbox
-        @jobs = current_user.jobs.where(closed: nil).order(:plan)
-      end
+      @jobs = Job.where.not(user_id: maids).order(updated_at: :desc)
     end
     @messages = []
     if params['job_id'].present?
