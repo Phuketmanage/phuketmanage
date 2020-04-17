@@ -1,31 +1,23 @@
-<% bg_color = 'bg-white' %>
-<% link_text = 'Open' %>
-<% if @active_job == job %>
-<% bg_color = 'bg-warning' %>
-<% link_text = 'Active' %>
-<% end %>
-
-<div class="shadow-sm mb-2 p-2 border rounded <%= bg_color %>" id="job_<%= job.id %>">
+<div class="shadow-sm mb-2 p-2 border rounded bg-white" id="job_<%= job.id %>">
   <% job_link = '' %>
   <% if current_user.role? :admin %>
     <% job_link = "#{job.user.name}: " if job.user_id %>
   <% end %>
   <% job_link += "#{job.house.code} - " if job.house %>
   <% job_link_plan = "(#{job.plan.strftime('%d.%m.%Y')})" if job.plan.present? %>
-  <%= link_to "#{job_link} #{job.job} #{job_link_plan}", jobs_path(job_id: job.id, status: @status), class: "open_job_chat text-dark", data: {job_id: job.id} %>
+  <%= link_to "#{job_link} #{job.job} #{job_link_plan}", job_path(job), class: "open_job_chat text-dark", data: {job_id: job.id} %>
 
   <% if (job.creator == current_user) || current_user.role?(:admin) %>
     <%= link_to 'Edit', '#', id: "edit_job", data: {job_id: job.id}  %> |
-    <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %> |
+    <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %>
   <% end %>
 </div>
 
+<div class="mt-2" style="display: none;" id="form_edit_job_<%= job.id %>">
+  <%= form_with(model: job, class: "update_job") do |f| %>
+    <%= f.text_area :job, class: 'form-control', row: 2,
+      data: {job_id: job.id, field: 'job'} %>
+    <%= f.submit 'Save', {  class: "btn btn-primary mt-2"} %>
 
-        <div class="mt-2" style="display: none;" id="form_edit_job_<%= job.id %>">
-          <%= form_with(model: job, class: "update_job") do |f| %>
-            <%= f.text_area :job, class: 'form-control', row: 2,
-              data: {job_id: job.id, field: 'job'} %>
-            <%= f.submit 'Save', {  class: "btn btn-primary mt-2"} %>
-
-          <% end %>
-        </div>
+  <% end %>
+</div>

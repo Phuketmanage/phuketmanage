@@ -10,19 +10,12 @@ class JobsController < ApplicationController
   # GET /jobs.json
   def index
     @job = Job.new
-    @message = JobMessage.new
     @status = params[:status]
     if current_user.role? :admin
       maids = User.with_role('Maid').ids
       @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
     else
       @jobs = current_user.jobs.order(updated_at: :desc)
-    end
-    @messages = []
-    if params['job_id'].present?
-      @active_job = Job.find(params['job_id'])
-      @messages = @active_job.job_messages.last(10)
-      @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@active_job.id}/${filename}", success_action_status: '201', acl: 'public-read')
     end
   end
 
@@ -66,6 +59,9 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET /jobs/1.json
   def show
+    @message = JobMessage.new
+    @messages = @job.job_messages.last(10)
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@job.id}/${filename}", success_action_status: '201', acl: 'public-read')
 
   end
 
@@ -122,7 +118,7 @@ class JobsController < ApplicationController
     end
     respond_to do |format|
       if @job.update(job_params)
-        format.html { redirect_to jobs_path(job_id: @job.id), notice: 'Job was successfully updated.' }
+        format.html { redirect_to job_path(@job), notice: 'Job was successfully updated.' }
         format.json { render :index, status: :ok, location: @job }
         format.js
       else

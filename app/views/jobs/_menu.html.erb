@@ -1,0 +1,5 @@
+<%= link_to 'New Job', new_job_path %> |
+<%= link_to 'Active', jobs_path(status: 'active') %> |
+<%= link_to 'Postponed', jobs_path(status: 'postponed') %> |
+<%= link_to 'Done', jobs_path(status: 'done') %> |
+<%= link_to 'Cancelled', jobs_path(status: 'cancelled') %>
