@@ -8,6 +8,7 @@ class JobMessagesController < ApplicationController
     @message.sender_id = current_user.id
       if @message.save
         job.update(updated_at: Time.zone.now)
+        job.job_tracks.where(user_id: current_user.id).update(visit_time: Time.zone.now)
       else
         redirect_to jobs_path
       end
