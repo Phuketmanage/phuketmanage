@@ -62,6 +62,12 @@ class JobsController < ApplicationController
     @message = JobMessage.new
     @messages = @job.job_messages.last(10)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@job.id}/${filename}", success_action_status: '201', acl: 'public-read')
+    trace = @job.job_tracks.where(user_id: current_user.id)
+    if trace.any?
+      trace.update(visit_time: Time.zone.now)
+    else
+      @job.job_tracks.create!(user_id: current_user.id, visit_time: Time.zone.now)
+    end
 
   end
 

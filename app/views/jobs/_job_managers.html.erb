@@ -1,4 +1,9 @@
-<div class="shadow-sm mb-2 p-2 border rounded bg-white" id="job_<%= job.id %>">
+<% trace = job.job_tracks.find_by(user_id: current_user.id) %>
+<% read_status = 'bg-white' %>
+<% if (!trace.nil? && trace.visit_time < job.updated_at) || trace.nil? %>
+  <% read_status = 'bg-warning' %>
+<% end %>
+<div class="shadow-sm mb-2 p-2 border rounded <%= read_status %>" id="job_<%= job.id %>">
   <% job_link = '' %>
   <% if current_user.role? :admin %>
     <% job_link = "#{job.user.name}: " if job.user_id %>

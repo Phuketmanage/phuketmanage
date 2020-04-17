@@ -44,7 +44,7 @@ class Ability
                       Connection, JobType, Transfer, Source, Option, HouseOption, Location ]
       can :manage, HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
-      can [:index, :new, :create, :edit, :update, :laundry, :update_laundry], Job
+      can [:index, :new, :show, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job , creator: user
       can :manage, JobMessage, sender: user
       can :index, [ Admin ]

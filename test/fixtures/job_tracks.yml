@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job: one
+  user: one
+  visit_time: 2020-04-17 17:00:04
+
+two:
+  job: two
+  user: two
+  visit_time: 2020-04-17 17:00:04
