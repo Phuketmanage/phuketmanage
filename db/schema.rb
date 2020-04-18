@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_18_070223) do
+ActiveRecord::Schema.define(version: 2020_04_18_072616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,14 +346,6 @@ ActiveRecord::Schema.define(version: 2020_04_18_070223) do
     t.index ["syncable"], name: "index_sources_on_syncable"
   end
 
-  create_table "transaction_files", force: :cascade do |t|
-    t.bigint "transaction_id", null: false
-    t.string "url", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["transaction_id"], name: "index_transaction_files_on_transaction_id"
-  end
-
   create_table "transaction_types", force: :cascade do |t|
     t.string "name_en"
     t.string "name_ru"
@@ -458,7 +450,6 @@ ActiveRecord::Schema.define(version: 2020_04_18_070223) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
-  add_foreign_key "transaction_files", "transactions"
   add_foreign_key "transactions", "bookings"
   add_foreign_key "transactions", "houses"
   add_foreign_key "transactions", "transaction_types", column: "type_id"

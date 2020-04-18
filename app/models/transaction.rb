@@ -5,6 +5,7 @@ class Transaction < ApplicationRecord
   belongs_to :booking, optional: true
   has_many :balances, dependent: :destroy
   has_many :balance_outs, dependent: :destroy
+  has_many :transaction_files
 
   validates :date, :type, :comment_en, presence: true
 
