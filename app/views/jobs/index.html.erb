@@ -3,8 +3,8 @@
 <div id='jobs'>
   <% if @status == 'active' || !@status.present? %>
     INBOX
-    <% if @jobs.paused.any? %>
-      <% @jobs.paused.each do |job| %>
+    <% if @jobs.inbox.any? %>
+      <% @jobs.inbox.each do |job| %>
         <%= render 'job_managers', job: job %>
       <% end %>
     <% else %>

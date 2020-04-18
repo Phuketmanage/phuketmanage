@@ -12,8 +12,9 @@ class JobsController < ApplicationController
     @job = Job.new
     @status = params[:status]
     if current_user.role? :admin
-      maids = User.with_role('Maid').ids
+      # maids = User.with_role('Maid').ids
       @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
+      # byebug
     else
       @jobs = current_user.jobs.order(updated_at: :desc)
     end
