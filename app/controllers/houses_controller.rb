@@ -157,7 +157,8 @@ class HousesController < ApplicationController
                                     :rules_en,
                                     :rules_ru,
                                     :other_en,
-                                    :other_ru
+                                    :other_ru,
+                                    :details
                                     )
     end
 
