@@ -103,7 +103,8 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     @transaction = Transaction.new
-
+    now = Time.zone.now.in_time_zone('Bangkok')
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
     if params[:user_id].present?
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
@@ -123,6 +124,7 @@ class TransactionsController < ApplicationController
     @de_co = @transaction.balances.sum(:debit)
     @cr_co = @transaction.balances.sum(:credit)
     @bookings = []
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
     if @transaction.user
       owner = @transaction.user
       @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
@@ -142,6 +144,12 @@ class TransactionsController < ApplicationController
         cr_co = params[:transaction][:cr_co].to_d
         type = TransactionType.find(params[:transaction][:type_id]).name_en
         @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
+        files = params['transaction']['files']
+        if !files.nil?
+          files.each do |f|
+            @transaction.files.create!(url: f)
+          end
+        end
         if @transaction.errors.any?
           @transaction.destroy
           if params[:user_id].present?
@@ -154,7 +162,7 @@ class TransactionsController < ApplicationController
           else
             @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
           end
-
+          @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
           render :new and return
         end
         if params[:booking_fully_paid] == "true"
@@ -196,6 +204,12 @@ class TransactionsController < ApplicationController
         cr_co = params[:transaction][:cr_co].to_d
         type = TransactionType.find(params[:transaction][:type_id]).name_en
         @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
+        files = params['transaction']['files']
+        if !files.nil?
+          files.each do |f|
+            @transaction.files.create!(url: f)
+          end
+        end
         if @transaction.errors.any?
           @de_ow = @transaction.balance_outs.sum(:debit)
           @cr_ow = @transaction.balance_outs.sum(:credit)

@@ -55,6 +55,7 @@ $(document).on "turbolinks:load", ->
       fail: (e, data) ->
         progressBar.
           css("background", "red")
+
   $("a[data-link-to-image]").on "click", (e) ->
     e.preventDefault()
     url = $(this).attr('href')

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  delete 'transaction_file', to: 'transaction_files#destroy'
+  delete 'transaction_file_tmp', to: 'transaction_files#destroy_tmp'
   get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
   get 'laundry', to: 'jobs#laundry', as: 'laundry'
   patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'

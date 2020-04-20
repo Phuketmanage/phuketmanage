@@ -6,7 +6,7 @@ class Transaction < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :balance_outs, dependent: :destroy
   has_many :transaction_files
-
+  has_many :files, dependent: :destroy, foreign_key: 'trsc_id', class_name: 'TransactionFile'
   validates :date, :type, :comment_en, presence: true
 
   # before_save :log
