@@ -94,7 +94,7 @@
     <%= form.text_field :ref_no, class: "form-control" %>
   </div>
   <div class="d-flex flex-wrap" id='transaction_files'>
-    <% transaction.files.each do |f| %>
+    <% transaction.files.order(:url).each do |f| %>
       <%= render 'transaction_files/file', file: f %>
     <% end %>
   </div>
