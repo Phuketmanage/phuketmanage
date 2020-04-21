@@ -67,8 +67,6 @@ $(document).on "turbolinks:load", ->
         # tr.addClass('shown')
         tr.find('i').removeClass('fa-plus-circle').addClass('fa-minus-circle')
 
-
-
   $('#link_show_hidden').on 'click', (e) ->
     e.preventDefault()
     if $('.hidden_row').is(":hidden")
@@ -84,27 +82,24 @@ $(document).on "turbolinks:load", ->
     if $('#trsc_type').children('option:selected').text() == 'Rental'
       $('#rental_calcs').html("To owner: #{$('#transaction_de_ow').val() - $(this).val()}")
 
-  $ ->
-    fileInput = $('#fileupload_trsc')
+  fileInput = $('#fileupload_trsc')
+  if fileInput.length > 0
     form = $(fileInput.parents('form:first'))
     submitButton = form.find('input[type="submit"]')
     progressBar  = $('.progress-bar')
-    fileInput.fileupload
-      fileInput:       fileInput,
-      dropZone:        $('#fileupload_trsc'),
-      url:             form.data('url'),
-      type:            'POST',
-      autoUpload:       true,
-      formData:         form.data('form-data'),
-      paramName:        'file', #// S3 does not like nested name fields i.e. name="user[avatar_url]"
-      dataType:         'XML',  #// S3 returns XML if success_action_status is set to 201
-      replaceFileInput: false
+    awsFormData = form.data('form-data')
+    formData = new FormData()
+    Object.keys(awsFormData).forEach (key) ->
+      formData.append(key, awsFormData[key])
 
-      progressall: (e, data) ->
-        progress = parseInt(data.loaded / data.total * 100, 10);
-        progressBar.css('width', progress + '%')
-      ,
-      submit: (e, data) ->
+    fileInput.on 'change', (e) ->
+      e.preventDefault
+      loaded = 0
+      totalSize = 0
+      fileCount = 0
+      for file in e.target.files
+        totalSize += file.size
+      for file in e.target.files
         date = new Date($('#transaction_date').val())
         year = date.getFullYear()
         month = ("0" + (date.getMonth() + 1)).slice(-2)
@@ -112,69 +107,80 @@ $(document).on "turbolinks:load", ->
         house = $('#transaction_house_id').children("option:selected").text()
         if house.length > 0 then house = ' '+house else house = ''
         text = $('#transaction_comment_en').val()
-        oldname = data.files[0].name
+        oldname = file.name
         extention = oldname.split('.').pop()
-        fileCount = 1
-        if jQuery.inArray('fileCount', sessionStorage)
-          fileCount = parseInt(sessionStorage.getItem("fileCount"))
-          fileCount += 1
-        sessionStorage.setItem("fileCount", fileCount)
+        fileCount += 1
         newname = year+'.'+month+'.'+day+house+' - '+text+' '+fileCount+'.'+extention
         newname = newname.replace("/", "-")
-        data.files[0].uploadName = newname
-      ,
-      start: (e) ->
-        submitButton.prop('disabled', true)
-        progressBar.css('width', '0%')
-      ,
+        formData.set('Content-Type', file.type)
+        formData.set('file', file, newname)
+        $.ajax
+          xhr: ->
+            xhr = new window.XMLHttpRequest()
+            xhr.upload.addEventListener "progress", (evt) ->
+              if (evt.lengthComputable)
+                progress =  (loaded + evt.loaded) / totalSize * 100
+                progressBar.css('width', progress + '%')
+            , false
+            return xhr
+          url: form.data('url')
+          type: 'POST'
+          processData:false
+          contentType: false
+          paramName: 'file'
+          dataType: 'XML'
+          data: formData
+          beforeSend: (e) ->
+            submitButton.prop('disabled', true)
+            progressBar.show()
+            progressBar.css('width', '0%')
+          success: (data) ->
+            submitButton.prop('disabled', false)
+            progressBar.hide()
+            progressBar.css('width', '0%')
+            loaded += file.size
+            key   = $(data).find('Key').text()
+            url   = key
+            src = '//' + form.data('host') + '/' + key
+            input = $("<input />", { type:'hidden', name: 'transaction[files][]', value: url })
+            form.append(input)
+            div = $('<div></div>', {class: 'shadow-sm mr-md-2 mt-2 p-2 border rounded bg-warning'})
+            extention = key.split('.').pop()
+            if extention == 'pdf'
+              attachment = $('<embed></embed>', {src: src, width: '250px', height: '250px'})
+            else
+              attachment = $('<img />', {src: src, width: '250px'})
+            div.append(attachment)
+            link = $('<a></a>', {href: '#', text: 'Delete', 'data-delete-tmp-file': '', 'data-key': key, })
+            div.append('<br />')
+            div.append(link)
+            $('div#transaction_files').append(div)
+          fail: (data) ->
+            console.log data.jqXHR.responseText
 
-      done: (e, data) ->
-        submitButton.prop('disabled', false)
-        progressBar.css('width', '0%')
+    $('#transaction_files').on "click", "a[data-link-to-file]", (e) ->
+      e.preventDefault()
+      url = $(this).children('img:first').attr('src')
+      $('div.modal-body').html("<img src='#{url}' width='100%'>")
+      $('#transaction_file').modal()
 
-        key   = $(data.jqXHR.responseXML).find("Key").text()
-        url   = key
-        input = $("<input />", { type:'hidden', name: 'transaction[files][]', value: url })
-        form.append(input)
-        div = $('<div></div>', {class: 'shadow-sm mr-md-2 mt-2 p-2 border rounded bg-warning'})
-        img = $('<img />', {src: '//' + form.data('host') + '/' + key, width: '250px'})
-        div.append(img)
-        link = $('<a></a>', {href: '#', text: 'Delete', 'data-delete-tmp-file': '', 'data-key': key, })
-        div.append('<br />')
-        div.append(link)
-        $('div#transaction_files').append(div)
-        sessionStorage.setItem("fileCount", 0)
-      ,
+    $('#transaction_files').on "click", "div a[data-delete-tmp-file]", (e) ->
+      e.preventDefault()
+      $.ajax
+        url: "/transaction_file_tmp",
+        type: "delete",
+        dataType: "json",
+        data: {
+          key: $(this).data('key')
+        },
+        success: (data) ->
+          $("a[data-key='#{data.key}']").closest('div').remove()
+        fail: (data) ->
+          console.log 'Can not delete file'
 
-      fail: (e, data) ->
-        submitButton.prop('disabled', false)
-        progressBar.
-          css("background", "red")
-        sessionStorage.setItem("fileCount", 0)
-
-  $('#transaction_files').on "click", "a[data-link-to-file]", (e) ->
-    e.preventDefault()
-    url = $(this).children('img:first').attr('src')
-    $('div.modal-body').html("<img src='#{url}' width='100%'>")
-    $('#transaction_file').modal()
-
-  $('#transaction_files').on "click", "div a[data-delete-tmp-file]", (e) ->
-    e.preventDefault()
-    $.ajax
-      url: "/transaction_file_tmp",
-      type: "delete",
-      dataType: "json",
-      data: {
-        key: $(this).data('key')
-      },
-      success: (data) ->
-        $("a[data-key='#{data.key}']").closest('div').remove()
-      fail: (data) ->
-        console.log 'Can not delete file'
-
-  $('#transaction_back').on 'click', (e) ->
-    e.preventDefault()
-    $('a[data-delete-tmp-file]').each ->
+    $('#transaction_back').on 'click', (e) ->
+      e.preventDefault()
+      $('a[data-delete-tmp-file]').each ->
         $.ajax
           url: "/transaction_file_tmp",
           type: "delete",
@@ -186,7 +192,7 @@ $(document).on "turbolinks:load", ->
             $("a[data-key='#{data.key}']").closest('div').remove()
           fail: (data) ->
             console.log 'Can not delete file'
-    window.location = $(this).attr('href')
+      window.location = $(this).attr('href')
 
 react_to_select_user_id = (selected) ->
   if selected > 0

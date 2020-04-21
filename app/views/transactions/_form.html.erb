@@ -94,7 +94,7 @@
     <%= form.text_field :ref_no, class: "form-control" %>
   </div>
   <div class="d-flex flex-wrap" id='transaction_files'>
-    <% transaction.files.order(:url).each do |f| %>
+    <% transaction.files.order(:created_at).each do |f| %>
       <%= render 'transaction_files/file', file: f %>
     <% end %>
   </div>
@@ -102,7 +102,9 @@
     <label for="fileupload_trsc" class="btn btn-success">
       Add file
     </label>
+    <%#= hidden_field_tag 'Content-Type', 'application/pdf' %>
     <%= file_field_tag :files, id: "fileupload_trsc", multiple: true, style: 'display: none;'%>
+
   </div>
   <div class="progress" style="height:3px;">
       <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>

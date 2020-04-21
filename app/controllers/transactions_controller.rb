@@ -124,7 +124,11 @@ class TransactionsController < ApplicationController
     @de_co = @transaction.balances.sum(:debit)
     @cr_co = @transaction.balances.sum(:credit)
     @bookings = []
-    @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
+    @s3_direct_post = S3_BUCKET.presigned_post(
+      key: "transactions/${filename}",
+      success_action_status: '201',
+      acl: 'public-read',
+      content_type_starts_with: "")
     if @transaction.user
       owner = @transaction.user
       @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')

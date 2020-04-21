@@ -1,8 +1,9 @@
 <div class="shadow-sm mr-md-2 mt-2 p-2 border rounded bg-white" data-file-id="<%= file.id %>">
   <% if File.extname(file.full_url) == ".pdf" %>
-    <iframe src="https://docs.google.com/viewer?url=http:<%= file.full_url %>&embedded=true" frameborder="0" width="250px"></iframe>
+    <!-- <iframe src="https://docs.google.com/viewer?url=http:<%= file.full_url %>&embedded=true" frameborder="0" width="250px"></iframe> -->
+    <embed src="http:<%= file.full_url %>" width='250px' height='250px'></embed>
   <% else %>
-    <a href="#" data-link-to-file><img src="http:<%= file.full_url %>" width="250px"></a>
+    <a href="#" data-link-to-file><img src="https:<%= file.full_url %>" width="250px"></a>
   <% end %>
   <br />
   <%= link_to 'Delete', transaction_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
