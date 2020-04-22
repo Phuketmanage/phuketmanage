@@ -62,7 +62,12 @@ class JobsController < ApplicationController
   def show
     @message = JobMessage.new
     @messages = @job.job_messages.last(10)
-    @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@job.id}/${filename}", success_action_status: '201', acl: 'public-read')
+    # @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@job.id}/${filename}", success_action_status: '201', acl: 'public-read')
+    @s3_direct_post = S3_BUCKET.presigned_post(
+      key: "job_messages/#{@job.id}/${filename}",
+      success_action_status: '201',
+      acl: 'public-read',
+      content_type_starts_with: "")
     trace = @job.job_tracks.where(user_id: current_user.id)
     if trace.any?
       trace.update(visit_time: Time.zone.now)

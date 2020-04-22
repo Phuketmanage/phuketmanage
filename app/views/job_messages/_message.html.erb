@@ -24,7 +24,7 @@
     <% if File.extname(message.url) == ".pdf" %>
       <iframe src="https://docs.google.com/viewer?url=http:<%= message.url %>&embedded=true" frameborder="0" height="400px" width="100%"></iframe>
     <% else %>
-      <a href="http:<%= message.url %>" data-link-to-image><img src="http:<%= message.url %>" width="100%"></a>
+      <a href="http:<%= message.url %>" data-link-to-image><img src="<%= message.url %>" width="100%"></a>
     <% end %>
   <% else %>
     <%= message.message %>

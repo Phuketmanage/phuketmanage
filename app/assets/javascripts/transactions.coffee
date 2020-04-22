@@ -96,7 +96,6 @@ $(document).on "turbolinks:load", ->
       e.preventDefault
       loaded = 0
       totalSize = 0
-      fileCount = 0
       for file in e.target.files
         totalSize += file.size
       for file in e.target.files
@@ -105,13 +104,13 @@ $(document).on "turbolinks:load", ->
         month = ("0" + (date.getMonth() + 1)).slice(-2)
         day = date.getDate()
         house = $('#transaction_house_id').children("option:selected").text()
-        if house.length > 0 then house = ' '+house else house = ''
+        if house.length > 0 and house != 'Select house' then house = house+' - ' else house = ''
         text = $('#transaction_comment_en').val()
         oldname = file.name
         extention = oldname.split('.').pop()
-        fileCount += 1
-        newname = year+'.'+month+'.'+day+house+' - '+text+' '+fileCount+'.'+extention
+        newname = year+'.'+month+'.'+day+' '+house+text+' '+(new Date).getTime()+'.'+extention
         newname = newname.replace("/", "-")
+        newname = newname.replace(".", "-")
         formData.set('Content-Type', file.type)
         formData.set('file', file, newname)
         $.ajax
