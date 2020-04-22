@@ -104,7 +104,11 @@ class TransactionsController < ApplicationController
   def new
     @transaction = Transaction.new
     now = Time.zone.now.in_time_zone('Bangkok')
-    @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
+    @s3_direct_post = S3_BUCKET.presigned_post(
+      key: "transactions/${filename}",
+      success_action_status: '201',
+      acl: 'public-read',
+      content_type_starts_with: "")
     if params[:user_id].present?
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id

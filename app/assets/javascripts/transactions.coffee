@@ -194,6 +194,10 @@ $(document).on "turbolinks:load", ->
             console.log 'Can not delete file'
       window.location = $(this).attr('href')
 
+    $('a[data-print]').on 'click', (e) ->
+      e.preventDefault()
+      printJS("http:#{$(this).data('print')}", $(this).data('type'))
+
 react_to_select_user_id = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)
