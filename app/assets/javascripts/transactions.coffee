@@ -196,7 +196,7 @@ $(document).on "turbolinks:load", ->
 
     $('a[data-print]').on 'click', (e) ->
       e.preventDefault()
-      printJS("http:#{$(this).data('print')}", $(this).data('type'))
+      printJS("https:#{$(this).data('print')}", $(this).data('type'))
 
 react_to_select_user_id = (selected) ->
   if selected > 0

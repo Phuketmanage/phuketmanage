@@ -5,7 +5,7 @@
     <embed src="<%= file.full_url %>#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" width='250px' height='250px' />
   <% else %>
     <% file_type = 'image' %>
-    <a href="#" data-link-to-file><img src="https:<%= file.full_url %>" width="250px"></a>
+    <a href="#" data-link-to-file><img src="<%= file.full_url %>" width="250px"></a>
   <% end %>
   <br />
   <%= link_to 'Delete', transaction_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
