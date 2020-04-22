@@ -19,6 +19,11 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :code %><br />
+    <%= f.text_field :code, autofocus: true, autocomplete: "code", class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
     <%= f.label :comment %>
     <%= f.text_area :comment, class: 'form-control', rows: 6 %>
   </div>

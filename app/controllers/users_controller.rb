@@ -84,7 +84,8 @@ class UsersController < ApplicationController
                                     :password,
                                     :password_confirmation,
                                     { role_ids: []},
-                                    :comment)
+                                    :comment,
+                                    :code)
     end
 
 end

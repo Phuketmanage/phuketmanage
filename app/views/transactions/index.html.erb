@@ -42,8 +42,6 @@
                 class: "btn btn-primary mb-2 mr-2 btn-sm",
                 id: 'btn_owner_accounting_view',
                 disabled: true %>
-          <%= link_to 'Drop filter', transactions_path,
-                class: 'btn btn-secondary mb-2 mr-2 btn-sm' %>
           <% if !@view_user_id %>
             <%= link_to 'New Transaction', new_transaction_path,
                   class: 'btn btn-info mb-2 mr-2 btn-sm' %>

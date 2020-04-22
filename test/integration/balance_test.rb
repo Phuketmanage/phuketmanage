@@ -47,7 +47,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '100,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_cell", '20,000.00' #Invoice
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
+    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '18,691.59' #Invoice
 
     # Maintenance
     type = TransactionType.find_by(name_en: 'Maintenance')
@@ -82,7 +86,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
-    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_cell", '15,000.00' #Invoice
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
+    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '14,018.69' #Invoice
 
     # Laundry
     type = TransactionType.find_by(name_en: 'Laundry')
@@ -117,7 +125,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
-    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_cell", '300.00' #Invoice
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
+    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '280.37' #Invoice
 
     # Top up
     type = TransactionType.find_by(name_en: 'Top up')
@@ -153,6 +165,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
     # From guests
@@ -191,6 +207,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
     # Repair
@@ -231,7 +251,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '500.00'
-    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_cell", '1,700.00' #Invoice
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
+    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '1,588.79' #Invoice
 
     # Purchases
     type = TransactionType.find_by(name_en: 'Purchases')
@@ -270,7 +294,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '7,500.00'
-    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_cell", '1,500.00' #Invoice
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
+    assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '1,401.87' #Invoice
 
     # ['Utilities', 'Pest control', 'Insurance', 'Salary', 'Gasoline', 'Office', 'Suppliers', 'Equipment']
     type = TransactionType.find_by(name_en: 'Utilities')
@@ -307,6 +335,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '3,500.00'
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
     # Add hidden from acc transaction
@@ -351,6 +383,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr.hidden_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '30,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
     # Add only for acc transaction
@@ -394,6 +430,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr.for_acc_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '10,000.00'
+    get transaction_invoice_path, params: {
+      from: Time.now.to_date.beginning_of_month,
+      to: Time.now.to_date.end_of_month,
+      view_user_id: @owner.id}
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 #Invoice
 
     #
@@ -412,7 +452,6 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Company view'}
     de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
-    # assert_equal '123', response.body
     assert_equal 73200.99.to_d, de_co_sum
     assert_select "#de_co_sum", "73,200.99"
     assert_select '#de_co_prev_sum', '7,000.00'
@@ -420,10 +459,13 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select '#co_prev_balance', '7,000.00'
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select "#company_maintenance", "60,200.99" #Because of hidden trsc it less 6000
+    get transaction_invoice_path, params: {
+      from: from,
+      to: to,
+      view_user_id: @owner.id}
     assert_select "#de_co_bvat_sum", "56,262.61"
     assert_select "#vat_sum", "3,938.38"
     assert_select "#iv_de_co_sum", "60,200.99" #Because of hidden trsc  it less 6000
-    assert_select "#iv_de_co_sum_2", "60,200.99"
 
     # For specific owner: Owner view(back) totals Owner view(front)totals = Acc view totals = DB totals
     de_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('debit')

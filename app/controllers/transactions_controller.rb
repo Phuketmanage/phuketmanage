@@ -4,6 +4,11 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 
+  def as_pdf
+    binary_pdf = Dhalang::PDF.get_from_url("https://www.phuketmanage.com/transactions/2443/edit?locale=ru")
+    send_data(binary_pdf, filename: 'pdfofgoogle.pdf', type: 'application/pdf')
+  end
+
   # GET /transactions
   # GET /transactions.json
   def index
@@ -98,6 +103,20 @@ class TransactionsController < ApplicationController
   # GET /transactions/1
   # GET /transactions/1.json
   def show
+  end
+
+  def show_invoice
+    @from = params[:from]
+    @to = params[:to]
+    @owner = User.find(params[:view_user_id])
+    @one_house = true
+    @one_house = false if @owner.houses.count > 1
+    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner.id).order(:date, :created_at).all
+
+    # @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+    # @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+    # type_rental_id = TransactionType.find_by(name_en: 'Rental').id
+
   end
 
   # GET /transactions/new

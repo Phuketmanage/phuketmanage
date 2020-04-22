@@ -12,11 +12,9 @@ Rails.application.routes.draw do
   get 'test', to: 'pages#test'
   resources :locations, except: :show
   resources :options, except: :show
-  # namespace :house do
-  #   get 'photos/index'
-  # end
   get 'owner', to: 'admin#index', as: 'owner'
   resources :transactions, except: [:show]
+  get 'transaction_invoice', to: 'transactions#show_invoice', as: 'transaction_invoice'
   post 'transactions/update_invoice_ref', to: 'transactions#update_invoice_ref', as: 'update_invoice_ref'
   get 'balance', to: 'transactions#index', as: 'balance_front'
   resources :transaction_types
@@ -30,8 +28,6 @@ Rails.application.routes.draw do
     resources :prices, only: [:index]
     get 'photos', to: 'house_photos#index', as: 'photos'
     get 'photos/add', to: 'house_photos#add'
-    # resources :seasons, except: [:show, :new, :create, :edit, :update], shallow: true
-    # resources :durations, except: [:show, :new, :create, :edit, :update], shallow: true
   end
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
@@ -60,7 +56,6 @@ Rails.application.routes.draw do
     delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
     get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
     get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
-    # post 'houses/:id/connections', to: 'houses#create_connection', as: 'add_connection'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
 
     get 'dashboard', to: 'admin#index', as: 'dashboard'
