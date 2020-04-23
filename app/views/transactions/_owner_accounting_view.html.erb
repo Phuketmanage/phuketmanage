@@ -109,7 +109,7 @@ Address:
         <td>Maintenance
           <% if @from.to_date.month == @to.to_date.month %>
             <%= link_to 'Invoice', transactions_docs_path(
-              type: 'nvoice', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %> |
+              type: 'invoice', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %> |
             <%= link_to 'Receipt', transactions_docs_path(
               type: 'receipt', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %>
           <% else %>
