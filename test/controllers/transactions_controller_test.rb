@@ -35,8 +35,6 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_path
   end
 
-  include Devise::Test::IntegrationHelpers
-
   test "should create transaction, type = rental" do
     @booking = bookings(:_1)
     @house = @booking.house

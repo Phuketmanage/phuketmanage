@@ -44,6 +44,7 @@ class Ability
                       Connection, JobType, Transfer, Source, Option, HouseOption, Location ]
       can :manage, HousePhoto
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
+      can :manage, BookingFile
       can [:index, :new, :show, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job , creator: user
       can :manage, JobMessage, sender: user
@@ -55,6 +56,7 @@ class Ability
       can [:destroy], Transaction do |t|
         t.date > Date.today-1.days
       end
+      can :manage, TransactionFile
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns

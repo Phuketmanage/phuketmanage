@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_054328) do
+ActiveRecord::Schema.define(version: 2020_04_23_132127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,7 +41,9 @@ ActiveRecord::Schema.define(version: 2020_04_23_054328) do
     t.text "comment"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
     t.index ["booking_id"], name: "index_booking_files_on_booking_id"
+    t.index ["user_id"], name: "index_booking_files_on_user_id"
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -447,6 +449,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_054328) do
   add_foreign_key "balance_outs", "transactions"
   add_foreign_key "balances", "transactions"
   add_foreign_key "booking_files", "bookings"
+  add_foreign_key "booking_files", "users"
   add_foreign_key "bookings", "houses"
   add_foreign_key "bookings", "users", column: "tenant_id"
   add_foreign_key "connections", "houses"

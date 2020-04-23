@@ -33,9 +33,8 @@ Rails.application.routes.draw do
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
   post 'booking/new', to: 'bookings#create_front'
-  resources :bookings do
-    resources :booking_files, only: [:create, :update, :destroy]
-  end
+  resources :bookings
+  resources :booking_files, only: [:create, :update, :destroy]
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     get '/about', to: 'pages#about', as: 'page_about'

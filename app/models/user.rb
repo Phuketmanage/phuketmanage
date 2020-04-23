@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :jobs
   has_many :job_tracks, dependent: :destroy
   has_many :transactions
+  has_many :booking_files, dependent: :nullify
   # has_many :jobs_created, class_name: 'Job', foreign_key: 'creator_id'
   has_many :todos
   has_many :todos_created, class_name: 'Todo', foreign_key: 'creator_id'
