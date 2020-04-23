@@ -172,8 +172,12 @@ class BookingsController < ApplicationController
     @transfer = @booking.transfers.new
     @select_items = House.order(:code).map{|h| [h.code, h.number]}
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
-    # @transfers_in = @booking.transfers.where(trsf_type: 'IN')
-    # @transfers_out = @booking.transfers.where(trsf_type: 'OUT')
+    @booking_file = @booking.files.new()
+    @s3_direct_post = S3_BUCKET.presigned_post(
+      key: "bookings/#{@booking.number}/${filename}",
+      success_action_status: '201',
+      acl: 'public-read',
+      content_type_starts_with: "")
     unless @booking.block?
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]

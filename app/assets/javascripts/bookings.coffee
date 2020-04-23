@@ -215,6 +215,71 @@ $(document).on "turbolinks:load", ->
 
     $('[data-toggle="popover"]').popover({container: 'body'})
 
+  fileInput = $('#fileupload_booking')
+  if fileInput.length > 0
+    form = $(fileInput.parents('form:first'))
+    submitButton = form.find('input[type="submit"]')
+    progressBar  = $('.progress-bar')
+    awsFormData = form.data('form-data')
+    formData = new FormData()
+    Object.keys(awsFormData).forEach (key) ->
+      formData.append(key, awsFormData[key])
+
+    # form.on 'submit', (e) ->
+    #   e.preventDefault
+    #   file = fileInput[0].files[0]
+    #   booking_number = $('#booking_number').val()
+    #   name = $('#file_name').val()
+    #   comment =$('#file_comment').val()
+    #   oldname = file.name
+    #   extention = oldname.split('.').pop()
+    #   newname = name+'.'+extention
+    #   formData.set('Content-Type', file.type)
+    #   formData.set('file', file, newname)
+    #   $.ajax
+    #     xhr: ->
+    #       xhr = new window.XMLHttpRequest()
+    #       xhr.upload.addEventListener "progress", (evt) ->
+    #         if (evt.lengthComputable)
+    #           progress =  (loaded + evt.loaded) / totalSize * 100
+    #           progressBar.css('width', progress + '%')
+    #       , false
+    #       return xhr
+    #     url: form.data('url')
+    #     type: 'POST'
+    #     processData:false
+    #     contentType: false
+    #     paramName: 'file'
+    #     dataType: 'XML'
+    #     data: formData
+    #     beforeSend: (e) ->
+    #       submitButton.prop('disabled', true)
+    #       progressBar.show()
+    #       progressBar.css('width', '0%')
+    #     success: (data) ->
+    #       submitButton.prop('disabled', false)
+    #       progressBar.hide()
+    #       progressBar.css('width', '0%')
+    #       loaded += file.size
+    #       key   = $(data).find('Key').text()
+    #       url   = key
+    #       src = '//' + form.data('host') + '/' + key
+    #       input = $("<input />", { type:'hidden', name: 'transaction[files][]', value: url })
+    #       form.append(input)
+    #       div = $('<div></div>', {class: 'shadow-sm mr-md-2 mt-2 p-2 border rounded bg-warning'})
+    #       extention = key.split('.').pop()
+    #       if extention == 'pdf'
+    #         attachment = $('<embed></embed>', {src: src, width: '250px', height: '250px'})
+    #       else
+    #         attachment = $('<img />', {src: src, width: '250px'})
+    #       div.append(attachment)
+    #       link = $('<a></a>', {href: '#', text: 'Delete', 'data-delete-tmp-file': '', 'data-key': key, })
+    #       div.append('<br />')
+    #       div.append(link)
+    #       $('div#transaction_files').append(div)
+    #     fail: (data) ->
+    #       console.log data.jqXHR.responseText
+
 close_dates = (h) ->
   for b in h.bookings
     for x_add in [0..b.length-1]

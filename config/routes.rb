@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
   post 'booking/new', to: 'bookings#create_front'
+  resources :bookings do
+    resources :booking_files, only: [:create, :update, :destroy]
+  end
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     get '/:locale' , to: 'pages#index'
     get '/about', to: 'pages#about', as: 'page_about'
@@ -46,7 +49,7 @@ Rails.application.routes.draw do
     get 'bookings/timeline_data', to: 'bookings#timeline_data'
     get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
     patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
-    resources :bookings
+
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
