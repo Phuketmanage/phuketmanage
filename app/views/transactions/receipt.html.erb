@@ -4,7 +4,7 @@
   </div>
   <div class="d-flex flex-row">
     <div class="p-2 mr-auto"><img src="https://phuketmanage.s3-ap-southeast-1.amazonaws.com/images/Logo-512x512.png" alt="Company logo" width='100px'></div>
-    <div class="p-2"><h3>INVOICE / ใบแจ้งรายการ</h3></div>
+    <div class="p-2 text-right"><h3>RECEIPT / TAX INVOICE</h3><h3>ใบเสร็จรับเงิน / ใบกำกับถาษี</h3></div>
   </div>
   <div class="d-flex flex-row">
     <div class="p-2 mr-auto">
@@ -22,7 +22,7 @@
         <% code = houses.first.code.gsub(/\//,'-') %>
       <% end %>
       <% date = @to.to_date %>
-      <strong>Invoice:</strong> IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
+      <strong>Number:</strong> RE-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
       <strong>Date:</strong>  <%= @to.to_date.strftime('%d.%m.%Y') %>
     </div>
   </div>
@@ -52,20 +52,17 @@
         <% de_co_sum += de_co %>
         <% vat = de_co.to_f*7/107 %>
         <% de_co_bvat = de_co-vat %>
-        <%# de_co_wvat = de_co %>
         <% de_co_bvat_sum += de_co_bvat %>
-        <%# de_co_wvat_sum += de_co_wvat %>
         <% vat_sum += vat %>
-        <tr id="trsc_<%= t.id %>_iv_row">
-          <td>
-            <%= t.date.strftime('%d.%m.%Y') %>
-            <%= t.comment_en %>
-          </td>
-          <td class="iv_price_bvat_cell text-right">
-            <nobr><%= number_to_currency(de_co_bvat.round(2), precision: 2, unit: '') %></nobr>
-          </td>
-        </tr>
       <% end %>
+      <tr>
+        <td>
+          IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001
+        </td>
+        <td class="iv_price_bvat_cell text-right">
+          <%= number_to_currency(de_co_bvat_sum.round(2), precision: 2, unit: '') %>
+        </td>
+      </tr>
 
       <tfoot>
         <tr>
@@ -90,17 +87,10 @@
     </tbody>
   </table>
   </div>
-  <div class="d-flex flex-row align-items-end">
+  <div class="d-flex flex-row align-items-end" style='height: 100px;'>
     <div class="p-2 mr-auto">
-      <strong>Bank details:</strong><br />
-      A/C Name: PHAETHON CO., LTD<br />
-      Bank: Kasikorn Bank Pcl<br />
-      Branch: Central Festival Phuket<br />
-      Address: 74-75 Moo5 T.Vichit Muang Phuket 83000<br />
-      Account: 482-2-31032-5<br />
-      Swift: KASITHBK
     </div>
-    <div class="p-2 text-center">
+    <div class="p-2 text-center" >
       _____________________________________<br />
       Assignment
     </div>

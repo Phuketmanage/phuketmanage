@@ -107,8 +107,15 @@ Address:
         <td class='text-right' id='company_maintenance'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
         <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum - de_co_sum, precision: 2, unit: '') %></td>
         <td>Maintenance
-          <%= link_to 'Show invoice details', transaction_invoice_path(
-            from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %>
+          <% if @from.to_date.month == @to.to_date.month %>
+            <%= link_to 'Invoice', transactions_docs_path(
+              type: 'nvoice', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %> |
+            <%= link_to 'Receipt', transactions_docs_path(
+              type: 'receipt', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %>
+          <% else %>
+            <span class="text-muted">Invoice</span> |
+            <span class="text-muted">Receipt</span>
+          <% end %>
         </td>
         <td></td>
       </tr>
@@ -166,4 +173,11 @@ Address:
     </tr>
   </tfoot>
 </table>
-
+<% disabled = false %>
+<% if @from.to_date.month != @to.to_date.month %>
+  <% disabled = true %>
+<% end %>
+<%= form_with(url: update_invoice_ref_path, local: false, class: 'form-inline') do |f| %>
+  <%= text_field_tag 'ref_no', nil, class: 'form-control mr-2 w-50', placeholder: 'Ref no.', disabled: disabled %>
+  <%= f.submit 'Save', class: 'btn btn-primary', disabled: disabled %>
+<% end %>

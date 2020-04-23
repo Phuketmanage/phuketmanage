@@ -47,7 +47,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '100,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -86,7 +87,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -125,7 +127,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -165,7 +168,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -207,7 +211,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -251,7 +256,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '500.00'
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -294,7 +300,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '7,500.00'
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -335,7 +342,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '3,500.00'
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -383,7 +391,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr.hidden_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '30,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -430,7 +439,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr.for_acc_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '10,000.00'
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
       to: Time.now.to_date.end_of_month,
       view_user_id: @owner.id}
@@ -459,7 +469,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select '#co_prev_balance', '7,000.00'
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
     assert_select "#company_maintenance", "60,200.99" #Because of hidden trsc it less 6000
-    get transaction_invoice_path, params: {
+    get transactions_docs_path, params: {
+      type: 'invoice',
       from: from,
       to: to,
       view_user_id: @owner.id}

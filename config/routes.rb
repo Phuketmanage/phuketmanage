@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :options, except: :show
   get 'owner', to: 'admin#index', as: 'owner'
   resources :transactions, except: [:show]
-  get 'transaction_invoice', to: 'transactions#show_invoice', as: 'transaction_invoice'
+  get 'transactions_docs', to: 'transactions#docs', as: 'transactions_docs'
   post 'transactions/update_invoice_ref', to: 'transactions#update_invoice_ref', as: 'update_invoice_ref'
   get 'balance', to: 'transactions#index', as: 'balance_front'
   resources :transaction_types

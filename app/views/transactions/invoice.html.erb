@@ -1,0 +1,109 @@
+<div class="p-2 bg-white">
+  <div class="text-right d-print-none">
+    <button type="button" class="btn btn-outline-primary" onclick="window.print();">Print</button>
+  </div>
+  <div class="d-flex flex-row">
+    <div class="p-2 mr-auto"><img src="https://phuketmanage.s3-ap-southeast-1.amazonaws.com/images/Logo-512x512.png" alt="Company logo" width='100px'></div>
+    <div class="p-2"><h3>INVOICE / ใบแจ้งรายการ</h3></div>
+  </div>
+  <div class="d-flex flex-row">
+    <div class="p-2 mr-auto">
+      <strong>Phaethon Co., Ltd (Head Office)</strong><br />
+      30/257 Moo.1, T. Kathu, A. Kathu, Phuket, 83120 Thailand<br />
+      Tel/Fax: 076 20 20 22<br />
+      +66 87 555 81 55<br />
+      Tax ID: 0835550008605
+    </div>
+    <div class="p-2">
+      <% houses = @owner.houses %>
+      <% if houses.count > 1 %>
+        <% code = @owner.code %>
+      <% else %>
+        <% code = houses.first.code.gsub(/\//,'-') %>
+      <% end %>
+      <% date = @to.to_date %>
+      <strong>Number:</strong> IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
+      <strong>Date:</strong>  <%= @to.to_date.strftime('%d.%m.%Y') %>
+    </div>
+  </div>
+  <div class="p-2">
+    <strong>Customer</strong><br/>
+    <%= "#{@owner.name} #{@owner.surname}" %><br />
+    <% @owner.houses.each do |h| %>
+      <%= h.address %><br />
+    <% end %>
+    Tax ID Card No.: 0000000000000
+  </div>
+  <div class="p-2">
+  <table class='table table-bordered table-sm'>
+    <tbody>
+      <tr>
+        <th width='100%'>Description</th>
+        <th class="text-right" width='100px'>Amount</th>
+      </tr>
+      <% de_co_sum = 0 %>
+      <% vat_sum = 0 %>
+      <% de_co_bvat_sum = 0 %>
+      <% de_co_wvat_sum = 0 %>
+      <% @transactions.each do |t| %>
+        <% next if t.hidden %>
+        <% de_co = t.balances.sum(:debit) %>
+        <% next unless de_co > 0 %>
+        <% de_co_sum += de_co %>
+        <% vat = de_co.to_f*7/107 %>
+        <% de_co_bvat = de_co-vat %>
+        <%# de_co_wvat = de_co %>
+        <% de_co_bvat_sum += de_co_bvat %>
+        <%# de_co_wvat_sum += de_co_wvat %>
+        <% vat_sum += vat %>
+        <tr id="trsc_<%= t.id %>_iv_row">
+          <td>
+            <%= t.date.strftime('%d.%m.%Y') %>
+            <%= t.comment_en %>
+          </td>
+          <td class="iv_price_bvat_cell text-right">
+            <%= number_to_currency(de_co_bvat.round(2), precision: 2, unit: '') %>
+          </td>
+        </tr>
+      <% end %>
+
+      <tfoot>
+        <tr>
+          <td class='text-right font-weight-bold text-right'>
+            SUB TOTAL:<br />
+            VAT (7%):<br />
+            TOTAL:<br />
+          </td>
+          <td class="font-weight-bold text-right">
+            <span id='de_co_bvat_sum'>
+              <%= number_to_currency(de_co_bvat_sum.round(2), precision: 2, unit: '') %>
+            </span>
+            <br />
+            <span id='vat_sum'>
+              <%= number_to_currency(vat_sum.round(2), precision: 2, unit: '') %>
+            </span>
+            <br />
+            <span id="iv_de_co_sum"><%= number_to_currency((de_co_bvat_sum+vat_sum).round(2), precision: 2, unit: '') %></span>
+            </td>
+        </tr>
+      </tfoot>
+    </tbody>
+  </table>
+  </div>
+  <div class="d-flex flex-row align-items-end">
+    <div class="p-2 mr-auto">
+      <strong>Bank details:</strong><br />
+      A/C Name: PHAETHON CO., LTD<br />
+      Bank: Kasikorn Bank Pcl<br />
+      Branch: Central Festival Phuket<br />
+      Address: 74-75 Moo5 T.Vichit Muang Phuket 83000<br />
+      Account: 482-2-31032-5<br />
+      Swift: KASITHBK
+    </div>
+    <div class="p-2 text-center">
+      _____________________________________<br />
+      Assignment
+    </div>
+  </div>
+
+</div>
