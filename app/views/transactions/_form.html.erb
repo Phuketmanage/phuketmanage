@@ -21,9 +21,13 @@
       <% end %>
     </div>
     <div class="col-md-2" id='house_id', style='display:none;'>
+      <% if params[:user_id].present? %>
+        <% choices_for_select = House.where(owner_id: params[:user_id]).all.order(:code).map {|h| [h.code, h.id]} %>
+      <% else %>
+        <% choices_for_select = House.all.order(:code).map {|h| [h.code, h.id]} %>
+      <% end %>
       <%= form.label :house_id %>
-      <%= form.select :house_id,
-            House.all.order(:code).map {|h| [h.code, h.id]},
+      <%= form.select :house_id, choices_for_select,
                       { include_blank: 'Select house' }, class: "form-control" %>
     </div>
     <div class="col-md-2" id='owner_id', style='display:none;'>
