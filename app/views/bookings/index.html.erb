@@ -119,10 +119,11 @@
                   <%= t.hidden? ? '/ Hidden' : '1' %>
                   <%= t.ref_no.present? ? "/ Ref No.: #{t.ref_no}" : '' %>
                   <%= link_to 'Show', edit_transaction_path(t), target: '_blank' %><br />
-                  TOTAL Received: <%= number_to_currency(tr, precision: 2, unit: '') %>
-                  Comm: <%= number_to_currency(tc, precision: 2, unit: '') %>
-                  To owner: <%= number_to_currency(tp, precision: 2, unit: '') %>
-                  <br />
+                <% end %>
+                <% if booking.transactions.count > 1  %>
+                  TOTAL Received: <%= number_to_currency(tr, precision: 2, unit: '') %>,
+                  Comm: <%= number_to_currency(tc, precision: 2, unit: '') %>,
+                  To owner: <%= number_to_currency(tp, precision: 2, unit: '') %><br />
                 <% end %>
             <% end %>
             <%= "Booking number: #{booking.number}" %>
