@@ -102,15 +102,26 @@
             <% if booking.transactions.any? %>
               Payment history:
               <div>
-
+                <% tr = 0 %>
+                <% tc = 0 %>
+                <% tp = 0 %>
                 <% booking.transactions.each do |t| %>
-                  <% recieved = BalanceOut.where(transaction_id: t.id).first.debit %>
+                  <% received = BalanceOut.where(transaction_id: t.id).first.debit %>
+                  <% tr += received %>
                   <% comm = BalanceOut.where(transaction_id: t.id).first.credit %>
+                  <% tc += comm %>
+                  <% to_owner = received - comm %>
+                  <% tp += to_owner %>
                   <%= t.date.strftime('%d.%m.%Y') %> -
-                  Received <%= number_to_currency(recieved, precision: 2, unit: '') %>,
-                  To owner <%= number_to_currency(recieved - comm, precision: 2, unit: '') %>
+                  Received <%= number_to_currency(received, precision: 2, unit: '') %>,
+                  Comm: <%= number_to_currency(comm, precision: 2, unit: '') %>,
+                  To owner <%= number_to_currency(to_owner, precision: 2, unit: '') %>
                   <%= t.hidden? ? '/ Hidden' : '1' %>
-                  <%= t.ref_no.present? ? "/ Ref_no: #{t.ref_no}" : '' %>
+                  <%= t.ref_no.present? ? "/ Ref No.: #{t.ref_no}" : '' %>
+                  <%= link_to 'Show', edit_transaction_path(t), target: '_blank' %><br />
+                  TOTAL Received: <%= number_to_currency(tr, precision: 2, unit: '') %>
+                  Comm: <%= number_to_currency(tc, precision: 2, unit: '') %>
+                  To owner: <%= number_to_currency(tp, precision: 2, unit: '') %>
                   <br />
                 <% end %>
             <% end %>
