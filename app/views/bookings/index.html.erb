@@ -103,12 +103,15 @@
               Payment history:
               <div>
 
-                <% booking.transactions.each do |b| %>
-                  <% recieved = BalanceOut.where(transaction_id: b.id).first.debit %>
-                  <% comm = BalanceOut.where(transaction_id: b.id).first.credit %>
-                  <%= b.date.strftime('%d.%m.%Y') %> -
+                <% booking.transactions.each do |t| %>
+                  <% recieved = BalanceOut.where(transaction_id: t.id).first.debit %>
+                  <% comm = BalanceOut.where(transaction_id: t.id).first.credit %>
+                  <%= t.date.strftime('%d.%m.%Y') %> -
                   Received <%= number_to_currency(recieved, precision: 2, unit: '') %>,
-                  To owner <%= number_to_currency(recieved - comm, precision: 2, unit: '') %><br />
+                  To owner <%= number_to_currency(recieved - comm, precision: 2, unit: '') %>
+                  <%= t.hidden? ? '/ Hidden' : '1' %>
+                  <%= t.ref_no.present? ? "/ Ref_no: #{t.ref_no}" : '' %>
+                  <br />
                 <% end %>
             <% end %>
             <%= "Booking number: #{booking.number}" %>
