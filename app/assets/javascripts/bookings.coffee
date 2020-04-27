@@ -11,7 +11,7 @@ $(document).on "turbolinks:load", ->
     $('.timeline_container').scroll ->
       $('.timeline_top_container').prop("scrollLeft", this.scrollLeft)
       $('.timeline_left_container').prop("scrollTop", this.scrollTop)
-    $('#compact_check_box').change ->
+    $('#compact_view_check_box').change ->
       if this.checked
         $('.cell').addClass('cell_compact')
         $('.date').addClass('date_compact')
