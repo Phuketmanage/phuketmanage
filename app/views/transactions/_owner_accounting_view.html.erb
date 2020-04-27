@@ -15,7 +15,7 @@ Address:
       <th class="text-right" width="90px">Credit</th>
       <th class="text-right" width="90px">Balance</th>
       <th>Comment</th>
-      <th><span class='d-print-none'>Actions</span></th>
+      <th class="d-print-none">Actions</th>
     </tr>
   </thead>
 
@@ -45,7 +45,7 @@ Address:
           <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
         </td>
         <td>Balance from previous period</td>
-        <td></td>
+        <td class="d-print-none"></td>
       </tr>
     <% end %>
     <% transactions.each do |t| %>
@@ -80,19 +80,17 @@ Address:
           <%= number_to_currency(balance_sum, precision: 2, unit: '') if !t.hidden %>
         </td>
         <td><%= t.comment_en %></td>
-        <td>
-          <div class="d-print-none">
-            <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
-              <%= link_to 'Edit', edit_transaction_path(t) %>
-            <% end %>
-            <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
-              <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
-            <% end %>
-            <% if current_user.role?('Admin') %>
-              <%= link_to 'Edit', edit_transaction_path(t) %>
-              <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
-            <% end %>
-          </div>
+        <td class="d-print-none">
+          <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
+            <%= link_to 'Edit', edit_transaction_path(t) %>
+          <% end %>
+          <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
+            <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
+          <% if current_user.role?('Admin') %>
+            <%= link_to 'Edit', edit_transaction_path(t) %>
+            <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
         </td>
       </tr>
     <% end %>
@@ -106,18 +104,18 @@ Address:
         <td></td>
         <td class='text-right' id='company_maintenance'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
         <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum - de_co_sum, precision: 2, unit: '') %></td>
-        <td>Maintenance
+        <td>Maintenance</td>
+        <td class="d-print-none">
           <% if @from.to_date.month == @to.to_date.month %>
             <%= link_to 'Invoice', transactions_docs_path(
-              type: 'invoice', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %> |
+              type: 'invoice', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %>
             <%= link_to 'Receipt', transactions_docs_path(
               type: 'receipt', from: @from, to: @to, view_user_id: @view_user_id), target: '_blank' %>
           <% else %>
-            <span class="text-muted">Invoice</span> |
+            <span class="text-muted">Invoice</span>
             <span class="text-muted">Receipt</span>
           <% end %>
         </td>
-        <td></td>
       </tr>
     <% end %>
   </tbody>
@@ -177,7 +175,7 @@ Address:
 <% if @from.to_date.month != @to.to_date.month %>
   <% disabled = true %>
 <% end %>
-<%= form_with(url: update_invoice_ref_path, local: false, class: 'form-inline') do |f| %>
+<%= form_with(url: update_invoice_ref_path, local: false, class: 'form-inline d-print-none') do |f| %>
   <%= text_field_tag 'ref_no', nil, class: 'form-control mr-2 w-50', placeholder: 'Ref no.', disabled: disabled %>
   <%= f.submit 'Save', class: 'btn btn-primary', disabled: disabled %>
 <% end %>

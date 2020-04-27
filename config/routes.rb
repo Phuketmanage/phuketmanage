@@ -33,6 +33,12 @@ Rails.application.routes.draw do
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
   post 'booking/new', to: 'bookings#create_front'
+  get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
+  get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
+  get 'bookings/timeline_data', to: 'bookings#timeline_data'
+  get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
+  patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
+  get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
   resources :bookings
   resources :booking_files, only: [:create, :update, :destroy]
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
@@ -43,13 +49,6 @@ Rails.application.routes.draw do
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
     resources :houses, only: :show
-    get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
-    get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
-    get 'bookings/timeline_data', to: 'bookings#timeline_data'
-    get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
-    patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
-
-    get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'
@@ -59,7 +58,6 @@ Rails.application.routes.draw do
     get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
     get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
-
     get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'

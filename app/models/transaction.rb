@@ -24,7 +24,8 @@ class Transaction < ApplicationRecord
     balances.destroy_all if balances.any?
     if types1.include?(type)
       errors.add(:base, 'Need to select owner or house') and return if house_id.nil? || user_id.nil?
-      balance_outs.create!(debit: de_ow, credit: de_co)
+      balance_outs.create!(debit: de_ow)
+      balance_outs.create!(credit: de_co)
       balances.create!(debit: de_co)
     elsif types2.include?(type)
       errors.add(:base, '"Pay to outside" and "Pay to Phaethon" can not be blank both') if (cr_ow.nil? || cr_ow == 0) && (de_co.nil? || de_co == 0)
