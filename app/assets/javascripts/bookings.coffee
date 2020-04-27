@@ -46,14 +46,12 @@ $(document).on "turbolinks:load", ->
       e.preventDefault()
       $("div.house_code").show()
       $("div.house_line").show()
-    $("input[type='checkbox'][data-group-id]").on 'change', ->
+    $("input[type='radio'][data-group-id]").on 'change', ->
       group_id = $(this).data('group-id')
-      if this.checked == true
-        $("div.house_code[data-house-group-id=#{group_id}]").hide()
-        $("div.house_line[data-house-group-id=#{group_id}]").hide()
-      if this.checked == false
-        $("div.house_code[data-house-group-id=#{group_id}]").show()
-        $("div.house_line[data-house-group-id=#{group_id}]").show()
+      $("div.house_code").show()
+      $("div.house_line").show()
+      $("div.house_code[data-house-group-id=#{group_id}]").hide()
+      $("div.house_line[data-house-group-id=#{group_id}]").hide()
 
 
     $.ajax
