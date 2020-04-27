@@ -16,10 +16,10 @@
     <%= f.label 'Compact view', {     class: 'form-check-label',
                             for: 'compact_view_check_box' } %>
   </div>
-  <div class="mr-2">  House group:</div>
+  <div class='mr-2'>Hide house group:</div>
   <% HouseGroup.order(:name).all.each do |g| %>
     <div class="form-check form-check-inline">
-      <%= f.radio_button 'house_group', g.name, { class: 'form-check-input',
+      <%= f.check_box g.name, { class: 'form-check-input',
                               id: "group_#{g.id}_check_box",
                               data: {
                                 group_id: g.id
