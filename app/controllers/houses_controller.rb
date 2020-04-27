@@ -93,6 +93,8 @@ class HousesController < ApplicationController
       else
         @owners = User.with_role('Owner')
         @types = HouseType.all
+        @connections = @house.connections.all
+        @connection = @house.connections.new
         format.html { render :edit }
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
@@ -158,7 +160,8 @@ class HousesController < ApplicationController
                                     :rules_ru,
                                     :other_en,
                                     :other_ru,
-                                    :details
+                                    :details,
+                                    :house_group_id
                                     )
     end
 

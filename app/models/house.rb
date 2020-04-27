@@ -1,6 +1,7 @@
 class House < ApplicationRecord
   belongs_to :owner, class_name: "User"
   belongs_to :type, class_name: 'HouseType'
+  belongs_to :house_group, optional: true
   has_many :bookings, dependent: :destroy
   has_many :prices, dependent: :destroy
   has_many :seasons, dependent: :destroy

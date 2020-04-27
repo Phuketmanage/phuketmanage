@@ -40,11 +40,11 @@ class Ability
       can [:new ], User
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
       cannot :destroy, User
-      can :manage, [  HouseType, House, Duration, Season, Price, Booking,
-                      Connection, JobType, Transfer, Source, Option, HouseOption, Location ]
-      can :manage, HousePhoto
+      can :manage, [  HouseType, House, Duration, Season, Price,
+                      Booking, Connection, JobType, Transfer, Source,
+                      Option, HouseOption, Location, HousePhoto,
+                      BookingFile, HouseGroup ]
       cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
-      can :manage, BookingFile
       can [:index, :new, :show, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job , creator: user
       can :manage, JobMessage, sender: user

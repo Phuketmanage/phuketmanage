@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_26_093459) do
+ActiveRecord::Schema.define(version: 2020_04_27_042623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,12 @@ ActiveRecord::Schema.define(version: 2020_04_26_093459) do
     t.index ["house_id", "employee_id"], name: "index_employees_houses_on_house_id_and_employee_id", unique: true
   end
 
+  create_table "house_groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "house_options", force: :cascade do |t|
     t.bigint "house_id", null: false
     t.bigint "option_id", null: false
@@ -203,9 +209,11 @@ ActiveRecord::Schema.define(version: 2020_04_26_093459) do
     t.text "other_ru"
     t.text "other_en"
     t.text "details"
+    t.bigint "house_group_id"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
+    t.index ["house_group_id"], name: "index_houses_on_house_group_id"
     t.index ["number"], name: "index_houses_on_number", unique: true
     t.index ["owner_id"], name: "index_houses_on_owner_id"
     t.index ["parking"], name: "index_houses_on_parking"
@@ -461,6 +469,7 @@ ActiveRecord::Schema.define(version: 2020_04_26_093459) do
   add_foreign_key "house_options", "houses"
   add_foreign_key "house_options", "options"
   add_foreign_key "house_photos", "houses"
+  add_foreign_key "houses", "house_groups"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
   add_foreign_key "job_messages", "jobs"

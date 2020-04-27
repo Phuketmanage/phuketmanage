@@ -18,6 +18,11 @@
     <div class="col-md-2">
       <%= form.text_field :code, class: 'form-control', placeholder: 'Code' %>
     </div>
+    <div class="col-md-2 mb-2">
+      <%= form.select :house_group_id,
+            HouseGroup.order(:name).all.map {|g| [g.name, g.id]},
+                      { include_blank: 'No group' }, { class: "form-control"  } %>
+    </div>
 
   </div>
 

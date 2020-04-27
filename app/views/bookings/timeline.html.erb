@@ -12,10 +12,21 @@
 <%= form_with do |f| %>
   <div class="form-check form-check-inline">
     <%= f.check_box :compact_view, { class: 'form-check-input',
-                            id: 'compact_check_box' } %>
+                            id: 'compact_view_check_box' } %>
     <%= f.label 'Compact view', {     class: 'form-check-label',
-                            for: 'compact_check_box' } %>
+                            for: 'compact_view_check_box' } %>
   </div>
+  <% HouseGroup.order(:name).all.each do |g| %>
+    <div class="form-check form-check-inline">
+      <%= f.check_box g.name, { class: 'form-check-input',
+                              id: "group_#{g.id}_check_box",
+                              data: {
+                                group_id: g.id
+                              }} %>
+      <%= f.label g.name, {     class: 'form-check-label',
+                              for: "group_#{g.id}_check_box" } %>
+    </div>
+  <% end %>
 
   <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
 <% end %>
@@ -41,16 +52,16 @@
   <div class="timeline_left_container">
     <% @houses.each do |h| %>
       <div  class="house_code <%= 'text-muted' if h.unavailable? %>"
-            data-house-id='<%= h.id %>'>
+            data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
         <%= link_to h.code, '#',  class: 'hide_house',
-                                  data: { house_id: h.id },
+                                  data: {house_id: h.id},
                                   style: 'display: block;' %>
       </div>
     <% end %>
   </div>
   <div class="timeline_container">
     <% @houses.each_with_index do |h, y| %>
-      <div class="house_line" data-house-id='<%= h.id %>'>
+      <div class="house_line" data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
         <% @days.times do |x| %>
           <% date = @today+x.days %>
           <div  class="cell<%= ' sunday' if date.sunday? %>"

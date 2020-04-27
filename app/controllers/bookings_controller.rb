@@ -126,7 +126,7 @@ class BookingsController < ApplicationController
       from = params[:from].to_date
       to = params[:to].to_date
     end
-    @houses = House.order(:unavailable, :code)
+    @houses = House.order(:unavailable, :house_group_id, :code)
     @today = from
     @days = (to - from).to_i+1
     @job_types_for_bookings = JobType.where.not(for_house_only: true).order(:name)
