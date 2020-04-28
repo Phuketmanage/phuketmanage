@@ -69,7 +69,8 @@ Address:
         <%= 'class=hidden_row style=display:none;' if t.hidden %>
         <%= 'class=for_acc_row' if t.for_acc %>>
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
-        <td><small><%= t.ref_no %></small></td>
+        <td><small>
+          <%= t.ref_no %></small></td>
         <td class='de_ow_cell text-right'>
           <%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0 %>
         </td>
@@ -90,6 +91,10 @@ Address:
           <% if current_user.role?('Admin') %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% if de_ow > 0 %>
+              <%= link_to 'ST', tmp_statement_path(from: @from, to: @to, view_user_id: @view_user_id, booking_id: t.booking_id) %>
+              <%= link_to 'RB', tmp_reimbersment_path(booking_id: t.booking_id) %>
+            <% end %>
           <% end %>
         </td>
       </tr>

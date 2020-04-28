@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+    get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
+  get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
   resources :house_groups
   delete 'transaction_file', to: 'transaction_files#destroy'
   delete 'transaction_file_tmp', to: 'transaction_files#destroy_tmp'

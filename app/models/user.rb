@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :roles
   has_many :houses, foreign_key: 'owner_id'
   has_many :bookings, foreign_key: 'tenant_id'
+  # has_many :statements, foreign_key: 'owner_id'
   has_many :jobs
   has_many :job_tracks, dependent: :destroy
   has_many :transactions

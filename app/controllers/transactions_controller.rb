@@ -248,16 +248,6 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
-        # Log.create!(
-        #   when: Time.zone.now.in_time_zone('Bangkok'),
-        #   who: "#{current_user.name} #{current_user.surname}",
-        #   where: controller_name,
-        #   action: action_name,
-        #   before: state_before.inspect,
-        #   after: @transaction.changed_attributes)
-
-
-
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
@@ -275,7 +265,11 @@ class TransactionsController < ApplicationController
           owner = @transaction.user
           @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
         end
-
+        @s3_direct_post = S3_BUCKET.presigned_post(
+          key: "transactions/${filename}",
+          success_action_status: '201',
+          acl: 'public-read',
+          content_type_starts_with: "")
         format.html { render :edit }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end

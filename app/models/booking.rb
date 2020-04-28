@@ -15,6 +15,7 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, foreign_key: 'booking_id', class_name: 'BookingFile'
+  # has_many :statements
   validates :start, :finish, :house_id, :status, :client_details, presence: true
   validate :price_chain, unless: :allotment?
 
