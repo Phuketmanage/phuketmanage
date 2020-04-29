@@ -2,7 +2,7 @@ $(document).on "turbolinks:load", ->
   $('#document_date').on 'change', ->
     date = new Date($(this).val())
     month = (date.getMonth()+1).toString()
-    new_month = '0'*(2-month.length)+month
+    new_month = ('0'+month).slice(-2)
     new_date = "#{date.getDate()}.#{new_month}.#{date.getFullYear()}"
     $('#doc_date').text(new_date)
     code = $('input#document_code').val()
