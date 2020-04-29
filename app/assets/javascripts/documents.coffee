@@ -8,16 +8,14 @@ $(document).on "turbolinks:load", ->
     code = $('input#document_code').val()
     run_number = $('#run_number').val()
     new_run_number  = '0'.repeat(3-run_number.length) + run_number
-    $('#st_number').text("SO-#{code}-#{date.getFullYear()}#{new_month}#{new_run_number}")
-    $('#rb_number').text("RB-#{code}-#{date.getFullYear()}#{new_month}#{new_run_number}")
+    $('#number').text("#{code}-#{date.getFullYear()}#{new_month}#{new_run_number}")
   $('#run_number').on 'change', ->
-    new_run_number  = '0'.repeat(3-$(this).val().length) + $(this).val()
-    st_old_number = $('#st_number').text()
-    st_new_number = st_old_number.replace(/\d{3}$/,new_run_number)
-    $('#st_number').text(st_new_number)
-    rb_old_number = $('#rb_number').text()
-    rb_new_number = rb_old_number.replace(/\d{3}$/,new_run_number)
-    $('#rb_number').text(rb_new_number)
+    new_run_number  = ('000'+$(this).val()).slice(-3)
+    old_number = $('#number').text()
+    new_number = old_number.replace(/\d{3}$/,new_run_number)
+    $('#number').text(new_number)
+  $('#run_number_add').on 'change', ->
+    $('#number_add').text($(this).val())
   $('#document_amount').on 'change', ->
     new_amount_raw = $(this).val()
     new_amount = parseFloat(new_amount_raw.replace(',', '.')).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
