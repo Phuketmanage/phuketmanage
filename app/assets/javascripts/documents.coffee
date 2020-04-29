@@ -17,7 +17,7 @@ $(document).on "turbolinks:load", ->
   $('#run_number_add').on 'change', ->
     $('#number_add').text($(this).val())
   $('#document_amount').on 'change', ->
-    new_amount_raw = $(this).val()
+    new_amount_raw = $(this).val().replace(',', '.')
     new_amount = parseFloat(new_amount_raw.replace(',', '.')).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     $('#doc_amount').text(new_amount)
     $('#doc_total_thb').text(new_amount)
