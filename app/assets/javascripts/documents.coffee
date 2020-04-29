@@ -33,3 +33,7 @@ $(document).on "turbolinks:load", ->
     $('#doc_address').text($(this).val())
   $('#document_add_text').on 'change', ->
     $('#doc_add_text').text($(this).val())
+  $('input[type=radio]').on 'click', ->
+    console.log $(this).val()
+    $('span[data-checkmark]').hide()
+    $("span##{$(this).val()}").show()

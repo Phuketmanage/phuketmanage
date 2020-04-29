@@ -26,6 +26,18 @@
       <%= form.label :add_text %>
       <%= form.text_field :add_text, id: 'document_add_text' %>
     </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name='paid_by' id="inlineCheckbox1" value="by_bank" checked="checked">
+      <label class="form-check-label" for="inlineCheckbox1">By bank</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name='paid_by' id="inlineCheckbox2" value="by_cash">
+      <label class="form-check-label" for="inlineCheckbox2">By cash</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name='paid_by' id="inlineCheckbox3" value="by_credit_card">
+      <label class="form-check-label" for="inlineCheckbox3">By credit card</label>
+    </div>
   <% end %>
 </div>
 
@@ -108,13 +120,9 @@
   </div>
   <div class="d-flex flex-row align-items-end">
     <div class="p-2 mr-auto">
-      <strong>Bank details:</strong><br />
-      A/C Name: PHAETHON CO., LTD<br />
-      Bank: Kasikorn Bank Pcl<br />
-      Branch: Central Festival Phuket<br />
-      Address: 74-75 Moo5 T.Vichit Muang Phuket 83000<br />
-      Account: 482-2-31032-5<br />
-      Swift: KASITHBK
+      <span id='by_bank' data-checkmark>&#10004;</span>Paid by bank transfer<br />
+      <span id='by_cash' data-checkmark style='display: none;'>&#10004;</span>Paid by cash<br />
+      <span id='by_credit_card' data-checkmark style='display: none;'>&#10004;</span>Paid by credit card<br />
     </div>
     <div class="p-2 text-center">
       _____________________________________<br />
