@@ -106,9 +106,11 @@
                 <% tc = 0 %>
                 <% tp = 0 %>
                 <% booking.transactions.each do |t| %>
-                  <% received = BalanceOut.where(transaction_id: t.id).first.debit %>
+                  <%# received = BalanceOut.where(transaction_id: t.id).first.debit %>
+                  <% received = t.balance_outs.sum(:debit) %>
                   <% tr += received %>
-                  <% comm = BalanceOut.where(transaction_id: t.id).first.credit %>
+                  <%# comm = BalanceOut.where(transaction_id: t.id).first.credit %>
+                  <% comm = t.balance_outs.sum(:credit) %>
                   <% tc += comm %>
                   <% to_owner = received - comm %>
                   <% tp += to_owner %>
