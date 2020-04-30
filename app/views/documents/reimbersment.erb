@@ -100,6 +100,7 @@
           <span id="doc_add_text"></span>
         </td>
         <td class="text-right" id='doc_amount'>
+          <%= number_to_currency(@t.balance_outs.sum(:debit).round(2), precision: 2, unit: '') %>
         </td>
       </tr>
       <% 9.times do %>
