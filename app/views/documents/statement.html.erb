@@ -1,6 +1,6 @@
 <div class="d-print-none" id='statement_form'>
   <%= form_with do |form| %>
-    <%= form.hidden_field :code, value: code(@booking.house.owner), id: 'document_code' %>
+    <%= form.hidden_field :code, value: code(@t.user), id: 'document_code' %>
     <%= form.hidden_field :code, value: @usd, id: 'document_usd' %>
     <div class="field">
       <%= form.label :date %>
@@ -16,11 +16,11 @@
     </div>
     <div class="field">
       <%= form.label :amount %>
-      <%= form.text_field :amount, id: 'document_amount', value: @booking.sale-@booking.agent %>
+      <%= form.text_field :amount, id: 'document_amount' %>
     </div>
     <div class="field">
       <%= form.label :customer %>
-      <%= form.text_field :customer, id: 'document_customer', value: @booking.client_details %>
+      <%= form.text_field :customer, id: 'document_customer' %>
     </div>
     <div class="field">
       <%= form.label :address %>
@@ -51,21 +51,21 @@
     </div>
     <div class="p-2">
       <% date = Time.zone.now.in_time_zone('Bangkok') %>
-      <strong>Number:</strong> SO-<span id='number'><%= "#{code(@booking.house.owner)}-#{date.year}#{date.strftime('%m')}001" %></span><span id='number_add'></span> <br />
+      <strong>Number:</strong> SO-<span id='number'><%= "#{code(@t.user)}-#{date.year}#{date.strftime('%m')}001" %></span><span id='number_add'></span> <br />
       <strong>Date:</strong>  <span id='doc_date'><%= date.strftime('%d.%m.%Y') %></span>
     </div>
   </div>
   <div class="d-flex flex-row">
     <div class="p-2 w-50">
-      <strong>Customer</strong><br/>
-      <span id='doc_customer'><%= @booking.client_details %></span><br />
-      <span id='doc_address'></span><br />
+      <strong>To</strong><br/>
+      <span id='doc_customer'><%= @to[:name] %></span><br />
+      <span id='doc_address'><%= @to[:address] %></span><br />
       Tax ID Card No.: <span id='doc_tax_id'>0000000000000</span>
     </div>
     <div class="p-2 w-50">
       <strong>Balance of</strong><br/>
-      <%= "#{@owner.name} #{@owner.surname}" %><br/>
-      <% @owner.houses.each do |h| %>
+      <%= "#{@t.user.name} #{@t.user.surname}" %><br/>
+      <% @t.user.houses.each do |h| %>
         <%= h.address %><br />
       <% end %>
       Tax ID Card No.: 0000000000000
@@ -80,13 +80,11 @@
       </tr>
       <tr>
         <td>
-          Rental
-          <%= @booking.start.strftime('%d.%m.%Y') %> -
-          <%= @booking.finish.strftime('%d.%m.%Y') %>
+          <%= @t.comment_en %>
           <span id='doc_add_text'></span>
         </td>
         <td class="text-right" id='doc_amount'>
-          <%= number_to_currency((@booking.sale-@booking.agent).round(2), precision: 2, unit: '') %>
+          <%= number_to_currency(@t.balance_outs.sum(:debit).round(2), precision: 2, unit: '') %>
         </td>
       </tr>
       <% 9.times do %>
@@ -103,11 +101,11 @@
           </td>
           <td class="font-weight-bold text-right">
             <span id='doc_total_thb'>
-              <%= number_to_currency((@booking.sale-@booking.agent).round(2), precision: 2, unit: '') %>
+              <%= number_to_currency(@t.balance_outs.sum(:debit).round(2), precision: 2, unit: '') %>
             </span>
             <br />
             <span id='doc_total_usd'>
-              <%= number_to_currency(((@booking.sale-@booking.agent)/@usd).round(2), precision: 2, unit: '') %>
+              <%= number_to_currency((@t.balance_outs.sum(:debit)/@usd).round(2), precision: 2, unit: '') %>
             </span>
           </td>
         </tr>

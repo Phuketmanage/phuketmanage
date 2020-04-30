@@ -1,20 +1,27 @@
 class DocumentsController < ApplicationController
 
   def statement
-    if params[:booking_id].present?
-      @booking = Booking.find(params[:booking_id])
-      @owner = @booking.house.owner
-      @usd = 29
+    @t = Transaction.find(params[:trsc_id])
+    @usd = 29
+    if @t.type.name_en == 'Rental'
+      @to = { name: Booking.find(@t.booking_id).client_details,
+              address: '' }
+    else
+      @to = { name: "#{@t.user.name} #{@t.user.surname}",
+              address: '' }
     end
   end
 
   def reimbersment
-    if params[:booking_id].present?
-      @booking = Booking.find(params[:booking_id])
-      @owner = @booking.house.owner
-      @usd = 29
+    @t = Transaction.find(params[:trsc_id])
+    @usd = 29
+    if @t.type.name_en == 'Rental'
+      @to = { name: Booking.find(@t.booking_id).client_details,
+              address: '' }
+    else
+      @to = { name: "#{@t.user.name} #{@t.user.surname}",
+              address: '' }
     end
-
   end
 
   def invoice

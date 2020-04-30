@@ -92,8 +92,8 @@ Address:
             <%= link_to 'Edit', edit_transaction_path(t) %>
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
             <% if de_ow > 0 %>
-              <%= link_to 'ST', tmp_statement_path(from: @from, to: @to, view_user_id: @view_user_id, booking_id: t.booking_id), target: '_blank' %>
-              <%= link_to 'RB', tmp_reimbersment_path(booking_id: t.booking_id), target: '_blank' %>
+              <%= link_to 'ST', tmp_statement_path(trsc_id: t.id), target: '_blank' %>
+              <%= link_to 'RB', tmp_reimbersment_path(trsc_id: t.id), target: '_blank' %>
             <% end %>
           <% end %>
         </td>
