@@ -52,7 +52,7 @@
     <div class="p-2">
       <% date = Time.zone.now.in_time_zone('Bangkok') %>
       <strong>Number:</strong> SO-<span id='number'><%= "#{code(@t.user)}-#{date.year}#{date.strftime('%m')}001" %></span><span id='number_add'></span> <br />
-      <strong>Date:</strong>  <span id='doc_date'><%= date.strftime('%d.%m.%Y') %></span>
+      <strong>Date:</strong>  <span id='doc_date'><%= @t.date.strftime('%d.%m.%Y') %></span>
     </div>
   </div>
   <div class="d-flex flex-row">
