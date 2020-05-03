@@ -1,14 +1,27 @@
 class DocumentsController < ApplicationController
 
   def statement
-    @t = Transaction.find(params[:trsc_id])
+
     @usd = 29
-    if @t.type.name_en == 'Rental'
-      @to = { name: Booking.find(@t.booking_id).client_details,
+    if params[:trsc_id].present?
+      @t = Transaction.find(params[:trsc_id])
+
+      if @t.type.name_en == 'Rental'
+        @date = @t.date
+        @owner = @t.user
+        @to = { name: Booking.find(@t.booking_id).client_details,
+                address: '' }
+      else
+        @owner = @t.user
+        @to = { name: "#{@t.user.name} #{@t.user.surname}",
+                address: '' }
+      end
+    elsif params[:owner_id].present?
+      @date = Time.zone.now.in_time_zone('Bangkok')
+      @owner = User.find(params[:owner_id])
+      @to = { name: "#{@owner.name} #{@owner.surname}",
               address: '' }
-    else
-      @to = { name: "#{@t.user.name} #{@t.user.surname}",
-              address: '' }
+
     end
   end
 
