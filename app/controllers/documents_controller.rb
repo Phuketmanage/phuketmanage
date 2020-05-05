@@ -26,6 +26,7 @@ class DocumentsController < ApplicationController
 
   def reimbersment
     @t = Transaction.find(params[:trsc_id])
+    @date = @t.date
     @usd = 29
     if @t.type.name_en == 'Rental'
       @to = { name: Booking.find(@t.booking_id).client_details,
