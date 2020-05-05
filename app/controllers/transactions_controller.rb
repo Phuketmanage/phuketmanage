@@ -297,7 +297,6 @@ class TransactionsController < ApplicationController
       'date >= ? AND date <= ? AND user_id = ? AND balance_outs.credit > 0',
       session[:from], session[:to], session[:view_user_id]).all
     @transactions.each do |t|
-      byebug
       t.balances.where('debit > 0').update(ref_no: params[:ref_no])
       t.balance_outs.where('credit > 0').update(ref_no: params[:ref_no])
     end
