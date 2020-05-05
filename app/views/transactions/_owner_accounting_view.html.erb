@@ -125,7 +125,7 @@ Address:
     <% end %>
   </tbody>
   <tfoot>
-    <tr>
+    <tr class="d-print-none">
       <td></td>
       <td class='font-weight-bold text-right d-print-none'>Total:</td>
       <td class="font-weight-bold text-right d-print-none">
@@ -184,4 +184,4 @@ Address:
   <%= text_field_tag 'ref_no', nil, class: 'form-control mr-2 w-50', placeholder: 'Ref no.', disabled: disabled %>
   <%= f.submit 'Save', class: 'btn btn-primary', disabled: disabled %>
 <% end %>
-<%= link_to 'ST', tmp_statement_path(owner_id: owner.id), target: '_blank' %>
+<%= link_to 'ST', tmp_statement_path(owner_id: owner.id), target: '_blank', class: 'd-print-none' %>
