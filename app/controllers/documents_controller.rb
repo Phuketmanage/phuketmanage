@@ -5,9 +5,8 @@ class DocumentsController < ApplicationController
     @usd = 29
     if params[:trsc_id].present?
       @t = Transaction.find(params[:trsc_id])
-
+      @date = @t.date
       if @t.type.name_en == 'Rental'
-        @date = @t.date
         @owner = @t.user
         @to = { name: Booking.find(@t.booking_id).client_details,
                 address: '' }
