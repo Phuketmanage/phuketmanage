@@ -103,8 +103,12 @@ Address:
       <% cr_ow_sum += de_co_sum %>
       <tr>
         <td><%= @to.to_date.strftime('%d.%m.%Y') %></td>
-        <td><small>
-          <%= transactions.joins(:balances).where('balances.debit > 0').pluck('balances.ref_no').uniq.join(', ') %></small>
+        <td>
+          <small>
+            <% ref_no = transactions.joins(:balances).where('balances.debit > 0').pluck('balances.ref_no').uniq.join(', ') %>
+            <% ref_no = transactions.joins(:balance_outs).where('balance_outs.credit > 0').pluck('balance_outs.ref_no').uniq.join(', ') if ref_no.empty? %>
+            <%= ref_no %>
+          </small>
         </td>
         <td></td>
         <td class='text-right' id='company_maintenance'><%= number_to_currency(de_co_sum, precision: 2, unit: '') %></td>
