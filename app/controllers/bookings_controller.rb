@@ -129,8 +129,9 @@ class BookingsController < ApplicationController
     @houses = House.order(:unavailable, :house_group_id, :code)
     @today = from
     @days = (to - from).to_i+1
-    @job_types_for_bookings = JobType.where.not(for_house_only: true).order(:name)
-    @job_types_for_houses = JobType.order(for_house_only: :desc, name: :asc)
+    jt_fm = JobType.find_by(name: 'For management').id
+    @job_types_for_bookings = JobType.where.not(for_house_only: true, id: jt_fm).order(:name)
+    @job_types_for_houses = JobType.where.not(id: jt_fm).order(for_house_only: :desc, name: :asc)
     @job = Job.new
   end
 

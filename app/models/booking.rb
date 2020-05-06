@@ -137,8 +137,9 @@ class Booking < ApplicationRecord
         # booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
         booking[:length] = ([b.finish, to].min-[b.start, from].max).to_i+1
         # Get jobs for bookings
-        jobs = b.jobs
-
+        jt_fm = JobType.find_by(name: 'For management').id
+        # jobs = b.jobs
+        jobs = b.jobs.where.not(job_type_id: jt_fm)
         booking[:jobs] = []
         jobs.each do |j|
           job = {}
@@ -158,7 +159,9 @@ class Booking < ApplicationRecord
         house[:bookings] << booking
       end
       # Get jobs for house
-      jobs = h.jobs
+      jt_fm = JobType.find_by(name: 'For management').id
+      # jobs = h.jobs
+      jobs = h.jobs.where.not(job_type_id: jt_fm)
       house[:jobs] = []
       jobs.each do |j|
         job = {}
