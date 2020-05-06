@@ -4,7 +4,6 @@
   <% read_status = 'bg-warning' %>
 <% end %>
 <div class="shadow-sm mb-2 p-2 border rounded <%= read_status %>" id="job_<%= job.id %>">
-  <%= link_to 'For managers', for_managers_path(id: job.id), remote: true %>
   <% job_link = '' %>
   <% if current_user.role? :admin %>
     <% job_link = "#{job.user.name}: " if job.user_id %>

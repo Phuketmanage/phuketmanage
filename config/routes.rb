@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'for_managers', to: 'jobs#for_managers', as: 'for_managers'
   get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
   get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
   resources :house_groups
