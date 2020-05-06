@@ -21,8 +21,8 @@ class JobsController < ApplicationController
     if current_user.role? :admin
       # maids = User.with_role('Maid').ids
       jt_id = JobType.find_by(name: 'For management').id
-      # @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
-      @jobs = Job.where(job_type_id: jt_id).order(updated_at: :desc)
+      @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
+      # @jobs = Job.where(job_type_id: jt_id).order(updated_at: :desc)
       @all_jobs = Job.where.not(job_type_id: jt_id).where(time: nil).order(updated_at: :desc)
       # byebug
     else
