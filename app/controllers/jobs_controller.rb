@@ -6,6 +6,13 @@ class JobsController < ApplicationController
   after_action :system_message_update, only: [:update]
   layout 'admin'
 
+  def for_managers
+    j = Job.find(params[:id])
+    jt_id = JobType.find_by(name: 'For management').id
+    j.update(job_type_id: jt_id)
+  end
+
+
   # GET /jobs
   # GET /jobs.json
   def index
@@ -13,7 +20,10 @@ class JobsController < ApplicationController
     @status = params[:status]
     if current_user.role? :admin
       # maids = User.with_role('Maid').ids
-      @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
+      jt_id = JobType.find_by(name: 'For management').id
+      # @jobs = Job.where.not(user_id: nil).order(updated_at: :desc)
+      @jobs = Job.where(job_type_id: jt_id).order(updated_at: :desc)
+      @all_jobs = Job.where.not(job_type_id: jt_id).where(time: nil).order(updated_at: :desc)
       # byebug
     else
       @jobs = current_user.jobs.order(updated_at: :desc)
@@ -40,7 +50,7 @@ class JobsController < ApplicationController
                                     .order(:plan)
     elsif from.present? && !to.present? || !from.present? && to.present?
       @error_message = "Both dates should be selected / ควรเลือกวันที่ทั้งสอง"
-      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?) AND (
+      @laundry = Job.joins(:job_type).where('job_types.code IN (?,?,?) AND (
                                           collected IS NULL OR
                                           sent IS NULL OR
                                           rooms IS NULL OR

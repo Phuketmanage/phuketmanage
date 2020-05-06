@@ -37,7 +37,7 @@
       <%= form.text_field :job, class: "form-control" %>
     </div>
   </div>
-  <%= form.hidden_field :job_type_id, value: JobType.find_by(name: 'Other').id %>
+  <%= form.hidden_field :job_type_id, value: JobType.find_by(name: 'For management').id %>
   <%= form.submit 'Save', class: "btn btn-primary"  %>
   <%= link_to 'Back', jobs_path, class: "btn btn-secondary"  %>
 <% end %>
