@@ -49,7 +49,7 @@ class Ability
       can [:destroy], Job , creator: user
       can :manage, JobMessage, sender: user
       can :index, [ Admin ]
-      can [:index, :new, :create, :update_invoice_ref] , Transaction
+      can [:index, :new, :create, :update_invoice_ref, :docs] , Transaction
       can [:edit, :update], Transaction do |t|
         t.date > (Date.today-30.days).beginning_of_month
       end
@@ -57,6 +57,7 @@ class Ability
         t.date > Date.today-1.days
       end
       can :manage, TransactionFile
+      # can [ :statement, :reimbersment ], Document
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
