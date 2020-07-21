@@ -12,11 +12,12 @@ $(document).on "turbolinks:load", ->
         modal = $('#transaction_files')
         file_current = modal.find('div.file_current')
         files_carousel = modal.find('div.files_carousel')
-        src = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/' + data['files'][0]['url']
+        files_host = $('#files_host').val()
+        src = files_host + data['files'][0]['url']
         file_current.html($("<img />", {src: src, class: 'img-fluid'}))
         files_carousel.empty()
         for f in data['files']
-          src = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/' + f['url']
+          src = files_host + f['url']
           link = $("<a>", {href: '#', 'data-link-preview': src})
           img = $("<img />", {src: src, class: 'file_preview img-fluid'})
           preview = link.html(img)
