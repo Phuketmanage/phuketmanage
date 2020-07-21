@@ -151,6 +151,45 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_no_match 'Hidden comment', response.body
   end
 
+  test 'Transaction files' do
+    # owner can see only files that allowed to see
+    sign_in users(:owner)
+    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
+    trsc1 = transactions(:one)
+    trsc2 = transactions(:two)
+    # trsc 1 have 3 files 1 for show
+    assert_select "a[data-show-files][data-transaction=#{trsc1.id}]", text: 'Files(1)'
+    # trsc 2 have 2 files 2 for show
+    assert_select "a[data-show-files][data-transaction=#{trsc2.id}]", text: 'Files(2)'
+
+    # transaction files request return only file that for show
+    # trsc 1
+    get transaction_files_path(transaction_id: trsc1.id), xhr: true
+    files_for_show = trsc1.files.where(show: true)
+    files_for_show.each do |f|
+      assert_match f.url, @response.body
+    end
+    files_inner = trsc1.files.where(show: false)
+    files_inner.each do |f|
+      assert_no_match f.url, @response.body
+    end
+
+    # transaction files request return only file that for show
+    # trsc 2
+    get transaction_files_path(transaction_id: trsc2.id), xhr: true
+    # transaction files request return only file that for show
+    # trsc 1
+    files_for_show = trsc2.files.where(show: true)
+    files_for_show.each do |f|
+      assert_match f.url, @response.body
+    end
+    files_inner = trsc2.files.where(show: false)
+    files_inner.each do |f|
+      assert_no_match f.url, @response.body
+    end
+
+  end
+
   test 'transactions aka balance' do
     sign_in users(:manager)
     get transactions_path

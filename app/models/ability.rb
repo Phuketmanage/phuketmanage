@@ -12,6 +12,7 @@ class Ability
       can :index, [ Transaction ]
       can :index_front, [ Booking ]
       can :index, [ Admin ]
+      can :index, TransactionFile, show: true
     elsif user.role? 'Transfer'
       can :read, Transfer
       can :index, [ Admin ]

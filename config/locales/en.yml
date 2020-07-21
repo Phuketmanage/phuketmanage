@@ -74,6 +74,7 @@ en:
   type: Type
   house: House
   comment: Comment
+  files: Files
   total: TOTAL
   start: Start
   finish: Finish

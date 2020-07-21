@@ -1,4 +1,38 @@
 $(document).on "turbolinks:load", ->
+  $('a[data-show-files]').on "click", (e) ->
+    e.preventDefault()
+    $.ajax
+      url: "/transaction_files",
+      type: "get",
+      dataType: "json",
+      data: {
+        transaction_id: $(this).data('transaction')
+      },
+      success: (data) ->
+        modal = $('#transaction_files')
+        file_current = modal.find('div.file_current')
+        files_carousel = modal.find('div.files_carousel')
+        src = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/' + data['files'][0]['url']
+        file_current.html($("<img />", {src: src, class: 'img-fluid'}))
+        files_carousel.empty()
+        for f in data['files']
+          src = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/' + f['url']
+          link = $("<a>", {href: '#', 'data-link-preview': src})
+          img = $("<img />", {src: src, class: 'file_preview img-fluid'})
+          preview = link.html(img)
+          files_carousel.append(preview)
+        $('#transaction_files').modal()
+      fail: (data) ->
+        console.log 'Can not read files'
+
+  $('#transaction_files').on 'click', 'a[data-link-preview]', (e) ->
+    e.preventDefault()
+    src = $(this).data('link-preview')
+    console.log src
+    modal = $('#transaction_files')
+    file_current = modal.find('div.file_current')
+    file_current.html($("<img />", {src: src, class: 'img-fluid'}))
+
   react_to_select_user_id($('#view_user_id').val())
 
   react_to_select_trsc_type($('#trsc_type').children('option:selected').text(), true)
@@ -141,7 +175,7 @@ $(document).on "turbolinks:load", ->
             key   = $(data).find('Key').text()
             url   = key
             src = '//' + form.data('host') + '/' + key
-            input = $("<input />", { type:'hidden', name: 'transaction[files][]', value: url })
+            input = $("<input />", { type:'hidden', name: 'transaction[files][]', value: url})
             form.append(input)
             div = $('<div></div>', {class: 'shadow-sm mr-md-2 mt-2 p-2 border rounded bg-warning'})
             extention = key.split('.').pop()
@@ -150,8 +184,13 @@ $(document).on "turbolinks:load", ->
             else
               attachment = $('<img />', {src: src, width: '250px'})
             div.append(attachment)
+            show_checkbox = $('<input />', {type: 'checkbox', 'data-show-file': '','data-key': key})
+            show_label = $('<label></label>', {text: 'Show'})
             link = $('<a></a>', {href: '#', text: 'Delete', 'data-delete-tmp-file': '', 'data-key': key, })
             div.append('<br />')
+            div.append(show_checkbox)
+            div.append(show_label)
+            div.append(' ')
             div.append(link)
             $('div#transaction_files').append(div)
           fail: (data) ->
@@ -165,6 +204,7 @@ $(document).on "turbolinks:load", ->
 
     $('#transaction_files').on "click", "div a[data-delete-tmp-file]", (e) ->
       e.preventDefault()
+      $("input[value='"+$(this).data('key')+"']").remove()
       $.ajax
         url: "/transaction_file_tmp",
         type: "delete",
@@ -176,6 +216,15 @@ $(document).on "turbolinks:load", ->
           $("a[data-key='#{data.key}']").closest('div').remove()
         fail: (data) ->
           console.log 'Can not delete file'
+
+    $('#transaction_files').on "click", "div input[data-show-file]", (e) ->
+      key = $(this).data('key')
+      if $(this).prop('checked') == true
+        input = $("input[value='"+key+"']")
+        input_after = $("<input />", { type:'hidden', name: 'transaction[files_to_show][]', value: key})
+        input.after(input_after)
+      else
+        $("input[name='transaction[files_to_show][]'][value='"+key+"']").remove()
 
     $('#transaction_back').on 'click', (e) ->
       e.preventDefault()
@@ -196,6 +245,33 @@ $(document).on "turbolinks:load", ->
     $('a[data-print]').on 'click', (e) ->
       e.preventDefault()
       printJS("https:#{$(this).data('print')}", $(this).data('type'))
+
+    $('input[name=show_file]').on 'click', (e) ->
+      $.ajax
+        url: "/transaction_file_toggle_show",
+        type: "get",
+        dataType: "json",
+        data: {
+          id: $(this).data('id'),
+          status: $(this).val()
+        },
+        beforeSend: (data) ->
+          submitButton.prop('disabled', true)
+        success: (data) ->
+          submitButton.prop('disabled', false)
+          text = $('<span></span>', {text: 'OK', id: "file_status_change_#{data['id']}", class: 'badge badge-success'})
+          $("label[for=show_file_#{data['id']}").after(text)
+          $("span#file_status_change_#{data['id']}").fadeOut('slow')
+        error: (data) ->
+          console.log 'Can not update show status'
+          text = $('<span></span>', {text: 'Error', id: "file_status_change_#{data['id']}", class: 'badge badge-danger'})
+          $("label[for=show_file_#{data['id']}").after(text)
+          $("span#file_status_change_#{data['id']}").fadeOut('slow')
+          checkbox = $("input#show_file_#{data['id']}")
+          if checkbox.prop('checked') == true
+            checkbox.prop('checked', false)
+          else
+            checkbox.prop('checked',true)
 
 react_to_select_user_id = (selected) ->
   if selected > 0

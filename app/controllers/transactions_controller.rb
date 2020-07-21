@@ -172,6 +172,12 @@ class TransactionsController < ApplicationController
             @transaction.files.create!(url: f)
           end
         end
+        files_to_show = params['transaction']['files_to_show']
+        if !files_to_show.nil?
+          files_to_show.each do |f|
+            @transaction.files.find_by(url: f).update_attributes(show: true)
+          end
+        end
         if @transaction.errors.any?
           @transaction.destroy
           if params[:user_id].present?
@@ -230,6 +236,12 @@ class TransactionsController < ApplicationController
         if !files.nil?
           files.each do |f|
             @transaction.files.create!(url: f)
+          end
+        end
+        files_to_show = params['transaction']['files_to_show']
+        if !files_to_show.nil?
+          files_to_show.each do |f|
+            @transaction.files.find_by(url: f).update_attributes(show: true)
           end
         end
         if @transaction.errors.any?

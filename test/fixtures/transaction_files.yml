@@ -2,8 +2,25 @@
 
 one:
   trsc: one
-  url: MyString
+  url: file11
+  show: true
 
 two:
+  trsc: one
+  url: file12
+  show: false
+
+three:
+  trsc: one
+  url: file13
+  show: false
+
+four:
   trsc: two
-  url: MyString
+  url: file21
+  show: true
+
+five:
+  trsc: two
+  url: file22
+  show: true

@@ -6,11 +6,22 @@
     <% file_type = 'image' %>
     <a href="#" data-link-to-file><img src="<%= file.full_url %>" width="250px"></a>
   <% end %>
-  <div class='text-right'>
-    <% if file_type == 'pdf' %>
-      <%= link_to 'Open pdf', file.full_url, target: '_blank' %> |
-    <% end %>
-    <%= link_to 'Print', "#", data: {print: file.full_url, type: file_type} %> |
-    <%= link_to 'Delete', transaction_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
+  <div class='row'>
+    <div class="col-6">
+      <div class="form-check">
+        <%= check_box_tag 'show_file', file.show == true ? false : true, file.show == true ? true : false, id: "show_file_#{file.id}", class: 'form-check-input', data: {id: file.id} %>
+        <label class="form-check-label" for=<%= "show_file_#{file.id}" %>>
+          Show
+        </label>
+      </div>
+    </div>
+    <div class='col-6 text-right'>
+      <% if file_type == 'pdf' %>
+        <%= link_to 'Open pdf', file.full_url, target: '_blank' %> |
+      <% end %>
+      <%= link_to 'Print', "#", data: {print: file.full_url, type: file_type} %> |
+      <%= link_to 'Delete', transaction_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
+    </div>
   </div>
+
 </div>

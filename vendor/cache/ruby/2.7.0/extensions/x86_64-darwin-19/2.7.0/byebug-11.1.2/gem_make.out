@@ -1,0 +1,19 @@
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/byebug-11.1.2/ext/byebug
+/Users/sergey/.rbenv/versions/2.7.1/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.1/lib/ruby/2.7.0 -r ./siteconf20200620-75973-1oa2rpt.rb extconf.rb
+creating Makefile
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/byebug-11.1.2/ext/byebug
+make "DESTDIR=" clean
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/byebug-11.1.2/ext/byebug
+make "DESTDIR="
+compiling breakpoint.c
+compiling byebug.c
+compiling context.c
+compiling locker.c
+compiling threads.c
+linking shared-object byebug/byebug.bundle
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/byebug-11.1.2/ext/byebug
+make "DESTDIR=" install
+/usr/local/bin/ginstall -c -m 0755 byebug.bundle ./.gem.20200620-75973-5bb34r/byebug
