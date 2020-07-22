@@ -1,4 +1,5 @@
 $(document).on "turbolinks:load", ->
+  # show files from transaction list
   $('a[data-show-files]').on "click", (e) ->
     e.preventDefault()
     $.ajax
@@ -14,25 +15,44 @@ $(document).on "turbolinks:load", ->
         files_carousel = modal.find('div.files_carousel')
         files_host = $('#files_host').val()
         src = files_host + data['files'][0]['url']
-        file_current.html($("<img />", {src: src, class: 'img-fluid'}))
+        extention = data['files'][0]['url'].split('.').pop().toLowerCase()
+        height = $(window).height()-300
+        if extention == 'pdf'
+          file_current.html($("<embed />", {src: src, type: "application/pdf", width: '100%', height: '100%' }))
+        else
+          file_current.html($("<img />", {src: src, class: 'file_image'}))
         files_carousel.empty()
         for f in data['files']
+          extention = data['files'][0]['url'].split('.').pop().toLowerCase()
+          height = $(window).height()-350
+          extention = f['url'].split('.').pop()
           src = files_host + f['url']
-          link = $("<a>", {href: '#', 'data-link-preview': src})
-          img = $("<img />", {src: src, class: 'file_preview img-fluid'})
-          preview = link.html(img)
+          link = $("<a>", {href: '#', 'data-link-preview': src, class: 'link_for_preview'})
+          if extention == 'pdf'
+            file = $("<embed />", {src: src, type: "application/pdf", width: '150px', height: '150px', class: 'pdf_preview' })
+          else
+            file = $("<img />", {src: src, class: 'image_preview'})
+          preview = link.html(file)
           files_carousel.append(preview)
+        $('div.file_current').height(height = $(window).height()-350)
         $('#transaction_files').modal()
       fail: (data) ->
         console.log 'Can not read files'
 
+  # cilck on preview of transaction file
   $('#transaction_files').on 'click', 'a[data-link-preview]', (e) ->
     e.preventDefault()
     src = $(this).data('link-preview')
-    console.log src
     modal = $('#transaction_files')
     file_current = modal.find('div.file_current')
-    file_current.html($("<img />", {src: src, class: 'img-fluid'}))
+    extention = src.split('.').pop().toLowerCase()
+    # height = $(window).height()-300
+    if extention == 'pdf'
+      file_current.html($("<embed />", {src: src, type: "application/pdf", width: '100%', height: '100%' }))
+    else
+      # file_current.html($("<img />", {src: src, width: '100%', class: 'img-fluid'}))
+        # file_current.html($("<embed />", {src: src, type: "image/jpg", width: '100%', height: '100%' }))
+        file_current.html($("<img />", {src: src, class: 'file_image' }))
 
   react_to_select_user_id($('#view_user_id').val())
 

@@ -403,8 +403,28 @@ span.gallery_text {
   color: red;
 }
 
-.file_preview {
+/* Transaction files quick view */
+
+.file_current {
+  text-align: center;
+}
+
+.link_for_preview {
+  display:inline-block;
+  float: left;
+}
+
+.image_preview {
   object-fit: cover;
   width:150px;
   height:150px;
+}
+
+.pdf_preview {
+  pointer-events: none;
+}
+
+.file_image {
+  max-height: 100%;
+  max-width: 100%;
 }
