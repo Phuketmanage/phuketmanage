@@ -24,7 +24,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                 booking_fully_paid: true,
                                 comment_en: 'Rental'} }
     t = Transaction.last
-    assert_equal 1, t.balance_outs.count
+    assert_equal 2, t.balance_outs.count
     assert_equal 100000, t.balance_outs.sum(:debit)
     assert_equal 20000, t.balance_outs.sum(:credit)
     assert_equal 1, t.balances.count
@@ -233,10 +233,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     # assert_match 'test', response.body
     t = Transaction.last
-    assert_equal 1, t.balance_outs.count
+    assert_equal 2, t.balance_outs.count
     assert_equal 0, t.balance_outs.sum(:debit)
     assert_equal 2200, t.balance_outs.sum(:credit)
-    assert_equal 1, t.balances.count
+    assert_equal 2, t.balances.count
     assert_equal 1700, t.balances.sum(:debit)
     assert_equal 1000, t.balances.sum(:credit)
     assert_response :redirect
@@ -277,7 +277,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     # assert_match 'test', response.body
     t = Transaction.last
-    assert_equal 1, t.balance_outs.count
+    assert_equal 2, t.balance_outs.count
     assert_equal 0, t.balance_outs.sum(:debit)
     assert_equal 9000, t.balance_outs.sum(:credit)
     assert_equal 1, t.balances.count
@@ -366,8 +366,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                   hidden: true} }
     end
     t = Transaction.last
-    # byebug
-    assert_equal 1, t.balance_outs.count
+    assert_equal 2, t.balance_outs.count
     assert_equal 30000, t.balance_outs.sum(:debit)
     assert_equal 6000, t.balance_outs.sum(:credit)
     assert_equal 1, t.balances.count
@@ -456,8 +455,6 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 14.11.2019 Rental credit deducted from Owner totals
 
     from = '2019-09-01'
-    # from = Time.now.beginning_of_month.to_date
-    # from = '2019-10-01'
     to = Time.now.to_date
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Company view'}
@@ -515,13 +512,103 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     to = Transaction.maximum(:date)
     get transactions_path, params: {from: from, to: to }
     de_co_sum = Transaction.joins(:balances).sum('balances.debit')
-    assert_equal 99250.99.to_d, de_co_sum
-    assert_select "#de_co_sum", "99,250.99"
+    assert_equal 109250.99.to_d, de_co_sum
+    assert_select "#de_co_sum", "109,250.99"
     cr_co_sum = Transaction.joins(:balances).sum('balances.credit')
     assert_equal 7000.99, cr_co_sum
     assert_select "#cr_co_sum", "7,000.99"
 
     #Prev sums
 
+  end
+
+  test 'Show and hide comm' do
+    # if show_comm set to false Owner can not see comm
+    from = '2019-09-01'
+    to = Time.now.to_date
+    sign_in users(:owner)
+    get balance_front_path, params: { from: from, to: to}
+    assert_select "td.cr_ow_net_cell", count: 0
+    assert_select "td.de_co_cell", count: 0
+    assert_select "td.cr_ow_cell"
+
+    sign_in users(:admin)
+    @owner = users(:owner_3)
+    @house = @owner.houses.first
+    # Top up
+    type = TransactionType.find_by(name_en: 'Top up')
+    post transactions_path, params: {
+                              transaction: {
+                                date: Time.now.to_date,
+                                type_id: type.id,
+                                house_id: @house.id,
+                                de_ow: 150000,
+                                comment_en: 'Top up'} }
+    t = Transaction.last
+    get transactions_path, params: { commit: 'Company view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150,000.00'
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
+    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150 000,00'
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", count: 0
+    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150,000.00'
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
+
+    #if show_comm set to true Owner can see comm
+    type = TransactionType.find_by(name_en: 'Purchases')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Time.now.to_date,
+                                  type_id: type.id,
+                                  house_id: @house.id,
+                                  cr_ow: 20000,
+                                  de_co: 2000,
+                                  comment_en: 'Purchases'} }
+    end
+    # assert_match 'test', response.body
+    t = Transaction.last
+    assert_equal 2, t.balance_outs.count
+    assert_equal 0, t.balance_outs.sum(:debit)
+    assert_equal 22000, t.balance_outs.sum(:credit)
+    assert_equal 1, t.balances.count
+    assert_equal 2000, t.balances.sum(:debit)
+    assert_equal 0, t.balances.sum(:credit)
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    get transactions_path, params: { commit: 'Company view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2,000.00'
+    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '22,000.00'
+    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", count: 0
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_net_cell", '20 000,00'
+    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2 000,00'
+    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    assert_response :success
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '20,000.00'
+
+    sign_in users(:owner_3)
+    get balance_front_path, params: { from: from, to: to}
+    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", count: 0
+    assert_select "tr#trsc_#{t.id}_row td.cr_ow_net_cell", '20 000,00'
+    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2 000,00'
+    assert_select "#de_ow_sum", "150 000,00"
+    assert_select "#cr_ow_net_sum", "120 000,00"
+    assert_select "#de_co_sum", "12 000,00"
+    assert_select "#ow_balance", "18 000,00"
   end
 end

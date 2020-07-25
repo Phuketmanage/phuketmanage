@@ -23,11 +23,20 @@ owner: #{}
   email: 'owner@test.com'
   roles: owner
   locale: en
+  show_comm: false
 
 owner_2: #{}
   email: 'owner_2@test.com'
   roles: owner
   locale: en
+  show_comm: false
+
+owner_3: #{}
+  email: 'owner_3@test.com'
+  roles: owner
+  locale: ru
+  show_comm: true
+
 
 tenant: #{}
   email: 'tenant@test.com'

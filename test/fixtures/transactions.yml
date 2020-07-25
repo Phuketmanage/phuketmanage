@@ -101,3 +101,13 @@ six:
   comment_en: utilities
   comment_ru: MyString
   comment_inner: MyString
+
+seven:
+  date: '25.07.2020'
+  ref_no:
+  house: villa_6
+  type: purchases
+  user: owner_3
+  comment_en: rental
+  comment_ru: MyString
+  comment_inner: MyString

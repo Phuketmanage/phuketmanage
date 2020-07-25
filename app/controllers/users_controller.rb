@@ -86,7 +86,8 @@ class UsersController < ApplicationController
                                     { role_ids: []},
                                     :comment,
                                     :code,
-                                    :tax_no)
+                                    :tax_no,
+                                    :show_comm)
     end
 
 end

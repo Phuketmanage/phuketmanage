@@ -24,9 +24,9 @@ class Transaction < ApplicationRecord
     balances.destroy_all if balances.any?
     if types1.include?(type)
       errors.add(:base, 'Need to select owner or house') and return if house_id.nil? || user_id.nil?
-      balance_outs.create!(debit: de_ow, credit: 0)
-      balance_outs.create!(debit: 0, credit: de_co)
-      balances.create!(debit: de_co, credit: 0)
+      balance_outs.create!(debit: de_ow, credit: 0) if de_ow > 0
+      balance_outs.create!(debit: 0, credit: de_co) if de_co > 0
+      balances.create!(debit: de_co, credit: 0) if de_co > 0
     elsif types2.include?(type)
       errors.add(:base, '"Pay to outside" and "Pay to Phaethon" can not be blank both') if (cr_ow.nil? || cr_ow == 0) && (de_co.nil? || de_co == 0)
       errors.add(:base, 'Need to select owner or house') if house_id.nil? && user_id.nil?
@@ -46,9 +46,10 @@ class Transaction < ApplicationRecord
       errors.add(:base, 'Need to select house') and return if user_id.nil?
       errors.add(:base, 'Need to select house') and return if house_id.nil?
       errors.add(:base, 'Amount can not be blank') and return if cr_ow == 0 && cr_co == 0 && de_co == 0
-      balance_outs.create!(debit: 0, credit: cr_ow + cr_co + de_co)
-      balances.create!(debit: cr_co + de_co, credit: 0)
-      balances.create!(debit: 0, credit: cr_co)
+      balance_outs.create!(debit: 0, credit: cr_ow) if cr_ow > 0
+      balance_outs.create!(debit: 0, credit: cr_co + de_co) if cr_co + de_co > 0
+      balances.create!(debit: cr_co + de_co, credit: 0) if cr_co + de_co > 0
+      balances.create!(debit: 0, credit: cr_co) if cr_co > 0
     elsif types5.include?(type)
       errors.add(:base, 'Need to select owner or house') and return if user_id.nil? && house_id.nil?
       errors.add(:base, 'Amount can not be blank') and return if cr_ow == 0
@@ -61,8 +62,8 @@ class Transaction < ApplicationRecord
       if de_ow > 0 || cr_ow > 0
         errors.add(:base, 'Need to select owner or house') and return if house_id.nil? && user_id.nil?
         return if errors.any?
-        balance_outs.create!(debit: de_ow, credit: 0)
-        balance_outs.create!(debit: 0, credit: cr_ow)
+        balance_outs.create!(debit: de_ow, credit: 0) if de_ow > 0
+        balance_outs.create!(debit: 0, credit: cr_ow) if cr_ow > 0
       end
       balances.create!(debit: de_co, credit: 0) if de_co > 0
       balances.create!(debit: 0, credit: cr_co) if cr_co > 0

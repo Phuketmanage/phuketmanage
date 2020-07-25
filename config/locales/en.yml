@@ -70,6 +70,7 @@ en:
   date_text: Date
   debit: Debit
   credit: Credit
+  comm: Comm
   balance: Balance
   type: Type
   house: House

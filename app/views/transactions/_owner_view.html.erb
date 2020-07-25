@@ -4,7 +4,12 @@
       <tr>
         <th width="70px"><%= t('date_text') %></th>
         <th class="text-right" width="105px"><%= t('debit') %></th>
-        <th class="text-right" width="105px"><%= t('credit') %></th>
+        <% if @owner.show_comm? %>
+          <th class="text-right" width="105px"><%= t('credit') %></th>
+          <th class="text-right" width="105px"><%= t('comm') %>
+        <% else %>
+          <th class="text-right" width="105px"><%= t('credit') %></th>
+        <% end %>
         <th class="text-right" width="105px"><%= t('balance') %></th>
         <th width="150px"><%= t('type') %></th>
         <% if !one_house %>
@@ -21,6 +26,7 @@
     <tbody>
       <% de_ow_sum = 0 %>
       <% cr_ow_sum = 0 %>
+      <% de_co_sum = 0 %>
       <% de_ow_prev_sum = 0 %>
       <% cr_ow_prev_sum = 0 %>
       <% balance_sum = 0 %>
@@ -35,11 +41,16 @@
               <%= number_to_currency(de_ow_prev_sum - cr_ow_prev_sum, precision: 2, unit: '') if de_ow_prev_sum > cr_ow_prev_sum %>
             </nobr>
           </td>
-          <td class="text-right" id="cr_ow_prev_sum">
-            <nobr>
-              <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
-            </nobr>
-          </td>
+          <% if @owner.show_comm? %>
+            <td></td>
+            <td></td>
+          <% else %>
+            <td class="text-right" id="cr_ow_prev_sum">
+              <nobr>
+                <%= number_to_currency(cr_ow_prev_sum - de_ow_prev_sum, precision: 2, unit: '') if cr_ow_prev_sum > de_ow_prev_sum %>
+              </nobr>
+            </td>
+          <% end %>
           <td class="text-right" id="ow_prev_balance">
             <nobr>
               <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
@@ -60,8 +71,10 @@
         <% next if t.for_acc %>
         <% de_ow = t.balance_outs.sum(:debit) %>
         <% cr_ow = t.balance_outs.sum(:credit) %>
+        <% de_co = t.balances.sum(:debit) %>
         <% de_ow_sum += de_ow - cr_ow if de_ow > 0 %>
         <% cr_ow_sum += cr_ow unless de_ow > 0 %>
+        <% de_co_sum += de_co if de_co > 0 %>
         <% balance_sum += de_ow - cr_ow %>
         <tr class="trsc_row <%= 'text-muted' if t.hidden %>" id="trsc_<%= t.id %>_row" >
           <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
@@ -70,11 +83,24 @@
               <%= number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0 %>
             </nobr>
           </td>
-          <td class='cr_ow_cell text-right'>
-            <nobr>
-              <%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %>
-            </nobr>
-          </td>
+          <% if @owner.show_comm? %>
+            <td class='cr_ow_net_cell text-right'>
+              <nobr>
+                <%= number_to_currency(cr_ow-de_co, precision: 2, unit: '') if (cr_ow-de_co) > 0 %>
+              </nobr>
+            </td>
+            <td class='de_co_cell text-right'>
+              <nobr>
+                <%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %>
+              </nobr>
+            </td>
+          <% else %>
+            <td class='cr_ow_cell text-right'>
+              <nobr>
+                <%= number_to_currency(cr_ow, precision: 2, unit: '') unless de_ow > 0 %>
+              </nobr>
+            </td>
+          <% end %>
           <td class='balance_sum_cell text-right'>
             <nobr>
               <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
@@ -126,11 +152,25 @@
             <%= number_to_currency(de_ow_prev_sum + de_ow_sum - @cr_prev_rental, precision: 2, unit: '') %>
           </nobr>
         </td>
-        <td class="font-weight-bold text-right" id='cr_ow_sum'>
-          <nobr>
-            <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %>
-          </nobr>
-        </td>
+        <% if @owner.show_comm? %>
+          <td class="font-weight-bold text-right" id='cr_ow_net_sum'>
+            <nobr>
+              <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental - de_co_sum, precision: 2, unit: '') %>
+            </nobr>
+          </td>
+          <td class="font-weight-bold text-right" id='de_co_sum'>
+            <nobr>
+              <%= number_to_currency(de_co_sum, precision: 2, unit: '') %>
+            </nobr>
+          </td>
+        <% else %>
+          <td class="font-weight-bold text-right" id='cr_ow_sum'>
+            <nobr>
+              <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum - @cr_prev_rental, precision: 2, unit: '') %>
+            </nobr>
+          </td>
+        <% end %>
+
         <td class="font-weight-bold text-right" id="ow_balance">
           <nobr>
             <%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %>

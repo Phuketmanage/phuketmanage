@@ -55,6 +55,12 @@
     </div>
   <% end %>
 
+  <div class="form-check">
+    <%= f.check_box :show_comm, class: 'form-check-input' %>
+    <%= f.label :show_comm, class: 'form-check-label', for: 'user_show_comm' %>
+  </div>
+
+
   Role:
   <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |c| %>
       <div class="form-check form-check-inline">

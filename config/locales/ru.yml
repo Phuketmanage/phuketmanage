@@ -75,6 +75,7 @@ ru:
   date_text: Дата
   debit: Приход
   credit: Расход
+  comm: Комиссия
   balance: Баланс
   type: Тип
   house: Дом

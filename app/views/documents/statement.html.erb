@@ -68,7 +68,7 @@
       <% @owner.houses.each do |h| %>
         <%= h.address %><br />
       <% end %>
-      Tax ID Card No.: 0000000000000
+      Tax ID Card No.: <%= @owner.tax_no.present? ? @owner.tax_no : '0000000000000' %>
     </div>
   </div>
   <div class="p-2">

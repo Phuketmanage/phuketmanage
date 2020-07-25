@@ -20,29 +20,30 @@ class TransactionsController < ApplicationController
     if !@error.present?
       if current_user.role?(['Owner']) ||
       params[:commit] == 'Owner view'
-        owner = current_user if current_user.role?(['Owner'])
-        if params[:commit] == 'Owner view'
+        if current_user.role?(['Owner'])
+          @owner = current_user
+        elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
           if !params[:view_user_id].present?
             @error = 'Owner should be selected for this type of view'
             return
           end
           @view_user_id = params[:view_user_id]
           session[:view_user_id] = params[:view_user_id]
-          owner = User.find(@view_user_id)
+          @owner = User.find(@view_user_id)
         end
-        @locale = owner.locale
-        @transactions = owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-        @transactions_before = owner.transactions.where('date < ?', @from).order(:date, :created_at).all
-        @transactions_by_cat = owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
+        @locale = @owner.locale
+        @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+        @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
+        @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
         type_rental_id = TransactionType.find_by(name_en: 'Rental').id
         @cr_rental = 0
         @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
         @cr_prev_rental = 0
         @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
         @one_house = true
-        @one_house = false if owner.houses.count > 1
+        @one_house = false if @owner.houses.count > 1
         today = Time.zone.now.in_time_zone('Bangkok')
-        future_booking_ids = owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
+        future_booking_ids = @owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
         future_booking_de = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.debit')
         future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
         @bookings_prepayment = future_booking_de - future_booking_cr

@@ -44,3 +44,13 @@ five:
   trsc: five
   debit: 50000.0
   credit: 10000.0
+
+six:
+  trsc: seven
+  debit: 0.0
+  credit: 100000.0
+
+seven:
+  trsc: seven
+  debit: 0.0
+  credit: 10000.0
