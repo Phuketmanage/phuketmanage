@@ -28,6 +28,13 @@
         </li>
       <% end %>
 
+      <% if signed_in? && current_user.role?(['Gardener']) %>
+        <li class="nav-item">
+          <%= link_to 'Water usage', water_usage_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+
       <% if signed_in? && current_user.role?(['Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
@@ -75,6 +82,10 @@
         <li class="nav-item">
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Sources', sources_path, class: "nav-link" %>
+        </li>
+
       <% end %>
 
       <% if signed_in? && current_user.role?(['Admin']) %>
@@ -107,6 +118,9 @@
         </li>
         <li class="nav-item">
           <%= link_to 'House groups', house_groups_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Settings', settings_path, class: "nav-link" %>
         </li>
 
       <% end %>
