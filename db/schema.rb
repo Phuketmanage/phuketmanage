@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_061303) do
+ActiveRecord::Schema.define(version: 2020_07_27_134525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -310,6 +310,15 @@ ActiveRecord::Schema.define(version: 2020_07_23_061303) do
     t.string "action"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "level"
+    t.string "text"
+    t.bigint "house_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_notifications_on_house_id"
+  end
+
   create_table "options", force: :cascade do |t|
     t.string "title_en"
     t.string "title_ru"
@@ -460,6 +469,15 @@ ActiveRecord::Schema.define(version: 2020_07_23_061303) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "water_usages", force: :cascade do |t|
+    t.bigint "house_id", null: false
+    t.date "date"
+    t.integer "amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_id"], name: "index_water_usages_on_house_id"
+  end
+
   add_foreign_key "balance_outs", "transactions"
   add_foreign_key "balances", "transactions"
   add_foreign_key "booking_files", "bookings"
@@ -486,6 +504,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_061303) do
   add_foreign_key "jobs", "job_types"
   add_foreign_key "jobs", "users"
   add_foreign_key "jobs", "users", column: "creator_id"
+  add_foreign_key "notifications", "houses"
   add_foreign_key "prices", "houses"
   add_foreign_key "seasons", "houses"
   add_foreign_key "transaction_files", "transactions", column: "trsc_id"
@@ -494,4 +513,5 @@ ActiveRecord::Schema.define(version: 2020_07_23_061303) do
   add_foreign_key "transactions", "transaction_types", column: "type_id"
   add_foreign_key "transactions", "users"
   add_foreign_key "transfers", "bookings"
+  add_foreign_key "water_usages", "houses"
 end

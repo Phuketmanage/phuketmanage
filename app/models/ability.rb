@@ -19,6 +19,9 @@ class Ability
     elsif user.role? 'Maid'
       can [:laundry, :update_laundry], Job
       can :index, [ Admin ]
+    elsif user.role? 'Gardener'
+      can [:index, :create, :update], WaterUsage
+      can :index, [ Admin ]
     elsif user.role? 'Accounting'
       can [:index, :new, :create, :update_invoice_ref] , Transaction
       can [:edit, :update], Transaction do |t|
@@ -44,8 +47,8 @@ class Ability
       can :manage, [  HouseType, House, Duration, Season, Price,
                       Booking, Connection, JobType, Transfer, Source,
                       Option, HouseOption, Location, HousePhoto,
-                      BookingFile, HouseGroup ]
-      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer ]
+                      BookingFile, HouseGroup, TransactionFile ]
+      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer, TransactionFile ]
       can [:index, :new, :show, :create, :edit, :update, :laundry, :update_laundry], Job
       can [:destroy], Job , creator: user
       can :manage, JobMessage, sender: user

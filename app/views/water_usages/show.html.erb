@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>House:</strong>
+  <%= @water_usage.house_id %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @water_usage.date %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @water_usage.amount %>
+</p>
+
+<%= link_to 'Edit', edit_water_usage_path(@water_usage) %> |
+<%= link_to 'Back', water_usages_path %>

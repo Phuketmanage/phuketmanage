@@ -82,7 +82,7 @@ class BookingsController < ApplicationController
       # Admin look bookings for selected owner
       house_ids = User.find(@oid).houses.ids
     elsif @hid.present? && current_user.houses.where(number: @hid).any?
-      # Owner look bookings for selected hgouse
+      # Owner look bookings for selected house
       house_ids = House.where(number: @hid).ids
     else
       # Owner look bookings

@@ -1,0 +1,17 @@
+span = $("span.status[data-hid=<%= @water_usage.house.id %>]")
+<% if @water_usage.errors.any? %>
+  <% msgs = '' %>
+  <% @water_usage.errors.full_messages.each do |msg| %>
+    <% msgs += msg + '; ' %>
+  <% end %>
+  alert('<%= msgs %>')
+  span.removeClass('badge-success')
+      .addClass('badge-danger').text('error').show
+  // $("input[name='water_usage[amount]'][data-hid=<%= @water_usage.house.id %>]").val(<%= @water_usage.amount %>)
+<% else %>
+  span.removeClass('badge-danger')
+      .addClass('badge-success').text('OK').show
+  // $("input[name='water_usage[amount]'][data-hid=<%= @water_usage.house.id %>]").val(<%= @water_usage.amount %>)
+<% end %>
+
+// $("span.status[data-hid=<%= @water_usage.house.id %>]").fadeOut('slow')

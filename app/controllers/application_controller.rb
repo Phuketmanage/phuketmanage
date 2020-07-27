@@ -48,6 +48,8 @@ class ApplicationController < ActionController::Base
         jobs_path
       elsif current_user.role?('Maid')
         laundry_path
+      elsif current_user.role?('Gardener')
+        water_usages_path
       else
         dashboard_path
       end

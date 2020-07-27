@@ -47,3 +47,14 @@ owner_tenant: #{}
   email: 'owner_tenant@test.com'
   roles: owner, tenant
   locale: ru
+
+maid:
+  email: 'maid@phuketmanage.com'
+  roles: maid
+  locale: en
+
+gardener:
+  email: 'garden@phuketmanage.com'
+  roles: gardener
+  locale: en
+

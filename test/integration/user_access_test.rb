@@ -31,6 +31,20 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:gardener)
+    get settings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:maid)
+    get settings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+
   end
 
   test 'users' do
@@ -59,6 +73,20 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:maid)
+    get users_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:gardener)
+    get users_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+
   end
 
 # Invatation was turned off because use Devise reset password option
@@ -120,6 +148,62 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert ability.can?(:destroy, Job.new(creator: manager))
     assert ability.cannot?(:destroy, Job.new(creator: admin))
   end
+
+  test 'Bookings (inner)' do
+    sign_in users(:admin)
+    get bookings_path
+    assert_response :success
+
+    sign_in users(:manager)
+    get bookings_path
+    assert_response :success
+
+    sign_in users(:owner)
+    get bookings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:tenant)
+    get bookings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner_tenant)
+    get bookings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:maid)
+    get bookings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:maid)
+    get bookings_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+  end
+
+  # test 'Bookings (front)' do
+  #   sign_in users(:admin)
+  #   owner = users(:owner)
+  #   house = houses(:villa_1)
+
+  #   get bookings_front_path([oid: owner.id])
+  #   assert_response :success
+
+  #   sign_in users(:manager)
+  #   get bookings_front_path([hid: house.number])
+  #   assert_response :success
+
+
+
+  # end
 
   test 'Balance' do
     # owner can see only his own balance

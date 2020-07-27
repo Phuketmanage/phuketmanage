@@ -1,0 +1,20 @@
+<h1>Water Usages</h1>
+
+<% @houses.each do |h| %>
+  <%= form_with model: @water_usage do |f| %>
+    <strong><%= h.code %></strong>,
+    <%= h.water_usages.any? ?
+      "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %> <span class='status badge' data-hid="<%= h.id %>"></span>
+    <div class="form-row">
+      <div class="col-2">
+        <%= f.number_field :amount, class: 'form-control',
+          data: { hid: h.id } %>
+      </div>
+      <div class="col-1">
+        <%= f.hidden_field :house_id, value: h.id %>
+        <%= f.hidden_field :date, value: Time.zone.now.to_date %>
+        <%= f.submit 'Save', class: 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
