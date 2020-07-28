@@ -5,9 +5,7 @@
     <strong><%= h.code %></strong>,
     <%= h.water_usages.any? ?
       "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
-    <% if h.water_meters.present? and h.water_meters == 2 %>
-      / <%= h.water_usages.last.amount_2 %>
-    <% end %>
+    <%= h.water_usages.any? && h.water_meters.present? && h.water_meters == 2 ? "/ #{h.water_usages.last.amount_2}" : '' %>
     <span class='status badge' data-hid="<%= h.id %>"></span>
 
     <div class="form-row">
