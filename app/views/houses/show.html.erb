@@ -4,6 +4,11 @@
 <h1><%= @house.send("title_#{I18n.locale}") %></h1>
 
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <% @house.photos.count.times do |i| %>
+      <li data-target="#carouselExampleControls" data-slide-to="<%= i %>" class="<%= 'active' if i == 0 %>"></li>
+    <% end %>
+  </ol>
   <div class="carousel-inner">
     <% i = 0 %>
     <% @house.photos.order(:url).each do |photo| %>
@@ -14,6 +19,9 @@
       <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
       <div class="carousel-item <%= 'active' if i == 1 %>">
         <img src="<%= photo.original %>" class="d-block w-100" alt="<%= photo.send("title_#{I18n.locale}") %>">
+        <div class="carousel-caption d-none d-md-block">
+          <p><%= photo_title %></p>
+        </div>
       </div>
     <% end %>
   </div>
