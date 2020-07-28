@@ -16,7 +16,6 @@ class WaterUsage < ApplicationRecord
     def only_greater
       before = WaterUsage.where(house_id: house_id).order(:date)
       if before.any?
-        byebug
         self.errors.add(:amount, 'Can not be less then before') if amount.present? && before.last.amount.present? && amount < before.last.amount
         self.errors.add(:amount_2, 'Can not be less then before') if amount_2.present? && before.last.amount_2.present? && amount_2 < before.last.amount_2
       end
