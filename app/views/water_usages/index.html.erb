@@ -4,12 +4,24 @@
   <%= form_with model: @water_usage do |f| %>
     <strong><%= h.code %></strong>,
     <%= h.water_usages.any? ?
-      "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %> <span class='status badge' data-hid="<%= h.id %>"></span>
+      "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
+    <% if h.water_meters.present? and h.water_meters == 2 %>
+      / <%= h.water_usages.last.amount_2 %>
+    <% end %>
+    <span class='status badge' data-hid="<%= h.id %>"></span>
+
     <div class="form-row">
       <div class="col-2">
         <%= f.number_field :amount, class: 'form-control',
           data: { hid: h.id } %>
       </div>
+      <% if h.water_meters.present? and h.water_meters == 2 %>
+
+      <div class="col-2">
+        <%= f.number_field :amount_2, class: 'form-control',
+          data: { hid: h.id } %>
+      </div>
+      <% end %>
       <div class="col-1">
         <%= f.hidden_field :house_id, value: h.id %>
         <%= f.hidden_field :date, value: Time.zone.now.to_date %>

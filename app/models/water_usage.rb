@@ -16,7 +16,9 @@ class WaterUsage < ApplicationRecord
     def only_greater
       before = WaterUsage.where(house_id: house_id).order(:date)
       if before.any?
-        self.errors.add(:amount, 'Can not be less then before') if amount < before.last.amount
+        byebug
+        self.errors.add(:amount, 'Can not be less then before') if amount.present? && before.last.amount.present? && amount < before.last.amount
+        self.errors.add(:amount_2, 'Can not be less then before') if amount_2.present? && before.last.amount_2.present? && amount_2 < before.last.amount_2
       end
     end
 
@@ -25,12 +27,18 @@ class WaterUsage < ApplicationRecord
       if !last.nil?
         days = (date - last.date).to_i
         # byebug
-        if (amount-last.amount).to_f/days > 1
+        if amount.present? && last.amount.present? && (amount-last.amount).to_f/days > 1
           Notification.create!(
             house_id: house_id,
             text: "Water overusage #{amount-last.amount} units for #{(date - last.date).to_i} days. #{last.date.strftime('%d.%m')} - #{last.amount} units, #{date.in_time_zone('Bangkok').strftime('%d.%m')} - #{amount} units")
 
         end
+        if amount_2.present? && last.amount_2.present? && (amount_2-last.amount_2).to_f/days > 1
+          Notification.create!(
+            house_id: house_id,
+            text: "Water overusage #{amount_2-last.amount_2} units for #{(date - last.date).to_i} days. #{last.date.strftime('%d.%m')} - #{last.amount_2} units, #{date.in_time_zone('Bangkok').strftime('%d.%m')} - #{amount_2} units")
+        end
+
       end
     end
 end

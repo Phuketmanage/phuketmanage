@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_27_134525) do
+ActiveRecord::Schema.define(version: 2020_07_28_032745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_134525) do
     t.text "other_en"
     t.text "details"
     t.bigint "house_group_id"
+    t.integer "water_meters", default: 1
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
@@ -475,6 +476,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_134525) do
     t.integer "amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "amount_2"
     t.index ["house_id"], name: "index_water_usages_on_house_id"
   end
 

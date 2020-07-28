@@ -77,6 +77,6 @@ class WaterUsagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def water_usage_params
-      params.require(:water_usage).permit(:house_id, :date, :amount)
+      params.require(:water_usage).permit(:house_id, :date, :amount, :amount_2)
     end
 end

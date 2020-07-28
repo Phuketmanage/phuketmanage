@@ -251,17 +251,15 @@
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Employees:</strong>
-    <hr>
-
     <%= form.collection_check_boxes :employee_ids, Employee.all, :id, :type_with_name do |e| %>
         <div class="form-check form-check-inline">
           <%= e.check_box(class: "form-check-input") %>
           <%= e.label(class: "form-check-label" ) %>
         </div>
     <% end %>
+    <hr />
 
-    <strong>Service provided</strong>
-
+    <strong>Service provided</strong><br />
     <div class="form-check form-check-inline">
       <%= form.check_box :rental, { class: 'form-check-input',
                               id: 'rental_check_box' } %>
@@ -286,13 +284,20 @@
       <%= form.label :outsource_linen, {     class: 'form-check-label',
                               for: 'outsource_linen_check_box' } %>
     </div>
+    <hr />
 
-  </div>
-  <div class="form-check mb-2">
-    <%= form.check_box :unavailable, { class: 'form-check-input',
-                            id: 'unavailable_check_box' } %>
-    <%= form.label 'Not for rent', {     class: 'form-check-label',
-                            for: 'unavailable_check_box' } %>
+    <b>Other</b>
+    <div class="form-check mb-2">
+      <%= form.check_box :unavailable, { class: 'form-check-input',
+                              id: 'unavailable_check_box' } %>
+      <%= form.label 'Not for rent', {     class: 'form-check-label',
+                              for: 'unavailable_check_box' } %>
+    </div>
+    <div class="form-group">
+      <%= form.label :water_meters, 'Water meters qty' %>
+      <%= form.number_field :water_meters, min: 1, max: 2, class: 'form-control' %>
+    </div>
+
   </div>
 
   <div class="actions mb-2">
