@@ -213,20 +213,3 @@
     </div>
   </div>
 <% end %>
-
-<div class="house_main_photo_parent mb-2" onclick="">
-  <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
-    <span class='gallery_text'><%= t('house.see_all_photos') %></span>
-  </div>
-</div>
-<div id="lightgallery" class="d-none">
-  <% @house.photos.order(:url).each do |photo| %>
-    <% house_title = @house.send("title_#{I18n.locale}") %>
-    <% photo_title = photo.send("title_#{I18n.locale}") %>
-
-    <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
-    <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
-      <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
-    </a>
-  <% end %>
-</div>
