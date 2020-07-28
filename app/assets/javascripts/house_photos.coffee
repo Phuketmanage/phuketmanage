@@ -187,9 +187,9 @@ $(document).on 'turbolinks:load', ->
     form = document.querySelector("#form_edit_photo_id_#{photo_id}");
     Rails.fire(form, 'submit');
 
-  lightGallery document.getElementById('lightgallery'),
-    download: false
+  # lightGallery document.getElementById('lightgallery'),
+  #   download: false
 
-  $(".house_main_photo_parent").on "click", (e) ->
-    e.preventDefault()
-    $("#lightgallery a:first-child > img").trigger("click");
+  # $(".house_main_photo_parent").on "click", (e) ->
+  #   e.preventDefault()
+  #   $("#lightgallery a:first-child > img").trigger("click");
