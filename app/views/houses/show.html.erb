@@ -13,14 +13,10 @@
     <% i = 0 %>
     <% @house.photos.order(:url).each do |photo| %>
       <% i += 1 %>
-      <% house_title = @house.send("title_#{I18n.locale}") %>
-      <% photo_title = photo.send("title_#{I18n.locale}") %>
-
-      <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
       <div class="carousel-item <%= 'active' if i == 1 %>">
         <img src="<%= photo.original %>" class="d-block w-100" alt="<%= photo.send("title_#{I18n.locale}") %>">
         <div class="carousel-caption d-none d-md-block">
-          <p><%= photo_title %></p>
+          <p><%= photo.send("title_#{I18n.locale}") %></p>
         </div>
       </div>
     <% end %>
@@ -34,8 +30,6 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-
-
 
 <p>
   <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
@@ -218,11 +212,7 @@
       </div>
     </div>
   </div>
-
-
 <% end %>
-
-
 
 <div class="house_main_photo_parent mb-2" onclick="">
   <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
