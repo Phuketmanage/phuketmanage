@@ -162,7 +162,8 @@ class HousesController < ApplicationController
                                     :other_ru,
                                     :details,
                                     :house_group_id,
-                                    :water_meters
+                                    :water_meters,
+                                    :water_reading
                                     )
     end
 

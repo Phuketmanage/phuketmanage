@@ -9,7 +9,8 @@ class WaterUsagesController < ApplicationController
   # GET /water_usages.json
   def index
     @water_usages = WaterUsage.all
-    @houses = House.order(:house_group_id, :code)
+    @house_groups = HouseGroup.all
+    @houses = House.where(water_reading: true).order(:house_group_id, :code).all
     @water_usage = WaterUsage.new
   end
 

@@ -284,6 +284,12 @@
       <%= form.label :outsource_linen, {     class: 'form-check-label',
                               for: 'outsource_linen_check_box' } %>
     </div>
+    <div class="form-check mb-2">
+      <%= form.check_box :water_reading, { class: 'form-check-input',
+                              id: 'water_reading_check_box' } %>
+      <%= form.label 'Water meter reading', {     class: 'form-check-label',
+                              for: 'water_reading_check_box' } %>
+    </div>
     <hr />
 
     <b>Other</b>

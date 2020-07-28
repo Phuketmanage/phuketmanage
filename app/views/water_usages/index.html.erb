@@ -1,30 +1,36 @@
 <h1>Water Usages</h1>
 
-<% @houses.each do |h| %>
-  <%= form_with model: @water_usage do |f| %>
-    <strong><%= h.code %></strong>,
-    <%= h.water_usages.any? ?
-      "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
-    <%= h.water_usages.any? && h.water_meters.present? && h.water_meters == 2 ? "/ #{h.water_usages.last.amount_2}" : '' %>
-    <span class='status badge' data-hid="<%= h.id %>"></span>
+<% @house_groups.each do |hg| %>
+<h5><%= hg.name %></h5>
+<% @houses.where(house_group_id: hg.id).each do |h| %>
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <%= form_with model: @water_usage do |f| %>
+      <strong><%= h.code %></strong>,
+      <%= h.water_usages.any? ?
+        "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
+      <%= h.water_usages.any? && h.water_meters.present? && h.water_meters == 2 ? "/ #{h.water_usages.last.amount_2}" : '' %>
+      <span class='status badge' data-hid="<%= h.id %>"></span>
 
-    <div class="form-row">
-      <div class="col-3">
-        <%= f.number_field :amount, class: 'form-control',
-          data: { hid: h.id } %>
-      </div>
-      <% if h.water_meters.present? and h.water_meters == 2 %>
+      <div class="form-row">
+        <div class="col-3">
+          <%= f.number_field :amount, class: 'form-control',
+            data: { hid: h.id } %>
+        </div>
+        <% if h.water_meters.present? and h.water_meters == 2 %>
 
-      <div class="col-3">
-        <%= f.number_field :amount_2, class: 'form-control',
-          data: { hid: h.id } %>
+        <div class="col-3">
+          <%= f.number_field :amount_2, class: 'form-control',
+            data: { hid: h.id } %>
+        </div>
+        <% end %>
+        <div class="col-2">
+          <%= f.hidden_field :house_id, value: h.id %>
+          <%= f.hidden_field :date, value: Time.zone.now.to_date %>
+          <%= f.submit 'Save', class: 'btn btn-primary' %>
+        </div>
       </div>
-      <% end %>
-      <div class="col-2">
-        <%= f.hidden_field :house_id, value: h.id %>
-        <%= f.hidden_field :date, value: Time.zone.now.to_date %>
-        <%= f.submit 'Save', class: 'btn btn-primary' %>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 <% end %>
+<% end %>
+
