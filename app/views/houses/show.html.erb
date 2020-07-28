@@ -3,22 +3,31 @@
 
 <h1><%= @house.send("title_#{I18n.locale}") %></h1>
 
-<div class="house_main_photo_parent mb-2" onclick="">
-  <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
-    <span class='gallery_text'><%= t('house.see_all_photos') %></span>
-  </div>
-</div>
-<div id="lightgallery" class="d-none">
-  <% @house.photos.order(:url).each do |photo| %>
-    <% house_title = @house.send("title_#{I18n.locale}") %>
-    <% photo_title = photo.send("title_#{I18n.locale}") %>
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <% i = 0 %>
+    <% @house.photos.order(:url).each do |photo| %>
+      <% i += 1 %>
+      <% house_title = @house.send("title_#{I18n.locale}") %>
+      <% photo_title = photo.send("title_#{I18n.locale}") %>
 
-    <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
-    <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
-      <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
-    </a>
-  <% end %>
+      <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
+      <div class="carousel-item <%= 'active' if i == 1 %>">
+        <img src="<%= photo.original %>" class="d-block w-100" alt="<%= photo.send("title_#{I18n.locale}") %>">
+      </div>
+    <% end %>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
+
+
 
 <p>
   <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
@@ -207,3 +216,19 @@
 
 
 
+<div class="house_main_photo_parent mb-2" onclick="">
+  <div class='house_main_photo_child' style="background-image: url('<%= @house.main_photo if @house.main_photo %>');">
+    <span class='gallery_text'><%= t('house.see_all_photos') %></span>
+  </div>
+</div>
+<div id="lightgallery" class="d-none">
+  <% @house.photos.order(:url).each do |photo| %>
+    <% house_title = @house.send("title_#{I18n.locale}") %>
+    <% photo_title = photo.send("title_#{I18n.locale}") %>
+
+    <% caption = "<h4>#{house_title}</h4><p>#{photo_title}</p>" %>
+    <a href="<%= photo.original %>" data-sub-html="<%= caption %>">
+      <img src="<%= photo.thumb %>" alt="<%= photo.send("title_#{I18n.locale}") %>" />
+    </a>
+  <% end %>
+</div>
