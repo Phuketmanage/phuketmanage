@@ -1,0 +1,39 @@
+      <div class="card ">
+        <%= image_tag h.preview, class: 'card-img-top', alt: h.send("title_#{I18n.locale}") if h.preview %>
+        <div class="card-body">
+          <h5 class="card-title"><%= h.send("title_#{I18n.locale}") %></h5>
+          <p>
+            <% if from_search == true %>
+              <h5><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %></h5>
+              <%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+            <% else %>
+              <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
+            <% end %>
+          </p>
+          <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
+          <p>
+            <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %>
+            <br />
+              <% amenities = [] %>
+              <% amenities << t('houses.pool') if h.pool%>
+              <% amenities << t('houses.communalPool') if h.communal_pool %>
+              <% amenities << t('houses.ac') if h.option('Air conditioner') %>
+              <% amenities << t('houses.internet') if h.option('Internet') %>
+              <% amenities << t('houses.kitchen') if h.option('Kitchen') %>
+              <%= amenities.join(", ") %>
+          </p>
+          <p class="card-text">
+            <% text = simple_format h.send("description_#{I18n.locale}") %>
+            <%= truncate(text,
+                                length: 140,
+                                separator: ' ', escape: false) %>
+          </p>
+
+          <% if from_search == true %>
+            <%= link_to t('houses.view'), house_path(h.number, params: {rs: search.rs, rf: search.rf}), class: "btn btn-primary", target: "_blank" %>
+          <% else %>
+            <%= link_to t('houses.view'), house_path(h.number), class: "btn btn-primary", target: "_blank" %>
+          <% end %>
+
+        </div>
+      </div>

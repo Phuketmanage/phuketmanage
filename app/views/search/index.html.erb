@@ -1,38 +1,17 @@
 <h1><%= t('search.results') %></h1>
 <%= render 'form', search: @search %>
 <div class="duration">Total rental period: <%= @search.duration %> days</div>
-<% (1..10).each do |number| %>
-<% end %>
+<% i = 0 %>
 <% @houses.each do |h| %>
-  <% next if @prices[h.id].nil? %>
-  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
-    <div class="row">
-      <div class="col-md-3 preview">
-        <%= image_tag h.preview, class: 'img-fluid' if h.preview %>
-      </div>
-      <div class="col-md-9 ">
-        <div class="row">
-          <div class="col h5 house"><%= link_to h.send("title_#{I18n.locale}"), house_path(h.number, params: {rs: @search.rs, rf: @search.rf}), target: "_blank" %></div>
-        </div>
-        <div class="row">
-          <div class="col-md-8">
-            <%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
-            <p>
-              <%= t('houses.capacity', count: h.capacity) %>, <%= t('houses.rooms', count: h.rooms) %>, <%= t('houses.bathrooms', count: h.bathrooms) %>
-            <br />
-              <%= h.pool ? "#{t('houses.pool')}, " : '' %>
-              <%= h.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
-              <%= h.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
-              <%= h.option('Internet') ? "#{t('houses.internet')}, " : '' %>
-              <%= h.option('Kitchen') ? t('houses.kitchen') : '' %>
-            </p>
-          </div>
-          <div class="col-md-4 text-right">
-            <span class="price"><h5><%= "#{number_to_currency(@prices[h.id][:total], precision: 0, unit: '฿')}" %></h5></span>
-            <%= "#{number_to_currency(@prices[h.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
-          </div>
-        </div>
-      </div>
+  <% next if @prices[h.id].nil?  %>
+  <% if i % 3 == 0  %>
+    <div class="row mt-2">
+  <% end %>
+    <div class="col-md-4 mb-2">
+      <%= render 'houses/preview', h: h, price: @prices[h.id], from_search: true, search: @search %>
     </div>
-  </div>
+  <% if (i+1) % 3 == 0 || h == @houses.last %>
+    </div>
+  <% end %>
+  <% i += 1 %>
 <% end %>
