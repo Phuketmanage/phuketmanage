@@ -12,9 +12,12 @@
     <%= image_tag h.preview, class: 'card-img-top', alt: h.send("title_#{I18n.locale}") if h.preview %>
     <div class="card-body">
       <h5 class="card-title"><%= h.send("title_#{I18n.locale}") %></h5>
-      <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
+      <p>
+        <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
+      </p>
       <p>
         <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %></p>
+      <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
       <p class="card-text">
         <% text = simple_format h.send("description_#{I18n.locale}") %>
         <%= truncate(text,
