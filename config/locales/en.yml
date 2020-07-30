@@ -54,6 +54,7 @@ en:
     internet: "Internet"
     kitchen: "Kitchen"
     seaview: "Seaview"
+    view: "View"
   client:
     name: Name
     surname: Surname

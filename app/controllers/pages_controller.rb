@@ -5,6 +5,7 @@ class PagesController < ApplicationController
 
   def index
     @search = Search.new
+    @houses = House.where(unavailable: false).order('random()')
   end
 
   def about

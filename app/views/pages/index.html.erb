@@ -1,4 +1,31 @@
 <h1 class="display-3"><%= t('search.title') %></h1>
 
 <%= render 'search/form', search: @search %>
+<div class="d-flex flex-wrap">
 
+<div class="row mt-2">
+<% @houses.each_with_index do |h, i| %>
+  <% break if i == 3  %>
+
+  <div class="col-md-4 mb-2">
+  <div class="card ">
+    <%= image_tag h.preview, class: 'card-img-top', alt: h.send("title_#{I18n.locale}") if h.preview %>
+    <div class="card-body">
+      <h5 class="card-title"><%= h.send("title_#{I18n.locale}") %></h5>
+      <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
+      <p>
+        <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %></p>
+      <p class="card-text">
+        <% text = simple_format h.send("description_#{I18n.locale}") %>
+        <%= truncate(text,
+                            length: 140,
+                            separator: ' ', escape: false) %>
+      </p>
+
+      <%= link_to t('houses.view'), house_path(h.number), class: "btn btn-primary", target: "_blank" %>
+    </div>
+  </div>
+  </div>
+
+<% end %>
+  </div>

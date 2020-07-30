@@ -44,10 +44,10 @@ ru:
       many: "%{count} человек"
       other: "%{count} человек"
     rooms:
-      one: "1 комната"
-      few: "%{count} комнаты"
-      many: "%{count} комнат"
-      other: "%{count} комнат"
+      one: "1 спальня"
+      few: "%{count} спальни"
+      many: "%{count} спален"
+      other: "%{count} спален"
     bathrooms:
       one: "1 ванная"
       few: "%{count} ванных"
@@ -59,6 +59,7 @@ ru:
     internet: "Интернет"
     kitchen: "Кухня"
     seaview: "Вид на море"
+    view: "Подробнее"
   client:
     name: Имя
     surname: Фамилия
