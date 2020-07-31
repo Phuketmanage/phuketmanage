@@ -1,0 +1,16 @@
+<%= form_with url: house_path(@house.number), method: :get, local: true do |f| %>
+  <% if search.errors.any? %>
+    <%= render 'shared/error_messages', object: f.object %>
+  <% end %>
+  <div class="row shadow-sm pt-3 pb-3 bg-white border rounded">
+    <div class="col-4 col-lg-12">
+      <%= f.date_field :rs, min: Time.zone.now.in_time_zone('Bangkok').to_date+1.day, class: 'form-control' %>
+    </div>
+    <div class="col-4 col-lg-12 mt-lg-2">
+      <%= f.date_field :rf, min: Time.zone.now.in_time_zone('Bangkok').to_date+7.day, class: 'form-control' %>
+    </div>
+    <div class="col-4 col-lg-12 mt-lg-2">
+      <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
+    </div>
+  </div>
+<% end %>

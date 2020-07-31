@@ -3,7 +3,7 @@
 
 <h1><%= @house.send("title_#{I18n.locale}") %></h1>
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col-lg-8 mb-2">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <% @house.photos.count.times do |i| %>
@@ -33,30 +33,42 @@
     </div>
   </div>
   <div class="col-lg-4">
-    <p>
-      <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
-    </p>
-    <p>
-      <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
-    <br />
-      <%= @house.pool ? "#{t('houses.pool')}, " : '' %>
-      <%= @house.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
-      <%= @house.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
-      <%= @house.option('Internet') ? "#{t('houses.internet')}, " : '' %>
-      <%= @house.option('Kitchen') ? t('houses.kitchen') : '' %>
-
-    </p>
-    <p>
-      <%= simple_format @house.send("description_#{I18n.locale}") %>
-    </p>
+    <%= render 'search/form_vertical', search: @search %>
+    <% if @prices %>
+      <div class="row shadow-sm pt-3 pb-3 bg-white border rounded mt-2 d-flex align-items-center">
+        <div class="col-6 col-lg-12 text-center">
+          <h4><%= @search.rs.strftime('%d.%m.%Y') %> -
+          <%= @search.rf.strftime('%d.%m.%Y') %></h4>
+        </div>
+        <div class="col-2 col-lg-12 text-center">
+          <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>
+          <br />
+          <div><%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %></div>
+        </div>
+        <div class="col-4 col-lg-12 mt-2">
+          <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+        </div>
+      </div>
+    <% end %>
+    </div>
   </div>
 </div>
+<p>
+  <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
+</p>
+<p>
+  <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
+<br />
+  <%= @house.pool ? "#{t('houses.pool')}, " : '' %>
+  <%= @house.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
+  <%= @house.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
+  <%= @house.option('Internet') ? "#{t('houses.internet')}, " : '' %>
+  <%= @house.option('Kitchen') ? t('houses.kitchen') : '' %>
 
-
-
-
-
-
+</p>
+<p>
+  <%= simple_format @house.send("description_#{I18n.locale}") %>
+</p>
 <hr />
 <h6><%= t('houses.amenities') %></h6>
 <p>
@@ -97,24 +109,7 @@
 <p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
 <% end %>
 
-<% if @search %>
-  <div class="fixed-bottom p-4 bg-info text-white" id="booking_footer">
-    <div class="row">
-      <div class="col-6">
-        <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>&emsp;
-        <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
-        <div>
-          <%= @search.rs.strftime('%d.%m.%Y') %> -
-          <%= @search.rf.strftime('%d.%m.%Y') %>
-        </div>
-
-      </div>
-      <div class="col-6 text-right">
-        <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-primary', data: {toggle: "modal", target: "#makeBooking"} %>
-      </div>
-    </div>
-  </div>
-
+<% if @prices %>
   <!-- Modal -->
   <div class="modal fade" id="makeBooking" tabindex="-1" role="dialog" aria-labelledby="makeBookingLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

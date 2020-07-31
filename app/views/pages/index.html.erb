@@ -2,15 +2,10 @@
 
 <%= render 'search/form', search: @search %>
 
-
+<div class="row row-cols-3 mt-2">
 <% @houses.each_with_index do |h, i| %>
-  <% if i % 3 == 0  %>
-    <div class="row mt-2">
-  <% end %>
-    <div class="col-md-4 mb-2">
-      <%= render 'houses/preview', h: h, from_search: false %>
-    </div>
-  <% if (i+1) % 3 == 0 || h == @houses.last %>
-    </div>
-  <% end %>
+  <div class="col-md-4 mb-2">
+    <%= render 'houses/preview', h: h, from_search: false %>
+  </div>
 <% end %>
+</div>
