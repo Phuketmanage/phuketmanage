@@ -1,7 +1,7 @@
 <div class="d-print-none" id='statement_form'>
   <%= form_with do |form| %>
     <%= form.hidden_field :code, value: code(@owner), id: 'document_code' %>
-    <%= form.hidden_field :code, value: @usd, id: 'document_usd' %>
+    <%= form.hidden_field :usd, value: @usd, id: 'document_usd' %>
     <div class="field">
       <%= form.label :date %>
       <%= form.date_field :date, max: Time.zone.now.in_time_zone('Bangkok').to_date, id: 'document_date' %>
