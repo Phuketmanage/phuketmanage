@@ -33,20 +33,17 @@
     </div>
   </div>
   <div class="col-lg-4">
-    <%= render 'search/form_vertical', search: @search %>
+    <%= render 'search/form_vertical', search: @search, btn_text: t('search.check') %>
     <% if @prices %>
-      <div class="row shadow-sm pt-3 pb-3 bg-white border rounded mt-2 d-flex align-items-center">
-        <div class="col-6 col-lg-12 text-center">
-          <h4><%= @search.rs.strftime('%d.%m.%Y') %> -
-          <%= @search.rf.strftime('%d.%m.%Y') %></h4>
-        </div>
-        <div class="col-2 col-lg-12 text-center">
-          <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>
-          <br />
-          <div><%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %></div>
-        </div>
-        <div class="col-4 col-lg-12 mt-2">
-          <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+      <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
+        <div class="row d-flex align-items-center">
+          <div class="col-md-8 col-lg-12 mb-1 text-center">
+            <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>
+            <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+          </div>
+          <div class="col-md-4 col-lg-12">
+            <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+          </div>
         </div>
       </div>
     <% end %>

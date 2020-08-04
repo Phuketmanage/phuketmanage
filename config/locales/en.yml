@@ -15,6 +15,7 @@ en:
     title: Search property for rent
     rs: Start
     search: Search
+    check: Check price
     results: Search results
     rf_less_rs: End of stay can not be less then beginig
     in_the_past: Begining or End of period can not be in the past
