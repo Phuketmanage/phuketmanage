@@ -133,6 +133,7 @@ class BookingsController < ApplicationController
     @job_types_for_bookings = JobType.where.not(for_house_only: true, id: jt_fm).order(:name)
     @job_types_for_houses = JobType.where.not(id: jt_fm).order(for_house_only: :desc, name: :asc)
     @job = Job.new
+
   end
 
   def timeline_data
