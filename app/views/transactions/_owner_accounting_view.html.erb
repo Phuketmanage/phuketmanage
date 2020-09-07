@@ -67,7 +67,8 @@ Address:
       <% next if (cr_ow - de_co + de_ow ) == 0 %>
       <tr id="trsc_<%= t.id %>_row"
         <%= 'class=hidden_row style=display:none;' if t.hidden %>
-        <%= 'class=for_acc_row' if t.for_acc %>>
+        <%= 'class=for_acc_row' if t.for_acc %>
+        <%#= 'style=background-color:#FFC300' if t.for_acc %>>
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
         <td><small>
           <%= t.ref_no %></small></td>
