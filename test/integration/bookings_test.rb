@@ -126,6 +126,15 @@ class BookingsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
+    # Guest can create booking
+    rs = "15.11.#{year}".to_date
+    rf = "25.11.#{year}".to_date
+    get search_path params: { search: { rs: rs, rf: rf } }
+    assert_select 'div.duration', 'Total rental period: 10 days'
+    assert_select 'div.house', count: 3
+    assert_select 'div.house', 'Villa 1'
+    assert_select 'span.price', '฿40,000'
+
 
   end
 

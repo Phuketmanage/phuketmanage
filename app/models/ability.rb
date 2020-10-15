@@ -7,6 +7,7 @@ class Ability
     user ||= User.new                          # guest user
     can [:confirmed, :index_supplier, :canceled], Transfer
     can :show, House
+    can :create_front, Booking
     # can :about, Page
     if user.role? :owner
       can :index, [ Transaction ]
