@@ -92,8 +92,9 @@
     <div class="col-lg-2 form-group">
       <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
     </div>
-    <div class="col-lg-3 form-group">
+    <div class="col-lg-4 form-group">
       <%= f.submit 'Show', class: 'btn btn-primary' %>
+      <%= link_to 'Get job order', '#', class: 'btn btn-primary', id: 'get_job_oder'  %>
       <%= link_to 'Drop filter', bookings_timeline_path(period: 45), class: 'btn btn-secondary'  %>
     </div>
   </div>
@@ -133,3 +134,21 @@
 </div>
 
 <%= render 'jobs/form_modal', job: @job %>
+
+<div class="modal fade" id="ModalJobOrder" tabindex="-1" role="dialog" aria-labelledby="ModalJobOrderTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalJobOrderTitle">Job order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

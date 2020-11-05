@@ -56,6 +56,32 @@ class JobsController < ApplicationController
 
   end
 
+  def job_order
+    if !params[:from].present? || !params[:to].present?
+      #need to return error message
+    elsif params[:from].present? && params[:to].present?
+      from = params[:from].to_date
+      to = params[:to].to_date
+    end
+    jobs_raw = Job.where('plan >= ? AND plan <= ?', from, to).order(:plan, :time)
+    jobs = {}
+    date_old = ''
+    jobs_raw.each do |j|
+      date = j.plan.strftime('%d.%m.%Y')
+      if date != date_old
+        jobs[date] = []
+        # jobs[date]['date'] = date
+        # jobs[date]['jobs'] = []
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name}"]
+        date_old = date
+      else
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name}"]
+      end
+
+    end
+    render json: { jobs:  jobs }
+  end
+
   # GET /jobs/1
   # GET /jobs/1.json
   def show

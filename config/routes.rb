@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
   get 'laundry', to: 'jobs#laundry', as: 'laundry'
   patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'
+  get 'jobs/job_order', to: 'jobs#job_order', as: 'job_order'
   resources :jobs
   resources :job_types, except: :show
   post 'job_messages', to: 'job_messages#create'

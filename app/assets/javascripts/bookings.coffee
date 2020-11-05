@@ -223,6 +223,29 @@ $(document).on "turbolinks:load", ->
 
     $('[data-toggle="popover"]').popover({container: 'body'})
 
+    $('#get_job_oder').on 'click', (e) ->
+      e.preventDefault()
+      $.ajax
+        url: '/jobs/job_order',
+        type: "get",
+        dataType: "json",
+        data: {
+          from: $('#from').val(),
+          to: $('#to').val()
+        },
+        success: (data) ->
+          console.log('Get job order')
+          console.log data.jobs
+          $('#ModalJobOrder div.modal-body').html('')
+          for i, d of data.jobs
+            $('#ModalJobOrder div.modal-body').append("<strong>#{i}</strong><br />")
+            for j in d
+              $('#ModalJobOrder div.modal-body').append("#{j}<br />")
+          $('#ModalJobOrder').modal()
+
+        error: (data) ->
+          console.log('Job order - Something went wrong')
+
   $('#booking_files').on "click", "a[data-link-to-file]", (e) ->
     e.preventDefault()
     url = $(this).data('link-to-file')
