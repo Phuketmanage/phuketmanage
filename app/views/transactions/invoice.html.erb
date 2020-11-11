@@ -16,11 +16,12 @@
     </div>
     <div class="p-2">
       <% houses = @owner.houses %>
-      <% if houses.count > 1 %>
+            <% if houses.count > 1 %>
         <% code = @owner.code %>
       <% else %>
         <% code = houses.first.code.gsub(/\//,'-') %>
       <% end %>
+      <% code = @owner.code if @owner.code.present? %>
       <% date = @to.to_date %>
       <strong>Number:</strong> IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
       <strong>Date:</strong>  <%= @to.to_date.strftime('%d.%m.%Y') %>
