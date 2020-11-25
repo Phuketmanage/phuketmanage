@@ -63,7 +63,9 @@ class JobsController < ApplicationController
       from = params[:from].to_date
       to = params[:to].to_date
     end
-    jobs_raw = Job.where('plan >= ? AND plan <= ?', from, to).order(:plan, :time)
+    jobs_raw = Job.where.not(house_id: nil)
+                  .where('plan >= ? AND plan <= ?', from, to)
+                  .order(:plan, :time)
     jobs = {}
     date_old = ''
     jobs_raw.each do |j|
