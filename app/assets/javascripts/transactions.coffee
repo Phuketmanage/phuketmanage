@@ -294,6 +294,39 @@ $(document).on "turbolinks:load", ->
           else
             checkbox.prop('checked',true)
 
+  $('#transaction_comment_en').on "change", (e) ->
+    check_warnings($(this).attr('id'), $(this).val())
+  $('#transaction_comment_ru').on "change", (e) ->
+    check_warnings($(this).attr('id'), $(this).val())
+
+
+check_warnings = (field, text) ->
+  date = $('#transaction_date').val()
+  console.log date
+  console.log field
+  console.log text
+
+  if date != ""
+    $.ajax
+      url: "/transaction_warnings",
+      type: "get",
+      dataType: "json",
+      data: {
+        date: date,
+        field: field,
+        text: text
+      },
+      success: (data) ->
+        $("div[data-input-warning=#{data['field']}]").remove()
+        if data['warning'] != ""
+          div = $("<div/>", {
+            class: 'text-danger',
+            'data-input-warning': data['field'],
+            text: data['warning']})
+          $("##{data['field']}").parent().append div
+      error: (data) ->
+        console.log 'Can not check warnings'
+
 react_to_select_user_id = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)

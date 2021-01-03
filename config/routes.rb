@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   delete 'transaction_file_tmp', to: 'transaction_files#destroy_tmp'
   get 'transaction_file_toggle_show', to: 'transaction_files#toggle_show'
   get 'transaction_files', to: 'transaction_files#index'
+  get 'transaction_warnings', to: 'transactions#warnings'
   get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
   get 'laundry', to: 'jobs#laundry', as: 'laundry'
   patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'

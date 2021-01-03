@@ -3,6 +3,7 @@ class TransactionsController < ApplicationController
 
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   layout 'admin'
+  # after_action :check_warnings, only: [:create, :update]
 
   # GET /transactions
   # GET /transactions.json
@@ -331,7 +332,32 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def warnings
+    warning = ""
+    date = params[:date]
+    field = params[:field]
+    text = params[:text]
+    ts = Transaction.where('date= ? AND lower(comment_en) = ? ', date ,text.downcase) if field == "transaction_comment_en"
+    ts = Transaction.where('date= ? AND comment_ru ILIKE ? ', date , "%#{text}%") if field == "transaction_comment_ru"
+    # byebug
+    warning = "There is one more transaction with same name on this date" if ts.any?
+    render json: { field: field, warning: warning }
+  end
+
   private
+    # def check_warnings
+    #   # owner same day same text
+    #   lt = Transaction.last
+    #   ts = Transaction.where('date= ? AND (comment_en = ? OR comment_ru = ?)', lt.date ,lt.comment_en, lt.comment_ru)
+    #   @warnings = []
+    #   @warnings << ["Same day same name: #{lt.date} #{lt.comment_en} / #{lt.comment_ru}"] if ts.count > 1
+    #   #ts = Transaction.where(date: lt.date).joins(:balance_outs)
+    #   #  .where('balance_outs.debit': lt.balance_outs.)
+    #   # bs = ts.where(debit: lt.balance_outs.sum(:debit)
+    #   byebug
+    #   # self.warnings
+    # end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])

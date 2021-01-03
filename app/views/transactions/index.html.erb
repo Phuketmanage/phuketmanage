@@ -57,6 +57,14 @@
       <%= @error %>
     </div>
   <% else %>
+    <% if @warnings %>
+    <% @warnings.each do |w| %>
+      <div class="alert alert-warning warning" role="alert">
+        <%= w %>
+      </div>
+    <% end %>
+    <% end %>
+
     <% if @view == 'company' %>
       <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
     <% elsif @view == 'owner' %>

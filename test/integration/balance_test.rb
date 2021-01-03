@@ -611,4 +611,37 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#de_co_sum", "12 000,00"
     assert_select "#ow_balance", "18 000,00"
   end
+
+  test 'Test that get warnings' do
+    # Same amounts or text in same day
+    # 1st record
+    type = TransactionType.find_by(name_en: 'Repair')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Time.now.to_date,
+                                  type_id: type.id,
+                                  house_id: @house.id,
+                                  cr_ow: 500,
+                                  cr_co: 1000,
+                                  de_co: 700,
+                                  comment_en: 'Repair'} }
+    end
+    # 2nd record
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Time.now.to_date,
+                                  type_id: type.id,
+                                  house_id: @house.id,
+                                  cr_ow: 500,
+                                  cr_co: 1000,
+                                  de_co: 700,
+                                  comment_en: 'Repair'} }
+    end
+    follow_redirect!
+    assert_select ".warning", "Same day same name: #{Time.now.to_date} Repair / "
+  end
+
+
 end

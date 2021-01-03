@@ -1,4 +1,6 @@
 class Transaction < ApplicationRecord
+  # attr_accessor :warnings
+
   belongs_to :type, class_name: 'TransactionType'
   belongs_to :house, optional: true
   belongs_to :user, optional: true
@@ -8,8 +10,7 @@ class Transaction < ApplicationRecord
   has_many :transaction_files
   has_many :files, dependent: :destroy, foreign_key: 'trsc_id', class_name: 'TransactionFile'
   validates :date, :type, :comment_en, presence: true
-
-  # before_save :log
+  # after_save :check_warnings, on: [:create, :update]
 
   def write_to_balance (type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
@@ -87,6 +88,19 @@ class Transaction < ApplicationRecord
 
   # def log
   #   logger.info self.changes
+  # end
+
+  # def check_warnings
+  #   # owner same day same text
+  #   lt = Transaction.last
+  #   ts = Transaction.where('date= ? AND (comment_en = ? OR comment_ru = ?)', lt.date ,lt.comment_en, lt.comment_ru)
+  #   warnings = []
+  #   @warnings << ["Same day same name: #{lt.date} #{lt.comment_en} / #{lt.comment_ru}"] if ts.count > 1
+  #   #ts = Transaction.where(date: lt.date).joins(:balance_outs)
+  #   #  .where('balance_outs.debit': lt.balance_outs.)
+  #   # bs = ts.where(debit: lt.balance_outs.sum(:debit)
+  #   byebug
+  #   # self.warnings
   # end
 
 end
