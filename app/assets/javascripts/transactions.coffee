@@ -293,7 +293,7 @@ $(document).on "turbolinks:load", ->
             checkbox.prop('checked', false)
           else
             checkbox.prop('checked',true)
-
+  #Check warnings
   $('#transaction_comment_en').on "change", (e) ->
     check_warnings(
       "text",
@@ -309,7 +309,6 @@ $(document).on "turbolinks:load", ->
       $(this).attr('id'),
       $(this).val())
   $('#transaction_de_co').on "change", (e) ->
-    console.log parseInt($('#transaction_cr_co').val())
     if parseInt($('#transaction_cr_co').val()) > 0
       amount = parseInt($(this).val()) + parseInt($('#transaction_cr_co').val())
       is_sum = 'true'
