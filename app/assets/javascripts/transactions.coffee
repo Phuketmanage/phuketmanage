@@ -295,24 +295,67 @@ $(document).on "turbolinks:load", ->
             checkbox.prop('checked',true)
 
   $('#transaction_comment_en').on "change", (e) ->
-    check_warnings($(this).attr('id'), $(this).val())
+    check_warnings(
+      "text",
+      '',
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      $(this).val())
   $('#transaction_comment_ru').on "change", (e) ->
-    check_warnings($(this).attr('id'), $(this).val())
+    check_warnings(
+      "text",
+      '',
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      $(this).val())
+  $('#transaction_de_co').on "change", (e) ->
+    console.log parseInt($('#transaction_cr_co').val())
+    if parseInt($('#transaction_cr_co').val()) > 0
+      amount = parseInt($(this).val()) + parseInt($('#transaction_cr_co').val())
+      is_sum = 'true'
+    else
+      is_sum = ''
+      amount = $(this).val()
+    check_warnings(
+      "number",
+      is_sum,
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      amount)
+  $('#transaction_cr_co').on "change", (e) ->
+    check_warnings(
+      "number",
+      '',
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      $(this).val())
+  $('#transaction_de_ow').on "change", (e) ->
+    check_warnings(
+      "number",
+      '',
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      $(this).val())
+  $('#transaction_cr_ow').on "change", (e) ->
+    check_warnings(
+      "number",
+      '',
+      $("#transaction_user_id").children("option:selected").val(),
+      $(this).attr('id'),
+      $(this).val())
 
-
-check_warnings = (field, text) ->
+check_warnings = (type, is_sum, user_id, field, text) ->
   date = $('#transaction_date').val()
-  console.log date
-  console.log field
-  console.log text
-
   if date != ""
     $.ajax
       url: "/transaction_warnings",
       type: "get",
       dataType: "json",
       data: {
+        type: type
+        is_sum: is_sum
         date: date,
+        user_id: user_id
         field: field,
         text: text
       },

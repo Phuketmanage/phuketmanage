@@ -334,13 +334,35 @@ class TransactionsController < ApplicationController
 
   def warnings
     warning = ""
+    type = params[:type]
+    is_sum = params[:is_sum]
     date = params[:date]
+    user_id = params[:user_id]
     field = params[:field]
     text = params[:text]
-    ts = Transaction.where('date= ? AND lower(comment_en) = ? ', date ,text.downcase) if field == "transaction_comment_en"
-    ts = Transaction.where('date= ? AND comment_ru ILIKE ? ', date , "%#{text}%") if field == "transaction_comment_ru"
-    # byebug
-    warning = "There is one more transaction with same name on this date" if ts.any?
+    if type == "text"
+      if !user_id.present?
+        ts = Transaction.where('date = ? AND user_id IS NULL AND comment_en ILIKE ? ', date, "%#{text}%") if field == "transaction_comment_en"
+        ts = Transaction.where('date = ? AND user_id IS NULL AND comment_ru ILIKE ? ', date, "%#{text}%") if field == "transaction_comment_ru"
+      else
+        ts = Transaction.where('date = ? AND user_id = ? AND comment_en ILIKE ? ', date, user_id, "%#{text}%") if field == "transaction_comment_en"
+        ts = Transaction.where('date = ? AND user_id = ? AND comment_ru ILIKE ? ', date, user_id, "%#{text}%") if field == "transaction_comment_ru"
+      end
+      warning = "There is one more transaction with simillar name on this date" if !ts.nil? && ts.any?
+    elsif type == "number"
+      if !user_id.present?
+        ts = Transaction.where('date = ?', date).joins(:balances).where('balances.credit = ?', text) if field == "transaction_cr_co"
+      else
+        ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.debit = ?', text) if field == "transaction_de_ow"
+        ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.credit = ?', text) if field == "transaction_cr_ow"
+        ts = Transaction.where('date = ?', date).joins(:balances).where('balances.debit = ?', text) if field == "transaction_de_co"
+      end
+      if is_sum == 'true'
+        warning = "There is one more transaction with same cr_co+de_co on this date" if !ts.nil? && ts.any?
+      else
+        warning = "There is one more transaction with same amount on this date" if !ts.nil? && ts.any?
+      end
+    end
     render json: { field: field, warning: warning }
   end
 

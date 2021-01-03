@@ -613,7 +613,63 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   end
 
   test 'Test that get warnings' do
-    # Same amounts or text in same day
+    # For company
+    # 1st record
+    type = TransactionType.find_by(name_en: 'Salary')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+                                transaction: {
+                                  date: Time.now.to_date,
+                                  type_id: type.id,
+                                  cr_co: 35000,
+                                  comment_en: 'Salary'} }
+    end
+    # 2nd record catch comment_en
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: "",
+                                      field: 'transaction_comment_en',
+                                      text: "salary" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with simillar name on this date", warning['warning']
+
+    # 2nd record pass comment_en
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: "",
+                                      field: 'transaction_comment_en',
+                                      text: "Different text" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+
+    # 2nd record catch cr_co
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: "",
+                                      field: 'transaction_cr_co',
+                                      text: "35000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with same amount on this date", warning['warning']
+
+    # 2nd record pass cr_co
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: "",
+                                      field: 'transaction_cr_co',
+                                      text: "5000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+
+
+    # For owner
     # 1st record
     type = TransactionType.find_by(name_en: 'Repair')
     assert_difference('Transaction.count', 1) do
@@ -625,22 +681,162 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                   cr_ow: 500,
                                   cr_co: 1000,
                                   de_co: 700,
-                                  comment_en: 'Repair'} }
+                                  comment_en: 'Door',
+                                  comment_ru: 'Дверь'} }
     end
-    # 2nd record
+    user_id = @house.owner_id
+    # 2nd record catch for comment_en
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_comment_en',
+                                      text: "door" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with simillar name on this date", warning['warning']
+    # 2nd record pass for comment_en
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_comment_en',
+                                      text: "door 1" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+    # 2nd record catch for comment_ru
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_comment_ru',
+                                      text: "Дверь" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with simillar name on this date", warning['warning']
+    # 2nd record pass for comment_ru
+    get transaction_warnings_path,  params: {
+                                      type: 'text',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_comment_ru',
+                                      text: "Дверь 1" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+    # 2nd record catch for cr_co+de_co
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      is_sum: 'true',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_co',
+                                      text: "1700" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with same cr_co+de_co on this date", warning['warning']
+    # 2nd record pass for cr_co+de_co
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      is_sum: 'true',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_co',
+                                      text: "170" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+
+
+
+    # 1st record Rental
+    type = TransactionType.find_by(name_en: 'Rental')
+    post transactions_path, params: {
+                              transaction: {
+                                date: Time.now.to_date,
+                                type_id: type.id,
+                                booking_id: @booking.id,
+                                de_ow: 100000,
+                                de_co: 20000,
+                                booking_fully_paid: true,
+                                comment_en: 'Rental'} }
+
+    user_id = @booking.house.owner_id
+    # 2nd record rental de_ow catch
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_ow',
+                                      text: "100000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with same amount on this date", warning['warning']
+    # 2nd record rental de_ow pass
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_ow',
+                                      text: "1000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+    # 2nd record rental de_co catch
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_co',
+                                      text: "20000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with same amount on this date", warning['warning']
+    # 2nd record rental de_co pass
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_de_co',
+                                      text: "2000" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+
+    # 1st record Utilities
+    type = TransactionType.find_by(name_en: 'Utilities')
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
                                 transaction: {
                                   date: Time.now.to_date,
                                   type_id: type.id,
                                   house_id: @house.id,
-                                  cr_ow: 500,
-                                  cr_co: 1000,
-                                  de_co: 700,
-                                  comment_en: 'Repair'} }
+                                  cr_ow: 3500,
+                                  comment_en: 'Electricity 08.2019'} }
     end
-    follow_redirect!
-    assert_select ".warning", "Same day same name: #{Time.now.to_date} Repair / "
+    # 2nd record rental cr_ow catch
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_cr_ow',
+                                      text: "3500" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "There is one more transaction with same amount on this date", warning['warning']
+    # 2nd record rental cr_ow pass
+    get transaction_warnings_path,  params: {
+                                      type: 'number',
+                                      date: Time.now.to_date,
+                                      user_id: user_id,
+                                      field: 'transaction_cr_ow',
+                                      text: "350" },
+                                    xhr: true
+    warning = JSON.parse(@response.body)
+    assert_equal "", warning['warning']
+
+
   end
 
 
