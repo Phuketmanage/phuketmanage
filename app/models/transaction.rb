@@ -45,7 +45,7 @@ class Transaction < ApplicationRecord
       balance_outs.create!(debit: de_ow, credit: 0)
     elsif types4.include?(type)
       errors.add(:base, 'Need to select house') and return if user_id.nil?
-      errors.add(:base, 'Need to select house') and return if house_id.nil?
+      # errors.add(:base, 'Need to select house') and return if house_id.nil?
       errors.add(:base, 'Amount can not be blank') and return if cr_ow == 0 && cr_co == 0 && de_co == 0
       balance_outs.create!(debit: 0, credit: cr_ow) if cr_ow > 0
       balance_outs.create!(debit: 0, credit: cr_co + de_co) if cr_co + de_co > 0
