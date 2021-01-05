@@ -20,8 +20,8 @@
       <% end %>
     </div>
     <div class="col-md-2" id='house_id', style='display:none;'>
-      <% if params[:user_id].present? %>
-        <% choices_for_select = House.where(owner_id: params[:user_id]).all.order(:code).map {|h| [h.code, h.id]} %>
+      <% if @transaction.user_id.present? %>
+        <% choices_for_select = House.where(owner_id: @transaction.user_id).all.order(:code).map {|h| [h.code, h.id]} %>
       <% else %>
         <% choices_for_select = House.all.order(:code).map {|h| [h.code, h.id]} %>
       <% end %>

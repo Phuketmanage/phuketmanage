@@ -206,6 +206,16 @@ class TransactionsController < ApplicationController
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully created.' }
       else
+        @de_ow = params[:transaction][:de_ow].to_d
+        @cr_ow = params[:transaction][:cr_ow].to_d
+        @de_co = params[:transaction][:de_co].to_d
+        @cr_co = params[:transaction][:cr_co].to_d
+        @bookings = []
+        @s3_direct_post = S3_BUCKET.presigned_post(
+          key: "transactions/${filename}",
+          success_action_status: '201',
+          acl: 'public-read',
+          content_type_starts_with: "")
         if params[:user_id].present?
           owner = User.find(params[:user_id])
           @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
@@ -226,7 +236,9 @@ class TransactionsController < ApplicationController
 
       state_before = @transaction
       if @transaction.update(transaction_params)
+        byebug
         @transaction.set_owner_and_house
+        byebug
         @transaction.save
         de_ow = params[:transaction][:de_ow].to_d
         cr_ow = params[:transaction][:cr_ow].to_d
@@ -252,10 +264,16 @@ class TransactionsController < ApplicationController
           @de_co = @transaction.balances.sum(:debit)
           @cr_co = @transaction.balances.sum(:credit)
           @bookings = []
+          @s3_direct_post = S3_BUCKET.presigned_post(
+            key: "transactions/${filename}",
+            success_action_status: '201',
+            acl: 'public-read',
+            content_type_starts_with: "")
           if @transaction.user
             owner = @transaction.user
             @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
           end
+
           render :edit and return
         end
 

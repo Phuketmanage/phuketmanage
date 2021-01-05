@@ -64,9 +64,9 @@ $(document).on "turbolinks:load", ->
   $('#trsc_type').on 'change', ->
     react_to_select_trsc_type($(this).children('option:selected').text(), false)
 
-  $('#transaction_house_id').on 'change', ->
-    $('#transaction_user_id option:selected').removeAttr('selected')
-    $('#transaction_user_id').val('')
+  # $('#transaction_house_id').on 'change', ->
+    # $('#transaction_user_id option:selected').removeAttr('selected')
+    # $('#transaction_user_id').val('')
 
   $('#transaction_user_id').on 'change', ->
     $('#transaction_house_id option:selected').removeAttr('selected')
@@ -383,8 +383,8 @@ react_to_select_trsc_type = (selected, init) ->
     $('.money_fields').hide()
     if selected == 'Rental'
       if init == false
-        $("#transaction_cr_ow").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_cr_ow").val('')
+        $("#transaction_cr_co").val('')
       $("#booking_id").show()
       $("#de_ow_label").text('Received')
       $("#de_ow").show()
@@ -398,9 +398,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if selected == 'Top up'
       if init == false
-        $("#transaction_cr_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_cr_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").hide()
@@ -412,9 +412,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if selected == 'Maintenance'
       if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_de_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
       $("#cr_ow_label").text('Owner paid')
       $("#cr_ow").show()
       $("#de_co_label").text('To Phaethon')
@@ -428,9 +428,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if selected == 'Laundry'
       if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_de_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
       $("#cr_ow_label").text('Pay to outside')
       $("#cr_ow").show()
       $("#de_co_label").text('Pay to Phaethon')
@@ -444,7 +444,7 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if jQuery.inArray(selected, ['Repair','Purchases', 'Consumables', 'Improvements']) != -1
       if init == false
-        $("#transaction_de_ow").val(0)
+        $("#transaction_de_ow").val('')
       if $('input[name="_method"]').val() == 'patch'
         cr_ow = $("#transaction_cr_ow").val() - $("#transaction_de_co").val()
         de_co = $("#transaction_de_co").val() - $("#transaction_cr_co").val()
@@ -462,9 +462,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if selected == 'From guests' #House required
       if init == false
-        $("#transaction_cr_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_cr_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
       $("#house_id").show()
@@ -476,9 +476,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if jQuery.inArray(selected, ['Utilities', 'Yearly contracts','Insurance','To owner','Common area', 'Transfer']) != -1
       if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_de_co").val(0)
-        $("#transaction_cr_co").val(0)
+        $("#transaction_de_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
       $("#cr_ow_label").text('Amount')
       $("#cr_ow").show()
       $("#house_id").show()
@@ -490,9 +490,9 @@ react_to_select_trsc_type = (selected, init) ->
       $("#comment_inner").show()
     if jQuery.inArray(selected, ['Salary','Gasoline','Office','Suppliers','Eqp & Cons', 'Taxes & Accounting', 'Eqp maintenance', 'Materials']) != -1
       if init == false
-        $("#transaction_de_ow").val(0)
-        $("#transaction_cr_ow").val(0)
-        $("#transaction_de_co").val(0)
+        $("#transaction_de_ow").val('')
+        $("#transaction_cr_ow").val('')
+        $("#transaction_de_co").val('')
       $("#transaction_user_id").val([])
       $("#comment_ru").hide()
       $("#comment_inner").hide()
