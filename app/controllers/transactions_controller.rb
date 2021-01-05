@@ -233,12 +233,9 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1.json
   def update
     respond_to do |format|
-
       state_before = @transaction
       if @transaction.update(transaction_params)
-        byebug
         @transaction.set_owner_and_house
-        byebug
         @transaction.save
         de_ow = params[:transaction][:de_ow].to_d
         cr_ow = params[:transaction][:cr_ow].to_d
