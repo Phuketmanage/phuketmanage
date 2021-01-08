@@ -412,7 +412,8 @@ class TransactionsController < ApplicationController
                                           :comment_ru,
                                           :comment_inner,
                                           :hidden,
-                                          :for_acc)
+                                          :for_acc,
+                                          :incomplite)
     end
 
 end
