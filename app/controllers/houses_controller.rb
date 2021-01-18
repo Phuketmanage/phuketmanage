@@ -11,7 +11,7 @@ class HousesController < ApplicationController
     @houses = House.all.order(:unavailable, :code)
     respond_to do |format|
       format.html
-      format.json {render json: {houses: @houses}}
+      format.json {render json: @houses, only: [:id, :code]}
     end
   end
 
