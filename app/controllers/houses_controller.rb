@@ -9,6 +9,10 @@ class HousesController < ApplicationController
   # GET /houses.json
   def index
     @houses = House.all.order(:unavailable, :code)
+    respond_to do |format|
+      format.html
+      format.json {render json: @houses}
+    end
   end
 
   def test_upload
