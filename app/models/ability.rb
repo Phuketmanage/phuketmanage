@@ -64,6 +64,7 @@ class Ability
       end
       can :manage, TransactionFile
       # can [ :statement, :reimbersment ], Document
+      can [:index, :create, :update], WaterUsage
     elsif user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
