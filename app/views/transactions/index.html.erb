@@ -21,8 +21,10 @@
     <%= 'company view' if @view == 'company' %>
     <%= 'owner view' if @view == 'owner' %>
     <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
-    <% owner = User.find(params[:view_user_id]) %>
-    (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)
+    <% if params[:view_user_id].present? %>
+      <% owner = User.find(params[:view_user_id]) %>
+      (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)
+    <% end %>
   </h1>
 
   <div class="mb-2 d-print-none">
