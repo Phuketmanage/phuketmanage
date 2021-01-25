@@ -1,6 +1,7 @@
 <div class="d-none d-print-block">
 <% owner = User.find(params[:view_user_id]) %>
-Balance of: <%= "#{owner.name} #{owner.surname}" %><br />
+Balance of: <%= "#{owner.name} #{owner.surname}" %>
+<br />
 Address:
 <% owner.houses.each do |h| %>
   - <%= h.address %><br />
