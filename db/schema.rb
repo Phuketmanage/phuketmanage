@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_08_075828) do
+ActiveRecord::Schema.define(version: 2021_02_20_075702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -416,6 +416,8 @@ ActiveRecord::Schema.define(version: 2021_01_08_075828) do
     t.boolean "hidden", default: false
     t.boolean "for_acc", default: false
     t.boolean "incomplite", default: false, null: false
+    t.boolean "cash", default: false, null: false
+    t.boolean "transfer", default: false, null: false
     t.index ["booking_id"], name: "index_transactions_on_booking_id"
     t.index ["house_id"], name: "index_transactions_on_house_id"
     t.index ["type_id"], name: "index_transactions_on_type_id"

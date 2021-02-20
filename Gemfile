@@ -38,7 +38,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'cancancan'
 gem 'devise_invitable', '~> 2.0.0'
-gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap', '~> 5.0.0.beta1'
 gem 'jquery-rails'
 gem 'flag-icons-rails'
 gem 'icalendar'
