@@ -117,7 +117,7 @@
           </td>
           <td class="font-weight-bold text-right">
             <span id='doc_total_thb'>
-              <%= @t.balance_outs.sum(:debit) %>
+              <%= number_to_currency(@t.balance_outs.sum(:debit).round(2), precision: 2, unit: '') %>
             </span>
           </td>
         </tr>
