@@ -80,7 +80,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.7.2)
       msgpack (~> 1.0)
-    bootstrap (5.0.0.beta1)
+    bootstrap (4.6.0)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
@@ -277,7 +277,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3 (~> 1.0.0.rc2)
   bootsnap (>= 1.1.0)
-  bootstrap (~> 5.0.0.beta1)
+  bootstrap (~> 4.6.0)
   byebug
   cancancan
   capybara (>= 2.15)
