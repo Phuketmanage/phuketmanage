@@ -26,13 +26,26 @@
   </div>
 
 
+
   <div class='row'>
     <div class="col-md-6 form-group">
       <%= form.label :client_details %>
       <%= form.text_field :client_details, placeholder: 'Name Surname, pax, phone, email', class: 'form-control' %>
     </div>
   </div>
+  <% if controller.action_name == 'new' %>
+    <div class="row">
+      <div class="col">
+        <div class="form-check">
+          <%= form.check_box :manual_price, { class: 'form-check-input',
+                                  id: 'manual_price_check_box' } %>
+          <%= form.label "Manual initial price", {     class: 'form-check-label',
+                                  for: 'manual_price_check_box' } %>
 
+        </div>
+      </div>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col-md-2 form-group">
       <%= form.label :sale %>

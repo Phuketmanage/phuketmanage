@@ -205,8 +205,10 @@ class BookingsController < ApplicationController
     if @booking.block?
       @booking.sale = @booking.agent = @booking.comm = @booking.nett = 0
     else
-      prices = search.get_prices [@booking.house]
-      @booking.calc prices
+      if @booking.manual_price != '1'
+        prices = search.get_prices [@booking.house]
+        @booking.calc prices
+      end
     end
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
@@ -369,7 +371,8 @@ class BookingsController < ApplicationController
                                       :check_in,
                                       :check_out,
                                       :paid,
-                                      :ignore_warnings )
+                                      :ignore_warnings,
+                                      :manual_price )
     end
 
 

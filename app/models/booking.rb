@@ -1,4 +1,6 @@
 class Booking < ApplicationRecord
+  attr_accessor :manual_price
+  # attr_accessible :manual_price
 
   enum status:  {
     temporary: 0,
