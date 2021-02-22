@@ -157,7 +157,7 @@ class BookingsController < ApplicationController
   # GET /bookings/new
   def new
     @booking = Booking.new
-    @houses = House.all
+    @houses = House.where(unavailable: false).order(:code).map {|h| [h.code, h.id]}
     if params[:hid]
       @booking.house = @houses.find_by(number: params[:hid])
     end
@@ -166,7 +166,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/edit
   def edit
-    @houses = House.all
+    @houses = House.all.order(:code).map {|h| [h.code, h.id]}
     @tenants = User.with_role('Tenant')
     search = Search.new({rs: @booking.start, rf: @booking.finish})
     @booking_original = nil
@@ -190,17 +190,15 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
-    # byebug
     search = Search.new( rs: params[:booking][:start],
                           rf: params[:booking][:finish],
                           dtnb: 0)
     answer = search.is_house_available? @booking.house_id
-    # byebug
     if !answer[:result]
       if controller_name == 'houses'
       end
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
-      @houses = House.all
+      @houses = House.all.order(:code).map {|h| [h.code, h.id]}
       # @tenants = User.with_role('Tenant')
       render :new and return
     end
@@ -272,7 +270,7 @@ class BookingsController < ApplicationController
     answer = search.is_house_available? house_id, @booking.id
     if !answer[:result]
       @booking.errors.add(:base, "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
-      @houses = House.all
+      @houses = House.all.order(:code).map {|h| [h.code, h.id]}
       @tenants = User.with_role('Tenant')
       @booking_original = @booking.dup
       prices = search.get_prices [@booking.house]
@@ -300,7 +298,7 @@ class BookingsController < ApplicationController
         format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
-        @houses = House.all
+        @houses = House.all.order(:code).map {|h| [h.code, h.id]}
         @tenants = User.with_role('Tenant')
         @booking_original = @booking.dup
         search = Search.new({rs: @booking.start, rf: @booking.finish})
