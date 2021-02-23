@@ -63,7 +63,11 @@ class JobsController < ApplicationController
       from = params[:from].to_date
       to = params[:to].to_date
     end
+    hidden_houses = params[:hidden_houses].split(',').reject(&:empty?)
+    hidden_houses2 = House.where(house_group_id: params[:hidden_groups]).ids
+    hidden_houses = (hidden_houses+hidden_houses2).uniq
     jobs_raw = Job.where.not(house_id: nil)
+                  .where.not(house_id: hidden_houses)
                   .where('plan >= ? AND plan <= ?', from, to)
                   .order(:plan, :time)
     jobs = {}

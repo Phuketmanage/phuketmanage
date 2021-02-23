@@ -39,13 +39,16 @@ $(document).on "turbolinks:load", ->
     $('a.hide_house').on 'click', (e) ->
       e.preventDefault()
       house_id = $(this).data('house-id')
-      console.log house_id
       $("div.house_code[data-house-id=#{house_id}]").hide()
       $("div.house_line[data-house-id=#{house_id}]").hide()
+      $('#hidden_houses').val($('#hidden_houses').val()+','+house_id)
     $('a#show_all_houses').on 'click', (e) ->
       e.preventDefault()
       $("div.house_code").show()
       $("div.house_line").show()
+      $('input[data-group-id]').each ->
+        $(this).prop('checked', false)
+
     $("input[type='checkbox'][data-group-id]").on 'change', ->
       group_id = $(this).data('group-id')
       if this.checked == true
@@ -54,7 +57,6 @@ $(document).on "turbolinks:load", ->
       if this.checked == false
         $("div.house_code[data-house-group-id=#{group_id}]").show()
         $("div.house_line[data-house-group-id=#{group_id}]").show()
-
 
     $.ajax
       url: '/bookings/timeline_data',
@@ -90,13 +92,14 @@ $(document).on "turbolinks:load", ->
         $('.dropdown').addClass('dropup')
       if $(this).hasClass('booked')
         $('select#job_booking_id').val($(this).data('booking-id'))
-        $('select#job_house_id').val("")
+        # $('select#job_house_id').val("")
+        $('select#job_house_id').val($(this).data('house-id'))
         $('select#job_house_id').attr('disabled', true)
         $('select#job_booking_id').removeAttr('disabled')
         $('.dropdown_menu_for_booking').show()
       else
-        $('select#job_house_id').val($(this).data('house-id'))
         $('select#job_booking_id').val("")
+        $('select#job_house_id').val($(this).data('house-id'))
         $('select#job_house_id').removeAttr('disabled')
         $('select#job_booking_id').attr('disabled', true)
         $('.dropdown_menu_for_booking').hide()
@@ -225,26 +228,37 @@ $(document).on "turbolinks:load", ->
 
     $('#get_job_oder').on 'click', (e) ->
       e.preventDefault()
+      hidden_groups = []
+      $('input[data-group-id]').each ->
+        if $(this).is(':checked')
+          hidden_groups.push $(this).data('group-id')
       $.ajax
         url: '/jobs/job_order',
         type: "get",
         dataType: "json",
         data: {
           from: $('#from').val(),
-          to: $('#to').val()
+          to: $('#to').val(),
+          hidden_houses: $('#hidden_houses').val(),
+          hidden_groups: hidden_groups
         },
         success: (data) ->
           console.log('Get job order')
-          console.log data.jobs
+          # console.log data.jobs
           $('#ModalJobOrder div.modal-body').html('')
           for i, d of data.jobs
             $('#ModalJobOrder div.modal-body').append("<strong>#{i}</strong><br />")
             for j in d
               $('#ModalJobOrder div.modal-body').append("#{j}<br />")
           $('#ModalJobOrder').modal()
-
         error: (data) ->
           console.log('Job order - Something went wrong')
+
+    $('input#from').on 'change', (e) ->
+      $('input#to').attr('min', $(this).val())
+
+    $('input#to').on 'change', (e) ->
+      $('input#from').attr('max', $(this).val())
 
   $('#booking_files').on "click", "a[data-link-to-file]", (e) ->
     e.preventDefault()

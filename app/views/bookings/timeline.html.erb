@@ -30,6 +30,7 @@
   <% end %>
 
   <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
+  <%= hidden_field_tag 'hidden_houses', nil, id: 'hidden_houses' %>
 <% end %>
 
 <div class="timeline" id="timeline">
@@ -84,7 +85,7 @@
 </div>
 
 <div class='mt-2'>
-<%= form_with(url: bookings_timeline_path, local: true, method: :get) do |f| %>
+<%= form_with(url: bookings_timeline_path, local: true, method: :get, id: 'timeline_form') do |f| %>
   <div class="form-row">
     <div class="col-lg-2 form-group">
       <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
