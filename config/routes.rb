@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
+  get 'bookings/get_price', to: 'bookings#get_price'
   post 'booking/new', to: 'bookings#create_front'
   get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
   get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'

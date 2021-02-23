@@ -337,6 +337,17 @@ class BookingsController < ApplicationController
     end
   end
 
+  def get_price
+    booking = Booking.new
+    search = Search.new( rs: params[:start],
+                          rf: params[:finish],
+                          dtnb: 0)
+    booking.house = House.find(params[:house_id])
+    prices = search.get_prices [ booking.house ]
+    booking.calc prices
+    render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_booking

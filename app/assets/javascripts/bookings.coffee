@@ -263,8 +263,12 @@ $(document).on "turbolinks:load", ->
     e.preventDefault()
     printJS("https:#{$(this).data('print')}", $(this).data('type'))
 
-
-
+  $('#booking_start').on 'change', (e) ->
+    check_price()
+  $('#booking_finish').on 'change', (e) ->
+    check_price()
+  $('#booking_house_id').on 'change', (e) ->
+    check_price()
 
 close_dates = (h) ->
   for b in h.bookings
@@ -309,7 +313,29 @@ get_employees = (job_type_id, house_id) ->
         $('select#job_employee_id').val(data[0].id)
       if Object.keys(data).length > 1
         $('#new_job div.job_employee').show()
-      console.log 'Employee list loaded'
+      # console.log 'Employee list loaded'
     error: (data) ->
       console.log('Was not able to read employees list')
+
+check_price = ()->
+  start = $('#booking_start').val()
+  finish = $('#booking_finish').val()
+  house_id = $('#booking_house_id').val()
+  if start != '' && finish != '' && house_id != '' &&
+  !$('#manual_price_check_box').is(':checked')
+    $.ajax
+      url: '/bookings/get_price',
+      type: "get",
+      dataType: "json",
+      data: { start: start, finish: finish, house_id: house_id },
+      success: (data) ->
+        $('#booking_sale').val(data['sale'])
+        $('#booking_agent').val(0)
+        $('#booking_comm').val(data['comm'])
+        $('#booking_nett').val(data['nett'])
+        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale'])*100)
+        $('#comm_percent').text(comm_percent)
+      error: (data) ->
+        console.log('Was not able to get price for this period')
+
 
