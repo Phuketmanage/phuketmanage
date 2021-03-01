@@ -163,7 +163,7 @@ class Booking < ApplicationRecord
       # Get jobs for house
       jt_fm = JobType.find_by(name: 'For management').id
       # jobs = h.jobs
-      jobs = h.jobs.where.not(job_type_id: jt_fm)
+      jobs = h.jobs.where.not(job_type_id: jt_fm).where(booking_id: nil)
       house[:jobs] = []
       jobs.each do |j|
         job = {}
