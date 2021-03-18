@@ -9,8 +9,7 @@ class WaterUsagesController < ApplicationController
   # GET /water_usages.json
   def index
     if params[:house_id].present?
-      @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).last(30)
-
+      @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).first(30)
     else
       @water_usages = WaterUsage.all
       @house_groups = HouseGroup.all

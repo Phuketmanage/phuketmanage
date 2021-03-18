@@ -25,9 +25,8 @@
           <%= h.water_usages.any? ?
             "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
           <%= h.water_usages.any? && h.water_meters.present? && h.water_meters == 2 ? "/ #{h.water_usages.last.amount_2}" : '' %>
-          <%= link_to 'History', water_usages_path(house_id: h.id) %>
+          <%= link_to 'History', water_usages_path(house_id: h.id) if current_user.role?(['Admin', 'Manager']) %>
           <span class='status badge' data-hid="<%= h.id %>"></span>
-
           <div class="form-row">
             <div class="col-3">
               <%= f.number_field :amount, class: 'form-control',
