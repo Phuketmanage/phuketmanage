@@ -8,16 +8,22 @@ class WaterUsagesController < ApplicationController
   # GET /water_usages
   # GET /water_usages.json
   def index
-    @water_usages = WaterUsage.all
-    @house_groups = HouseGroup.all
-    @houses = House.where(water_reading: true).order(:house_group_id, :code).all
-    @water_usage = WaterUsage.new
+    if params[:house_id].present?
+      @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).last(30)
+
+    else
+      @water_usages = WaterUsage.all
+      @house_groups = HouseGroup.all
+      @houses = House.where(water_reading: true).order(:house_group_id, :code).all
+      @water_usage = WaterUsage.new
+    end
+
   end
 
   # GET /water_usages/1
   # GET /water_usages/1.json
-  # def show
-  # end
+  def show
+  end
 
   # GET /water_usages/new
   # def new
@@ -51,7 +57,7 @@ class WaterUsagesController < ApplicationController
   def update
     respond_to do |format|
       if @water_usage.update(water_usage_params)
-        format.html { redirect_to @water_usage, notice: 'Water usage was successfully updated.' }
+        format.html { redirect_to water_usages_path(house_id: @water_usage.house_id), notice: 'Water usage was successfully updated.' }
         format.json { render :show, status: :ok, location: @water_usage }
       else
         format.html { render :edit }

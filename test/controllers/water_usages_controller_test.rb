@@ -36,7 +36,7 @@ class WaterUsagesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update water_usage" do
     patch water_usage_url(@water_usage), params: { water_usage: { amount: @water_usage.amount, date: @water_usage.date, house_id: @water_usage.house_id } }
-    assert_redirected_to water_usage_url(@water_usage)
+    assert_redirected_to water_usages_url(house_id: @water_usage.house_id)
   end
 
   test "should destroy water_usage" do
