@@ -23,7 +23,7 @@
       <% if @transaction.user_id.present? %>
         <% choices_for_select = House.where(owner_id: @transaction.user_id).all.order(:code).map {|h| [h.code, h.id]} %>
       <% else %>
-        <% choices_for_select = House.all.order(:code).map {|h| [h.code, h.id]} %>
+        <% choices_for_select = House.where.not(balance_closed: true).all.order(:code).map {|h| [h.code, h.id]} %>
       <% end %>
       <%= form.label :house_id %>
       <%= form.select :house_id, choices_for_select,

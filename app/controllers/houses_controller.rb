@@ -8,7 +8,8 @@ class HousesController < ApplicationController
   # GET /houses
   # GET /houses.json
   def index
-    @houses = House.all.order(:unavailable, :code)
+    @houses = House.where.not(balance_closed: true).all.order(:unavailable, :code)
+    @houses_old = House.where(balance_closed: true).all.order(:unavailable, :code)
     # respond_to do |format|
     #   format.html
       # format.json {render json: {houses: @houses}}
@@ -171,7 +172,8 @@ class HousesController < ApplicationController
                                     :details,
                                     :house_group_id,
                                     :water_meters,
-                                    :water_reading
+                                    :water_reading,
+                                    :balance_closed
                                     )
     end
 

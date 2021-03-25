@@ -22,3 +22,26 @@
     </div>
   </div>
 <% end %>
+
+<h3>Houses with closed balance</h3>
+
+<% @houses_old.each do |house| %>
+  <div class='shadow-sm mb-2 p-2 border rounded bg-light text-muted'>
+    <div class="row">
+      <div class="col-md-2"><strong><%= house.code %></strong></div>
+      <div class="col-md-10">
+        Name: <%= house.title_en %><br />
+        Address: <%= house.address %><br />
+        Owner: <%= "#{house.owner.name} #{house.owner.surname}" %>
+      </div>
+    </div>
+    <div class="text-right">
+      <%= link_to 'Balance', transactions_path(view_user_id: house.owner.id) %> |
+      <%= link_to 'Bookings', house_bookings_path(house.number) %> |
+      <%= link_to 'Details', edit_house_path(house.number) %> |
+      <%= link_to 'Prices', house_prices_path(house.number) %> |
+      <%= link_to 'Photos', house_photos_path(house.number) %> |
+      <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+    </div>
+  </div>
+<% end %>

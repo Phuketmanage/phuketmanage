@@ -299,6 +299,13 @@
       <%= form.label 'Not for rent', {     class: 'form-check-label',
                               for: 'unavailable_check_box' } %>
     </div>
+    <div class="form-check mb-2">
+      <%= form.check_box :balance_closed, { class: 'form-check-input',
+                              id: 'balance_closed_check_box' } %>
+      <%= form.label 'Balance is closed', {     class: 'form-check-label',
+                              for: 'balance_closed_check_box' } %>
+    </div>
+
     <div class="form-group">
       <%= form.label :water_meters, 'Water meters qty' %>
       <%= form.number_field :water_meters, min: 1, max: 2, class: 'form-control' %>
