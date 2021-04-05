@@ -248,6 +248,7 @@ class BookingsController < ApplicationController
     @booking.number = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     @booking.save
+    BookingMailer.created(@booking).deliver_now
   end
 
   def sync
