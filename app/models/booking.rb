@@ -117,7 +117,8 @@ class Booking < ApplicationRecord
     timeline[:start] = from
     timeline[:days] = days
     timeline[:houses] = []
-    houses = House.order(:unavailable, :house_group_id, :code)
+    # houses = House.order(:unavailable, :house_group_id, :code)
+    houses = House.where.not(balance_closed: true).order(:unavailable, :house_group_id, :code)
     y = 1
     houses.each do |h|
       # Get bookings for house
