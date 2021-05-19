@@ -119,8 +119,8 @@ ru:
   activemodel:
     attributes:
       search:
-        rs: Начало
-        rf: Окончание
+        rs: Заезд
+        rf: Выезд
   date:
     order: [ !ruby/symbol day, !ruby/symbol month, !ruby/symbol year ]
     month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]

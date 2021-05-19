@@ -13,7 +13,7 @@ en:
     about: About
   search:
     title: Property for rent in Phuket
-    rs: Start
+    rs: Check in
     search: Search
     check: Check price
     results: Search results
@@ -95,8 +95,8 @@ en:
   activemodel:
     attributes:
       search:
-        rs: From
-        rf: To
+        rs: Check in
+        rf: Check out
   devise:
     log_in: Log in
     log_out: Log out
