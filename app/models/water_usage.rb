@@ -25,19 +25,31 @@ class WaterUsage < ApplicationRecord
       last = WaterUsage.where(house_id: house_id).order(:date).last
       if !last.nil?
         days = (date - last.date).to_i
-        # byebug
         if amount.present? && last.amount.present? && (amount-last.amount).to_f/days > 1
+          text = "Water overusage: #{amount}(#{date.in_time_zone('Bangkok').strftime('%d.%m')}) - #{last.amount}(#{last.date.in_time_zone('Bangkok').strftime('%d.%m')}) = #{amount-last.amount} in #{(date-last.date).to_i} days"
           Notification.create!(
             house_id: house_id,
-            text: "Water overusage #{amount-last.amount} units for #{(date - last.date).to_i} days. #{last.date.strftime('%d.%m')} - #{last.amount} units, #{date.in_time_zone('Bangkok').strftime('%d.%m')} - #{amount} units")
-
+            text: text)
+            send_sms(message: "#{House.find(house_id).code}: #{text}")
         end
         if amount_2.present? && last.amount_2.present? && (amount_2-last.amount_2).to_f/days > 1
+          text = "Water overusage: #{amount_2}(#{date.in_time_zone('Bangkok').strftime('%d.%m')}) - #{last.amount_2}(#{last.date.in_time_zone('Bangkok').strftime('%d.%m')}) = #{amount_2-last.amount_2} in #{(date-last.date).to_i} days"
           Notification.create!(
             house_id: house_id,
-            text: "Water overusage #{amount_2-last.amount_2} units for #{(date - last.date).to_i} days. #{last.date.strftime('%d.%m')} - #{last.amount_2} units, #{date.in_time_zone('Bangkok').strftime('%d.%m')} - #{amount_2} units")
+            text: text)
+            send_sms(message: "#{House.find(house_id).code} #{text} /2nd meter")
         end
 
       end
     end
+
+    def send_sms phone: '+66875558155', message:
+      client = Twilio::REST::Client.new
+        client.messages.create({
+          from: ENV['TWILIO_PHONE_NUMBER'],
+          to: phone,
+          body: message
+        })
+    end
+
 end
