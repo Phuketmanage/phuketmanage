@@ -1,10 +1,10 @@
 en:
   app:
-    name: "Phuket Manage - It's all about management"
+    name: "Phuket Manage - It's all about details"
     email: "info@phuketmanage.com"
-    phone: "+6687 477 5544"
-    reservation_phone: "+6687 477 5544"
-    reservation_email: "info@phuketmanage.com"
+    phone: "+6680 529 3353"
+    reservation_phone: "+6680 529 3353"
+    reservation_email: "rent@phuketmanage.com"
     tagline: "Property Management Phuket Thailand"
   menu:
     log_in: Log in
