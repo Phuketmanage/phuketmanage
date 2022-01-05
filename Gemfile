@@ -49,7 +49,6 @@ gem 'rails-i18n', '~> 6.0.0'
 gem 'momentjs-rails'
 gem 'font_awesome5_rails'
 gem 'twilio-ruby'
-gem "barnes"
 
 
 group :development, :test do
