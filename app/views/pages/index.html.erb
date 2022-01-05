@@ -4,7 +4,7 @@
 
 <div class="row mt-2">
 <% @houses.each_with_index do |h, i| %>
-  <div class="col-md-4 mb-2">
+  <div class="col-md-4 mt-2">
     <%= render 'houses/preview', h: h, from_search: false %>
   </div>
 <% end %>
