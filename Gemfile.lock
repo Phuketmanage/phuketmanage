@@ -58,6 +58,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    ast (2.4.2)
     autoprefixer-rails (10.2.4.0)
       execjs
     aws-eventstream (1.1.0)
@@ -183,6 +184,8 @@ GEM
     nokogiri (1.11.1-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    parser (3.1.0.0)
+      ast (~> 2.4.1)
     pg (1.2.3)
     popper_js (1.16.0)
     public_suffix (4.0.6)
@@ -250,6 +253,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scout_apm (5.1.1)
+      parser
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -323,6 +328,7 @@ DEPENDENCIES
   rails (~> 6.0.0.rc1)
   rails-i18n (~> 6.0.0)
   sass-rails (~> 5.0)
+  scout_apm
   selenium-webdriver
   spring
   spring-watcher-listen (~> 2.0.0)
