@@ -1,12 +1,12 @@
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
-/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/2.7.0 -r ./siteconf20220108-64637-1d31b72.rb extconf.rb
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220109-13455-1gdfer9.rb extconf.rb
 creating Makefile
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
-make "DESTDIR=" clean
+make DESTDIR\= clean
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
-make "DESTDIR="
+make DESTDIR\=
 compiling cruby.c
 cruby.c:74:17: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
   id_bindings = rb_intern("bindings");
@@ -42,5 +42,5 @@ cruby.c:74:17: note: ')' token is here
 linking shared-object skiptrace/internal/cruby.bundle
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
-make "DESTDIR=" install
-/usr/local/bin/ginstall -c -m 0755 cruby.bundle ./.gem.20220108-64637-jpxa79/skiptrace/internal
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 cruby.bundle ./.gem.20220109-13455-13q9gf4/skiptrace/internal

@@ -1,5 +1,5 @@
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/nio4r-2.5.8/ext/nio4r
-/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/2.7.0 -r ./siteconf20220108-64637-zvwqgd.rb extconf.rb
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220109-13455-eg4ul.rb extconf.rb
 checking for unistd.h... yes
 checking for linux/aio_abi.h... no
 checking for linux/io_uring.h... no
@@ -13,10 +13,10 @@ checking for sys/resource.h... yes
 creating Makefile
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/nio4r-2.5.8/ext/nio4r
-make "DESTDIR=" clean
+make DESTDIR\= clean
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/nio4r-2.5.8/ext/nio4r
-make "DESTDIR="
+make DESTDIR\=
 compiling bytebuffer.c
 compiling monitor.c
 monitor.c:90:25: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
@@ -3704,5 +3704,5 @@ selector.c:543:36: note: ')' token is here
 linking shared-object nio4r_ext.bundle
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/nio4r-2.5.8/ext/nio4r
-make "DESTDIR=" install
-/usr/local/bin/ginstall -c -m 0755 nio4r_ext.bundle ./.gem.20220108-64637-14cr8hz
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 nio4r_ext.bundle ./.gem.20220109-13455-1dvylw6

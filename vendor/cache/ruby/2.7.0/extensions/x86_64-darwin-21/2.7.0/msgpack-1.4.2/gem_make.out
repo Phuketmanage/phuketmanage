@@ -1,5 +1,5 @@
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/msgpack-1.4.2/ext/msgpack
-/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/2.7.0 -r ./siteconf20220108-64637-1lfca5x.rb extconf.rb
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220109-13455-ndbk43.rb extconf.rb
 checking for ruby/st.h... yes
 checking for st.h... yes
 checking for rb_str_replace() in ruby.h... yes
@@ -13,10 +13,10 @@ checking for rb_hash_clear() in ruby.h... yes
 creating Makefile
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/msgpack-1.4.2/ext/msgpack
-make "DESTDIR=" clean
+make DESTDIR\= clean
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/msgpack-1.4.2/ext/msgpack
-make "DESTDIR="
+make DESTDIR\=
 compiling buffer.c
 buffer.c:38:16: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
     s_uminus = rb_intern("-@");
@@ -1442,5 +1442,5 @@ unpacker_ext_registry.c:27:13: note: ')' token is here
 linking shared-object msgpack/msgpack.bundle
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/msgpack-1.4.2/ext/msgpack
-make "DESTDIR=" install
-/usr/local/bin/ginstall -c -m 0755 msgpack.bundle ./.gem.20220108-64637-9iq8zr/msgpack
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 msgpack.bundle ./.gem.20220109-13455-menqdt/msgpack

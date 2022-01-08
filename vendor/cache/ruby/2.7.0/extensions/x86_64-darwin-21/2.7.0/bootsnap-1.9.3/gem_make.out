@@ -1,12 +1,12 @@
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bootsnap-1.9.3/ext/bootsnap
-/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/2.7.0 -r ./siteconf20220108-64637-mq6zsk.rb extconf.rb
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220109-13455-1mo13tf.rb extconf.rb
 creating Makefile
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bootsnap-1.9.3/ext/bootsnap
-make "DESTDIR=" clean
+make DESTDIR\= clean
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bootsnap-1.9.3/ext/bootsnap
-make "DESTDIR="
+make DESTDIR\=
 compiling bootsnap.c
 bootsnap.c:159:18: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
   uncompilable = rb_intern("__bootsnap_uncompilable__");
@@ -366,5 +366,5 @@ bootsnap.c:963:36: note: ')' token is here
 linking shared-object bootsnap/bootsnap.bundle
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bootsnap-1.9.3/ext/bootsnap
-make "DESTDIR=" install
-/usr/local/bin/ginstall -c -m 0755 bootsnap.bundle ./.gem.20220108-64637-ong6q4/bootsnap
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 bootsnap.bundle ./.gem.20220109-13455-9ksxqt/bootsnap

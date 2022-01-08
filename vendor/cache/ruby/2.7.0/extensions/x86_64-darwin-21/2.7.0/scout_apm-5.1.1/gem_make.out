@@ -1,15 +1,15 @@
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/scout_apm-5.1.1/ext/rusage
-/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/2.7.0 -r ./siteconf20220108-64637-1ydg437.rb extconf.rb
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220109-13455-146ox9l.rb extconf.rb
 creating Makefile
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/scout_apm-5.1.1/ext/rusage
-make "DESTDIR=" clean
+make DESTDIR\= clean
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/scout_apm-5.1.1/ext/rusage
-make "DESTDIR="
+make DESTDIR\=
 compiling rusage.c
 linking shared-object rusage.bundle
 
 current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/scout_apm-5.1.1/ext/rusage
-make "DESTDIR=" install
-/usr/local/bin/ginstall -c -m 0755 rusage.bundle ./.gem.20220108-64637-1vm5g8y
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 rusage.bundle ./.gem.20220109-13455-15guzmh

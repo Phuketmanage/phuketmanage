@@ -12,10 +12,10 @@ Gem::Specification.new do |s|
   s.description = "    Moment.js is a lightweight javascript date library for parsing, manipulating, and formatting dates.\n    This gem allows for its easy inclusion into the rails asset pipeline.\n".freeze
   s.homepage = "https://github.com/derekprior/momentjs-rails".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.1.6".freeze
+  s.rubygems_version = "3.3.4".freeze
   s.summary = "The Moment.js JavaScript library ready to play with Rails.".freeze
 
-  s.installed_by_version = "3.1.6" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.4" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

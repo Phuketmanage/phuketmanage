@@ -31,8 +31,8 @@ rubyhdrdir = $(includedir)/$(RUBY_VERSION_NAME)
 vendorarchdir = $(vendorlibdir)/$(sitearch)
 vendorlibdir = $(vendordir)/$(ruby_version)
 vendordir = $(rubylibprefix)/vendor_ruby
-sitearchdir = $(DESTDIR)./.gem.20220108-64637-1e53q9f
-sitelibdir = $(DESTDIR)./.gem.20220108-64637-1e53q9f
+sitearchdir = $(DESTDIR)./.gem.20220109-13455-11kktfk
+sitelibdir = $(DESTDIR)./.gem.20220109-13455-11kktfk
 sitedir = $(rubylibprefix)/site_ruby
 rubyarchdir = $(rubylibdir)/$(arch)
 rubylibdir = $(rubylibprefix)/$(ruby_version)
@@ -87,9 +87,9 @@ CCDLFLAGS = -fno-common
 CFLAGS   = $(CCDLFLAGS) -g -O2 -fno-common -pipe $(ARCH_FLAG)
 INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
 DEFS     = 
-CPPFLAGS = -DRUBY_EXTCONF_H=\"$(RUBY_EXTCONF_H)\" -I/usr/local/include -I/Users/sergey/.rbenv/versions/2.7.4/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT $(DEFS) $(cppflags)
+CPPFLAGS = -DRUBY_EXTCONF_H=\"$(RUBY_EXTCONF_H)\" -I/usr/local/opt/postgresql@13/include -I/Users/sergey/.rbenv/versions/2.7.4/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT $(DEFS) $(cppflags)
 CXXFLAGS = $(CCDLFLAGS) -g -O2 $(ARCH_FLAG)
-ldflags  = -L. -L/Users/sergey/.rbenv/versions/2.7.4/lib  -fstack-protector-strong -L/usr/local/lib -Wl,-rpath,/usr/local/lib
+ldflags  = -L. -L/Users/sergey/.rbenv/versions/2.7.4/lib  -fstack-protector-strong -L/usr/local/lib -Wl,-rpath,/usr/local/opt/postgresql@13/lib
 dldflags = -L/Users/sergey/.rbenv/versions/2.7.4/lib  -Wl,-undefined,dynamic_lookup -Wl,-multiply_defined,suppress 
 ARCH_FLAG = 
 DLDFLAGS = $(ldflags) $(dldflags) $(ARCH_FLAG)
@@ -125,8 +125,8 @@ TOUCH = exit >
 #### End of system configuration section. ####
 
 preload = 
-libpath = . $(libdir) /usr/local/lib
-LIBPATH =  -L. -L$(libdir) -L/usr/local/lib
+libpath = . $(libdir) /usr/local/opt/postgresql@13/lib
+LIBPATH =  -L. -L$(libdir) -L/usr/local/opt/postgresql@13/lib
 DEFFILE = 
 
 CLEANFILES = mkmf.log

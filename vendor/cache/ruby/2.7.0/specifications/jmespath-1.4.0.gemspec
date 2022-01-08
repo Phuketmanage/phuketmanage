@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.email = "trevorrowe@gmail.com".freeze
   s.homepage = "http://github.com/trevorrowe/jmespath.rb".freeze
   s.licenses = ["Apache-2.0".freeze]
-  s.rubygems_version = "3.1.2".freeze
+  s.rubygems_version = "3.3.4".freeze
   s.summary = "JMESPath - Ruby Edition".freeze
 
-  s.installed_by_version = "3.1.2" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.4" if s.respond_to? :installed_by_version
 end

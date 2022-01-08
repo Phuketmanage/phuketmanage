@@ -13,10 +13,10 @@ Gem::Specification.new do |s|
   s.email = ["iain@iain.nl".freeze]
   s.homepage = "https://github.com/iain/http_accept_language".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.1.2".freeze
+  s.rubygems_version = "3.3.4".freeze
   s.summary = "Find out which locale the user preferes by reading the languages they specified in their browser".freeze
 
-  s.installed_by_version = "3.1.2" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.4" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/icalendar/icalendar".freeze
   s.post_install_message = "ActiveSupport is required for TimeWithZone support, but not required for general use.\n".freeze
   s.required_ruby_version = Gem::Requirement.new(">= 2.4.0".freeze)
-  s.rubygems_version = "3.1.6".freeze
+  s.rubygems_version = "3.3.4".freeze
   s.summary = "A ruby implementation of the iCalendar specification (RFC-5545).".freeze
 
-  s.installed_by_version = "3.1.6" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.3.4" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
