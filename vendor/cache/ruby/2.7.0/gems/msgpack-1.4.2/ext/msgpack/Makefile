@@ -12,12 +12,12 @@ NULLCMD = :
 #### Start of system configuration section. ####
 
 srcdir = .
-topdir = /Users/sergey/.rbenv/versions/2.7.1/include/ruby-2.7.0
+topdir = /Users/sergey/.rbenv/versions/2.7.4/include/ruby-2.7.0
 hdrdir = $(topdir)
-arch_hdrdir = /Users/sergey/.rbenv/versions/2.7.1/include/ruby-2.7.0/x86_64-darwin19
+arch_hdrdir = /Users/sergey/.rbenv/versions/2.7.4/include/ruby-2.7.0/x86_64-darwin21
 PATH_SEPARATOR = :
 VPATH = $(srcdir):$(arch_hdrdir)/ruby:$(hdrdir)/ruby
-prefix = $(DESTDIR)/Users/sergey/.rbenv/versions/2.7.1
+prefix = $(DESTDIR)/Users/sergey/.rbenv/versions/2.7.4
 rubysitearchprefix = $(rubylibprefix)/$(sitearch)
 rubyarchprefix = $(rubylibprefix)/$(arch)
 rubylibprefix = $(libdir)/$(RUBY_BASE_NAME)
@@ -31,8 +31,8 @@ rubyhdrdir = $(includedir)/$(RUBY_VERSION_NAME)
 vendorarchdir = $(vendorlibdir)/$(sitearch)
 vendorlibdir = $(vendordir)/$(ruby_version)
 vendordir = $(rubylibprefix)/vendor_ruby
-sitearchdir = $(DESTDIR)./.gem.20210220-55446-f7rqrd
-sitelibdir = $(DESTDIR)./.gem.20210220-55446-f7rqrd
+sitearchdir = $(DESTDIR)./.gem.20220108-64637-9iq8zr
+sitelibdir = $(DESTDIR)./.gem.20220108-64637-9iq8zr
 sitedir = $(rubylibprefix)/site_ruby
 rubyarchdir = $(rubylibdir)/$(arch)
 rubylibdir = $(rubylibprefix)/$(ruby_version)
@@ -81,16 +81,16 @@ cflags   = $(optflags) $(debugflags) $(warnflags)
 cxxflags = 
 optflags = -O3
 debugflags = -ggdb3
-warnflags = -Wall -Wextra -Wdeprecated-declarations -Wdivision-by-zero -Wimplicit-function-declaration -Wimplicit-int -Wpointer-arith -Wshorten-64-to-32 -Wwrite-strings -Wmissing-noreturn -Wno-constant-logical-operand -Wno-long-long -Wno-missing-field-initializers -Wno-overlength-strings -Wno-parentheses-equality -Wno-self-assign -Wno-tautological-compare -Wno-unused-parameter -Wno-unused-value -Wunused-variable -Wextra-tokens
+warnflags = -Wall -Wextra -Wdeprecated-declarations -Wdivision-by-zero -Wimplicit-function-declaration -Wimplicit-int -Wmisleading-indentation -Wpointer-arith -Wshorten-64-to-32 -Wwrite-strings -Wmissing-noreturn -Wno-constant-logical-operand -Wno-long-long -Wno-missing-field-initializers -Wno-overlength-strings -Wno-parentheses-equality -Wno-self-assign -Wno-tautological-compare -Wno-unused-parameter -Wno-unused-value -Wunused-variable -Wextra-tokens
 cppflags = 
 CCDLFLAGS = -fno-common
-CFLAGS   = $(CCDLFLAGS) $(cflags)  -fno-common -pipe -I.. -Wall -O3 -g -std=gnu99 -DHASH_ASET_DEDUPE=1  -DSTR_UMINUS_DEDUPE=1  -DSTR_UMINUS_DEDUPE_FROZEN=0  $(ARCH_FLAG)
+CFLAGS   = $(CCDLFLAGS) -g -O2 -fno-common -pipe -I.. -Wall -O3 -g -std=gnu99 -DHASH_ASET_DEDUPE=1  -DSTR_UMINUS_DEDUPE=1  -DSTR_UMINUS_DEDUPE_FROZEN=0  $(ARCH_FLAG)
 INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
 DEFS     = 
-CPPFLAGS = -DHAVE_RUBY_ST_H -DHAVE_ST_H -DHAVE_RB_STR_REPLACE -DHAVE_RB_INTERN_STR -DHAVE_RB_SYM2STR -DHAVE_RB_STR_INTERN -DHAVE_RB_BLOCK_LAMBDA -DHAVE_RB_HASH_DUP -DHAVE_RB_HASH_CLEAR -I/Users/sergey/.rbenv/versions/2.7.1/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT $(DEFS) $(cppflags)
+CPPFLAGS = -DHAVE_RUBY_ST_H -DHAVE_ST_H -DHAVE_RB_STR_REPLACE -DHAVE_RB_INTERN_STR -DHAVE_RB_SYM2STR -DHAVE_RB_STR_INTERN -DHAVE_RB_BLOCK_LAMBDA -DHAVE_RB_HASH_DUP -DHAVE_RB_HASH_CLEAR -I/Users/sergey/.rbenv/versions/2.7.4/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT $(DEFS) $(cppflags)
 CXXFLAGS = $(CCDLFLAGS) -g -O2 $(ARCH_FLAG)
-ldflags  = -L. -L/Users/sergey/.rbenv/versions/2.7.1/lib  -fstack-protector-strong -L/usr/local/lib
-dldflags = -L/Users/sergey/.rbenv/versions/2.7.1/lib  -Wl,-undefined,dynamic_lookup -Wl,-multiply_defined,suppress 
+ldflags  = -L. -L/Users/sergey/.rbenv/versions/2.7.4/lib  -fstack-protector-strong -L/usr/local/lib
+dldflags = -L/Users/sergey/.rbenv/versions/2.7.4/lib  -Wl,-undefined,dynamic_lookup -Wl,-multiply_defined,suppress 
 ARCH_FLAG = 
 DLDFLAGS = $(ldflags) $(dldflags) $(ARCH_FLAG)
 LDSHARED = $(CC) -dynamic -bundle
@@ -105,7 +105,7 @@ RUBY_VERSION_NAME = $(RUBY_BASE_NAME)-$(ruby_version)
 RUBYW_BASE_NAME = rubyw
 RUBY_BASE_NAME = ruby
 
-arch = x86_64-darwin19
+arch = x86_64-darwin21
 sitearch = $(arch)
 ruby_version = 2.7.0
 ruby = $(bindir)/$(RUBY_BASE_NAME)
