@@ -5,9 +5,11 @@ Aws.config.update({
 
 
 S3_BUCKET = Aws::S3::Resource.new.bucket(ENV['S3_BUCKET'])
+S3_CLIENT = Aws::S3::Client.new
 if Rails.env.production?
   S3_HOST = '//phuketmanage.s3-ap-southeast-1.amazonaws.com/'
 else
   S3_HOST = '//phuketmanage-development.s3-ap-southeast-1.amazonaws.com/'
+  S3_HOST_SHORT = 'phuketmanage.s3-ap-southeast-1.amazonaws.com/'
 end
 # URI.parse(@s3_direct_post.url).host

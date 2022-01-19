@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :house_groups
   delete 'transaction_file', to: 'transaction_files#destroy'
   delete 'transaction_file_tmp', to: 'transaction_files#destroy_tmp'
+  get 'transaction_file_download', to: 'transaction_files#download'
   get 'transaction_file_toggle_show', to: 'transaction_files#toggle_show'
   get 'transaction_files', to: 'transaction_files#index'
   get 'transaction_warnings', to: 'transactions#warnings'

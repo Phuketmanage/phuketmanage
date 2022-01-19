@@ -16,6 +16,7 @@
       </div>
     </div>
     <div class='col-6 text-right'>
+      <%= link_to 'Save', transaction_file_download_path(key: file.url) %>
       <% if file_type == 'pdf' %>
         <%= link_to 'Open pdf', file.full_url, target: '_blank' %> |
       <% end %>

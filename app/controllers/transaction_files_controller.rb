@@ -31,4 +31,15 @@ class TransactionFilesController < ApplicationController
     end
   end
 
+  def download
+    key = params['key']
+    file = S3_CLIENT.get_object(
+      response_target: File.basename(key),
+      bucket: ENV['S3_BUCKET'],
+      key: key
+    )
+    file = open(file.body)
+    send_file file
+  end
+
 end
