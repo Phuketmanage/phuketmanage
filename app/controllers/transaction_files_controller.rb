@@ -39,7 +39,16 @@ class TransactionFilesController < ApplicationController
       key: key
     )
     file = open(file.body)
-    send_file file
+    respond_to do |format|
+      format.js { send_file file }
+    end
+
+    # S3_BUCKET.object(key)
+    # url_options = {
+    #   expires_in:                   5.minutes,
+    #   use_ssl:                      true,
+    #   response_content_disposition: "attachment; filename=\"#{File.basename(key)}\""
+    # }
   end
 
 end
