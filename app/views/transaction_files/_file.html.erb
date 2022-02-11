@@ -19,7 +19,7 @@
 
       <%= link_to 'Save 1', "#", data: {'download-file': file.url} %>
       <%= link_to 'Save 2', file.full_url, download: "#{File.basename(file.url)}" %>
-      <a href="https://150yearssampleapp.s3.ap-northeast-2.amazonaws.com/2011-08-26+17.37.38.jpg" download>Save 3</a>
+      <a href="https://150yearssampleapp.s3.ap-northeast-2.amazonaws.com/2011-08-26+17.37.38+2.jpg" download="1.jpg">Save 3</a>
 
       <% if file_type == 'pdf' %>
         <%= link_to 'Open pdf', file.full_url, target: '_blank' %> |

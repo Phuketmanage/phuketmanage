@@ -342,6 +342,14 @@ $(document).on "turbolinks:load", ->
       $("#transaction_user_id").children("option:selected").val(),
       $(this).attr('id'),
       $(this).val())
+  $('a[data-add-comm]').on "click", (e) ->
+    e.preventDefault()
+    add = $(this).data('add')
+    cr_ow = parseFloat($('#transaction_cr_ow').val())
+    cr_co = parseFloat($('#transaction_cr_co').val())
+    if isNaN(cr_ow) then cr_ow = 0
+    if isNaN(cr_co) then cr_co = 0
+    $('#transaction_de_co').val(Math.round((cr_ow+cr_co)*add/100))
 
 check_warnings = (type, is_sum, user_id, field, text) ->
   date = $('#transaction_date').val()
