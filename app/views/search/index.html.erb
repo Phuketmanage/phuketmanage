@@ -1,7 +1,7 @@
 <h1><%= t('search.results') %></h1>
 <%= render 'form', search: @search %>
 <div class="duration">Total rental period: <%= @search.duration %> days</div>
-<div class="row row-cols-md-3 mt-2">
+<div class="row row-cols-lg-3 mt-2">
 <% @houses.each do |h| %>
   <% next if @prices[h.id].nil?  %>
   <div class="col mb-2">
