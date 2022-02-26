@@ -4,7 +4,7 @@
 <div class="row row-cols-3 mt-2">
 <% @houses.each do |h| %>
   <% next if @prices[h.id].nil?  %>
-  <div class="col-md-4 mb-2">
+  <div class="col mb-2">
     <%= render 'houses/preview', h: h, price: @prices[h.id], from_search: true, search: @search %>
   </div>
 <% end %>
