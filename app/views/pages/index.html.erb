@@ -2,9 +2,9 @@
 
 <%= render 'search/form', search: @search %>
 
-<div class="row mt-2">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-2">
 <% @houses.each_with_index do |h, i| %>
-  <div class="col-md-4 mt-2">
+  <div class="col mb-2">
     <%= render 'houses/preview', h: h, from_search: false %>
   </div>
 <% end %>
