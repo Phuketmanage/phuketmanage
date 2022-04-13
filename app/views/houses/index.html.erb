@@ -35,7 +35,7 @@
 <h3>Houses with closed balance</h3>
 
 <% @houses_old.each do |house| %>
-  <div class='shadow-sm mb-2 p-2 border rounded bg-light text-muted'>
+  <div class='shadow-sm mb-2 p-2 border rounded bg-light text-muted' data-house-code="<%= house.code %>">
     <div class="row">
       <div class="col-md-2"><strong><%= house.code %></strong></div>
       <div class="col-md-10">
