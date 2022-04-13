@@ -1,0 +1,2 @@
+      invoke  active_record
+      remove    db/migrate/20220413151535_add_hide_intimeline_to_houses.rb
