@@ -130,7 +130,7 @@ $(document).on "turbolinks:load", ->
       modal.find('div.job_employee').hide()
       modal.find('select#job_employee_id').html('')
       modal.find('select#job_employee_id').append("<option value=''>Select employee</option>")
-
+      modal.find('input#paid_by_tenant_check_box').prop( "checked", false );
 
     $('#new_job_modal').on 'shown.bs.modal', (event) ->
       $('input#job_time').trigger('focus')
