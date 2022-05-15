@@ -59,8 +59,7 @@ class BookingsController < ApplicationController
         @to = @from
       end
     end
-    @bookings = bookings.where(' (start >= :from AND start <= :to) OR
-                                (finish >= :from AND finish <= :to)',
+    @bookings = bookings.where('finish >= :from AND start <= :to',
                                 from: @from, to: @to).order(:start)
   end
 
