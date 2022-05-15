@@ -168,7 +168,6 @@ class Booking < ApplicationRecord
         end
         house[:bookings] << booking
       end
-      byebug
       # Get jobs for house
       jt_fm = JobType.find_by(name: 'For management').id
       # jobs = h.jobs
