@@ -83,11 +83,14 @@ class Booking < ApplicationRecord
     result.sort_by{|r| r[:date].to_date}
   end
 
-  def self.timeline_data from = nil, to = nil, period = nil
+  def self.timeline_data from = nil, to = nil, period = nil, house_number = nil
 
     if !from.present? && !to.present?
       from = Time.zone.now.in_time_zone('Bangkok').to_date
-      if period.nil?
+      if period.nil? && Booking.count == 0
+        period = 45
+        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
+      elsif period.nil? && Booking.count > 0
         to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
       else
         to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
@@ -118,7 +121,11 @@ class Booking < ApplicationRecord
     timeline[:days] = days
     timeline[:houses] = []
     # houses = House.order(:unavailable, :house_group_id, :code)
-    houses = House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
+    unless house_number.present?
+      houses = House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
+    else
+      houses = House.where(number: house_number).all
+    end
     y = 1
     houses.each do |h|
       # Get bookings for house
@@ -161,6 +168,7 @@ class Booking < ApplicationRecord
         end
         house[:bookings] << booking
       end
+      byebug
       # Get jobs for house
       jt_fm = JobType.find_by(name: 'For management').id
       # jobs = h.jobs
