@@ -73,6 +73,13 @@
             <%= form.text_field :job, class: "form-control" %>
           </div>
         </div>
+
+        <div class="form-check mb-2">
+          <%= form.check_box :paid_by_tenant,
+            { class: 'form-check-input', id: 'paid_by_tenant_check_box' } %>
+          <%= form.label 'Paid by tenan',
+            { class: 'form-check-label', for: 'paid_by_tenant_check_box' } %>
+            </div>
       </div>
       <%= hidden_field_tag 'cell_id' %>
       <div class="modal-footer">

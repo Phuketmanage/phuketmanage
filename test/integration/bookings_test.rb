@@ -106,7 +106,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                             } }
 
     end
-    assert_redirected_to edit_booking_path(Booking.last)
+    hid = House.find(Booking.last.house_id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
@@ -122,7 +123,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client'
                                             } }
     end
-    assert_redirected_to edit_booking_path(Booking.last)
+    hid = House.find(Booking.last.house_id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
@@ -160,7 +162,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+    hid = House.find(@booking.house.id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
@@ -173,7 +176,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+    hid = House.find(@booking.house.id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.start, new_start
@@ -198,7 +202,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+    hid = House.find(new_house.id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.house.id, new_house.id
@@ -237,7 +242,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+    hid = House.find(new_house.id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
@@ -253,7 +259,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               status: 'confirmed',
                                               client_details: 'Test client'
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+    hid = House.find(@booking.house.id).number
+    assert_redirected_to bookings_path(hid:hid)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.start, new_start

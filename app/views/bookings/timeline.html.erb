@@ -88,13 +88,16 @@
 <%= form_with(url: bookings_timeline_path, local: true, method: :get, id: 'timeline_form') do |f| %>
   <div class="form-row">
     <div class="col-lg-2 form-group">
-      <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
+      <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
     </div>
     <div class="col-lg-2 form-group">
-      <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
+      <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
     </div>
-    <div class="col-lg-4 form-group">
-      <%= f.submit 'Show', class: 'btn btn-primary' %>
+    <div class="col-lg-2 form-group">
+      <%= f.select :house_number, @houses_for_select.map {|h| [h.code, h.number]} , { include_blank: 'All', selected: params[:house_number] }, class: "form-control" %>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.submit 'Update timeline', class: 'btn btn-primary' %>
       <%= link_to 'Get job order', '#', class: 'btn btn-primary', id: 'get_job_oder'  %>
       <%= link_to 'Drop filter', bookings_timeline_path(period: 45), class: 'btn btn-secondary'  %>
     </div>

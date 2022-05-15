@@ -110,25 +110,35 @@ class BookingsController < ApplicationController
 
   def timeline
     if !params[:from].present? && !params[:to].present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
-      if params[:period].nil?
-        to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+      @from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if params[:period].nil? && Booking.count == 0
+        params[:period] = 45
+        @to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
+      elsif params[:period].nil? && Booking.count > 0
+        @to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
       else
-        to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
+        @to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i-1).days
       end
     elsif params[:from].present? && !params[:to].present?
-      from = params[:from].to_date
-      to = Booking.maximum(:finish)
+      @from = params[:from].to_date
+      @to = Booking.maximum(:finish)
     elsif !params[:from].present? && params[:to].present?
-      from = Booking.minimum(:start)
-      to = params[:to].to_date
+      @from = Booking.minimum(:start)
+      @to = params[:to].to_date
     elsif params[:from].present? && params[:to].present?
-      from = params[:from].to_date
-      to = params[:to].to_date
+      @from = params[:from].to_date
+      @to = params[:to].to_date
     end
-    @houses = House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
-    @today = from
-    @days = (to - from).to_i+1
+    @houses = House.where.not(balance_closed: true, hide_in_timeline: true)
+                    .order(:unavailable, :house_group_id, :code).all
+    @houses_for_select = @houses
+    if params[:house_number].present?
+      house = params[:house_number]
+      @houses = House.where(number: house).all
+    end
+
+    @today = @from
+    @days = (@to - @from).to_i+1
     jt_fm = JobType.find_by(name: 'For management').id
     @job_types_for_bookings = JobType.where.not(for_house_only: true, id: jt_fm).order(:name)
     @job_types_for_houses = JobType.where.not(id: jt_fm).order(for_house_only: :desc, name: :asc)
@@ -215,7 +225,8 @@ class BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.save
-        format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully created.' }
+        hid = House.find(@booking.house_id).number
+        format.html { redirect_to bookings_path(hid: hid), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
@@ -298,7 +309,8 @@ class BookingsController < ApplicationController
             @booking.calc prices
             @booking.save
         end
-        format.html { redirect_to edit_booking_path(@booking), notice: 'Booking was successfully updated.' }
+        hid = House.find(@booking.house_id).number
+        format.html { redirect_to bookings_path(hid: hid), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.order(:code).map {|h| [h.code, h.id]}

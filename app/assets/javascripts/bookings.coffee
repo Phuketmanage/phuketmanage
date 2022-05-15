@@ -65,7 +65,8 @@ $(document).on "turbolinks:load", ->
       data: {
         from: $('#from').val(),
         to: $('#to').val(),
-        period: $('#period').val()
+        period: $('#period').val(),
+        house: $('select#house_number').val()
       },
       success: (data) ->
         console.log('Timeline ready')
@@ -153,6 +154,7 @@ $(document).on "turbolinks:load", ->
             plan: $('input#job_plan').val(),
             time: $('input#job_time').val(),
             comment: $('input#job_comment').val()
+            paid_by_tenant: $('input#paid_by_tenant_check_box').val()
           },
           cell_id: $('input#cell_id').val()
         },
@@ -240,7 +242,8 @@ $(document).on "turbolinks:load", ->
           from: $('#from').val(),
           to: $('#to').val(),
           hidden_houses: $('#hidden_houses').val(),
-          hidden_groups: hidden_groups
+          hidden_groups: hidden_groups,
+          house: $('select#house_number').val()
         },
         success: (data) ->
           console.log('Get job order')

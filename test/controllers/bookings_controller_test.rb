@@ -39,7 +39,8 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
                                       } }
     end
     booking = Booking.last
-    assert_redirected_to edit_booking_path(booking)
+    hid = House.find(booking.house_id).number
+    assert_redirected_to bookings_path(hid:hid)
   end
 
   test "should update booking" do
@@ -51,7 +52,9 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
                                             client_details: 'Test client'
 
                                             } }
-    assert_redirected_to edit_booking_path(@booking)
+
+    hid = House.find(@booking.house_id).number
+    assert_redirected_to bookings_path(hid:hid)
   end
 
   test "should destroy booking" do

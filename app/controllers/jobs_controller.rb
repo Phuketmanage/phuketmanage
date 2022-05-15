@@ -63,13 +63,24 @@ class JobsController < ApplicationController
       from = params[:from].to_date
       to = params[:to].to_date
     end
-    hidden_houses = params[:hidden_houses].split(',').reject(&:empty?)
-    hidden_houses2 = House.where(house_group_id: params[:hidden_groups]).ids
-    hidden_houses = (hidden_houses+hidden_houses2).uniq
-    jobs_raw = Job.where.not(house_id: nil)
-                  .where.not(house_id: hidden_houses)
-                  .where('plan >= ? AND plan <= ?', from, to)
-                  .order(:plan, :time)
+    jobs_raw = []
+    if params[:house].present?
+      house = params[:house]
+      jobs_raw = House.find_by(number: house).jobs
+                    .where('plan >= ? AND plan <= ?', from, to)
+                    .order(:plan, :time)
+    else
+      hidden_houses1 = hidden_houses2 = []
+      hidden_houses1 = params[:hidden_houses].split(',').reject(&:empty?)
+      if !params[:hidden_groups].nil?
+        hidden_houses2 = House.where(house_group_id: params[:hidden_groups]).ids
+      end
+      hidden_houses = (hidden_houses1+hidden_houses2).uniq
+      jobs_raw = Job.where.not(house_id: nil)
+                    .where.not(house_id: hidden_houses)
+                    .where('plan >= ? AND plan <= ?', from, to)
+                    .order(:plan, :time)
+    end
     jobs = {}
     date_old = ''
     jobs_raw.each do |j|
@@ -78,10 +89,10 @@ class JobsController < ApplicationController
         jobs[date] = []
         # jobs[date]['date'] = date
         # jobs[date]['jobs'] = []
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name}"]
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{ '<span class="remarks">[Paid by tenant]</span>' if j.paid_by_tenant == true}"]
         date_old = date
       else
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name}"]
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{j.paid_by_tenant}"]
       end
 
     end
@@ -227,6 +238,7 @@ class JobsController < ApplicationController
                                   :sent,
                                   :rooms,
                                   :price,
-                                  :status )
+                                  :status,
+                                  :paid_by_tenant )
     end
 end

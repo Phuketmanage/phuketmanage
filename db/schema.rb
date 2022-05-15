@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_13_151646) do
+ActiveRecord::Schema.define(version: 2022_05_15_065521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_151646) do
     t.string "before"
     t.integer "status", default: 0
     t.boolean "urgent", default: false
+    t.boolean "paid_by_tenant", default: false, null: false
     t.index ["booking_id"], name: "index_jobs_on_booking_id"
     t.index ["creator_id"], name: "index_jobs_on_creator_id"
     t.index ["employee_id"], name: "index_jobs_on_employee_id"

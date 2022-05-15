@@ -97,7 +97,7 @@ class HousesController < ApplicationController
       if @house.update(house_params)
         if params[:copy_options]
         end
-        format.html { redirect_to houses_path(@house.number), notice: "House #{@house.code} was successfully updated." }
+        format.html { redirect_to houses_path, notice: "House #{@house.code} was successfully updated." }
         format.json { render :show, status: :ok, location: @house }
       else
         @owners = User.with_role('Owner')
