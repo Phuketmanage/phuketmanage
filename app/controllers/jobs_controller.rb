@@ -89,11 +89,9 @@ class JobsController < ApplicationController
         jobs[date] = []
         # jobs[date]['date'] = date
         # jobs[date]['jobs'] = []
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{'<span class="remarks">[Paid by tenant]</span>' j.paid_by_tenant == true}"]
         date_old = date
-      else
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{'<span class="remarks">[Paid by tenant]</span>' j.paid_by_tenant == true}"]
       end
+      jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{'<span class="remarks">[Paid by tenant]</span>' if j.paid_by_tenant == true}"]
 
     end
     render json: { jobs:  jobs }
