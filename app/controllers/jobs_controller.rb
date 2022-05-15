@@ -89,10 +89,10 @@ class JobsController < ApplicationController
         jobs[date] = []
         # jobs[date]['date'] = date
         # jobs[date]['jobs'] = []
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{ '<span class="remarks">[Paid by tenant]</span>' if j.paid_by_tenant == true}"]
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{'<span class="remarks">[Paid by tenant]</span>' j.paid_by_tenant == true}"]
         date_old = date
       else
-        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{j.paid_by_tenant}"]
+        jobs[date] << ["#{j.time} #{j.house.code} #{j.job_type.name} #{'<span class="remarks">[Paid by tenant]</span>' j.paid_by_tenant == true}"]
       end
 
     end
