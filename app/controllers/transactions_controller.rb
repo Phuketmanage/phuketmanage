@@ -32,7 +32,7 @@ class TransactionsController < ApplicationController
           session[:view_user_id] = params[:view_user_id]
           @owner = User.find(@view_user_id)
         end
-        @locale = @owner.locale
+        @locale = @owner.locale || 'en'
         @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
         @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
         @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
@@ -118,7 +118,18 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
-    @transaction = Transaction.new
+
+    unless params[:tid].present?
+      @transaction = Transaction.new
+    else
+      tid = params[:tid]
+      @transaction = Transaction.find(tid)
+      @transaction.date = nil
+      @de_ow = @transaction.balance_outs.sum(:debit)
+      @cr_ow = @transaction.balance_outs.sum(:credit)
+      @de_co = @transaction.balances.sum(:debit)
+      @cr_co = @transaction.balances.sum(:credit)
+    end
     now = Time.zone.now.in_time_zone('Bangkok')
     @s3_direct_post = S3_BUCKET.presigned_post(
       key: "transactions/${filename}",
