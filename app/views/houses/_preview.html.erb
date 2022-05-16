@@ -28,12 +28,18 @@
                                 length: 140,
                                 separator: ' ', escape: false) %>
           </p>
-
+          <div class='row'>
+            <div class="col">
           <% if from_search == true %>
             <%= link_to t('houses.view'), house_path(h.number, params: {rs: search.rs, rf: search.rf}), class: "btn btn-primary", target: "_blank" %>
           <% else %>
             <%= link_to t('houses.view'), house_path(h.number), class: "btn btn-primary", target: "_blank" %>
           <% end %>
+            </div>
+            <div class="d-flex mt-auto mr-3 text-uppercase font-weight-light text-muted small" >
+              CODE: <%= h.code %>
+            </div>
+          </div>
 
         </div>
       </div>
