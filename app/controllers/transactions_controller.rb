@@ -130,6 +130,7 @@ class TransactionsController < ApplicationController
       @cr_ow = old_transaction.balance_outs.sum(:credit)
       @de_co = old_transaction.balances.sum(:debit)
       @cr_co = old_transaction.balances.sum(:credit)
+      @cr_ow -= @de_co
     end
     now = Time.zone.now.in_time_zone('Bangkok')
     @s3_direct_post = S3_BUCKET.presigned_post(
