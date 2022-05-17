@@ -19,8 +19,7 @@ class TransactionsController < ApplicationController
       @error = 'Both dates should be selected'
     end
     if !@error.present?
-      if current_user.role?(['Owner']) ||
-      params[:commit] == 'Owner view'
+      if current_user.role?(['Owner']) || params[:commit] == 'Owner view'
         if current_user.role?(['Owner'])
           @owner = current_user
         elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
@@ -35,7 +34,7 @@ class TransactionsController < ApplicationController
         @locale = @owner.locale || 'en'
         @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
         @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
-        @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
+        @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
         type_rental_id = TransactionType.find_by(name_en: 'Rental').id
         @cr_rental = 0
         @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
@@ -61,7 +60,7 @@ class TransactionsController < ApplicationController
           session[:view_user_id] = params[:view_user_id]
           @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
-          @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+          # @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @view = 'accounting' if params[:commit] == 'Accounting view'
           session[:commit] = params[:commit]
@@ -74,17 +73,17 @@ class TransactionsController < ApplicationController
           session[:view_user_id] = params[:view_user_id]
           @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
-          @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+          @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ? AND for_acc = false', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
         else
           if current_user.role?(['Admin'])
             @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
             @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ?', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           else
             salary = TransactionType.find_by(name_en:'Salary')
             @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
             @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           end
           session.delete(:view_user_id)
         end
