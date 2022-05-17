@@ -123,12 +123,13 @@ class TransactionsController < ApplicationController
       @transaction = Transaction.new
     else
       tid = params[:tid]
-      @transaction = Transaction.find(tid)
+      old_transaction = Transaction.find(tid)
+      @transaction = old_transaction.dup
       @transaction.date = nil
-      @de_ow = @transaction.balance_outs.sum(:debit)
-      @cr_ow = @transaction.balance_outs.sum(:credit)
-      @de_co = @transaction.balances.sum(:debit)
-      @cr_co = @transaction.balances.sum(:credit)
+      @de_ow = old_transaction.balance_outs.sum(:debit)
+      @cr_ow = old_transaction.balance_outs.sum(:credit)
+      @de_co = old_transaction.balances.sum(:debit)
+      @cr_co = old_transaction.balances.sum(:credit)
     end
     now = Time.zone.now.in_time_zone('Bangkok')
     @s3_direct_post = S3_BUCKET.presigned_post(
