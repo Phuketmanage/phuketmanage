@@ -354,7 +354,13 @@ class TransactionsController < ApplicationController
   def destroy
     @transaction.destroy
     respond_to do |format|
-      format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
+      format.html { redirect_to transactions_path(
+                                    from: session[:from],
+                                    to: session[:to],
+                                    view_user_id: session[:view_user_id],
+                                    commit: session[:commit]),
+                                    notice: 'Transaction was successfully destroyed.' }
+      # format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
