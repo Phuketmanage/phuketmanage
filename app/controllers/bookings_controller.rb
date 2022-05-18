@@ -12,12 +12,14 @@ class BookingsController < ApplicationController
     filename = "listing-#{hid}.ics"
     cal.prodid = '-//Phuketmanage.com//Hosting Calendar//EN'
     cal.version = '2.0'
-    from = Time.zone.now.in_time_zone('Bangkok').to_date
-    bookings = h.bookings.where(' finish >= :from AND
-                                  status != :status',
-                                  from: from,
-                                  status: Booking.statuses[:canceled])
-                                .order(:start).all
+    today = Time.zone.now.in_time_zone('Bangkok').to_date
+    except_status = Booking.statuses[:canceled]
+    bookings = h.bookings.all
+    # bookings = h.bookings.where(' finish >= :today AND
+    #                               status != :status',
+    #                               today: from,
+    #                               status: except_status)
+    #                             .order(:start).all
     bookings.each do |b|
       cal.event do |e|
         # byebug
