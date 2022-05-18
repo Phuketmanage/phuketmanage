@@ -328,32 +328,34 @@
 <div class="shadow-sm mb-2 p-2 bg-white border rounded">
   <strong>Connections</strong>
   <hr>
-  <% @connections.each do |c| %>
-    <p>
-      <%= "#{c.source.name}: #{c.link}" %>
-      <%= link_to 'Destroy', connection_path(c.id), method: :delete, data: { confirm: 'Are you sure?' } %>
-    </p>
-  <% end %>
-  <%= form_with(model: connection, url: connections_path(hid: house.number), local: true) do |form| %>
-    <% if connection.errors.any? %>
-      <%= render 'shared/error_messages', object: form.object %>
+  iCal link: <%= link_to "#{request.base_url}/calendar/#{@house.number}", "#{request.base_url}/calendar/#{@house.number}" %>
+  <% if 1==0 %>
+    <% @connections.each do |c| %>
+      <p>
+        <%= "#{c.source.name}: #{c.link}" %>
+        <%= link_to 'Destroy', connection_path(c.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </p>
     <% end %>
-    <div class="row">
-      <div class="col-md-2 ">
-        <%= form.select :source_id,
-              @sources.all.map {|s| [s.name, s.id]},
-                        { prompt: 'Select source' }, { class: "form-control",  } %>
-      </div>
+    <%= form_with(model: connection, url: connections_path(hid: house.number), local: true) do |form| %>
+      <% if connection.errors.any? %>
+        <%= render 'shared/error_messages', object: form.object %>
+      <% end %>
+      <div class="row">
+        <div class="col-md-2 ">
+          <%= form.select :source_id,
+                @sources.all.map {|s| [s.name, s.id]},
+                          { prompt: 'Select source' }, { class: "form-control",  } %>
+        </div>
 
-      <div class="col-md-8 form-group">
-        <%= form.text_field :link,  placeholder: "Link",
-                                    class: 'form-control' %>
-      </div>
-      <div class="col-md-2 actions">
-        <%= form.submit 'Save Connection', class: 'btn btn-primary' %>
-      </div>
+        <div class="col-md-8 form-group">
+          <%= form.text_field :link,  placeholder: "Link",
+                                      class: 'form-control' %>
+        </div>
+        <div class="col-md-2 actions">
+          <%= form.submit 'Save Connection', class: 'btn btn-primary' %>
+        </div>
 
-    </div>
+      </div>
+    <% end %>
   <% end %>
-
 </div>

@@ -6,28 +6,30 @@ class BookingsController < ApplicationController
   layout 'admin'
 
   def ical
-    require 'icalendar'
-    @cal = Icalendar::Calendar.new
-    @cal.NAME = 'Awesome Rails Calendar'
-    @cal.x_wr_calname = 'Awesome Rails Calendar'
-    @cal.event do |e|
-      e.dtstart     = DateTime.now + 2.days
-      e.dtend       = DateTime.now + 20.days
-      e.summary     = "Meeting with the man."
-      e.description = "Have a long lunch meeting and decide nothing..."
+    cal = Icalendar::Calendar.new
+    hid = params[:hid]
+    h = House.find_by(number: hid)
+    filename = "listing-#{hid}.ics"
+    cal.prodid = '-//Phuketmanage.com//Hosting Calendar//EN'
+    cal.version = '2.0'
+    from = Time.zone.now.in_time_zone('Bangkok').to_date
+    bookings = h.bookings.where(' finish >= :from AND
+                                  status != :status',
+                                  from: from,
+                                  status: Booking.statuses[:canceled])
+                                .order(:start).all
+    bookings.each do |b|
+      cal.event do |e|
+        # byebug
+        e.dtstart     = Icalendar::Values::Date.new(b.start.to_s(:number))
+        e.dtend       = Icalendar::Values::Date.new(b.finish.to_s(:number))
+        e.summary     = "Reserved"
+        e.description = "Booking number: #{b.number}"
+      end
     end
-    #@cal.publish
 
-    send_data @cal.to_ical, type: 'text/calendar', disposition: 'attachment', filename: filename
-    # respond_to do |format|
-    #   # byebug
-    #     format.html do
-    #       render plain: @cal.to_ical
-    #     end
-    #     format.ics do
-    #       render plain: @cal.to_ical
-    #     end
-    # end
+    send_data cal.to_ical, type: 'text/calendar', disposition: 'attachment', filename: filename
+
   end
 
   # GET /bookings

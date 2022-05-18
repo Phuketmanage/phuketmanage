@@ -72,7 +72,7 @@ Rails.application.routes.draw do
     get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
-    get 'calendar/ical/:ical_name', to: 'bookings#ical'
+    get 'calendar/ical/:hid', to: 'bookings#ical', as: 'calendar'
     get 'search', to: 'search#index'
     resources :settings
     resources :house_types
