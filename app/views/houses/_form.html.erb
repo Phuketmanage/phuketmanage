@@ -328,7 +328,7 @@
 <div class="shadow-sm mb-2 p-2 bg-white border rounded">
   <strong>Connections</strong>
   <hr>
-  iCal link: <%= link_to "#{request.base_url}/calendar/#{@house.number}", "#{request.base_url}/calendar/#{@house.number}" %>
+  iCal link: <%= link_to "#{request.base_url}/calendar/ical/#{@house.number}", "#{request.base_url}/calendar/ical/#{@house.number}" %>
   <% if 1==0 %>
     <% @connections.each do |c| %>
       <p>
