@@ -1,0 +1,25 @@
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bcrypt-3.1.18/ext/mri
+/Users/sergey/.rbenv/versions/2.7.4/bin/ruby -I /Users/sergey/.rbenv/versions/2.7.4/lib/ruby/site_ruby/2.7.0 -r ./siteconf20220519-59680-1x6uef6.rb extconf.rb
+creating Makefile
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bcrypt-3.1.18/ext/mri
+make DESTDIR\= clean
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bcrypt-3.1.18/ext/mri
+make DESTDIR\=
+compiling bcrypt_ext.c
+2022-05-19 00:06:04.102 xcodebuild[59799:6530027] Requested but did not find extension point with identifier Xcode.IDEKit.ExtensionSentinelHostApplications for extension Xcode.DebuggerFoundation.AppExtensionHosts.watchOS of plug-in com.apple.dt.IDEWatchSupportCore
+2022-05-19 00:06:04.102 xcodebuild[59799:6530027] Requested but did not find extension point with identifier Xcode.IDEKit.ExtensionPointIdentifierToBundleIdentifier for extension Xcode.DebuggerFoundation.AppExtensionToBundleIdentifierMap.watchOS of plug-in com.apple.dt.IDEWatchSupportCore
+compiling crypt_blowfish.c
+clang  -D__SKIP_GNU -I/Users/sergey/.rbenv/versions/2.7.4/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT    -c -o x86.o x86.S
+compiling crypt_gensalt.c
+compiling wrapper.c
+wrapper.c:182:60: warning: declaration of 'struct crypt_data' will not be visible outside of this function [-Wvisibility]
+char *crypt_r(const char *key, const char *setting, struct crypt_data *data)
+                                                           ^
+1 warning generated.
+linking shared-object bcrypt_ext.bundle
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/2.7.0/gems/bcrypt-3.1.18/ext/mri
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 bcrypt_ext.bundle ./.gem.20220519-59680-1pr4wyn

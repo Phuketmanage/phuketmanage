@@ -16,17 +16,18 @@ class BookingsController < ApplicationController
       e.summary     = "Meeting with the man."
       e.description = "Have a long lunch meeting and decide nothing..."
     end
-    @cal.publish
+    #@cal.publish
 
-    respond_to do |format|
-      # byebug
-        format.html do
-          render plain: @cal.to_ical
-        end
-        format.ics do
-          render plain: @cal.to_ical
-        end
-    end
+    send_data @cal.to_ical, type: 'text/calendar', disposition: 'attachment', filename: filename
+    # respond_to do |format|
+    #   # byebug
+    #     format.html do
+    #       render plain: @cal.to_ical
+    #     end
+    #     format.ics do
+    #       render plain: @cal.to_ical
+    #     end
+    # end
   end
 
   # GET /bookings
