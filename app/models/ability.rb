@@ -8,7 +8,7 @@ class Ability
     can [:confirmed, :index_supplier, :canceled], Transfer
     can :show, House
     # can :index, House
-    can :create_front, Booking
+    can [:create_front, :ical], Booking
     # can :about, Page
     if user.role? :owner
       can :index, [ Transaction ]
