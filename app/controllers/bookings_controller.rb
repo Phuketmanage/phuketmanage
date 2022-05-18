@@ -16,7 +16,7 @@ class BookingsController < ApplicationController
     except_status = Booking.statuses[:canceled]
     bookings = h.bookings.where(' finish >= :today AND
                                   status != :status',
-                                  today: from,
+                                  today: today,
                                   status: except_status)
                                 .order(:start).all
     bookings.each do |b|
