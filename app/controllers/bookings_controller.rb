@@ -25,9 +25,10 @@ class BookingsController < ApplicationController
         e.dtstart     = Icalendar::Values::Date.new(b.start.to_s(:number))
         e.dtend       = Icalendar::Values::Date.new(b.finish.to_s(:number))
         e.summary     = "Reserved"
-        e.description = "Booking number: #{b.number}"
+        # e.description = "Booking number #{b.number}"
       end
     end
+    cal.publish
 
     send_data cal.to_ical, type: 'text/calendar', disposition: 'attachment', filename: filename
 
