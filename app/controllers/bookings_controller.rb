@@ -29,8 +29,8 @@ class BookingsController < ApplicationController
     end
     cal.publish
 
-    send_data cal.to_ical, type: 'text/calendar', disposition: 'attachment', filename: filename
-
+    send_data cal.to_ical, type: 'text/calendar', disposition: 'inline', filename: filename
+# render :text => cal.to_ical
   end
 
   # GET /bookings
