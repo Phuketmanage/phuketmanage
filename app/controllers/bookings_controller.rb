@@ -6,24 +6,19 @@ class BookingsController < ApplicationController
   layout 'admin'
 
   def ical
-    puts '1'
     cal = Icalendar::Calendar.new
     hid = params[:hid]
     h = House.find_by(number: hid)
-    puts '2'
     filename = "listing-#{hid}.ics"
     cal.prodid = '-//Phuketmanage.com//Hosting Calendar//EN'
     cal.version = '2.0'
     today = Time.zone.now.in_time_zone('Bangkok').to_date
-    puts '3'
     except_status = Booking.statuses[:canceled]
-    puts '4'
-    bookings = h.bookings.all
-    # bookings = h.bookings.where(' finish >= :today AND
-    #                               status != :status',
-    #                               today: from,
-    #                               status: except_status)
-    #                             .order(:start).all
+    bookings = h.bookings.where(' finish >= :today AND
+                                  status != :status',
+                                  today: from,
+                                  status: except_status)
+                                .order(:start).all
     bookings.each do |b|
       cal.event do |e|
         # byebug
