@@ -21,8 +21,8 @@
     <%= 'company view' if @view == 'company' %>
     <%= 'owner view' if @view == 'owner' %>
     <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
-    <% if params[:view_user_id].present? %>
-      <% owner = User.find(params[:view_user_id]) %>
+    <% if @view_user_id.present? %>
+      <% owner = User.find(@view_user_id) %>
       (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)
     <% end %>
   </h1>
@@ -31,10 +31,31 @@
     <%= form_with(url: transactions_path, method: :get, local: true, class: 'form-inline') do |form| %>
           <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
           <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
-          <%= form.select :view_user_id,
+          <%#= form.select :view_user_id,
                 House.where.not(balance_closed: true).order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
                 { include_blank: 'Company', selected: @view_user_id },
                 class: "form-control mb-2 mr-sm-2" %>
+
+          <div class="dropdown">
+            <%= text_field_tag :view_house,
+                @view_house_id.present? ? @houses_for_select[@view_house_id][:text] : nil,
+                class:"form-control dropdown-toggle mb-2 mr-sm-2",
+                placeholder: "Enter house code",
+                data: { toggle: 'dropdown' } %>
+            <div class="dropdown-menu" aria-labelledby="view_house">
+              <a class="dropdown-item" href="#">All</a>
+              <% @houses_for_select.each do |house_id,h| %>
+              <a class="dropdown-item" href="#"
+                                        data-house-id="<%= house_id %>"
+                                        data-user-id="<%= h[:user_id] %>"
+                                        ><%= h[:text] %></a>
+              <% end %>
+            </div>
+          </div>
+          <%= hidden_field_tag :view_user_id,
+            @view_user_id %>
+          <%= hidden_field_tag :view_house_id,
+            @view_house_id %>
           <%= form.submit 'Company view',
                 class: "btn btn-primary mb-2 mr-2 btn-sm",
                 id: 'btn_company_view' %>
@@ -50,7 +71,10 @@
             <%= link_to 'New Transaction', new_transaction_path,
                   class: 'btn btn-info mb-2 mr-2 btn-sm' %>
           <% else %>
-            <%= link_to 'New Transaction', new_transaction_path(user_id: @view_user_id),
+            <%= link_to 'New Transaction',
+                  new_transaction_path(
+                    user_id: @view_user_id,
+                    house_id: @view_house_id),
                   class: 'btn btn-info mb-2 mr-2 btn-sm' %>
           <% end %>
     <% end %>

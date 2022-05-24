@@ -281,8 +281,10 @@ $(document).on "turbolinks:load", ->
     printJS("https:#{$(this).data('print')}", $(this).data('type'))
 
   $('#booking_start').on 'change', (e) ->
+    $('#booking_finish').attr('min', "#{$(this).val()}")
     check_price()
   $('#booking_finish').on 'change', (e) ->
+    $('#booking_start').attr('max', "#{$(this).val()}")
     check_price()
   $('#booking_house_id').on 'change', (e) ->
     check_price()

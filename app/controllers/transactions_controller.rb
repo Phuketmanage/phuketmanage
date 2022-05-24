@@ -23,12 +23,17 @@ class TransactionsController < ApplicationController
         if current_user.role?(['Owner'])
           @owner = current_user
         elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
-          if !params[:view_user_id].present?
-            @error = 'Owner should be selected for this type of view'
+          # if !params[:view_user_id].present?
+          @houses_for_select = set_houses_for_select
+          @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+          @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+          if !@view_user_id && !@view_house_id
+            @error = 'Owner or house should be selected for this type of view'
             return
           end
-          @view_user_id = params[:view_user_id]
-          session[:view_user_id] = params[:view_user_id]
+          # @view_user_id = params[:view_user_id]
+          session[:view_user_id] = @view_user_id
+          session[:view_house_id] = @view_house_id
           @owner = User.find(@view_user_id)
         end
         @locale = @owner.locale || 'en'
@@ -51,13 +56,20 @@ class TransactionsController < ApplicationController
         session[:commit] = params[:commit]
       elsif current_user.role?(['Admin','Manager','Accounting']) &&
       params[:commit] == 'Accounting view'
-        if !params[:view_user_id].present?
-          @error = 'Owner should be selected for this type of view'
+        @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+        @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+        @houses_for_select = set_houses_for_select
+        if !@view_user_id && !@view_house_id
+        # if !params[:view_house_id].present?
+          @error = 'Owner or house should be selected for this type of view'
         else
-          @view_user_id = params[:view_user_id]
+
+          # @view_user_id = params[:view_user_id]
+          # @view_user_id = House.find(params[:view_house_id]).owner.id
           owner = User.find(@view_user_id)
           @locale = owner.locale
-          session[:view_user_id] = params[:view_user_id]
+          session[:view_user_id] = @view_user_id
+          session[:view_house_id] = @view_house_id
           @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
           # @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
@@ -67,10 +79,15 @@ class TransactionsController < ApplicationController
           session[:view] = @view
         end
       elsif current_user.role?(['Admin','Manager','Accounting'])
-        if params[:view_user_id].present?
-          @view_user_id = params[:view_user_id]
+        @houses_for_select = set_houses_for_select
+        # if params[:view_user_id].present?
+        @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+        @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+        if @view_user_id.present?
+          # @view_user_id = params[:view_user_id]
           owner = User.find(@view_user_id)
-          session[:view_user_id] = params[:view_user_id]
+          session[:view_user_id] = @view_user_id
+          session[:view_house_id] = @view_house_id
           @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
           @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ? AND for_acc = false', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
@@ -210,11 +227,11 @@ class TransactionsController < ApplicationController
         if params[:booking_fully_paid] == "true"
           @transaction.booking.update(paid: true)
         end
-
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
                                     view_user_id: session[:view_user_id],
+                                    view_house_id: session[:view_house_id],
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully created.' }
       else
@@ -234,7 +251,7 @@ class TransactionsController < ApplicationController
         else
           @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
         end
-
+        @houses_for_select = set_houses_for_select
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
@@ -400,18 +417,22 @@ class TransactionsController < ApplicationController
   end
 
   private
-    # def check_warnings
-    #   # owner same day same text
-    #   lt = Transaction.last
-    #   ts = Transaction.where('date= ? AND (comment_en = ? OR comment_ru = ?)', lt.date ,lt.comment_en, lt.comment_ru)
-    #   @warnings = []
-    #   @warnings << ["Same day same name: #{lt.date} #{lt.comment_en} / #{lt.comment_ru}"] if ts.count > 1
-    #   #ts = Transaction.where(date: lt.date).joins(:balance_outs)
-    #   #  .where('balance_outs.debit': lt.balance_outs.)
-    #   # bs = ts.where(debit: lt.balance_outs.sum(:debit)
-    #   byebug
-    #   # self.warnings
-    # end
+
+
+    def set_houses_for_select
+      houses_for_select = User.joins(:houses)
+                            .select(" users.id as owner_id,
+                                      houses.id as house_id,
+                                      houses.code as house_code,
+                                      users.name as owner_name,
+                                      users.surname as owner_surname ")
+                            .where.not('houses.balance_closed': true)
+                            .order('houses.code')
+                            .map{|h| [
+                              h.house_id,
+                              {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}]}
+                            .to_h
+    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction

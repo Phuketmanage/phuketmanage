@@ -54,7 +54,6 @@ class BookingsController < ApplicationController
       house_ids = House.ids
     end
     bookings = Booking.where(house_id: house_ids).all
-
     if !@from.present? && !@to.present?
       @from = Time.zone.now.in_time_zone('Bangkok').to_date
       if bookings.any?
@@ -63,6 +62,7 @@ class BookingsController < ApplicationController
         @to = @from
       end
     end
+
     @bookings = bookings.where('finish >= :from AND start <= :to',
                                 from: @from, to: @to).order(:start)
   end

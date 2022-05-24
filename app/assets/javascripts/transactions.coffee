@@ -54,12 +54,22 @@ $(document).on "turbolinks:load", ->
         # file_current.html($("<embed />", {src: src, type: "image/jpg", width: '100%', height: '100%' }))
         file_current.html($("<img />", {src: src, class: 'file_image' }))
 
-  react_to_select_user_id($('#view_user_id').val())
+  react_to_select_house($('#view_house_id').val())
 
   react_to_select_trsc_type($('#trsc_type').children('option:selected').text(), true)
 
-  $('#view_user_id').on 'change', ->
-    react_to_select_user_id($(this).val())
+  # Filtering a list as you type by house code
+  $('#view_house').on "keyup", (e) ->
+    value = $(this).val().toLowerCase()
+    $(".dropdown-menu a").filter (e) ->
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+
+  $('div.dropdown-menu a').on 'click', (e) ->
+    e.preventDefault()
+    $('#view_house').val($(this).text())
+    $('#view_user_id').val($(this).data('user-id'))
+    $('#view_house_id').val($(this).data('house-id'))
+    react_to_select_house($(this).data('house-id'))
 
   $('#trsc_type').on 'change', ->
     react_to_select_trsc_type($(this).children('option:selected').text(), false)
@@ -380,7 +390,7 @@ check_warnings = (type, is_sum, user_id, field, text) ->
       error: (data) ->
         console.log 'Can not check warnings'
 
-react_to_select_user_id = (selected) ->
+react_to_select_house = (selected) ->
   if selected > 0
     $('#btn_owner_view').attr('disabled', false)
     $('#btn_owner_front_view').attr('disabled', false)

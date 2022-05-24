@@ -34,7 +34,7 @@
   </div>
   <div class="col-lg-4">
     <%= render 'search/form_vertical', search: @search, btn_text: t('search.check') %>
-    <% if @prices %>
+    <% if @prices && @prices != 'unavailable' %>
       <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
         <div class="row d-flex align-items-center">
           <div class="col-md-8 col-lg-12 mb-1 text-center">
@@ -45,6 +45,10 @@
             <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
           </div>
         </div>
+      </div>
+    <% elsif @prices == 'unavailable' %>
+      <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
+        <%= t('search.unavailable') %>
       </div>
     <% end %>
     </div>
@@ -106,7 +110,7 @@
 <p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
 <% end %>
 
-<% if @prices %>
+<% if @prices && @prices != 'unavailable' %>
   <!-- Modal -->
   <div class="modal fade" id="makeBooking" tabindex="-1" role="dialog" aria-labelledby="makeBookingLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

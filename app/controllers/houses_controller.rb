@@ -29,10 +29,14 @@ class HousesController < ApplicationController
       @search = Search.new( rs: params[:rs],
                             rf: params[:rf],
                             dtnb: @settings['dtnb'])
-      @houses = [@house]
-
-      @prices = @search.get_prices @houses
-      @booking = Booking.new
+      answer = @search.is_house_available? @house.id
+      if !answer[:result]
+        @prices = "unavailable"
+      else
+        @houses = [@house]
+        @prices = @search.get_prices @houses
+        @booking = Booking.new
+      end
     else
       @search = Search.new
     end
