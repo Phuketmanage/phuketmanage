@@ -46,6 +46,7 @@
                 @view_house_id.present? ? @houses_for_select[@view_house_id][:text] : nil,
                 class:"form-control dropdown-toggle mb-2 mr-sm-2",
                 placeholder: "Enter house code",
+                autocomplete: "off",
                 data: { toggle: 'dropdown', display: "static" } %>
             <div class="dropdown-menu" aria-labelledby="view_house">
               <a class="dropdown-item" href="#">All</a>

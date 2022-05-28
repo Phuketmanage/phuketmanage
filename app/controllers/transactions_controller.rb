@@ -19,9 +19,12 @@ class TransactionsController < ApplicationController
       @error = 'Both dates should be selected'
     end
     if !@error.present?
+      # Owner view
       if current_user.role?(['Owner']) || params[:commit] == 'Owner view'
+        # Owner view for owner
         if current_user.role?(['Owner'])
           @owner = current_user
+        # Owner view for management
         elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
           # if !params[:view_user_id].present?
           @houses_for_select = set_houses_for_select
@@ -54,6 +57,7 @@ class TransactionsController < ApplicationController
         @bookings_prepayment = future_booking_de - future_booking_cr
         @view = 'owner'
         session[:commit] = params[:commit]
+      # Accounting view
       elsif current_user.role?(['Admin','Manager','Accounting']) &&
       params[:commit] == 'Accounting view'
         @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
@@ -63,7 +67,6 @@ class TransactionsController < ApplicationController
         # if !params[:view_house_id].present?
           @error = 'Owner or house should be selected for this type of view'
         else
-
           # @view_user_id = params[:view_user_id]
           # @view_user_id = House.find(params[:view_house_id]).owner.id
           owner = User.find(@view_user_id)
@@ -78,9 +81,10 @@ class TransactionsController < ApplicationController
           session[:commit] = params[:commit]
           session[:view] = @view
         end
+      # Company view
       elsif current_user.role?(['Admin','Manager','Accounting'])
+        # @owners_for_select = set_owners_for_select
         @houses_for_select = set_houses_for_select
-        # if params[:view_user_id].present?
         @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
         @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
         if @view_user_id.present?
@@ -417,21 +421,32 @@ class TransactionsController < ApplicationController
   end
 
   private
+    # def set_owners_for_select
+    #   User.joins(:houses)
+    #     .select(" users.id,
+    #               users.name,
+    #               users.surname")
+    #     .where.not('houses.balance_closed': true)
+    #     .order('users.name')
+    #     .group('users.id')
+    #     .map{|o| [o.id, "#{o.name} #{o.surname}"]}
+    #     .to_h
 
+    # end
 
     def set_houses_for_select
-      houses_for_select = User.joins(:houses)
-                            .select(" users.id as owner_id,
-                                      houses.id as house_id,
-                                      houses.code as house_code,
-                                      users.name as owner_name,
-                                      users.surname as owner_surname ")
-                            .where.not('houses.balance_closed': true)
-                            .order('houses.code')
-                            .map{|h| [
-                              h.house_id,
-                              {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}]}
-                            .to_h
+      User.joins(:houses)
+        .select(" users.id as owner_id,
+                  houses.id as house_id,
+                  houses.code as house_code,
+                  users.name as owner_name,
+                  users.surname as owner_surname ")
+        .where.not('houses.balance_closed': true)
+        .order('houses.code')
+        .map{|h| [
+          h.house_id,
+          {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}]}
+        .to_h
     end
 
     # Use callbacks to share common setup or constraints between actions.
