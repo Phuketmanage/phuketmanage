@@ -58,11 +58,18 @@ $(document).on "turbolinks:load", ->
 
   react_to_select_trsc_type($('#trsc_type').children('option:selected').text(), true)
 
+  $('#view_house').on 'click', (e) ->
+    $(this).select()
+
   # Filtering a list as you type by house code
-  $('#view_house').on "keyup", (e) ->
+  $('#view_house').on 'keyup', (e) ->
     value = $(this).val().toLowerCase()
     $(".dropdown-menu a").filter (e) ->
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    if value == ""
+      $('#view_user_id').val($(this).data('user-id'))
+      $('#view_house_id').val($(this).data('house-id'))
+      react_to_select_house($(this).data('house-id'))
 
   $('div.dropdown-menu a').on 'click', (e) ->
     e.preventDefault()
