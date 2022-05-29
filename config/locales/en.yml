@@ -23,6 +23,7 @@ en:
     too_short: Minimum rental period is 5 days
     unavailable: Place is not available for selected dates
     per_day: day
+    per_month: month
     price: Price
     period: Rental period
     book: Make reservation

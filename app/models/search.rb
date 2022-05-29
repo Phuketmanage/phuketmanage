@@ -37,12 +37,20 @@ class Search
     return result
   end
 
-  def get_prices houses = []
+  def get_prices houses = [], unavailable_ids = []
     result = {}
     houses.each do |house|
       total = 0
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration).first
+      # Management can check price out of min and max house period
+      # if durations.nil? && house.durations.any? && management
+      #   min = house.durations.minimum(:finish)
+      #   max = house.durations.maximum(:finish)
+      #   d = house.durations.order(:start)
+      #   durations = d.first if duration < min
+      #   durations = d.last if duration > max
+      # end
       next if durations.nil?
       seasons = get_seasons house.seasons
       seasons.each do |s|
@@ -51,7 +59,9 @@ class Search
         price = amount*s[:days]
         total += price
       end
-      result[house.id] = {total: total, per_day: total/duration.to_f.round()}
+      result[house.id] = {total: total,
+                          per_day: total/duration.to_f.round(),
+                          unavailable: unavailable_ids.include?(house.id)}
     end
     return result
   end
@@ -94,18 +104,19 @@ class Search
     end
   end
 
-  def get_available_houses
+  def get_available_houses management = false
     overlapped_bookings = Booking.where(
       'start <= ? AND finish >= ? AND status != ?', rf_e, rs_e,
       Booking.statuses[:canceled]).all.map{
       |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
     booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
-    if booked_house_ids.any?
-      available_houses = House.for_rent.where.not(id: booked_house_ids)
+    if booked_house_ids.any? && !management
+      available_houses = {available:House.for_rent.where.not(id: booked_house_ids),
+                          unavailable_ids: []}
     else
-      available_houses = House.for_rent.all
+      available_houses = {available: House.for_rent.all,
+                          unavailable_ids: booked_house_ids}
     end
-
   end
 
   private

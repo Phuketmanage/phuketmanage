@@ -1,11 +1,18 @@
       <div class="card house">
         <%= image_tag h.preview, class: 'card-img-top', alt: h.send("title_#{I18n.locale}") if h.preview %>
         <div class="card-body">
-          <h5 class="card-title house_title"><%= h.send("title_#{I18n.locale}") %></h5>
+          <h5 class="card-title house_title">
+            <%= h.send("title_#{I18n.locale}") %>
+            <% if from_search == true && price[:unavailable].present? %>
+              <span class="badge badge-danger">Unavailable</span>
+            <% end %>
+          </h5>
+
           <p>
             <% if from_search == true %>
               <h5 class="house_price"><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %></h5>
               <%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+              <%= ", #{number_to_currency(price[:total]/(@search.duration/30), precision: 0, unit: '฿')} / #{t('search.per_month')}" if @search.duration > 30 %>
             <% else %>
               <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
             <% end %>
