@@ -43,7 +43,9 @@ class TransactionsController < ApplicationController
           @owner = User.find(@view_user_id)
         end
         @locale = @owner.locale || 'en'
-        @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+        # @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+        # 05.2022 Order: Show new gtransactions on top
+        @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
         @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
         @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
         type_rental_id = TransactionType.find_by(name_en: 'Rental').id
@@ -96,16 +98,22 @@ class TransactionsController < ApplicationController
           session[:view_user_id] = @view_user_id
           session[:view_house_id] = @view_house_id
           @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
+          # 05.2022 Order: Show new gtransactions on top
+          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(date: :desc, created_at: :desc).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
           @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ? AND for_acc = false', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
         else
           if current_user.role?(['Admin'])
-            @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+            # @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+            # 05.2022 Order: Show new gtransactions on top
+            @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
             @transactions_before = Transaction.where('date < ?', @from).all
             @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           else
             salary = TransactionType.find_by(name_en:'Salary')
-            @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
+            # @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
+            # 05.2022 Order: Show new gtransactions on top
+            @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(date: :desc, created_at: :desc).all
             @transactions_before = Transaction.where('date < ?', @from).all
             @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           end
