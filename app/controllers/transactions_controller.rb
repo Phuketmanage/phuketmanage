@@ -30,6 +30,9 @@ class TransactionsController < ApplicationController
           @houses_for_select = set_houses_for_select
           @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
           @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+          if @view_user_id && !@view_house_id.present?
+            @view_house_id = User.find(@view_user_id).houses.where.not(balance_closed: true).last.id
+          end
           if !@view_user_id && !@view_house_id
             @error = 'Owner or house should be selected for this type of view'
             return
