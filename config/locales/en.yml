@@ -21,8 +21,10 @@ en:
     in_the_past: Begining or End of period can not be in the past
     too_soon: You can book at least 2 days in advance
     too_short: Minimum rental period is 5 days
+    period_limits: 'Limits: min 5 days, max 180 days. In case you need to check price for longer period please contact us by phone or email.'
+    search_duration: 'Total nights:'
     unavailable: Place is not available for selected dates
-    per_day: day
+    per_day: night
     per_month: month
     price: Price
     period: Rental period

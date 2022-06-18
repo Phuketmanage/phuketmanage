@@ -1,6 +1,6 @@
 <h1><%= t('search.results') %></h1>
 <%= render 'form', search: @search %>
-<div class="duration">Total rental period: <%= @search.duration %> days</div>
+<p><small><%= t('search.period_limits') %></small></p>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-2">
 <% @houses.each do |h| %>
   <% next if @prices[h.id].nil?  %>

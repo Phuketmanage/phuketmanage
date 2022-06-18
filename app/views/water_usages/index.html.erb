@@ -3,14 +3,31 @@
 <% if params[:house_id].present? %>
   <div class="row">
   <div class="col-md-3">
-  <table class="table">
-  <% @water_usage.each do |wu| %>
-    <tr>
-      <td><%= wu.date.strftime('%d.%m.%Y') %></td>
-      <td><%= wu.amount %></td>
-      <td><%= wu.amount_2 if wu.amount_2? %></td>
-      <td><%= link_to "Edit", edit_water_usage_path(wu.id) %></td>
-    </tr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Meter_1</th>
+        <th>Delta_1</th>
+        <th>Meter_2</th>
+        <th>Delta_1</th>
+        <th>Comment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <% @water_usage.each_with_index do |wu, ind| %>
+    <% last = true if ind == @water_usage.size-1 %>
+    <tbody>
+      <tr>
+        <td><%= wu.date.strftime('%d.%m.%Y') %></td>
+        <td><%= wu.amount %></td>
+        <td><%= wu.amount - @water_usage[ind+1].amount if !last %></td>
+        <td><%= wu.amount_2 if wu.amount_2? %></td>
+        <td><%= wu.amount_2 - @water_usage[ind+1].amount_2 if !last && wu.amount_2.present? %></td>
+        <td><%= wu.comment %></td>
+        <td><%= link_to "Edit", edit_water_usage_path(wu.id) %></td>
+      </tr>
+    </tbody>
   <% end %>
   </table>
   </div>

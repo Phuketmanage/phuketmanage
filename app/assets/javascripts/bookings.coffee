@@ -154,7 +154,7 @@ $(document).on "turbolinks:load", ->
             plan: $('input#job_plan').val(),
             time: $('input#job_time').val(),
             comment: $('input#job_comment').val()
-            paid_by_tenant: $('input#paid_by_tenant_check_box').val()
+            paid_by_tenant: $('input#paid_by_tenant_check_box').prop('checked')
           },
           cell_id: $('input#cell_id').val()
         },

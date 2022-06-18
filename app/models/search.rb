@@ -111,10 +111,10 @@ class Search
       |b| {house_id: b.house_id, start: b.start, finish: b.finish}}
     booked_house_ids = overlapped_bookings.map{|b| b[:house_id]}
     if booked_house_ids.any? && !management
-      available_houses = {available:House.for_rent.where.not(id: booked_house_ids),
+      available_houses = {available: House.for_rent.where.not(id: booked_house_ids).order("RANDOM()"),
                           unavailable_ids: []}
     else
-      available_houses = {available: House.for_rent.all,
+      available_houses = {available: House.for_rent.all.order("RANDOM()"),
                           unavailable_ids: booked_house_ids}
     end
   end
