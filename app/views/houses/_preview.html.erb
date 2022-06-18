@@ -8,16 +8,15 @@
             <% end %>
           </h5>
 
-          <p>
-            <% if from_search == true %>
-              <h5 class="house_price"><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %>  </h5>
-              <div><%= "#{t('search.search_duration')} #{@search.duration}" %></div>
-              <%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
-              <%= ", #{number_to_currency(price[:total]/(@search.duration.to_f/28), precision: 0, unit: '฿')} / #{t('search.per_month')}" if @search.duration >= 28 %>
-            <% else %>
-              <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
-            <% end %>
-          </p>
+          <% if from_search == true %>
+            <h5 class="house_price"><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %>  </h5>
+            <p class="duration"><%= "#{t('search.search_duration')} #{@search.duration}" %></p>
+            <p><%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+            <%= ", #{number_to_currency(price[:total]/(@search.duration.to_f/28), precision: 0, unit: '฿')} / #{t('search.per_month')}" if @search.duration >= 28 %></p>
+          <% else %>
+            <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
+          <% end %>
+
           <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
           <p>
             <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %>

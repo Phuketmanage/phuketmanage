@@ -7,10 +7,13 @@
     <thead>
       <tr>
         <th>Date</th>
+        <th>Days</th>
         <th>Meter_1</th>
         <th>Delta_1</th>
+        <th>Per_day_1</th>
         <th>Meter_2</th>
-        <th>Delta_1</th>
+        <th>Delta_2</th>
+        <th>Per_day_2</th>
         <th>Comment</th>
         <th>Actions</th>
       </tr>
@@ -20,10 +23,13 @@
     <tbody>
       <tr>
         <td><%= wu.date.strftime('%d.%m.%Y') %></td>
+        <td><%= days = (wu.date - @water_usage[ind+1].date).to_i if !last %></td>
         <td><%= wu.amount %></td>
-        <td><%= wu.amount - @water_usage[ind+1].amount if !last %></td>
+        <td><%= delta_1 = (wu.amount - @water_usage[ind+1].amount) if !last %></td>
+        <td><%= (delta_1 / days.to_f).round(1) if !last %></td>
         <td><%= wu.amount_2 if wu.amount_2? %></td>
         <td><%= wu.amount_2 - @water_usage[ind+1].amount_2 if !last && wu.amount_2.present? %></td>
+        <td><%= (delta_2 / days.to_f).round(1) if !last  && wu.amount_2.present? %></td>
         <td><%= wu.comment %></td>
         <td><%= link_to "Edit", edit_water_usage_path(wu.id) %></td>
       </tr>
