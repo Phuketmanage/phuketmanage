@@ -2,7 +2,8 @@ class DocumentsController < ApplicationController
 
   def statement
 
-    @usd = 29
+    @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
+
     if params[:trsc_id].present?
       @t = Transaction.find(params[:trsc_id])
       @date = @t.date
