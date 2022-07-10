@@ -1,0 +1,15 @@
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/3.0.0/gems/scout_apm-5.2.0/ext/rusage
+/Users/sergey/.rbenv/versions/3.0.2/bin/ruby -I /Users/sergey/.rbenv/versions/3.0.2/lib/ruby/3.0.0 -r ./siteconf20220710-9280-s8kj93.rb extconf.rb
+creating Makefile
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/3.0.0/gems/scout_apm-5.2.0/ext/rusage
+make DESTDIR\= clean
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/3.0.0/gems/scout_apm-5.2.0/ext/rusage
+make DESTDIR\=
+compiling rusage.c
+linking shared-object rusage.bundle
+
+current directory: /Users/sergey/Desktop/ror/phuketmanage/vendor/cache/ruby/3.0.0/gems/scout_apm-5.2.0/ext/rusage
+make DESTDIR\= install
+/usr/local/bin/ginstall -c -m 0755 rusage.bundle ./.gem.20220710-9280-xi386r
