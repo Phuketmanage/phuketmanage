@@ -147,7 +147,8 @@ class Booking < ApplicationRecord
         # 14.07.2022: startin - if booking start in timeline frame and need red line style to show start day
         b.start >= from ? booking[:startsin] = 1 : booking[:startsin] = 0
         # 14.07.2022: show brief booking details in tooltip
-        booking[:details] = "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')} #{b.client_details} #{b.source}"
+        source = b.source.name if b.source.present?
+        booking[:details] = "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')} #{b.client_details} #{source}"
         # Get jobs for bookings
         jt_fm = JobType.find_by(name: 'For management').id
         # jobs = b.jobs
