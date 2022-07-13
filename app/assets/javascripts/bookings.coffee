@@ -299,6 +299,7 @@ close_dates = (h) ->
       if x_add == 0
         $("#x"+x+"y"+b.y).css("z-index", 3)
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
+        $("#x"+x+"y"+b.y).addClass('bstart')
     allocate_job "#x#{j.x}y#{b.y}", j for j in b.jobs
   allocate_job "#x#{j.x}y#{h.y}", j for j in h.jobs
 
