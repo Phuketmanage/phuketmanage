@@ -296,10 +296,14 @@ close_dates = (h) ->
       $("#x"+x+"y"+b.y).addClass('booked')
       $("#x"+x+"y"+b.y).addClass(b.status)
       $("#x"+x+"y"+b.y).attr('data-booking-id', b.id)
+      # $("#x"+x+"y"+b.y).attr('data-toggle', 'tooltip')
+      # $("#x"+x+"y"+b.y).attr('data-placement', 'bottom')
+      $("#x"+x+"y"+b.y).attr('title', b.details)
       if x_add == 0
         $("#x"+x+"y"+b.y).css("z-index", 3)
         $("#x"+x+"y"+b.y).append("<div class='booking_data'><a href="+b.id+"/edit>"+b.number+"</a></div>")
-        $("#x"+x+"y"+b.y).addClass('bstart')
+        if b.startsin == 1
+          $("#x"+x+"y"+b.y).addClass('bstart')
     allocate_job "#x#{j.x}y#{b.y}", j for j in b.jobs
   allocate_job "#x#{j.x}y#{h.y}", j for j in h.jobs
 

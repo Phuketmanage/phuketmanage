@@ -459,7 +459,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Company view'}
     de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
-    assert_equal 73200.99.to_d, de_co_sum
+    assert_equal 73200.99.to_d.round(2), de_co_sum.round(2)
     assert_select "#de_co_sum", "73,200.99"
     assert_select '#de_co_prev_sum', ''
     assert_select '#cr_co_prev_sum', ''

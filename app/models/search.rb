@@ -32,7 +32,8 @@ class Search
     end
     if overlapped.any?
       result[:result] = false
-      result[:overlapped] = overlapped.map(&:number)
+      # result[:overlapped] = overlapped.map(&:number)
+      result[:overlapped] = overlapped.map{|b| "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}"}
     end
     return result
   end

@@ -141,11 +141,13 @@ class Booking < ApplicationRecord
         booking[:number] = b.number
         booking[:status] = b.status
         booking[:comment] = b.comment
-        # booking[:x] = ([b.start, today].max - today).to_i+1
         booking[:x] = ([b.start, from].max - from).to_i+1
         booking[:y] = y
-        # booking[:length] = ([b.finish, last_date].min-[b.start, today].max).to_i+1
         booking[:length] = ([b.finish, to].min-[b.start, from].max).to_i+1
+        # 14.07.2022: startin - if booking start in timeline frame and need red line style to show start day
+        b.start >= from ? booking[:startsin] = 1 : booking[:startsin] = 0
+        # 14.07.2022: show brief booking details in tooltip
+        booking[:details] = "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')} #{b.client_details} #{b.source}"
         # Get jobs for bookings
         jt_fm = JobType.find_by(name: 'For management').id
         # jobs = b.jobs
