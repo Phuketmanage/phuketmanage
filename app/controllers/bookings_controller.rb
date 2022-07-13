@@ -21,8 +21,9 @@ class BookingsController < ApplicationController
                                 .order(:start).all
     bookings.each do |b|
       cal.event do |e|
-        e.dtstart     = Icalendar::Values::Date.new(b.start.to_s(:number))
-        e.dtend       = Icalendar::Values::Date.new(b.finish.to_s(:number))
+        # byebug
+        e.dtstart     = Icalendar::Values::Date.new((b.start-2.days).to_s(:number))
+        e.dtend       = Icalendar::Values::Date.new((b.finish+2.days).to_s(:number))
         e.summary     = "Reserved"
         e.description = "Booking number #{b.number}"
       end
