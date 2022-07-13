@@ -76,14 +76,6 @@
     <% end %>
   </div>
 </div>
-
-<div class='mt-2'>
-  Agenda:
-  <% JobType.order(:name).each do |jt| %>
-    <div style="background-color:<%= jt.color %>;display:inline-block;" class='rounded text-white p-1'><%= jt.name %></div>
-  <% end %>
-</div>
-
 <div class='mt-2'>
 <%= form_with(url: bookings_timeline_path, local: true, method: :get, id: 'timeline_form') do |f| %>
   <div class="form-row">
@@ -104,6 +96,23 @@
   </div>
 <% end %>
 </div>
+
+<div class='mt-2'>
+  Jobs:
+  <% JobType.order(:name).each do |jt| %>
+    <div style="background-color:<%= jt.color %>;display:inline-block;" class='rounded text-white p-1'><%= jt.name %></div>
+  <% end %>
+</div>
+<div class='mt-2'>
+  Booking statuses:
+    <div style="display:inline-block;" class='rounded text-white p-1 temporary'>Temporary</div>
+    <div style="display:inline-block;" class='rounded text-white p-1 pending'>Pending</div>
+    <div style="display:inline-block;" class='rounded text-white p-1 confirmed'>Confirmed</div>
+
+
+</div>
+
+
 
 <div class="dropdown new_job">
   <div class="dropdown-menu new_job">
