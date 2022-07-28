@@ -58,32 +58,71 @@ $(document).on "turbolinks:load", ->
 
   react_to_select_trsc_type($('#trsc_type').children('option:selected').text(), true)
 
-  $('#view_house').on 'click', (e) ->
+  $('#balance_of').on 'click', (e) ->
     $(this).select()
 
-  # Filtering a list as you type by house code
-  $('#view_house').on 'keyup', (e) ->
+  # Filtering a list as you type by house code or owner name
+  $('#balance_of').on 'keyup', (e) ->
     value = $(this).val().toLowerCase()
     $(".dropdown-menu a").filter (e) ->
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     if value == ""
-      $('#view_user_id').val($(this).data('user-id'))
-      $('#view_house_id').val($(this).data('house-id'))
+      $('#owner_id').val($(this).data('owner-id'))
       react_to_select_house($(this).data('house-id'))
 
-  $('div.dropdown-menu a').on 'click', (e) ->
+  # Filtering a list as you type by house code or owner name
+  $('#for_house').on 'keyup', (e) ->
+    value = $(this).val().toLowerCase()
+    $(".dropdown-menu a").filter (e) ->
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    if value == ""
+      $('#owner_id').val($(this).data('owner-id'))
+      react_to_select_house($(this).data('house-id'))
+
+
+  # Show houses for select if owner have more than 1
+  $('div.dropdown-menu[aria-labelledby="balance_of"] a').on 'click', (e) ->
     e.preventDefault()
-    $('#view_house').val($(this).text())
-    $('#view_user_id').val($(this).data('user-id'))
-    $('#view_house_id').val($(this).data('house-id'))
+    $('#balance_of').val($(this).data('owner-name'))
+    $('#owner_id').val($(this).data('owner-id'))
+    $('#for_house').val('')
+    $('#house_id').val('')
+    $('div.dropdown-menu[aria-labelledby="for_house"]').empty()
+    $.ajax
+      url: "/users/get_houses",
+      type: "get",
+      dataType: "json",
+      data: {
+        owner_id: $(this).data('owner-id')
+      },
+      success: (data) ->
+        if data['houses'].length <= 1
+          $('#for_house').attr(disabled: true)
+          $('#view_house_id').val('')
+        if data['houses'].length > 1
+          $('#for_house').attr(disabled: false)
+          $('div.dropdown-menu[aria-labelledby="for_house"]').empty()
+          item_all = $('<a></a>', {href: '#', text: 'All', class: 'dropdown-item'})
+          $('#for_house').val('All')
+          $('div.dropdown-menu[aria-labelledby="for_house"]').append(item_all)
+          for h in data['houses']
+            item = $('<a></a>', {
+                                  href: '#',
+                                  text: h['code'],
+                                  class: 'dropdown-item'
+                                  'data-house-id': h['id']})
+            $('div.dropdown-menu[aria-labelledby="for_house"]').append(item)
+      error: (data) ->
+        console.log('Something went wrong')
     react_to_select_house($(this).data('house-id'))
+
+  $('div.for_house').on 'click', 'div.dropdown-menu[aria-labelledby="for_house"] a', (e) ->
+    e.preventDefault()
+    $('#for_house').val($(this).text())
+    $('#house_id').val($(this).data('house-id'))
 
   $('#trsc_type').on 'change', ->
     react_to_select_trsc_type($(this).children('option:selected').text(), false)
-
-  # $('#transaction_house_id').on 'change', ->
-    # $('#transaction_user_id option:selected').removeAttr('selected')
-    # $('#transaction_user_id').val('')
 
   $('#transaction_user_id').on 'change', ->
     $('#transaction_house_id option:selected').removeAttr('selected')

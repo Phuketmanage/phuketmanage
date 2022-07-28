@@ -33,17 +33,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '20,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '100,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '20,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '80,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '100,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
@@ -80,11 +80,11 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '15,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '15,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_docs_path, params: {
@@ -114,17 +114,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '300.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '300.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '300.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_docs_path, params: {
@@ -154,17 +154,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
@@ -197,17 +197,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
@@ -242,17 +242,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '1,700.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", '1,000.00'
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '2,200.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '2,200.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '500.00'
@@ -286,17 +286,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '1,500.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '9,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '9,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '7,500.00'
@@ -375,17 +375,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '6,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '30,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '6,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '24,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr.hidden_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '30,000.00'
@@ -421,19 +421,19 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
     assert_select "tr#trsc_#{t.id}_row", count: 0
     assert_select "tr#trsc_#{t.id}_row", count: 0
     assert_select "tr#trsc_#{t.id}_row", count: 0
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row", count: 0
     assert_select "tr#trsc_#{t.id}_row", count: 0
     from = '2019-08-01'
     to = Time.now.to_date
-    get transactions_path, params: {  from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: {  from: from, to: to, owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr.for_acc_row", count: 1
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
@@ -453,18 +453,21 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 25.09.2019 Previous transactions (from fixtures)
     # 09.10.2019 Hidden from owner transactions (added within this test)
     # 14.11.2019 Rental credit deducted from Owner totals
+    # 28.07.2022 Company view for owner was removed
 
     from = '2019-09-01'
     to = Time.now.to_date
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
-    get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Company view'}
+    get transactions_path, params: { from: from, to: to, owner_id: @owner.id, commit: 'Full'}
     de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
     assert_equal 73200.99.to_d.round(2), de_co_sum.round(2)
-    assert_select "#de_co_sum", "73,200.99"
-    assert_select '#de_co_prev_sum', ''
-    assert_select '#cr_co_prev_sum', ''
-    assert_select '#co_prev_balance', '7,000.00'
-    get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
+    # </28.07.2022
+    # assert_select "#de_co_sum", "73,200.99"
+    # assert_select '#de_co_prev_sum', ''
+    # assert_select '#cr_co_prev_sum', ''
+    # assert_select '#co_prev_balance', '7,000.00'
+    # 28.07.2022/>
+    get transactions_path, params: { from: from, to: to, owner_id: @owner.id, commit: 'Acc'}
     assert_select "#company_maintenance", "60,200.99" #Because of hidden trsc it less 6000
     get transactions_docs_path, params: {
       type: 'invoice',
@@ -480,14 +483,14 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     cr_ow_sum = @owner.transactions.where(for_acc: false).joins(:balance_outs).sum('credit')
     assert_equal 322500, de_ow_sum
     assert_equal 101200.99.to_d, cr_ow_sum
-    get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { from: from, to: to, owner_id: @owner.id, commit: 'Full'}
     assert_select '#de_ow_prev_sum', ''
     assert_select '#cr_ow_prev_sum', ''
     assert_select '#ow_prev_balance', '14,000.00'
     assert_select "#de_ow_sum", "239,500.00" #Rental credit deducted from bebit for owner right away in owner view
     assert_select "#cr_ow_sum", "32,200.99" #Rental credit not counted because was deducted from bebit in owner view
     assert_select "#ow_balance", "221,299.01"
-    get transactions_path, params: { from: from, to: to, view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { from: from, to: to, owner_id: @owner.id, commit: 'Acc'}
     assert_select '#de_ow_prev_sum', ''
     assert_select '#cr_ow_prev_sum', ''
     assert_select '#ow_prev_balance', '-3,000.00'
@@ -503,8 +506,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     #View same as owner
     sign_in users(:owner)
     get balance_front_path, params: { from: from, to: to}
-    assert_select "#de_ow_sum", "239,500.00" #Rental credit 40000 deducted from bebit for owner right away in owner view
-    assert_select "#cr_ow_sum", "32,200.99" #Rental credit 40000 deducted from bebit for owner right away in owner view
+    assert_select "#de_ow_sum", "239,500.00" #Rental credit 40000 deducted from debit for owner right away in owner view
+    assert_select "#cr_ow_sum", "32,200.99" #Rental credit 40000 deducted from debit for owner right away in owner view
     assert_select "#ow_balance", "221,299.01"
 
     sign_in users(:manager)
@@ -546,17 +549,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
                                 de_ow: 150000,
                                 comment_en: 'Top up'} }
     t = Transaction.last
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150 000,00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", count: 0
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
@@ -584,19 +587,19 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    get transactions_path, params: { commit: 'Company view'}
+    get transactions_path, params: { commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2,000.00'
     assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '22,000.00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Owner view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Full'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", count: 0
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_net_cell", '20 000,00'
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2 000,00'
-    get transactions_path, params: { view_user_id: @owner.id, commit: 'Accounting view'}
+    get transactions_path, params: { owner_id: @owner.id, commit: 'Acc'}
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '20,000.00'

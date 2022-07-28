@@ -1,11 +1,39 @@
 <% if current_user.role?(['Owner']) %>
   <h1><%= t('balance') %></h1>
 
-  <%= form_with(url: balance_front_path, method: :get, local: true, class: 'form-inline d-print-none') do |form| %>
-        <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-md-2" %>
+  <%= form_with(url: balance_front_path, method: :get, local: true, class: 'd-print-none') do |form| %>
+    <div class="form-row">
+      <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+        <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+      </div>
+      <div class="col-6 col-lg-2 mb-1 mb-lg-0">
         <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+      </div>
+        <div class="col-lg-2 mb-1 mb-lg-0">
+          <div class="dropdown for_house">
+            <%= text_field_tag :for_house,
+                !@houses.empty? && @house_id ? @houses.where(id: @house_id).first[:code] : t('all_houses'),
+                class:"form-control dropdown-toggle mb-2 mr-sm-2",
+                placeholder: t('select_house'),
+                autocomplete: "off",
+                data: { toggle: 'dropdown', display: "static" },
+                disabled: @houses.length <= 1 %>
+            <div class="dropdown-menu" aria-labelledby="for_house">
+              <a class="dropdown-item" href="#"><%= t('all_houses') %></a>
+              <% if @houses %>
+              <% @houses.each do |h| %>
+              <a class="dropdown-item" href="#"
+                                        data-house-id="<%= h[:id] %>"
+                                        ><%= h[:code] %></a>
+              <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <%= hidden_field_tag :owner_id, @owner.id %>
+        <%= hidden_field_tag :house_id, @house_id %>
         <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
-        <%= link_to t('drop_filter'), balance_front_path, class: 'btn btn-secondary mb-2 mr-md-2'  %>
+    </div>
   <% end %>
 
   <% if @error %>
@@ -21,8 +49,8 @@
     <%= 'company view' if @view == 'company' %>
     <%= 'owner view' if @view == 'owner' %>
     <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
-    <% if @view_user_id.present? %>
-      <% owner = User.find(@view_user_id) %>
+    <% if @owner_id.present? %>
+      <% owner = User.find(@owner_id) %>
       (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)
     <% end %>
   </h1>
@@ -40,27 +68,50 @@
               House.where.not(balance_closed: true).order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
               { include_blank: 'Company', selected: @view_user_id },
               class: "form-control mb-2 mr-sm-2" %>
-        <div class="col-lg-4 mb-1 mb-lg-0">
+        <div class="col-lg-3 mb-1 mb-lg-0">
           <div class="dropdown">
-            <%= text_field_tag :view_house,
-                @view_house_id.present? ? @houses_for_select[@view_house_id][:text] : nil,
+            <%= text_field_tag :balance_of,
+                @owner_id.present? ? "#{@owner[:name]} #{@owner[:surname]}" : 'Company',
                 class:"form-control dropdown-toggle mb-2 mr-sm-2",
                 placeholder: "Enter house code",
                 autocomplete: "off",
                 data: { toggle: 'dropdown', display: "static" } %>
-            <div class="dropdown-menu" aria-labelledby="view_house">
-              <a class="dropdown-item" href="#">All</a>
-              <% @houses_for_select.each do |house_id,h| %>
+            <div class="dropdown-menu" aria-labelledby="balance_of">
+              <a class="dropdown-item" href="#" data-owner-name="Company">Company</a>
+              <% @owners.each do |o| %>
               <a class="dropdown-item" href="#"
-                                        data-house-id="<%= house_id %>"
-                                        data-user-id="<%= h[:user_id] %>"
-                                        ><%= h[:text] %></a>
+                                        data-owner-id="<%= o[:owner_id] %>"
+                                        data-owner-name="<%= "#{o[:owner_name]} #{o[:owner_surname]}" %>"
+                                        ><%= "#{o[:house_code]} (#{o[:owner_name]} #{o[:owner_surname]})" %></a>
               <% end %>
             </div>
           </div>
         </div>
-        <%= hidden_field_tag :view_user_id, @view_user_id %>
-        <%= hidden_field_tag :view_house_id, @view_house_id %>
+        <% if @view != 'accounting' %>
+        <div class="col-lg-2 mb-1 mb-lg-0">
+          <div class="dropdown for_house">
+            <%= text_field_tag :for_house,
+                !@houses.empty? && @house_id ? @houses.where(id: @house_id).first[:code] : 'All',
+                class:"form-control dropdown-toggle mb-2 mr-sm-2",
+                placeholder: "Select house",
+                autocomplete: "off",
+                data: { toggle: 'dropdown', display: "static" },
+                disabled: @houses.length <= 1 %>
+            <div class="dropdown-menu" aria-labelledby="for_house">
+              <a class="dropdown-item" href="#">All</a>
+              <% if @houses %>
+              <% @houses.each do |h| %>
+              <a class="dropdown-item" href="#"
+                                        data-house-id="<%= h[:id] %>"
+                                        ><%= h[:code] %></a>
+              <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <% end %>
+        <%= hidden_field_tag :owner_id, @owner_id %>
+        <%= hidden_field_tag :house_id, @house_id %>
       </div>
       <div class="form-row">
         <div class="col-6 col-lg-2 mb-1 mb-lg-0">
@@ -81,14 +132,38 @@
                 disabled: true %>
         </div>
         <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <% if !@view_user_id %>
+          <% if !@owner_id %>
             <%= link_to 'New Transaction', new_transaction_path,
                   class: 'btn btn-info btn-sm btn-block' %>
           <% else %>
             <%= link_to 'New Transaction',
                   new_transaction_path(
-                    user_id: @view_user_id,
-                    house_id: @view_house_id),
+                    user_id: @owner_id,
+                    house_id: @house_id),
+                  class: 'btn btn-info btn-sm btn-block' %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-2 col-lg-1 mb-1 mb-lg-0">
+          <%= form.submit 'Full',
+                class: "btn btn-primary btn-sm btn-block",
+                id: 'btn_white' %>
+        </div>
+        <div class="col-2 col-lg-1 mb-1 mb-lg-0">
+          <%= form.submit 'Acc',
+                class: "btn btn-primary btn-sm btn-block",
+                id: 'btn_acc' %>
+        </div>
+        <div class="col-6 col-lg-1 mb-1 mb-lg-0">
+          <% if !@owner_id %>
+            <%= link_to 'Add', new_transaction_path,
+                  class: 'btn btn-info btn-sm btn-block' %>
+          <% else %>
+            <%= link_to 'Add',
+                  new_transaction_path(
+                    user_id: @owner_id,
+                    house_id: @house_id),
                   class: 'btn btn-info btn-sm btn-block' %>
           <% end %>
         </div>

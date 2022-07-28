@@ -98,6 +98,8 @@ ru:
   transactions_by_type: Суммы по статьям за выбранный период
   prepaid_bookings: Предоплаты по еще не наступившим броням
   available_balance: Доступный баланс
+  select_house: Выбор дома
+  all_houses: Все дома
   users_mailer:
     reset_password_instructions:
       subject: Запрос на смену пароля

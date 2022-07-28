@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :notifications, only: [:destroy]
   resources :water_usages
+  get 'users/get_houses', to: 'users#get_houses'#, as: 'get_houses'
   get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
   get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
   resources :house_groups

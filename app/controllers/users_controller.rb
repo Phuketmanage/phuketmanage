@@ -74,6 +74,17 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  def get_houses
+    @owner_id = params[:owner_id]
+    if !@owner_id
+      @houses = []
+    else
+      @houses = User.find(@owner_id).houses.select(:id, :code)
+    end
+    render json: { houses:  @houses }
+  end
+
+
   private
 
     def user_params
