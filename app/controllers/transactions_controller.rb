@@ -101,114 +101,115 @@ class TransactionsController < ApplicationController
         end
       end
 
-      if 1==2
-        # Owner view
-        if current_user.role?(['Owner']) || params[:commit] == 'Owner view'
-          # Owner view for owner
-          if current_user.role?(['Owner'])
-            @owner = current_user
-          # Owner view for management
-          elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
-            # if !params[:view_user_id].present?
-            @houses_for_select = set_houses_for_select
-            @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
-            @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
-            if @view_user_id && !@view_house_id.present?
-              @view_house_id = User.find(@view_user_id).houses.where.not(balance_closed: true).last.id
-            end
-            if !@view_user_id && !@view_house_id
-              @error = 'Owner or house should be selected for this type of view'
-              return
-            end
-            # @view_user_id = params[:view_user_id]
-            session[:view_user_id] = @view_user_id
-            session[:view_house_id] = @view_house_id
-            @owner = User.find(@view_user_id)
-          end
-          @locale = @owner.locale || 'en'
-          @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-          ## 05.2022 Order: Show new transactions on top
-          # @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
-          @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
-          @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
-          type_rental_id = TransactionType.find_by(name_en: 'Rental').id
-          @cr_rental = 0
-          @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
-          @cr_prev_rental = 0
-          @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
-          @one_house = true
-          @one_house = false if @owner.houses.count > 1
-          today = Time.zone.now.in_time_zone('Bangkok')
-          future_booking_ids = @owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
-          future_booking_de = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.debit')
-          future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
-          @bookings_prepayment = future_booking_de - future_booking_cr
-          @view = 'owner'
-          session[:commit] = params[:commit]
-        # Accounting view
-        elsif current_user.role?(['Admin','Manager','Accounting']) &&
-        params[:commit] == 'Accounting view'
-          @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
-          @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
-          @houses_for_select = set_houses_for_select
-          if !@view_user_id && !@view_house_id
-          # if !params[:view_house_id].present?
-            @error = 'Owner or house should be selected for this type of view'
-          else
-            # @view_user_id = params[:view_user_id]
-            # @view_user_id = House.find(params[:view_house_id]).owner.id
-            owner = User.find(@view_user_id)
-            @locale = owner.locale
-            session[:view_user_id] = @view_user_id
-            session[:view_house_id] = @view_house_id
-            @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
-            @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
-            # @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
-            type_rental_id = TransactionType.find_by(name_en: 'Rental').id
-            @view = 'accounting' if params[:commit] == 'Accounting view'
-            session[:commit] = params[:commit]
-            session[:view] = @view
-          end
-        # Company view
-        elsif current_user.role?(['Admin','Manager','Accounting'])
-          # @owners_for_select = set_owners_for_select
-          @houses_for_select = set_houses_for_select
-          @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
-          @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
-          if @view_user_id.present?
-            # @view_user_id = params[:view_user_id]
-            owner = User.find(@view_user_id)
-            session[:view_user_id] = @view_user_id
-            session[:view_house_id] = @view_house_id
-            @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
-            # 05.2022 Order: Show new gtransactions on top
-            # @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(date: :desc, created_at: :desc).all
-            @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ? AND for_acc = false', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
-          else
-            if current_user.role?(['Admin'])
-              @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-              # 05.2022 Order: Show new gtransactions on top
-              # @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
-              @transactions_before = Transaction.where('date < ?', @from).all
-              @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
-            else
-              salary = TransactionType.find_by(name_en:'Salary')
-              @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
-              # 05.2022 Order: Show new gtransactions on top
-              # @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(date: :desc, created_at: :desc).all
-              @transactions_before = Transaction.where('date < ?', @from).all
-              @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
-            end
-            session.delete(:view_user_id)
-          end
-          @view = 'company'
-          session[:commit] = params[:commit]
-          session[:view] = @view
-        else
-          @error = 'No action programmed for this request'
-        end
-      end
+      #</28.07.2022 migrate to Balance v 2 (Balance of ... - White/Gray)
+      # # Owner view
+      # if current_user.role?(['Owner']) || params[:commit] == 'Owner view'
+      #   # Owner view for owner
+      #   if current_user.role?(['Owner'])
+      #     @owner = current_user
+      #   # Owner view for management
+      #   elsif params[:commit] == 'Owner view' && current_user.role?(['Admin','Manager','Accounting'])
+      #     # if !params[:view_user_id].present?
+      #     @houses_for_select = set_houses_for_select
+      #     @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+      #     @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+      #     if @view_user_id && !@view_house_id.present?
+      #       @view_house_id = User.find(@view_user_id).houses.where.not(balance_closed: true).last.id
+      #     end
+      #     if !@view_user_id && !@view_house_id
+      #       @error = 'Owner or house should be selected for this type of view'
+      #       return
+      #     end
+      #     # @view_user_id = params[:view_user_id]
+      #     session[:view_user_id] = @view_user_id
+      #     session[:view_house_id] = @view_house_id
+      #     @owner = User.find(@view_user_id)
+      #   end
+      #   @locale = @owner.locale || 'en'
+      #   @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+      #   ## 05.2022 Order: Show new transactions on top
+      #   # @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
+      #   @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
+      #   @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
+      #   type_rental_id = TransactionType.find_by(name_en: 'Rental').id
+      #   @cr_rental = 0
+      #   @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
+      #   @cr_prev_rental = 0
+      #   @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
+      #   @one_house = true
+      #   @one_house = false if @owner.houses.count > 1
+      #   today = Time.zone.now.in_time_zone('Bangkok')
+      #   future_booking_ids = @owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
+      #   future_booking_de = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.debit')
+      #   future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
+      #   @bookings_prepayment = future_booking_de - future_booking_cr
+      #   @view = 'owner'
+      #   session[:commit] = params[:commit]
+      # # Accounting view
+      # elsif current_user.role?(['Admin','Manager','Accounting']) &&
+      # params[:commit] == 'Accounting view'
+      #   @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+      #   @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+      #   @houses_for_select = set_houses_for_select
+      #   if !@view_user_id && !@view_house_id
+      #   # if !params[:view_house_id].present?
+      #     @error = 'Owner or house should be selected for this type of view'
+      #   else
+      #     # @view_user_id = params[:view_user_id]
+      #     # @view_user_id = House.find(params[:view_house_id]).owner.id
+      #     owner = User.find(@view_user_id)
+      #     @locale = owner.locale
+      #     session[:view_user_id] = @view_user_id
+      #     session[:view_house_id] = @view_house_id
+      #     @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
+      #     @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+      #     # @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+      #     type_rental_id = TransactionType.find_by(name_en: 'Rental').id
+      #     @view = 'accounting' if params[:commit] == 'Accounting view'
+      #     session[:commit] = params[:commit]
+      #     session[:view] = @view
+      #   end
+      # # Company view
+      # elsif current_user.role?(['Admin','Manager','Accounting'])
+      #   # @owners_for_select = set_owners_for_select
+      #   @houses_for_select = set_houses_for_select
+      #   @view_user_id = params[:view_user_id].present? ? params[:view_user_id].to_i : nil
+      #   @view_house_id = params[:view_house_id].present? ? params[:view_house_id].to_i : nil
+      #   if @view_user_id.present?
+      #     # @view_user_id = params[:view_user_id]
+      #     owner = User.find(@view_user_id)
+      #     session[:view_user_id] = @view_user_id
+      #     session[:view_house_id] = @view_house_id
+      #     @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(:date, :created_at).all
+      #     # 05.2022 Order: Show new gtransactions on top
+      #     # @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @view_user_id).order(date: :desc, created_at: :desc).all
+      #     @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @view_user_id).all
+      #     @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND user_id = ? AND for_acc = false', @from, @to, @view_user_id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+      #   else
+      #     if current_user.role?(['Admin'])
+      #       @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+      #       # 05.2022 Order: Show new gtransactions on top
+      #       # @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
+      #       @transactions_before = Transaction.where('date < ?', @from).all
+      #       @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+      #     else
+      #       salary = TransactionType.find_by(name_en:'Salary')
+      #       @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
+      #       # 05.2022 Order: Show new gtransactions on top
+      #       # @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(date: :desc, created_at: :desc).all
+      #       @transactions_before = Transaction.where('date < ?', @from).all
+      #       @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+      #     end
+      #     session.delete(:view_user_id)
+      #   end
+      #   @view = 'company'
+      #   session[:commit] = params[:commit]
+      #   session[:view] = @view
+      # else
+      #   @error = 'No action programmed for this request'
+      # end
+
+      # 28.07.2022 />
     end
   end
 
