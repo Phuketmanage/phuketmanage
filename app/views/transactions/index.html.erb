@@ -64,12 +64,8 @@
         <div class="col-6 col-lg-2 mb-1 mb-lg-0">
           <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
         </div>
-        <%#= form.select :view_user_id,
-              House.where.not(balance_closed: true).order(:code).map {|h| ["#{h.code} (#{h.owner.name} #{h.owner.surname})", h.owner.id]},
-              { include_blank: 'Company', selected: @view_user_id },
-              class: "form-control mb-2 mr-sm-2" %>
-        <div class="col-lg-3 mb-1 mb-lg-0">
-          <div class="dropdown">
+        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+          <div class="dropdown balance_of">
             <%= text_field_tag :balance_of,
                 @owner_id.present? ? "#{@owner[:name]} #{@owner[:surname]}" : 'Company',
                 class:"form-control dropdown-toggle mb-2 mr-sm-2",
@@ -88,7 +84,7 @@
           </div>
         </div>
         <% if @view != 'accounting' %>
-        <div class="col-lg-2 mb-1 mb-lg-0">
+        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
           <div class="dropdown for_house">
             <%= text_field_tag :for_house,
                 !@houses.empty? && @house_id ? @houses.where(id: @house_id).first[:code] : 'All',
@@ -113,7 +109,7 @@
         <%= hidden_field_tag :owner_id, @owner_id %>
         <%= hidden_field_tag :house_id, @house_id %>
       </div>
-      <div class="form-row">
+      <!-- <div class="form-row">
         <div class="col-6 col-lg-2 mb-1 mb-lg-0">
           <%= form.submit 'Company view',
                 class: "btn btn-primary btn-sm btn-block",
@@ -143,19 +139,19 @@
                   class: 'btn btn-info btn-sm btn-block' %>
           <% end %>
         </div>
-      </div>
+      </div> -->
       <div class="form-row">
-        <div class="col-2 col-lg-1 mb-1 mb-lg-0">
+        <div class="col-4 col-lg-2 mb-1 mb-lg-0">
           <%= form.submit 'Full',
                 class: "btn btn-primary btn-sm btn-block",
                 id: 'btn_white' %>
         </div>
-        <div class="col-2 col-lg-1 mb-1 mb-lg-0">
+        <div class="col-4 col-lg-2 mb-1 mb-lg-0">
           <%= form.submit 'Acc',
                 class: "btn btn-primary btn-sm btn-block",
                 id: 'btn_acc' %>
         </div>
-        <div class="col-6 col-lg-1 mb-1 mb-lg-0">
+        <div class="col-4 col-lg-2 mb-1 mb-lg-0">
           <% if !@owner_id %>
             <%= link_to 'Add', new_transaction_path,
                   class: 'btn btn-info btn-sm btn-block' %>
