@@ -45,11 +45,11 @@ class WaterUsage < ApplicationRecord
 
     def send_sms phone: '+66875558155', message:
       client = Twilio::REST::Client.new
-        client.messages.create({
-          from: ENV['TWILIO_PHONE_NUMBER'],
-          to: phone,
-          body: message
-        })
+      client.messages.create(
+        from: ENV['TWILIO_PHONE_NUMBER'],
+        to: phone,
+        body: message
+      )
     end
 
 end
