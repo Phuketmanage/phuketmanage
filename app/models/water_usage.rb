@@ -47,7 +47,7 @@ class WaterUsage < ApplicationRecord
       client = Twilio::REST::Client.new
       client.messages.create(
         from: ENV['TWILIO_PHONE_NUMBER'],
-        to: phone,
+        to: "#{phone}",
         body: message
       )
     end

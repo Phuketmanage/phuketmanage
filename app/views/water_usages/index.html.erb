@@ -31,7 +31,10 @@
         <td><%= wu.amount_2 - @water_usage[ind+1].amount_2 if !last && wu.amount_2.present? %></td>
         <td><%= (delta_2 / days.to_f).round(1) if !last  && wu.amount_2.present? %></td>
         <td><%= wu.comment %></td>
-        <td><%= link_to "Edit", edit_water_usage_path(wu.id) %></td>
+        <td>
+          <%= link_to "Edit", edit_water_usage_path(wu.id) %>
+          <%= link_to 'Destroy', water_usage_path(wu.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     </tbody>
   <% end %>

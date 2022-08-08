@@ -18,6 +18,20 @@ class TransactionsController < ApplicationController
     elsif !@from.present? || !@to.present?
       @error = 'Both dates should be selected'
     end
+
+    # @owner_id = nil
+    # @house_id = nil
+    # if params[:owner_id].present?
+    #   @owner_id = !params[:owner_id].empty? ? params[:owner_id].to_i : nil
+    # elsif session[:owner_id].present?
+    #   @owner_id = session[:owner_id].to_i
+    # end
+    # if params[:house_id].present?
+    #   @house_id = !params[:house_id].empty? ? params[:house_id].to_i : nil
+    # elsif session[:house_id].present?
+    #   @house_id = session[:house_id].to_i
+    # end
+    # byebug
     @owner_id = params[:owner_id].present? ? params[:owner_id].to_i : nil
     @house_id = params[:house_id].present? ? params[:house_id].to_i : nil
     @owners = set_owners
@@ -63,6 +77,7 @@ class TransactionsController < ApplicationController
         end
         @houses = @owner.houses.select(:id, :code)
         @locale = @owner.locale || 'en'
+        session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
           if @house_id.nil? #House not selected
@@ -87,7 +102,6 @@ class TransactionsController < ApplicationController
           future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
           @bookings_prepayment = future_booking_de - future_booking_cr
           @view = 'owner'
-          session[:commit] = params[:commit]
         end
         #White balance
         if params[:commit] == 'Acc' &&  current_user.role?(['Admin','Manager','Accounting'])
@@ -96,7 +110,6 @@ class TransactionsController < ApplicationController
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @owner_id).all
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @view = 'accounting' if params[:commit] == 'Acc'
-          session[:commit] = params[:commit]
           session[:view] = @view
         end
       end
@@ -330,8 +343,8 @@ class TransactionsController < ApplicationController
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
-                                    view_user_id: session[:view_user_id],
-                                    view_house_id: session[:view_house_id],
+                                    owner_id: session[:owner_id],
+                                    house_id: session[:house_id],
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully created.' }
       else
@@ -409,7 +422,8 @@ class TransactionsController < ApplicationController
         format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
-                                    view_user_id: session[:view_user_id],
+                                    owner_id: session[:owner_id],
+                                    house_id: session[:house_id],
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @transaction }
@@ -444,7 +458,8 @@ class TransactionsController < ApplicationController
     if error.present?
       redirect_to transactions_path(from: session[:from],
                                     to: session[:to],
-                                    view_user_id: session[:view_user_id],
+                                    owner_id: session[:owner_id],
+                                    house_id: session[:house_id],
                                     commit: session[:commit]),
                                     notice: error
       return
@@ -460,7 +475,8 @@ class TransactionsController < ApplicationController
     end
     redirect_to transactions_path(from: session[:from],
                                   to: session[:to],
-                                  view_user_id: session[:view_user_id],
+                                  owner_id: session[:owner_id],
+                                  house_id: session[:house_id],
                                   commit: session[:commit]),
                                   notice: 'Ref no was successfully updated.'
 
@@ -474,7 +490,8 @@ class TransactionsController < ApplicationController
       format.html { redirect_to transactions_path(
                                     from: session[:from],
                                     to: session[:to],
-                                    view_user_id: session[:view_user_id],
+                                    owner_id: session[:owner_id],
+                                    house_id: session[:house_id],
                                     commit: session[:commit]),
                                     notice: 'Transaction was successfully destroyed.' }
       # format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
