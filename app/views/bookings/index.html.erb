@@ -64,6 +64,7 @@
             <nobr>
               <%= booking.start.strftime('%d.%m.%Y') %> -
               <%= booking.finish.strftime('%d.%m.%Y') %>
+              (<%= (booking.finish-booking.start).to_i %>d)
             </nobr>
           </td>
           <td>
@@ -128,7 +129,8 @@
                   To owner: <%= number_to_currency(tp, precision: 2, unit: '') %><br />
                 <% end %>
             <% end %>
-            <%= "Booking number: #{booking.number}" %>
+            <%= "Booking number: #{booking.number}" %> |
+            <%= "Created: #{booking.created_at.strftime('%d.%m.%Y')}" %>
             <% if booking.allotment? %>
               <span class="badge badge-info">Allotment</span>
             <% end %>

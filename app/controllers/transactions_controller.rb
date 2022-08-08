@@ -19,19 +19,6 @@ class TransactionsController < ApplicationController
       @error = 'Both dates should be selected'
     end
 
-    # @owner_id = nil
-    # @house_id = nil
-    # if params[:owner_id].present?
-    #   @owner_id = !params[:owner_id].empty? ? params[:owner_id].to_i : nil
-    # elsif session[:owner_id].present?
-    #   @owner_id = session[:owner_id].to_i
-    # end
-    # if params[:house_id].present?
-    #   @house_id = !params[:house_id].empty? ? params[:house_id].to_i : nil
-    # elsif session[:house_id].present?
-    #   @house_id = session[:house_id].to_i
-    # end
-    # byebug
     @owner_id = params[:owner_id].present? ? params[:owner_id].to_i : nil
     @house_id = params[:house_id].present? ? params[:house_id].to_i : nil
     @owners = set_owners
@@ -44,15 +31,11 @@ class TransactionsController < ApplicationController
         if params[:commit] != 'Acc'
           if current_user.role?(['Admin'])
             @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-            # 05.2022 Order: Show new gtransactions on top
-            # @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(date: :desc, created_at: :desc).all
             @transactions_before = Transaction.where('date < ?', @from).all
             @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           else
             salary = TransactionType.find_by(name_en:'Salary')
             @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
-            # 05.2022 Order: Show new gtransactions on top
-            # @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(date: :desc, created_at: :desc).all
             @transactions_before = Transaction.where('date < ?', @from).all
             @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
           end
