@@ -12,7 +12,7 @@
             <h5 class="house_price"><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %>  </h5>
             <p class="duration"><%= "#{t('search.search_duration')} #{@search.duration}" %></p>
             <p><%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
-            <%= ", #{number_to_currency(price[:total]/(@search.duration.to_f/28), precision: 0, unit: '฿')} / #{t('search.per_month')}" if @search.duration >= 28 %></p>
+            <%#= ", #{number_to_currency(price[:total]/(@search.duration.to_f/28), precision: 0, unit: '฿')} / #{t('search.per_month')}" if @search.duration >= 28 %></p>
           <% else %>
             <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
           <% end %>
