@@ -15,16 +15,20 @@ class Ability
       can :index_front, [ Booking ]
       can :index, [ Admin ]
       can :index, TransactionFile, show: true
-    elsif user.role? 'Transfer'
+    end
+    if user.role? 'Transfer'
       can :read, Transfer
       can :index, [ Admin ]
-    elsif user.role? 'Maid'
+    end
+    if user.role? 'Maid'
       can [:laundry, :update_laundry], Job
       can :index, [ Admin ]
-    elsif user.role? 'Gardener'
+    end
+    if user.role? 'Gardener'
       can [:index, :create, :update], WaterUsage
       can :index, [ Admin ]
-    elsif user.role? 'Accounting'
+    end
+    if user.role? 'Accounting'
       can [:index, :new, :create, :update_invoice_ref] , Transaction
       can [:edit, :update], Transaction do |t|
         t.date > (Date.today-30.days).beginning_of_month
@@ -35,13 +39,15 @@ class Ability
       can [:laundry], Job
       can [:timeline, :timeline_data], Booking
       can :index, [ Admin ]
-    elsif user.role? 'Guest relation'
+    end
+    if user.role? 'Guest relation'
       can :manage, Job
       can [:destroy], Job, creator: user
       can :index, Transfer
       can [:timeline, :timeline_data, :check_in_out, :update_comment_gr], Booking
       can :index, [ Admin ]
-    elsif user.role? :manager
+    end
+    if user.role? :manager
       can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
       can [:new ], User
       can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
@@ -65,7 +71,8 @@ class Ability
       can :manage, TransactionFile
       # can [ :statement, :reimbersment ], Document
       can [:index, :create, :update], WaterUsage
-    elsif user.role? :admin
+    end
+    if user.role? :admin
       can :manage, :all
       # # manage products, assets he owns
       # can :manage, Product do | product |

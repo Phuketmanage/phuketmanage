@@ -83,6 +83,11 @@ Address:
         <td class="d-print-none">
           <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
+            <% if de_ow > 0 %>
+              <%= link_to 'ST', tmp_statement_path(trsc_id: t.id), target: '_blank' %>
+              <%= link_to 'RB', tmp_reimbersment_path(trsc_id: t.id), target: '_blank' %>
+            <% end %>
+
           <% end %>
           <% if current_user.role?(['Accounting', 'Manager']) && t.date > Date.today-1.day %>
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
