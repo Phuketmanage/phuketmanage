@@ -470,7 +470,7 @@ react_to_select_trsc_type = (selected, init) ->
         $("#transaction_cr_co").val('')
       $("#de_ow_label").text('Amount')
       $("#de_ow").show()
-      $("#house_id").hide()
+      $("#house_id").show()
       $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false
         $('#transaction_comment_en').val("Balance top up")
