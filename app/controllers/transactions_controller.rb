@@ -52,14 +52,15 @@ class TransactionsController < ApplicationController
       elsif !@owner_id.nil? || current_user.role?(['Owner'])
         if current_user.role?(['Owner'])
           @owner = current_user
+          @locale = @owner.locale || 'en'
         # Owner view for management
         elsif current_user.role?(['Admin','Manager','Accounting'])
           session[:owner_id] = @owner_id
           session[:house_id] = @house_id
           @owner = User.find(@owner_id)
+          @locale = 'en'
         end
         @houses = @owner.houses.select(:id, :code)
-        @locale = @owner.locale || 'en'
         session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
