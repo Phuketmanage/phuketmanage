@@ -78,7 +78,7 @@
               <a class="dropdown-item" href="#"
                                         data-owner-id="<%= o[:owner_id] %>"
                                         data-owner-name="<%= "#{o[:owner_name]} #{o[:owner_surname]}" %>"
-                                        ><%= "#{o[:house_code]} (#{o[:owner_name]} #{o[:owner_surname]})" %></a>
+                                        ><%= "#{o[:house_code]} (#{o[:owner_name]} #{o[:owner_surname]}) #{o[:house_maintenance] ? 'M' : ''}" %></a>
               <% end %>
             </div>
           </div>

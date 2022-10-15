@@ -557,6 +557,7 @@ class TransactionsController < ApplicationController
         .select(" users.id as owner_id,
                   houses.id as house_id,
                   houses.code as house_code,
+                  houses.maintenance as house_maintenance,
                   users.name as owner_name,
                   users.surname as owner_surname ")
         .where.not('houses.balance_closed': true)
