@@ -89,6 +89,7 @@
             <%= link_to 'Edit', edit_transaction_path(t) %>
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
           <% end %>
+          <%= link_to 'Copy', new_transaction_path(tid: t.id) %>
         </td>
         <td class='de_ow_cell text-right'><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0%></td>
         <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>
