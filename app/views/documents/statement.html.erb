@@ -44,8 +44,7 @@
   <div class="d-flex flex-row">
     <div class="p-2 mr-auto">
       <strong>Phaethon Co., Ltd (Head Office)</strong><br />
-      30/257 Moo.1, T. Kathu, A. Kathu, Phuket, 83120 Thailand<br />
-      Tel/Fax: 076 20 20 22<br />
+      100/21 Moo 5 T. Cherngtalay A. Thalang Phuket 83110 Thailand<br />
       +66 87 555 81 55<br />
       Tax ID: 0835550008605
     </div>
@@ -65,9 +64,9 @@
     <div class="p-2 w-50">
       <strong>Balance of</strong><br/>
       <%= "#{@owner.name} #{@owner.surname}" %><br/>
-      <% @owner.houses.each do |h| %>
-        <%= h.address %><br />
-      <% end %>
+      <%# @owner.houses.each do |h| %>
+        <%#= h.address %><br />
+      <%# end %>
       Tax ID Card No.: <%= @owner.tax_no.present? ? @owner.tax_no : '0000000000000' %>
     </div>
   </div>
