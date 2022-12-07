@@ -1,4 +1,5 @@
 $(document).on "turbolinks:load", ->
+
   if !!document.getElementById('timeline')
     $('[data-toggle="tooltip"]').tooltip()
 
@@ -216,16 +217,6 @@ $(document).on "turbolinks:load", ->
       if this.checked == false
         $('#booking_check_out').removeAttr('disabled')
 
-    # For check in/out
-    $('a.edit_comment').on 'click', (e) ->
-      e.preventDefault()
-      booking_id = $(this).data('booking-id')
-      $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").removeClass('d-none')
-    $('a.cancel_edit_comment').on 'click', (e) ->
-      e.preventDefault()
-      booking_id = $(this).data('booking-id')
-      $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").addClass('d-none')
-
     $('[data-toggle="popover"]').popover({container: 'body'})
 
     $('#get_job_oder').on 'click', (e) ->
@@ -262,6 +253,17 @@ $(document).on "turbolinks:load", ->
 
     $('input#to').on 'change', (e) ->
       $('input#from').attr('max', $(this).val())
+
+  # For check in/out
+  $('a.edit_comment').on 'click', (e) ->
+    e.preventDefault()
+    booking_id = $(this).data('booking-id')
+    type = $(this).data('type')
+    $(".form_edit_comment_gr[data-booking-id=#{booking_id}][data-type=#{type}]").removeClass('d-none')
+  $('a.cancel_edit_comment').on 'click', (e) ->
+    e.preventDefault()
+    booking_id = $(this).data('booking-id')
+    $(".form_edit_comment_gr[data-booking-id=#{booking_id}]").addClass('d-none')
 
   $('#booking_files').on "click", "a[data-link-to-file]", (e) ->
     e.preventDefault()

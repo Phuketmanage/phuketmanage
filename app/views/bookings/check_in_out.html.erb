@@ -48,13 +48,15 @@
       <% end %>
       Source: <%= booking.source.name if booking.source %><br />
       <%=  "Comment: #{r[:comment]}" %>
-      <%= link_to "Edit comment", '', class: 'edit_comment',
-                                      data: { booking_id: r[:booking_id] } %>
+      <%= link_to "Edit comment", '#', class: 'edit_comment',
+                                      data: { booking_id: r[:booking_id],
+                                              type: r[:type]} %>
       <%= form_with model: booking,
                     url: update_booking_comment_gr_path(r[:booking_id]),
                     local: true,
                     class: 'form_edit_comment_gr d-none',
-                    data: { booking_id: r[:booking_id] } do |f| %>
+                    data: { booking_id: r[:booking_id],
+                            type: r[:type] } do |f| %>
         <div class="form-group">
           <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
         </div>
