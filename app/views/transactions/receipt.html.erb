@@ -30,9 +30,10 @@
   <div class="p-2">
     <strong>Customer</strong><br/>
     <%= "#{@owner.name} #{@owner.surname}" %><br />
-    <% @owner.houses.each do |h| %>
-      <%= h.address %><br />
-    <% end %>
+    <%= @owner.houses.first.address %><br />
+    <%# @owner.houses.each do |h| %>
+      <%#= h.address %>
+    <%# end %>
     Tax ID Card No.: 0000000000000
   </div>
   <div class="p-2">
