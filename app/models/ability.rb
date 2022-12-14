@@ -31,7 +31,7 @@ class Ability
     if user.role? 'Accounting'
       can [:index, :new, :create, :update_invoice_ref] , Transaction
       can [:edit, :update], Transaction do |t|
-        t.date > (Date.today-30.days).beginning_of_month
+        t.date >= (Date.today-30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
         t.date > Date.today-1.days
@@ -63,7 +63,7 @@ class Ability
       can :index, [ Admin ]
       can [:index, :new, :create, :update_invoice_ref, :docs] , Transaction
       can [:edit, :update], Transaction do |t|
-        t.date > (Date.today-30.days).beginning_of_month
+        t.date >= (Date.today-30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
         t.date > Date.today-1.days
