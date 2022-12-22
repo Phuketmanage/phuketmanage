@@ -91,7 +91,7 @@
               </nobr>
             </td>
             <%# comm_prcnt = false %>
-            <% comm_prcnt = (de_co/cr_ow).round(2)  %>
+            <% comm_prcnt = (de_co/(cr_ow-de_co)).round(2)  %>
             <td class='de_co_cell text-right'>
               <nobr>
                 <%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %> <%= comm_prcnt %>
