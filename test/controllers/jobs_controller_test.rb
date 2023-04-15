@@ -6,6 +6,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:admin)
     @job = jobs(:one)
+    JobType.create!(name: 'For management')
   end
 
   test "should get index" do
