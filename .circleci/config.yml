@@ -2,25 +2,34 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+orbs:
+  ruby: circleci/ruby@2.0.0
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  say-hello:
+  build:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/configuration-reference/#executor-job
     docker:
-      - image: cimg/base:stable
+      - image: cimg/ruby:3.0.2-node
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+          DATABASE_URL: "postgres://user:@localhost:5432/phuketmanage_test"
+          S3_BUCKET: 'test'
+      - image: cimg/postgres:13.10
+        environment:
+          POSTGRES_USER: user
+          POSTGRES_DB: db
     # Add steps to the job
     # See: https://circleci.com/docs/configuration-reference/#steps
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/configuration-reference/#workflows
-workflows:
-  say-hello-workflow:
-    jobs:
-      - say-hello
+      - ruby/install-deps
+      - run: sudo bundle install
+      - run: bundle exec rails db:create db:schema:load
+      - run: bundle exec rake
+      - store_artifacts:
+          path: test-results
+          destination: test-results
