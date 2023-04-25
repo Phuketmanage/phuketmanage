@@ -50,6 +50,7 @@ gem 'font_awesome5_rails'
 gem 'twilio-ruby'
 gem 'barnes'
 gem 'scout_apm'
+gem 'the_schema_is'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

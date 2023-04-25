@@ -1,4 +1,12 @@
 class Duration < ApplicationRecord
+  the_schema_is "durations" do |t|
+    t.integer "start"
+    t.integer "finish"
+    t.bigint "house_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   belongs_to :house
   validates :start, :finish, :numericality => {
     greater_than: 0,
