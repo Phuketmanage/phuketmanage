@@ -1,6 +1,7 @@
 class TransactionFilesController < ApplicationController
   load_and_authorize_resource
 
+  # @route GET /transaction_files (transaction_files)
   def index
     if current_user.role?(['Owner'])
       files = Transaction.find(params[:transaction_id]).files.where(show: true)
@@ -10,17 +11,20 @@ class TransactionFilesController < ApplicationController
     render json: {files: files}
   end
 
+  # @route DELETE /transaction_file (transaction_file)
   def destroy
     @file = TransactionFile.find(params['id'])
     @file.destroy
   end
 
+  # @route DELETE /transaction_file_tmp (transaction_file_tmp)
   def destroy_tmp
     key = params['key']
     S3_BUCKET.object(key).delete
     render json: {key: key}
   end
 
+  # @route GET /transaction_file_toggle_show (transaction_file_toggle_show)
   def toggle_show
     file = TransactionFile.where(id: params[:id]).first
     if file.present?
@@ -31,6 +35,7 @@ class TransactionFilesController < ApplicationController
     end
   end
 
+  # @route GET /transaction_file_download (transaction_file_download)
   def download
     key = params['key']
     file = S3_CLIENT.get_object(

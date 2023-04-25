@@ -5,8 +5,7 @@ class WaterUsagesController < ApplicationController
 
   layout 'admin'
 
-  # GET /water_usages
-  # GET /water_usages.json
+  # @route GET /water_usages (water_usages)
   def index
     if params[:house_id].present?
       @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).first(30)
@@ -19,22 +18,18 @@ class WaterUsagesController < ApplicationController
 
   end
 
-  # GET /water_usages/1
-  # GET /water_usages/1.json
+  # @route GET /water_usages/:id (water_usage)
   def show
   end
 
-  # GET /water_usages/new
   # def new
   #   @water_usage = WaterUsage.new
   # end
 
-  # GET /water_usages/1/edit
   # def edit
   # end
 
-  # POST /water_usages
-  # POST /water_usages.json
+  # @route POST /water_usages (water_usages)
   def create
     @water_usage = WaterUsage.new(water_usage_params)
 
@@ -51,8 +46,8 @@ class WaterUsagesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /water_usages/1
-  # PATCH/PUT /water_usages/1.json
+  # @route PATCH /water_usages/:id (water_usage)
+  # @route PUT /water_usages/:id (water_usage)
   def update
     respond_to do |format|
       if @water_usage.update(water_usage_params)
@@ -65,8 +60,7 @@ class WaterUsagesController < ApplicationController
     end
   end
 
-  # DELETE /water_usages/1
-  # DELETE /water_usages/1.json
+  # @route DELETE /water_usages/:id (water_usage)
   def destroy
     @water_usage.destroy
     respond_to do |format|

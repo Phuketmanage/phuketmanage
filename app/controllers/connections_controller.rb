@@ -3,6 +3,7 @@ class ConnectionsController < ApplicationController
 
   # before_action :set_house, only: :create
 
+  # @route POST (/:locale)/connections (connections)
   def create
     @house = House.find_by(number: params[:hid])
     @connection = @house.connections.build(connection_params)
@@ -17,6 +18,7 @@ class ConnectionsController < ApplicationController
 
   end
 
+  # @route DELETE (/:locale)/connections/:id (connection)
   def destroy
     @connection = Connection.find(params[:id])
     hid = @connection.house.number

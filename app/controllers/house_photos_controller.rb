@@ -5,11 +5,13 @@ class HousePhotosController < ApplicationController
   before_action :get_photo, only: [:update]
   layout 'admin'
 
+  # @route GET /houses/:house_id/photos (house_photos)
   def index
     @photos = @house.photos.order(:url)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}", success_action_status: '201', acl: 'public-read')
   end
 
+  # @route GET /houses/:house_id/photos/add (house_photos_add)
   def add
     url = params[:photo_url]
     preview = params[:preview]
@@ -26,6 +28,7 @@ class HousePhotosController < ApplicationController
 
   end
 
+  # @route PATCH /house_photos/:id (house_photo_update)
   def update
     @photo.update(house_photo_params)
     if params[:commit] == "Use as default"
@@ -39,6 +42,8 @@ class HousePhotosController < ApplicationController
     # end
   end
 
+  # @route DELETE /house_photos/:id (house_photo_delete)
+  # @route DELETE /houses/:hid/delete_photos (house_photo_delete_all)
   def delete
 
     if params[:hid]

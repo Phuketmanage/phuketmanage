@@ -4,28 +4,24 @@ class SourcesController < ApplicationController
 
   before_action :set_source, only: [:show, :edit, :update, :destroy]
 
-  # GET /sources
-  # GET /sources.json
+  # @route GET (/:locale)/sources (sources)
   def index
     @sources = Source.all
   end
 
-  # GET /sources/1
-  # GET /sources/1.json
   def show
   end
 
-  # GET /sources/new
+  # @route GET (/:locale)/sources/new (new_source)
   def new
     @source = Source.new
   end
 
-  # GET /sources/1/edit
+  # @route GET (/:locale)/sources/:id/edit (edit_source)
   def edit
   end
 
-  # POST /sources
-  # POST /sources.json
+  # @route POST (/:locale)/sources (sources)
   def create
     @source = Source.new(source_params)
 
@@ -40,8 +36,8 @@ class SourcesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /sources/1
-  # PATCH/PUT /sources/1.json
+  # @route PATCH (/:locale)/sources/:id (source)
+  # @route PUT (/:locale)/sources/:id (source)
   def update
     respond_to do |format|
       if @source.update(source_params)
@@ -54,8 +50,7 @@ class SourcesController < ApplicationController
     end
   end
 
-  # DELETE /sources/1
-  # DELETE /sources/1.json
+  # @route DELETE (/:locale)/sources/:id (source)
   def destroy
     Booking.where(source_id: @source.id).update_all(source_id: nil)
     @source.destroy

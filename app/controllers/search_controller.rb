@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  # @route GET (/:locale)/search (search)
   def index
     @search = Search.new( rs: params[:search][:rs],
                           rf: params[:search][:rf],

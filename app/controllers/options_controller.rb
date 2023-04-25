@@ -5,28 +5,24 @@ class OptionsController < ApplicationController
 
   layout 'admin'
 
-  # GET /options
-  # GET /options.json
+  # @route GET /options (options)
   def index
     @options = Option.order(:zindex).all
   end
 
-  # GET /options/1
-  # GET /options/1.json
   def show
   end
 
-  # GET /options/new
+  # @route GET /options/new (new_option)
   def new
     @option = Option.new
   end
 
-  # GET /options/1/edit
+  # @route GET /options/:id/edit (edit_option)
   def edit
   end
 
-  # POST /options
-  # POST /options.json
+  # @route POST /options (options)
   def create
     @option = Option.new(option_params)
 
@@ -41,8 +37,8 @@ class OptionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /options/1
-  # PATCH/PUT /options/1.json
+  # @route PATCH /options/:id (option)
+  # @route PUT /options/:id (option)
   def update
     respond_to do |format|
       if @option.update(option_params)
@@ -55,8 +51,7 @@ class OptionsController < ApplicationController
     end
   end
 
-  # DELETE /options/1
-  # DELETE /options/1.json
+  # @route DELETE /options/:id (option)
   def destroy
     @option.destroy
     respond_to do |format|
