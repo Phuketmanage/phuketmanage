@@ -1,4 +1,35 @@
 class Booking < ApplicationRecord
+  the_schema_is "bookings" do |t|
+    t.date "start"
+    t.date "finish"
+    t.bigint "house_id", null: false
+    t.bigint "tenant_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "status"
+    t.string "number"
+    t.string "ical_UID"
+    t.integer "source_id"
+    t.text "comment"
+    t.integer "sale"
+    t.integer "agent"
+    t.integer "comm"
+    t.integer "nett"
+    t.boolean "synced", default: false
+    t.boolean "allotment"
+    t.boolean "transfer_in", default: false
+    t.boolean "transfer_out", default: false
+    t.string "client_details"
+    t.text "comment_gr"
+    t.boolean "no_check_in", default: false
+    t.boolean "no_check_out", default: false
+    t.date "check_in"
+    t.date "check_out"
+    t.string "comment_owner"
+    t.boolean "paid", default: false
+    t.boolean "ignore_warnings", default: false
+  end
+
   attr_accessor :manual_price
   # attr_accessible :manual_price
 

@@ -1,4 +1,29 @@
 class User < ApplicationRecord
+  the_schema_is "users" do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.bigint "invited_by_id"
+    t.integer "invitations_count", default: 0
+    t.string "name"
+    t.string "surname"
+    t.string "locale"
+    t.text "comment"
+    t.string "code"
+    t.string "tax_no"
+    t.boolean "show_comm", default: false
+  end
+
   has_and_belongs_to_many :roles
   has_many :houses, foreign_key: 'owner_id'
   has_many :bookings, foreign_key: 'tenant_id'

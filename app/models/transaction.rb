@@ -1,4 +1,23 @@
 class Transaction < ApplicationRecord
+  the_schema_is "transactions" do |t|
+    t.string "ref_no"
+    t.bigint "house_id"
+    t.bigint "type_id"
+    t.bigint "user_id"
+    t.string "comment_en"
+    t.string "comment_ru"
+    t.string "comment_inner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "date"
+    t.bigint "booking_id"
+    t.boolean "hidden", default: false
+    t.boolean "for_acc", default: false
+    t.boolean "incomplite", default: false, null: false
+    t.boolean "cash", default: false, null: false
+    t.boolean "transfer", default: false, null: false
+  end
+
   # attr_accessor :warnings
 
   belongs_to :type, class_name: 'TransactionType'

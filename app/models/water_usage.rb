@@ -1,4 +1,14 @@
 class WaterUsage < ApplicationRecord
+  the_schema_is "water_usages" do |t|
+    t.bigint "house_id", null: false
+    t.date "date"
+    t.integer "amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "amount_2"
+    t.string "comment"
+  end
+
   belongs_to :house
 
   validates :amount, presence: true
