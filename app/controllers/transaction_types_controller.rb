@@ -4,28 +4,25 @@ class TransactionTypesController < ApplicationController
   before_action :set_transaction_type, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 
-  # GET /transaction_types
-  # GET /transaction_types.json
+  # @route GET /transaction_types (transaction_types)
   def index
     @transaction_types = TransactionType.all.order(:name_en)
   end
 
-  # GET /transaction_types/1
-  # GET /transaction_types/1.json
+  # @route GET /transaction_types/:id (transaction_type)
   def show
   end
 
-  # GET /transaction_types/new
+  # @route GET /transaction_types/new (new_transaction_type)
   def new
     @transaction_type = TransactionType.new
   end
 
-  # GET /transaction_types/1/edit
+  # @route GET /transaction_types/:id/edit (edit_transaction_type)
   def edit
   end
 
-  # POST /transaction_types
-  # POST /transaction_types.json
+  # @route POST /transaction_types (transaction_types)
   def create
     @transaction_type = TransactionType.new(transaction_type_params)
 
@@ -40,8 +37,8 @@ class TransactionTypesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /transaction_types/1
-  # PATCH/PUT /transaction_types/1.json
+  # @route PATCH /transaction_types/:id (transaction_type)
+  # @route PUT /transaction_types/:id (transaction_type)
   def update
     respond_to do |format|
       if @transaction_type.update(transaction_type_params)
@@ -54,8 +51,7 @@ class TransactionTypesController < ApplicationController
     end
   end
 
-  # DELETE /transaction_types/1
-  # DELETE /transaction_types/1.json
+  # @route DELETE /transaction_types/:id (transaction_type)
   def destroy
     @transaction_type.destroy
     respond_to do |format|

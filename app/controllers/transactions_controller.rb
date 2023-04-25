@@ -5,8 +5,8 @@ class TransactionsController < ApplicationController
   layout 'admin'
   # after_action :check_warnings, only: [:create, :update]
 
-  # GET /transactions
-  # GET /transactions.json
+  # @route GET /transactions (transactions)
+  # @route GET /balance (balance_front)
   def index
     @from = params[:from]
     @to = params[:to]
@@ -210,11 +210,10 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # GET /transactions/1
-  # GET /transactions/1.json
   def show
   end
 
+  # @route GET /transactions_docs (transactions_docs)
   def docs
     @from = params[:from]
     @to = params[:to]
@@ -229,7 +228,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # GET /transactions/new
+  # @route GET /transactions/new (new_transaction)
   def new
 
     unless params[:tid].present?
@@ -263,7 +262,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # GET /transactions/1/edit
+  # @route GET /transactions/:id/edit (edit_transaction)
   def edit
     @de_ow = @transaction.balance_outs.sum(:debit)
     @cr_ow = @transaction.balance_outs.sum(:credit)
@@ -281,8 +280,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # POST /transactions
-  # POST /transactions.json
+  # @route POST /transactions (transactions)
   def create
     @transaction = Transaction.new(transaction_params)
     @transaction.set_owner_and_house
@@ -355,8 +353,8 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /transactions/1
-  # PATCH/PUT /transactions/1.json
+  # @route PATCH /transactions/:id (transaction)
+  # @route PUT /transactions/:id (transaction)
   def update
     respond_to do |format|
       state_before = @transaction
@@ -432,6 +430,7 @@ class TransactionsController < ApplicationController
     end
   end
 
+  # @route POST /transactions/update_invoice_ref (update_invoice_ref)
   def update_invoice_ref
     if !session[:view_user_id].present?
       error = 'Need to select Owner'
@@ -466,8 +465,7 @@ class TransactionsController < ApplicationController
 
   end
 
-  # DELETE /transactions/1
-  # DELETE /transactions/1.json
+  # @route DELETE /transactions/:id (transaction)
   def destroy
     @transaction.destroy
     respond_to do |format|
@@ -483,6 +481,7 @@ class TransactionsController < ApplicationController
     end
   end
 
+  # @route GET /transaction_warnings (transaction_warnings)
   def warnings
     warning = ""
     type = params[:type]

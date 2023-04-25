@@ -6,8 +6,7 @@ class JobsController < ApplicationController
   after_action :system_message_update, only: [:update]
   layout 'admin'
 
-  # GET /jobs
-  # GET /jobs.json
+  # @route GET /jobs (jobs)
   def index
     @job = Job.new
     @status = params[:status]
@@ -19,6 +18,7 @@ class JobsController < ApplicationController
     end
   end
 
+  # @route GET /jobs/index_new (jobs_new)
   def index_new
     maids = EmplType.find_by(name: 'Maids').employees.ids
     @jobs = Job.where(closed: nil, employee_id: maids).order(:plan)
@@ -27,6 +27,7 @@ class JobsController < ApplicationController
     render :index
   end
 
+  # @route GET /laundry (laundry)
   def laundry
     from = params[:from]
     to = params[:to]
@@ -56,6 +57,7 @@ class JobsController < ApplicationController
 
   end
 
+  # @route GET /jobs/job_order (job_order)
   def job_order
     if !params[:from].present? || !params[:to].present?
       #need to return error message
@@ -97,8 +99,7 @@ class JobsController < ApplicationController
     render json: { jobs:  jobs }
   end
 
-  # GET /jobs/1
-  # GET /jobs/1.json
+  # @route GET /jobs/:id (job)
   def show
     @message = JobMessage.new
     @messages = @job.job_messages.last(10)
@@ -117,20 +118,19 @@ class JobsController < ApplicationController
 
   end
 
-  # GET /jobs/new
+  # @route GET /jobs/new (new_job)
   def new
     @job = Job.new
     @houses = House.all.order(:code)
 
   end
 
-  # GET /jobs/1/edit
+  # @route GET /jobs/:id/edit (edit_job)
   def edit
     @houses = House.all.order(:code)
   end
 
-  # POST /jobs
-  # POST /jobs.json
+  # @route POST /jobs (jobs)
   def create
     @job = Job.new(job_params)
     @job.creator_id = current_user.id
@@ -158,8 +158,8 @@ class JobsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /jobs/1
-  # PATCH/PUT /jobs/1.json
+  # @route PATCH /jobs/:id (job)
+  # @route PUT /jobs/:id (job)
   def update
     if params[:done].present?
       @job_status_toggled = true
@@ -180,13 +180,13 @@ class JobsController < ApplicationController
     end
   end
 
+  # @route PATCH /jobs/:id/update_laundry (update_laundry)
   def update_laundry
     @job.update(job_params)
     redirect_to laundry_path
   end
 
-  # DELETE /jobs/1
-  # DELETE /jobs/1.json
+  # @route DELETE /jobs/:id (job)
   def destroy
       @job.destroy
       respond_to do |format|

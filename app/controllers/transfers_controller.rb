@@ -4,8 +4,7 @@ class TransfersController < ApplicationController
   layout 'admin', except: [:index_supplier, :confirmed, :canceled]
   before_action :set_transfer, only: [:show, :update, :destroy, :cancel]
 
-  # GET /transfers
-  # GET /transfers.json
+  # @route GET (/:locale)/transfers (transfers)
   def index
 
     if !params[:from].present? && !params[:to].present?
@@ -25,18 +24,18 @@ class TransfersController < ApplicationController
     @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
   end
 
+  # @route GET /transfers/supplier (transfers_supplier)
   def index_supplier
     today = Time.now.in_time_zone('Bangkok').to_date
     @transfers = Transfer.where('date >= ?', today).order(:date)
   end
 
-  # GET /transfers/1
-  # GET /transfers/1.json
+  # @route GET (/:locale)/transfers/:id (transfer)
   def show
     render json: @transfer
   end
 
-  # GET /transfers/new
+  # @route GET (/:locale)/transfers/new (new_transfer)
   def new
     @transfer = Transfer.new
     respond_to do |format|
@@ -44,7 +43,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # GET /transfers/1/edit
+  # @route GET (/:locale)/transfers/:id/edit (edit_transfer)
   def edit
     @transfer = Transfer.find(params[:id])
     @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
@@ -55,8 +54,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # POST /transfers
-  # POST /transfers.json
+  # @route POST (/:locale)/transfers (transfers)
   def create
     @transfer = Transfer.new(transfer_params)
     trsf_booking_no = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
@@ -85,6 +83,7 @@ class TransfersController < ApplicationController
     end
   end
 
+  # @route GET /transfers/:number/confirmed (supplier_confirm_transfer)
   def confirmed
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
@@ -101,8 +100,8 @@ class TransfersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /transfers/1
-  # PATCH/PUT /transfers/1.json
+  # @route PATCH (/:locale)/transfers/:id (transfer)
+  # @route PUT (/:locale)/transfers/:id (transfer)
   def update
     #transfer = Transfer.find_by(number: params[:id])
     @transfer.attributes = transfer_params
@@ -152,6 +151,7 @@ class TransfersController < ApplicationController
 
   end
 
+  # @route GET (/:locale)/transfers/:id/cancel (cancel_transfer)
   def cancel
     respond_to do |format|
       if @transfer.update(status: 'canceling')
@@ -169,6 +169,7 @@ class TransfersController < ApplicationController
     end
   end
 
+  # @route GET /transfers/:number/canceled (supplier_cancel_transfer)
   def canceled
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
@@ -186,8 +187,7 @@ class TransfersController < ApplicationController
   end
 
 
-  # DELETE /transfers/1
-  # DELETE /transfers/1.json
+  # @route DELETE (/:locale)/transfers/:id (transfer)
   def destroy
     @transfer.destroy
     respond_to do |format|

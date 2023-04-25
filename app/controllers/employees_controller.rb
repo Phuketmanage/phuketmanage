@@ -4,17 +4,16 @@ class EmployeesController < ApplicationController
   layout 'admin'
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
 
-  # GET /employees
-  # GET /employees.json
+  # @route GET /employees (employees)
   def index
     @employees = Employee.all
   end
 
-  # GET /employees/1
-  # GET /employees/1.json
+  # @route GET /employees/:id (employee)
   def show
   end
 
+  # @route GET /employees/list_for_job (employees_list_for_job)
   def list_for_job
     empls = Employee.joins(:houses, :job_types).where(
       'houses.id = ? AND job_types.id = ?',
@@ -24,17 +23,16 @@ class EmployeesController < ApplicationController
   end
 
 
-  # GET /employees/new
+  # @route GET /employees/new (new_employee)
   def new
     @employee = Employee.new
   end
 
-  # GET /employees/1/edit
+  # @route GET /employees/:id/edit (edit_employee)
   def edit
   end
 
-  # POST /employees
-  # POST /employees.json
+  # @route POST /employees (employees)
   def create
     @employee = Employee.new(employee_params)
 
@@ -49,8 +47,8 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /employees/1
-  # PATCH/PUT /employees/1.json
+  # @route PATCH /employees/:id (employee)
+  # @route PUT /employees/:id (employee)
   def update
     respond_to do |format|
       if @employee.update(employee_params)
@@ -63,8 +61,7 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # DELETE /employees/1
-  # DELETE /employees/1.json
+  # @route DELETE /employees/:id (employee)
   def destroy
     @employee.destroy
     respond_to do |format|

@@ -4,28 +4,25 @@ class EmplTypesController < ApplicationController
   layout 'admin'
   before_action :set_empl_type, only: [:show, :edit, :update, :destroy]
 
-  # GET /empl_types
-  # GET /empl_types.json
+  # @route GET /empl_types (empl_types)
   def index
     @empl_types = EmplType.all
   end
 
-  # GET /empl_types/1
-  # GET /empl_types/1.json
+  # @route GET /empl_types/:id (empl_type)
   def show
   end
 
-  # GET /empl_types/new
+  # @route GET /empl_types/new (new_empl_type)
   def new
     @empl_type = EmplType.new
   end
 
-  # GET /empl_types/1/edit
+  # @route GET /empl_types/:id/edit (edit_empl_type)
   def edit
   end
 
-  # POST /empl_types
-  # POST /empl_types.json
+  # @route POST /empl_types (empl_types)
   def create
     @empl_type = EmplType.new(empl_type_params)
 
@@ -40,8 +37,8 @@ class EmplTypesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /empl_types/1
-  # PATCH/PUT /empl_types/1.json
+  # @route PATCH /empl_types/:id (empl_type)
+  # @route PUT /empl_types/:id (empl_type)
   def update
     respond_to do |format|
       if @empl_type.update(empl_type_params)
@@ -54,8 +51,7 @@ class EmplTypesController < ApplicationController
     end
   end
 
-  # DELETE /empl_types/1
-  # DELETE /empl_types/1.json
+  # @route DELETE /empl_types/:id (empl_type)
   def destroy
     @empl_type.destroy
     respond_to do |format|

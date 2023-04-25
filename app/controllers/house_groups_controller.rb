@@ -6,28 +6,25 @@ class HouseGroupsController < ApplicationController
   layout 'admin'
 
 
-  # GET /house_groups
-  # GET /house_groups.json
+  # @route GET /house_groups (house_groups)
   def index
     @house_groups = HouseGroup.all
   end
 
-  # GET /house_groups/1
-  # GET /house_groups/1.json
+  # @route GET /house_groups/:id (house_group)
   def show
   end
 
-  # GET /house_groups/new
+  # @route GET /house_groups/new (new_house_group)
   def new
     @house_group = HouseGroup.new
   end
 
-  # GET /house_groups/1/edit
+  # @route GET /house_groups/:id/edit (edit_house_group)
   def edit
   end
 
-  # POST /house_groups
-  # POST /house_groups.json
+  # @route POST /house_groups (house_groups)
   def create
     @house_group = HouseGroup.new(house_group_params)
 
@@ -42,8 +39,8 @@ class HouseGroupsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /house_groups/1
-  # PATCH/PUT /house_groups/1.json
+  # @route PATCH /house_groups/:id (house_group)
+  # @route PUT /house_groups/:id (house_group)
   def update
     respond_to do |format|
       if @house_group.update(house_group_params)
@@ -56,8 +53,7 @@ class HouseGroupsController < ApplicationController
     end
   end
 
-  # DELETE /house_groups/1
-  # DELETE /house_groups/1.json
+  # @route DELETE /house_groups/:id (house_group)
   def destroy
     @house_group.destroy
     respond_to do |format|

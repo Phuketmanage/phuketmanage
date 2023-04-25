@@ -4,28 +4,24 @@ class JobTypesController < ApplicationController
   before_action :set_job_type, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 
-  # GET /job_types
-  # GET /job_types.json
+  # @route GET /job_types (job_types)
   def index
     @job_types = JobType.all
   end
 
-  # GET /job_types/1
-  # GET /job_types/1.json
   def show
   end
 
-  # GET /job_types/new
+  # @route GET /job_types/new (new_job_type)
   def new
     @job_type = JobType.new
   end
 
-  # GET /job_types/1/edit
+  # @route GET /job_types/:id/edit (edit_job_type)
   def edit
   end
 
-  # POST /job_types
-  # POST /job_types.json
+  # @route POST /job_types (job_types)
   def create
     @job_type = JobType.new(job_type_params)
 
@@ -40,8 +36,8 @@ class JobTypesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /job_types/1
-  # PATCH/PUT /job_types/1.json
+  # @route PATCH /job_types/:id (job_type)
+  # @route PUT /job_types/:id (job_type)
   def update
     respond_to do |format|
       if @job_type.update(job_type_params)
@@ -54,8 +50,7 @@ class JobTypesController < ApplicationController
     end
   end
 
-  # DELETE /job_types/1
-  # DELETE /job_types/1.json
+  # @route DELETE /job_types/:id (job_type)
   def destroy
     @job_type.destroy
     respond_to do |format|

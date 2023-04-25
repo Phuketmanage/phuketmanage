@@ -3,28 +3,25 @@ class HouseTypesController < ApplicationController
   before_action :set_house_type, only: [:show, :edit, :update, :destroy]
   layout 'admin'
 
-  # GET /house_types
-  # GET /house_types.json
+  # @route GET (/:locale)/house_types (house_types)
   def index
     @house_types = HouseType.all
   end
 
-  # GET /house_types/1
-  # GET /house_types/1.json
+  # @route GET (/:locale)/house_types/:id (house_type)
   def show
   end
 
-  # GET /house_types/new
+  # @route GET (/:locale)/house_types/new (new_house_type)
   def new
     @house_type = HouseType.new
   end
 
-  # GET /house_types/1/edit
+  # @route GET (/:locale)/house_types/:id/edit (edit_house_type)
   def edit
   end
 
-  # POST /house_types
-  # POST /house_types.json
+  # @route POST (/:locale)/house_types (house_types)
   def create
     @house_type = HouseType.new(house_type_params)
 
@@ -39,8 +36,8 @@ class HouseTypesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /house_types/1
-  # PATCH/PUT /house_types/1.json
+  # @route PATCH (/:locale)/house_types/:id (house_type)
+  # @route PUT (/:locale)/house_types/:id (house_type)
   def update
     respond_to do |format|
       if @house_type.update(house_type_params)
@@ -53,8 +50,7 @@ class HouseTypesController < ApplicationController
     end
   end
 
-  # DELETE /house_types/1
-  # DELETE /house_types/1.json
+  # @route DELETE (/:locale)/house_types/:id (house_type)
   def destroy
     @house_type.destroy
     respond_to do |format|

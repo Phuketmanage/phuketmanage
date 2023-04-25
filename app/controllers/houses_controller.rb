@@ -5,8 +5,7 @@ class HousesController < ApplicationController
                                     :create_connection]
   layout 'admin', except: :show
 
-  # GET /houses
-  # GET /houses.json
+  # @route GET /houses (houses)
   def index
     @houses = House.where.not(balance_closed: true).all.order(:unavailable, :code)
     @houses_old = House.where(balance_closed: true).all.order(:unavailable, :code)
@@ -16,12 +15,12 @@ class HousesController < ApplicationController
     # end
   end
 
+  # @route GET (/:locale)/test_upload (test_upload)
   def test_upload
     @house = House.new
   end
 
-  # GET /houses/1
-  # GET /houses/1.json
+  # @route GET (/:locale)/houses/:id
   def show
     # Front end
 
@@ -44,7 +43,7 @@ class HousesController < ApplicationController
 
   end
 
-  # GET /houses/new
+  # @route GET /houses/new (new_house)
   def new
     @house = House.new
     @owners = User.with_role('Owner')
@@ -55,7 +54,7 @@ class HousesController < ApplicationController
     @job_types = JobType.all
   end
 
-  # GET /houses/1/edit
+  # @route GET /houses/:id/edit (edit_house)
   def edit
     @owners = User.with_role('Owner')
     @types = HouseType.all
@@ -64,8 +63,7 @@ class HousesController < ApplicationController
     @connection = @house.connections.new
   end
 
-  # POST /houses
-  # POST /houses.json
+  # @route POST /houses (houses)
   def create
     options = params[:options] ? params[:options] : nil
     @house = House.new(house_params)
@@ -94,8 +92,8 @@ class HousesController < ApplicationController
 
   end
 
-  # PATCH/PUT /houses/1
-  # PATCH/PUT /houses/1.json
+  # @route PATCH /houses/:id (house)
+  # @route PUT /houses/:id (house)
   def update
     respond_to do |format|
       if @house.update(house_params)
@@ -114,8 +112,7 @@ class HousesController < ApplicationController
     end
   end
 
-  # DELETE /houses/1
-  # DELETE /houses/1.json
+  # @route DELETE /houses/:id (house)
   def destroy
     @house.destroy
     respond_to do |format|

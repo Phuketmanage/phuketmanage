@@ -10,8 +10,7 @@ class PricesController < ApplicationController
   before_action :set_price, only: [:show, :edit, :update, :destroy]
 
 
-  # GET /prices
-  # GET /prices.json
+  # @route GET /houses/:house_id/prices (house_prices)
   def index
     @houses = House.all.active
     # @house = House.find(params[:house_id])
@@ -22,12 +21,9 @@ class PricesController < ApplicationController
     @season = Season.new
   end
 
-  # GET /prices/1
-  # GET /prices/1.json
   def show
   end
 
-  # GET /prices/new
   def new
     # @house = House.find(params[:house_id])
     @price = Price.new
@@ -35,15 +31,12 @@ class PricesController < ApplicationController
     @seasons = @house.seasons
   end
 
-  # GET /prices/1/edit
   def edit
     @house = @price.house
     @durations = @house.durations
     @seasons = @house.seasons
   end
 
-  # POST /prices
-  # POST /prices.json
   # def create
   #   @house = House.find(params[:house_id])
   #   @price = @house.prices.build(price_params)
@@ -59,6 +52,7 @@ class PricesController < ApplicationController
   #   end
   # end
 
+  # @route POST (/:locale)/houses/:house_id/add_duration (add_duration)
   def create_duration
     # @house = House.find(params[:id])
     @seasons = @house.seasons
@@ -83,6 +77,7 @@ class PricesController < ApplicationController
     end
   end
 
+  # @route POST (/:locale)/houses/:house_id/add_season (add_season)
   def create_season
     # @house = House.find(params[:id])
     @durations = @house.durations
@@ -107,6 +102,7 @@ class PricesController < ApplicationController
     end
   end
 
+  # @route POST (/:locale)/prices/:house_id/copy_table (copy_table)
   def copy_table
     # @house = House.find(params[:id])
     copy_from_number = params[:copy_from_number]
@@ -137,8 +133,6 @@ class PricesController < ApplicationController
     redirect_to house_prices_path(@house.number)
   end
 
-  # PATCH/PUT /prices/1
-  # PATCH/PUT /prices/1.json
   def update_old
     @house = @price.house
     respond_to do |format|
@@ -152,6 +146,7 @@ class PricesController < ApplicationController
     end
   end
 
+  # @route GET (/:locale)/prices/:id/update (price)
   def update
       price = Price.find(params[:id])
       if price.update(price_params)
@@ -161,8 +156,6 @@ class PricesController < ApplicationController
       end
   end
 
-  # DELETE /prices/1
-  # DELETE /prices/1.json
   def destroy
     house = @price.house
     @price.destroy
@@ -172,6 +165,7 @@ class PricesController < ApplicationController
     end
   end
 
+  # @route DELETE (/:locale)/houses/:house_id/delete_duration (delete_duration)
   def destroy_duration
     # house = House.find(params[:id])
     duration = Duration.find(params[:duration_id])
@@ -183,6 +177,7 @@ class PricesController < ApplicationController
     end
   end
 
+  # @route DELETE (/:locale)/houses/:house_id/delete_season (delete_season)
   def destroy_season
     # house = House.find(params[:id])
     season = Season.find(params[:season_id])

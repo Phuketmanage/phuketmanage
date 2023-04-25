@@ -5,6 +5,7 @@ class BookingsController < ApplicationController
                                       :update_comment_gr,  :destroy ]
   layout 'admin'
 
+  # @route GET (/:locale)/calendar/ical/:hid (calendar)
   def ical
     cal = Icalendar::Calendar.new
     hid = params[:hid]
@@ -34,8 +35,8 @@ class BookingsController < ApplicationController
 # render :text => cal.to_ical
   end
 
-  # GET /bookings
-  # GET /bookings.json
+  # @route GET /bookings (bookings)
+  # @route GET (/:locale)/houses/:hid/bookings (house_bookings)
   def index
     @from = params[:from]
     @to = params[:to]
@@ -68,6 +69,7 @@ class BookingsController < ApplicationController
                                 from: @from, to: @to).order(:start)
   end
 
+  # @route GET /owner/bookings (bookings_front)
   def index_front
     @from = params[:from]
     @to = params[:to]
@@ -112,6 +114,7 @@ class BookingsController < ApplicationController
     @one_house = true if current_user.houses.ids.count == 1
   end
 
+  # @route GET /bookings/timeline (bookings_timeline)
   def timeline
     if !params[:from].present? && !params[:to].present?
       @from = Time.zone.now.in_time_zone('Bangkok').to_date
@@ -150,25 +153,27 @@ class BookingsController < ApplicationController
 
   end
 
+  # @route GET /bookings/timeline_data (bookings_timeline_data)
   def timeline_data
     # puts params[:period].nil?
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
     render json: { timeline:  timeline }
   end
 
+  # @route GET /bookings/check_in_out (bookings_check_in_out)
   def check_in_out
     @result = Booking.check_in_out params[:from], params[:to]
   end
 
 
-  # GET /bookings/1
-  # GET /bookings/1.json
+  # @route GET /bookings/:id (booking)
   def show
     # booking = Booking.find(params[:id])
     render json: { booking:  @booking }
   end
 
-  # GET /bookings/new
+  # @route GET /bookings/new (new_booking)
+  # @route GET (/:locale)/houses/:hid/bookings/new (new_house_booking)
   def new
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map {|h| [h.code, h.id]}
@@ -178,7 +183,7 @@ class BookingsController < ApplicationController
     @tenants = User.with_role('Tenant')
   end
 
-  # GET /bookings/1/edit
+  # @route GET /bookings/:id/edit (edit_booking)
   def edit
     @houses = House.all.order(:code).map {|h| [h.code, h.id]}
     @tenants = User.with_role('Tenant')
@@ -201,8 +206,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  # POST /bookings
-  # POST /bookings.json
+  # @route POST /bookings (bookings)
   def create
     search = Search.new( rs: params[:booking][:start],
                           rf: params[:booking][:finish],
@@ -241,6 +245,7 @@ class BookingsController < ApplicationController
     end
   end
 
+  # @route POST /booking/new (booking_new)
   def create_front
     search = Search.new( rs: params[:booking][:start],
                           rf: params[:booking][:finish],
@@ -266,6 +271,7 @@ class BookingsController < ApplicationController
     BookingMailer.created(@booking).deliver_now
   end
 
+  # @route GET /bookings/sync (booking_sync)
   def sync
     if params[:hid].present?
       house = House.find_by(number: params[:hid])
@@ -278,8 +284,8 @@ class BookingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /bookings/1
-  # PATCH/PUT /bookings/1.json
+  # @route PATCH /bookings/:id (booking)
+  # @route PUT /bookings/:id (booking)
   def update
     search = Search.new(rs: params[:booking][:start],
                         rf: params[:booking][:finish],
@@ -333,14 +339,14 @@ class BookingsController < ApplicationController
     end
   end
 
+  # @route PATCH /bookings/:id/update_comment_gr (update_booking_comment_gr)
   def update_comment_gr
     @booking.update(booking_params)
     @result = Booking.check_in_out
     redirect_to bookings_check_in_out_path
   end
 
-  # DELETE /bookings/1
-  # DELETE /bookings/1.json
+  # @route DELETE /bookings/:id (booking)
   def destroy
     @booking.destroy
     respond_to do |format|
@@ -354,6 +360,7 @@ class BookingsController < ApplicationController
     end
   end
 
+  # @route GET /bookings/get_price (bookings_get_price)
   def get_price
     booking = Booking.new
     search = Search.new( rs: params[:start],

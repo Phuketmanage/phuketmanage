@@ -1,5 +1,6 @@
 class DocumentsController < ApplicationController
 
+  # @route GET /documents/statement (tmp_statement)
   def statement
 
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
@@ -25,6 +26,7 @@ class DocumentsController < ApplicationController
     end
   end
 
+  # @route GET /documents/reimbersment (tmp_reimbersment)
   def reimbersment
     @t = Transaction.find(params[:trsc_id])
     @date = @t.date

@@ -5,28 +5,24 @@ class LocationsController < ApplicationController
 
   layout 'admin'
 
-  # GET /locations
-  # GET /locations.json
+  # @route GET /locations (locations)
   def index
     @locations = Location.all.order(:name_en)
   end
 
-  # GET /locations/1
-  # GET /locations/1.json
   def show
   end
 
-  # GET /locations/new
+  # @route GET /locations/new (new_location)
   def new
     @location = Location.new
   end
 
-  # GET /locations/1/edit
+  # @route GET /locations/:id/edit (edit_location)
   def edit
   end
 
-  # POST /locations
-  # POST /locations.json
+  # @route POST /locations (locations)
   def create
     @location = Location.new(location_params)
 
@@ -41,8 +37,8 @@ class LocationsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /locations/1
-  # PATCH/PUT /locations/1.json
+  # @route PATCH /locations/:id (location)
+  # @route PUT /locations/:id (location)
   def update
     respond_to do |format|
       if @location.update(location_params)
@@ -55,8 +51,7 @@ class LocationsController < ApplicationController
     end
   end
 
-  # DELETE /locations/1
-  # DELETE /locations/1.json
+  # @route DELETE /locations/:id (location)
   def destroy
     @location.destroy
     respond_to do |format|
