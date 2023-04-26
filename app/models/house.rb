@@ -66,7 +66,8 @@ class House < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :employees
   has_and_belongs_to_many :locations
-  validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
+  validates :description_en, :description_ru, presence: true
+  before_save :generate_title
 
   scope :active, -> { where(unavailable: false) }
   scope :for_rent, -> { where(unavailable: false) }
@@ -91,6 +92,14 @@ class House < ApplicationRecord
     options.where(id: option.id).any? ? true : false
   end
 
+  private
+  
+  def generate_title()
+    locations_en = self.locations.map{|x| x.name_en}.join(" ")
+    locations_ru = self.locations.map{|x| x.name_ru}.join(" ")
+    self.title_en = [self.code, self.type.name_en, self.rooms, "BDR", self.bathrooms, "BTH", locations_en].join(' ')
+    self.title_ru = [self.code, self.type.name_ru, self.rooms, "СП", self.bathrooms, "ВН", locations_ru].join(' ')
+  end
   # Was used after filed number added
   # def add_numbers
   #   houses = House.all
