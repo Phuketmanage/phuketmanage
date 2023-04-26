@@ -1,2 +1,22 @@
 require:
   - the_schema_is/cops
+  - rubocop-rails
+  - rubocop-performance
+  # - rubocop-rspec
+  # - rubocop-capybara
+
+AllCops:
+  NewCops: enable
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineAssignmentLayout:
+  EnforcedStyle: same_line
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Style/StringLiterals:
+  Enabled: false
+

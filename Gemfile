@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| 'https://github.com/#{repo}.git' }
+git_source(:github) { |_repo| 'https://github.com/#{repo}.git' }
 
 ruby '3.0.2'
 
@@ -34,23 +34,23 @@ gem 'jbuilder'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
-gem 'devise'
-gem 'cancancan'
-gem 'devise_invitable', '~> 2.0.0'
 gem 'bootstrap', '~> 4.6.0'
-gem 'jquery-rails'
+gem 'cancancan'
+gem 'devise'
+gem 'devise_invitable', '~> 2.0.0'
 gem 'flag-icons-rails'
-gem 'icalendar', '~> 2.7', '>= 2.7.1'
 gem 'http_accept_language'
+gem 'icalendar', '~> 2.7', '>= 2.7.1'
+gem 'jquery-rails'
 # gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'aws-sdk-s3', '~> 1.0.0.rc2'
-gem 'rails-i18n', '~> 6.0.0'
-gem 'momentjs-rails'
-gem 'font_awesome5_rails'
-gem 'twilio-ruby'
 gem 'barnes'
+gem 'font_awesome5_rails'
+gem 'momentjs-rails'
+gem 'rails-i18n', '~> 6.0.0'
 gem 'scout_apm'
 gem 'the_schema_is'
+gem 'twilio-ruby'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -59,12 +59,14 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'chusaku', '~> 0.6.1' # annotations for routes
+  gem "rubocop-performance"
+  gem "rubocop-rails"
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'chusaku', '~> 0.6.1' # annotations for routes
 end
 
 group :test do
