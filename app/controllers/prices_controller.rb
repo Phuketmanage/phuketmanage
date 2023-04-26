@@ -3,12 +3,11 @@ class PricesController < ApplicationController
   load_and_authorize_resource :house, id_param: :number
   # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
-  before_action :set_house, only: [ :index, :new,
-                                    :create_duration, :create_season,
-                                    :destroy_duration, :destroy_season,
-                                    :copy_table]
-  before_action :set_price, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_house, only: %i[index new
+                                     create_duration create_season
+                                     destroy_duration destroy_season
+                                     copy_table]
+  before_action :set_price, only: %i[show edit update destroy]
 
   # @route GET /houses/:house_id/prices (house_prices)
   def index
@@ -21,8 +20,7 @@ class PricesController < ApplicationController
     @season = Season.new
   end
 
-  def show
-  end
+  def show; end
 
   def new
     # @house = House.find(params[:house_id])
@@ -61,8 +59,8 @@ class PricesController < ApplicationController
       if @duration.save
         @seasons.each do |s|
           @price = @house.prices.create!(duration_id: @duration.id,
-                                        season_id: s.id,
-                                        amount: 0)
+                                         season_id: s.id,
+                                         amount: 0)
         end
         format.html { redirect_to house_prices_path(@house.number), notice: 'Duration was successfully created.' }
         format.json { render :index, status: :created, location: @price }
@@ -86,8 +84,8 @@ class PricesController < ApplicationController
       if @season.save
         @durations.each do |d|
           @house.prices.create!(duration_id: d.id,
-                                        season_id: @season.id,
-                                        amount: 0)
+                                season_id: @season.id,
+                                amount: 0)
         end
         format.html { redirect_to house_prices_path(@house.number), notice: 'Season was successfully created.' }
         format.json { render :index, status: :created, location: @price }
@@ -148,12 +146,12 @@ class PricesController < ApplicationController
 
   # @route GET (/:locale)/prices/:id/update (price)
   def update
-      price = Price.find(params[:id])
-      if price.update(price_params)
-        render json: { price_id: price.id, status: :ok }
-      else
-        render json: {errors: price.errors, price_id: price.id}, status: :unprocessable_entity
-      end
+    price = Price.find(params[:id])
+    if price.update(price_params)
+      render json: { price_id: price.id, status: :ok }
+    else
+      render json: { errors: price.errors, price_id: price.id }, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -189,28 +187,27 @@ class PricesController < ApplicationController
     end
   end
 
-
   private
-    def set_house
-      @house = House.find_by(number: params[:house_id])
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_price
-      @price = Price.find(params[:id])
-    end
+  def set_house
+    @house = House.find_by(number: params[:house_id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def price_params
-      params.require(:price).permit(:house_id, :season_id, :duration_id, :amount)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_price
+    @price = Price.find(params[:id])
+  end
 
-    def duration_params
-      params.require(:duration).permit(:start, :finish, :house_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def price_params
+    params.require(:price).permit(:house_id, :season_id, :duration_id, :amount)
+  end
 
-    def season_params
-      params.require(:season).permit(:ssd, :ssm, :sfd, :sfm, :house_id)
-    end
+  def duration_params
+    params.require(:duration).permit(:start, :finish, :house_id)
+  end
 
+  def season_params
+    params.require(:season).permit(:ssd, :ssm, :sfd, :sfm, :house_id)
+  end
 end

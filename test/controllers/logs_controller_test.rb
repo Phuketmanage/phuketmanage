@@ -5,5 +5,4 @@ class LogsControllerTest < ActionDispatch::IntegrationTest
   #   get logs_index_url
   #   assert_response :success
   # end
-
 end

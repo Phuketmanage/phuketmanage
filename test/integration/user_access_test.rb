@@ -43,8 +43,6 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
-
-
   end
 
   test 'users' do
@@ -85,11 +83,9 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
-
-
   end
 
-# Invatation was turned off because use Devise reset password option
+  # Invatation was turned off because use Devise reset password option
   # test 'invatations' do
   #   sign_in users(:admin)
   #   get new_user_invitation_path
@@ -201,31 +197,29 @@ class UserAccessTest < ActionDispatch::IntegrationTest
   #   get bookings_front_path([hid: house.number])
   #   assert_response :success
 
-
-
   # end
 
   test 'Balance' do
     # owner can see only his own balance
     sign_in users(:owner)
-    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
+    get balance_front_path, params: { from: '2019-09-01', to: '2019-09-30' }
     assert_select 'tr.trsc_row', 2
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 1
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 1
-    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 0 #owner_2
-    assert_select 'td.de_ow_cell', text: '38,000.00', count: 0 #owner_2
-    assert_select 'td.de_ow_cell', text: '40,000.00', count: 0 #owner_2
-    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
+    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 0 # owner_2
+    assert_select 'td.de_ow_cell', text: '38,000.00', count: 0 # owner_2
+    assert_select 'td.de_ow_cell', text: '40,000.00', count: 0 # owner_2
+    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 # company
 
     sign_in users(:owner_2)
-    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
+    get balance_front_path, params: { from: '2019-09-01', to: '2019-09-30' }
     assert_select 'tr.trsc_row', 3
     assert_select 'td.de_ow_cell', text: '80,000.00', count: 0
     assert_select 'td.cr_ow_cell', text: '2,200.99', count: 0
-    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 1 #owner_2
-    assert_select 'td.de_ow_cell', text: '38,000.00', count: 1 #owner_2
-    assert_select 'td.de_ow_cell', text: '40,000.00', count: 1 #owner_2
-    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 #company
+    assert_select 'td.cr_ow_cell', text: '16,050.00', count: 1 # owner_2
+    assert_select 'td.de_ow_cell', text: '38,000.00', count: 1 # owner_2
+    assert_select 'td.de_ow_cell', text: '40,000.00', count: 1 # owner_2
+    assert_select 'td.cr_ow_cell', text: '5,000.00', count: 0 # company
 
     # Owner can not see edit links
     assert_select 'a', text: 'Edit', count: 0
@@ -238,7 +232,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
   test 'Transaction files' do
     # owner can see only files that allowed to see
     sign_in users(:owner)
-    get balance_front_path, params: {from: '2019-09-01', to: '2019-09-30'}
+    get balance_front_path, params: { from: '2019-09-01', to: '2019-09-30' }
     trsc1 = transactions(:one)
     trsc2 = transactions(:two)
     # trsc 1 have 3 files 1 for show
@@ -271,7 +265,6 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     files_inner.each do |f|
       assert_no_match f.url, @response.body
     end
-
   end
 
   test 'transactions aka balance' do
@@ -292,20 +285,22 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
-    #Manager and Accounting can edit only until 1st of previous month
+    # Manager and Accounting can edit only until 1st of previous month
     sign_in users(:accounting)
     # old transaction
     @transaction = transactions(:prev_3)
-    patch transaction_url(@transaction),  params: {
-                                            transaction: {
-                                              date: @transaction.date,
-                                              comment_en: @transaction.comment_en,
-                                              comment_inner: @transaction.comment_inner,
-                                              comment_ru: @transaction.comment_ru,
-                                              house_id: @transaction.house_id,
-                                              ref_no: @transaction.ref_no,
-                                              type_id: @transaction.type_id,
-                                              user_id: @transaction.user_id } }
+    patch transaction_url(@transaction), params: {
+      transaction: {
+        date: @transaction.date,
+        comment_en: @transaction.comment_en,
+        comment_inner: @transaction.comment_inner,
+        comment_ru: @transaction.comment_ru,
+        house_id: @transaction.house_id,
+        ref_no: @transaction.ref_no,
+        type_id: @transaction.type_id,
+        user_id: @transaction.user_id
+      }
+    }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
@@ -313,16 +308,18 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
     sign_in users(:manager)
     @transaction = transactions(:prev_3)
-    patch transaction_url(@transaction),  params: {
-                                            transaction: {
-                                              date: @transaction.date,
-                                              comment_en: @transaction.comment_en,
-                                              comment_inner: @transaction.comment_inner,
-                                              comment_ru: @transaction.comment_ru,
-                                              house_id: @transaction.house_id,
-                                              ref_no: @transaction.ref_no,
-                                              type_id: @transaction.type_id,
-                                              user_id: @transaction.user_id } }
+    patch transaction_url(@transaction), params: {
+      transaction: {
+        date: @transaction.date,
+        comment_en: @transaction.comment_en,
+        comment_inner: @transaction.comment_inner,
+        comment_ru: @transaction.comment_ru,
+        house_id: @transaction.house_id,
+        ref_no: @transaction.ref_no,
+        type_id: @transaction.type_id,
+        user_id: @transaction.user_id
+      }
+    }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
@@ -335,25 +332,29 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     house = houses(:villa_1)
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
-                                transaction: {
-                                  date: Time.now-10.days,
-                                  type_id: type.id,
-                                  house_id: house.id,
-                                  cr_ow: 3500,
-                                  comment_en: 'Electricity 08.2019'} }
+        transaction: {
+          date: Time.now - 10.days,
+          type_id: type.id,
+          house_id: house.id,
+          cr_ow: 3500,
+          comment_en: 'Electricity 08.2019'
+        }
+      }
     end
     new_transaction = Transaction.last
     # accounting can edit
-    patch transaction_url(new_transaction),  params: {
-                                            transaction: {
-                                              cr_ow: 3500,
-                                              comment_en: 'New comment_en',
-                                              comment_inner: 'New comment_inner',
-                                              comment_ru: 'New comment_ru',
-                                              house_id: new_transaction.house_id,
-                                              ref_no: new_transaction.ref_no,
-                                              type_id: new_transaction.type_id,
-                                              user_id: new_transaction.user_id } }
+    patch transaction_url(new_transaction), params: {
+      transaction: {
+        cr_ow: 3500,
+        comment_en: 'New comment_en',
+        comment_inner: 'New comment_inner',
+        comment_ru: 'New comment_ru',
+        house_id: new_transaction.house_id,
+        ref_no: new_transaction.ref_no,
+        type_id: new_transaction.type_id,
+        user_id: new_transaction.user_id
+      }
+    }
     assert_redirected_to transactions_path
     follow_redirect!
     assert_select 'div.alert', 'Transaction was successfully updated.'
@@ -362,22 +363,24 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     # manager can edit
     sign_in users(:manager)
     get transactions_path
-    patch transaction_url(new_transaction),  params: {
-                                            transaction: {
-                                              cr_ow: 3500,
-                                              comment_en: 'New comment_en',
-                                              comment_inner: 'New comment_inner',
-                                              comment_ru: 'New comment_ru',
-                                              house_id: new_transaction.house_id,
-                                              ref_no: new_transaction.ref_no,
-                                              type_id: new_transaction.type_id,
-                                              user_id: new_transaction.user_id } }
+    patch transaction_url(new_transaction), params: {
+      transaction: {
+        cr_ow: 3500,
+        comment_en: 'New comment_en',
+        comment_inner: 'New comment_inner',
+        comment_ru: 'New comment_ru',
+        house_id: new_transaction.house_id,
+        ref_no: new_transaction.ref_no,
+        type_id: new_transaction.type_id,
+        user_id: new_transaction.user_id
+      }
+    }
     assert_redirected_to transactions_path
     follow_redirect!
     assert_select 'div.alert', 'Transaction was successfully updated.'
     sign_out :user
 
-    #Manager and Accounting can edit only with in 1 day
+    # Manager and Accounting can edit only with in 1 day
 
     # create transaction that happened 2 days ago
     sign_in users(:accounting)
@@ -386,12 +389,14 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     house = houses(:villa_1)
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
-                                transaction: {
-                                  date: Date.today-2.days,
-                                  type_id: type.id,
-                                  house_id: house.id,
-                                  cr_ow: 3500,
-                                  comment_en: 'Electricity 08.2019'} }
+        transaction: {
+          date: Date.today - 2.days,
+          type_id: type.id,
+          house_id: house.id,
+          cr_ow: 3500,
+          comment_en: 'Electricity 08.2019'
+        }
+      }
     end
     new_transaction = Transaction.last
     # accounting can not delete
@@ -419,12 +424,14 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     house = houses(:villa_1)
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
-                                transaction: {
-                                  date: Date.today,
-                                  type_id: type.id,
-                                  house_id: house.id,
-                                  cr_ow: 3500,
-                                  comment_en: 'Electricity 08.2019'} }
+        transaction: {
+          date: Date.today,
+          type_id: type.id,
+          house_id: house.id,
+          cr_ow: 3500,
+          comment_en: 'Electricity 08.2019'
+        }
+      }
     end
     new_transaction = Transaction.last
     # accounting can delete
@@ -443,12 +450,14 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     house = houses(:villa_1)
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
-                                transaction: {
-                                  date: Date.today,
-                                  type_id: type.id,
-                                  house_id: house.id,
-                                  cr_ow: 3500,
-                                  comment_en: 'Electricity 08.2019'} }
+        transaction: {
+          date: Date.today,
+          type_id: type.id,
+          house_id: house.id,
+          cr_ow: 3500,
+          comment_en: 'Electricity 08.2019'
+        }
+      }
     end
     new_transaction = Transaction.last
     # manager can delete
@@ -461,5 +470,4 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert', 'Transaction was successfully destroyed.'
     sign_out :user
   end
-
 end

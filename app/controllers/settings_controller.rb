@@ -1,7 +1,7 @@
 class SettingsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_setting, only: [:show, :edit, :update, :destroy]
+  before_action :set_setting, only: %i[show edit update destroy]
   layout 'admin'
   # @route GET (/:locale)/settings (settings)
   def index
@@ -9,8 +9,7 @@ class SettingsController < ApplicationController
   end
 
   # @route GET (/:locale)/settings/:id (setting)
-  def show
-  end
+  def show; end
 
   # @route GET (/:locale)/settings/new (new_setting)
   def new
@@ -18,8 +17,7 @@ class SettingsController < ApplicationController
   end
 
   # @route GET (/:locale)/settings/:id/edit (edit_setting)
-  def edit
-  end
+  def edit; end
 
   # @route POST (/:locale)/settings (settings)
   def create
@@ -60,13 +58,14 @@ class SettingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_setting
-      @setting = Setting.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def setting_params
-      params.require(:setting).permit(:var, :value, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_setting
+    @setting = Setting.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def setting_params
+    params.require(:setting).permit(:var, :value, :description)
+  end
 end

@@ -5,10 +5,10 @@ class TransactionFilesController < ApplicationController
   def index
     if current_user.role?(['Owner'])
       files = Transaction.find(params[:transaction_id]).files.where(show: true)
-    elsif current_user.role?(['Admin', 'Accounting', 'Manager'])
+    elsif current_user.role?(%w[Admin Accounting Manager])
       files = Transaction.find(params[:transaction_id]).files
     end
-    render json: {files: files}
+    render json: { files: files }
   end
 
   # @route DELETE /transaction_file (transaction_file)
@@ -21,7 +21,7 @@ class TransactionFilesController < ApplicationController
   def destroy_tmp
     key = params['key']
     S3_BUCKET.object(key).delete
-    render json: {key: key}
+    render json: { key: key }
   end
 
   # @route GET /transaction_file_toggle_show (transaction_file_toggle_show)
@@ -29,9 +29,9 @@ class TransactionFilesController < ApplicationController
     file = TransactionFile.where(id: params[:id]).first
     if file.present?
       file.update_attributes(show: params[:status]) if params[:status].present?
-      render json: {id: file.id}
+      render json: { id: file.id }
     else
-      render json: {id: params[:id], success: false}, status: 400
+      render json: { id: params[:id], success: false }, status: :bad_request
     end
   end
 
@@ -40,7 +40,7 @@ class TransactionFilesController < ApplicationController
     key = params['key']
     file = S3_CLIENT.get_object(
       response_target: File.basename(key),
-      bucket: ENV['S3_BUCKET'],
+      bucket: ENV.fetch('S3_BUCKET', nil),
       key: key
     )
     file = open(file.body)
@@ -55,5 +55,4 @@ class TransactionFilesController < ApplicationController
     #   response_content_disposition: "attachment; filename=\"#{File.basename(key)}\""
     # }
   end
-
 end

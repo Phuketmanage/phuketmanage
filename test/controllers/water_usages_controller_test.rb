@@ -20,7 +20,8 @@ class WaterUsagesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create water_usage" do
     assert_difference('WaterUsage.count') do
-      post water_usages_url, params: { water_usage: { amount: @water_usage.amount, date: Date.today , house_id: @water_usage.house_id } }
+      post water_usages_url,
+           params: { water_usage: { amount: @water_usage.amount, date: Date.today, house_id: @water_usage.house_id } }
     end
   end
 
@@ -35,7 +36,9 @@ class WaterUsagesControllerTest < ActionDispatch::IntegrationTest
   # end
 
   test "should update water_usage" do
-    patch water_usage_url(@water_usage), params: { water_usage: { amount: @water_usage.amount, date: @water_usage.date, house_id: @water_usage.house_id } }
+    patch water_usage_url(@water_usage),
+          params: { water_usage: { amount: @water_usage.amount, date: @water_usage.date,
+                                   house_id: @water_usage.house_id } }
     assert_redirected_to water_usages_url(house_id: @water_usage.house_id)
   end
 

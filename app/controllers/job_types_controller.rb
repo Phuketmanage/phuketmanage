@@ -1,7 +1,7 @@
 class JobTypesController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_job_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_job_type, only: %i[show edit update destroy]
   layout 'admin'
 
   # @route GET /job_types (job_types)
@@ -9,8 +9,7 @@ class JobTypesController < ApplicationController
     @job_types = JobType.all
   end
 
-  def show
-  end
+  def show; end
 
   # @route GET /job_types/new (new_job_type)
   def new
@@ -18,8 +17,7 @@ class JobTypesController < ApplicationController
   end
 
   # @route GET /job_types/:id/edit (edit_job_type)
-  def edit
-  end
+  def edit; end
 
   # @route POST /job_types (job_types)
   def create
@@ -60,13 +58,14 @@ class JobTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_job_type
-      @job_type = JobType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def job_type_params
-      params.require(:job_type).permit(:name, :code, :color, :for_house_only, { empl_type_ids: []})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_job_type
+    @job_type = JobType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def job_type_params
+    params.require(:job_type).permit(:name, :code, :color, :for_house_only, { empl_type_ids: [] })
+  end
 end

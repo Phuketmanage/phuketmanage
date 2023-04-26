@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+  before_action :set_transaction, only: %i[show edit update destroy]
   layout 'admin'
   # after_action :check_warnings, only: [:create, :update]
 
@@ -23,38 +23,41 @@ class TransactionsController < ApplicationController
     @house_id = params[:house_id].present? ? params[:house_id].to_i : nil
     @owners = set_owners
     @houses = []
-    if !@error.present?
+    unless @error.present?
       # Balance of company
       if @owner_id.nil? &&
-          current_user.role?(['Admin','Manager','Accounting'])
+         current_user.role?(%w[Admin Manager Accounting])
         # Gray balance
         if params[:commit] != 'Acc'
           if current_user.role?(['Admin'])
             @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
             @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(
+              :type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum"
+            )
           else
-            salary = TransactionType.find_by(name_en:'Salary')
-            @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(:date, :created_at).all
+            salary = TransactionType.find_by(name_en: 'Salary')
+            @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(
+              :date, :created_at
+            ).all
             @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(:type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum")
+            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(
+              :type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum"
+            )
           end
           session.delete(:owner_id)
           @view = 'company'
           session[:commit] = params[:commit]
           session[:view] = @view
         end
-        #White balance
-        if params[:commit] == 'Acc'
-
-        end
+      # White balance
       # Balance of selected owner
       elsif !@owner_id.nil? || current_user.role?(['Owner'])
         if current_user.role?(['Owner'])
           @owner = current_user
           @locale = @owner.locale || 'en'
         # Owner view for management
-        elsif current_user.role?(['Admin','Manager','Accounting'])
+        elsif current_user.role?(%w[Admin Manager Accounting])
           session[:owner_id] = @owner_id
           session[:house_id] = @house_id
           @owner = User.find(@owner_id)
@@ -64,20 +67,33 @@ class TransactionsController < ApplicationController
         session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
-          if @house_id.nil? #House not selected
-            @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
+          if @house_id.nil? # House not selected
+            @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date,
+                                                                                                   :created_at).all
             @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
-          elsif @house_id.present? #House is selected
-            @transactions = @owner.transactions.where('date >= ? AND date <= ? AND house_id = ?', @from, @to, @house_id).order(:date, :created_at).all
-            @transactions_before = @owner.transactions.where('date < ? AND house_id = ?', @from, @house_id).order(:date, :created_at).all
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false AND house_id = ?', @from, @to, @house_id).group(:type_id).select(:type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum")
+            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(
+              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
+            )
+          elsif @house_id.present? # House is selected
+            @transactions = @owner.transactions.where('date >= ? AND date <= ? AND house_id = ?', @from, @to, @house_id).order(
+              :date, :created_at
+            ).all
+            @transactions_before = @owner.transactions.where('date < ? AND house_id = ?', @from, @house_id).order(
+              :date, :created_at
+            ).all
+            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false AND house_id = ?', @from, @to, @house_id).group(:type_id).select(
+              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
+            )
           end
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @cr_rental = 0
-          @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions.any?
+          if @transactions.any?
+            @cr_rental = @transactions.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit)
+          end
           @cr_prev_rental = 0
-          @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit) if @transactions_before.any?
+          if @transactions_before.any?
+            @cr_prev_rental = @transactions_before.where(type_id: type_rental_id).joins(:balance_outs).sum(:credit)
+          end
           @one_house = true
           @one_house = false if @owner.houses.count > 1
           today = Time.zone.now.in_time_zone('Bangkok')
@@ -87,10 +103,12 @@ class TransactionsController < ApplicationController
           @bookings_prepayment = future_booking_de - future_booking_cr
           @view = 'owner'
         end
-        #White balance
-        if params[:commit] == 'Acc' &&  current_user.role?(['Admin','Manager','Accounting'])
+        # White balance
+        if params[:commit] == 'Acc' && current_user.role?(%w[Admin Manager Accounting])
           @house_id = ''
-          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(:date, :created_at).all
+          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(
+            :date, :created_at
+          ).all
           @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @owner_id).all
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @view = 'accounting' if params[:commit] == 'Acc'
@@ -98,7 +116,7 @@ class TransactionsController < ApplicationController
         end
       end
 
-      #</28.07.2022 migrate to Balance v 2 (Balance of ... - White/Gray)
+      # </28.07.2022 migrate to Balance v 2 (Balance of ... - White/Gray)
       # # Owner view
       # if current_user.role?(['Owner']) || params[:commit] == 'Owner view'
       #   # Owner view for owner
@@ -210,8 +228,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
   # @route GET /transactions_docs (transactions_docs)
   def docs
@@ -220,7 +237,8 @@ class TransactionsController < ApplicationController
     @owner = User.find(params[:view_user_id])
     @one_house = true
     @one_house = false if @owner.houses.count > 1
-    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner.id).order(:date, :created_at).all
+    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner.id).order(:date,
+                                                                                                              :created_at).all
     if params[:type] == 'invoice'
       render template: 'transactions/invoice'
     elsif params[:type] == 'receipt'
@@ -230,10 +248,7 @@ class TransactionsController < ApplicationController
 
   # @route GET /transactions/new (new_transaction)
   def new
-
-    unless params[:tid].present?
-      @transaction = Transaction.new
-    else
+    if params[:tid].present?
       tid = params[:tid]
       old_transaction = Transaction.find(tid)
       @transaction = old_transaction.dup
@@ -243,22 +258,27 @@ class TransactionsController < ApplicationController
       @de_co = old_transaction.balances.sum(:debit)
       @cr_co = old_transaction.balances.sum(:credit)
       @cr_ow -= @de_co
+    else
+      @transaction = Transaction.new
     end
     now = Time.zone.now.in_time_zone('Bangkok')
     @s3_direct_post = S3_BUCKET.presigned_post(
       key: "transactions/${filename}",
       success_action_status: '201',
       acl: 'public-read',
-      content_type_starts_with: "")
+      content_type_starts_with: ""
+    )
     if params[:user_id].present?
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
-      if owner.houses.count == 1
-        @transaction.house_id = owner.houses.first.id
-      end
-      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
+      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+      ).order('bookings.start')
     else
-      @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+      ).order('bookings.start')
     end
   end
 
@@ -273,10 +293,13 @@ class TransactionsController < ApplicationController
       key: "transactions/${filename}",
       success_action_status: '201',
       acl: 'public-read',
-      content_type_starts_with: "")
+      content_type_starts_with: ""
+    )
     if @transaction.user
       owner = @transaction.user
-      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
+        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+      ).order('bookings.start')
     end
   end
 
@@ -293,13 +316,13 @@ class TransactionsController < ApplicationController
         type = TransactionType.find(params[:transaction][:type_id]).name_en
         @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
         files = params['transaction']['files']
-        if !files.nil?
+        unless files.nil?
           files.each do |f|
             @transaction.files.create!(url: f)
           end
         end
         files_to_show = params['transaction']['files_to_show']
-        if !files_to_show.nil?
+        unless files_to_show.nil?
           files_to_show.each do |f|
             @transaction.files.find_by(url: f).update_attributes(show: true)
           end
@@ -309,26 +332,29 @@ class TransactionsController < ApplicationController
           if params[:user_id].present?
             owner = User.find(params[:user_id])
             @transaction.user_id = owner.id
-            if owner.houses.count == 1
-              @transaction.house_id = owner.houses.first.id
-            end
-            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
+            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+            ).order('bookings.start')
           else
-            @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+            ).order('bookings.start')
           end
-          @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201', acl: 'public-read')
+          @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201',
+                                                     acl: 'public-read')
           render :new and return
         end
-        if params[:booking_fully_paid] == "true"
-          @transaction.booking.update(paid: true)
-        end
-        format.html { redirect_to transactions_path(
-                                    from: session[:from],
-                                    to: session[:to],
-                                    owner_id: session[:owner_id],
-                                    house_id: session[:house_id],
-                                    commit: session[:commit]),
-                                    notice: 'Transaction was successfully created.' }
+        @transaction.booking.update(paid: true) if params[:booking_fully_paid] == "true"
+        format.html do
+          redirect_to transactions_path(
+            from: session[:from],
+            to: session[:to],
+            owner_id: session[:owner_id],
+            house_id: session[:house_id],
+            commit: session[:commit]
+          ),
+                      notice: 'Transaction was successfully created.' end
       else
         @de_ow = params[:transaction][:de_ow].to_d
         @cr_ow = params[:transaction][:cr_ow].to_d
@@ -339,12 +365,17 @@ class TransactionsController < ApplicationController
           key: "transactions/${filename}",
           success_action_status: '201',
           acl: 'public-read',
-          content_type_starts_with: "")
+          content_type_starts_with: ""
+        )
         if params[:user_id].present?
           owner = User.find(params[:user_id])
-          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+          ).order('bookings.start')
         else
-          @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
+            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+          ).order('bookings.start')
         end
         @houses_for_select = set_houses_for_select
         format.html { render :new }
@@ -368,13 +399,13 @@ class TransactionsController < ApplicationController
         type = TransactionType.find(params[:transaction][:type_id]).name_en
         @transaction.write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
         files = params['transaction']['files']
-        if !files.nil?
+        unless files.nil?
           files.each do |f|
             @transaction.files.create!(url: f)
           end
         end
         files_to_show = params['transaction']['files_to_show']
-        if !files_to_show.nil?
+        unless files_to_show.nil?
           files_to_show.each do |f|
             @transaction.files.find_by(url: f).update_attributes(show: true)
           end
@@ -389,25 +420,28 @@ class TransactionsController < ApplicationController
             key: "transactions/${filename}",
             success_action_status: '201',
             acl: 'public-read',
-            content_type_starts_with: "")
+            content_type_starts_with: ""
+          )
           if @transaction.user
             owner = @transaction.user
-            @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+            @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
+              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+            ).order('bookings.start')
           end
 
           render :edit and return
         end
 
-        if params[:booking_fully_paid] == "true"
-          @transaction.booking.update(paid: true)
-        end
-        format.html { redirect_to transactions_path(
-                                    from: session[:from],
-                                    to: session[:to],
-                                    owner_id: session[:owner_id],
-                                    house_id: session[:house_id],
-                                    commit: session[:commit]),
-                                    notice: 'Transaction was successfully updated.' }
+        @transaction.booking.update(paid: true) if params[:booking_fully_paid] == "true"
+        format.html do
+          redirect_to transactions_path(
+            from: session[:from],
+            to: session[:to],
+            owner_id: session[:owner_id],
+            house_id: session[:house_id],
+            commit: session[:commit]
+          ),
+                      notice: 'Transaction was successfully updated.' end
         format.json { render :show, status: :ok, location: @transaction }
       else
         @de_ow = @transaction.balance_outs.sum(:debit)
@@ -417,13 +451,16 @@ class TransactionsController < ApplicationController
         @bookings = []
         if @transaction.user
           owner = @transaction.user
-          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code').order('bookings.start')
+          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
+            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
+          ).order('bookings.start')
         end
         @s3_direct_post = S3_BUCKET.presigned_post(
           key: "transactions/${filename}",
           success_action_status: '201',
           acl: 'public-read',
-          content_type_starts_with: "")
+          content_type_starts_with: ""
+        )
         format.html { render :edit }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
@@ -432,9 +469,7 @@ class TransactionsController < ApplicationController
 
   # @route POST /transactions/update_invoice_ref (update_invoice_ref)
   def update_invoice_ref
-    if !session[:view_user_id].present?
-      error = 'Need to select Owner'
-    end
+    error = 'Need to select Owner' unless session[:view_user_id].present?
     if session[:from].to_date.month != session[:to].to_date.month
       error = 'Can update invoice ref_no only with in one month'
     end
@@ -444,14 +479,15 @@ class TransactionsController < ApplicationController
                                     owner_id: session[:owner_id],
                                     house_id: session[:house_id],
                                     commit: session[:commit]),
-                                    notice: error
+                  notice: error
       return
     end
     # view_user_id = session[:view_user_id]
     # commit = session[:commit]
     @transactions = Transaction.joins(:balance_outs).where(
       'date >= ? AND date <= ? AND user_id = ? AND balance_outs.credit > 0',
-      session[:from], session[:to], session[:view_user_id]).all
+      session[:from], session[:to], session[:view_user_id]
+    ).all
     @transactions.each do |t|
       t.balances.where('debit > 0').update(ref_no: params[:ref_no])
       t.balance_outs.where('credit > 0').update(ref_no: params[:ref_no])
@@ -461,21 +497,22 @@ class TransactionsController < ApplicationController
                                   owner_id: session[:owner_id],
                                   house_id: session[:house_id],
                                   commit: session[:commit]),
-                                  notice: 'Ref no was successfully updated.'
-
+                notice: 'Ref no was successfully updated.'
   end
 
   # @route DELETE /transactions/:id (transaction)
   def destroy
     @transaction.destroy
     respond_to do |format|
-      format.html { redirect_to transactions_path(
-                                    from: session[:from],
-                                    to: session[:to],
-                                    owner_id: session[:owner_id],
-                                    house_id: session[:house_id],
-                                    commit: session[:commit]),
-                                    notice: 'Transaction was successfully destroyed.' }
+      format.html do
+        redirect_to transactions_path(
+          from: session[:from],
+          to: session[:to],
+          owner_id: session[:owner_id],
+          house_id: session[:house_id],
+          commit: session[:commit]
+        ),
+                    notice: 'Transaction was successfully destroyed.' end
       # format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
@@ -491,98 +528,120 @@ class TransactionsController < ApplicationController
     field = params[:field]
     text = params[:text]
     if type == "text"
-      if !user_id.present?
-        ts = Transaction.where('date = ? AND user_id IS NULL AND comment_en ILIKE ? ', date, "%#{text}%") if field == "transaction_comment_en"
-        ts = Transaction.where('date = ? AND user_id IS NULL AND comment_ru ILIKE ? ', date, "%#{text}%") if field == "transaction_comment_ru"
+      if user_id.present?
+        if field == "transaction_comment_en"
+          ts = Transaction.where('date = ? AND user_id = ? AND comment_en ILIKE ? ', date, user_id,
+                                 "%#{text}%")
+        end
+        if field == "transaction_comment_ru"
+          ts = Transaction.where('date = ? AND user_id = ? AND comment_ru ILIKE ? ', date, user_id,
+                                 "%#{text}%")
+        end
       else
-        ts = Transaction.where('date = ? AND user_id = ? AND comment_en ILIKE ? ', date, user_id, "%#{text}%") if field == "transaction_comment_en"
-        ts = Transaction.where('date = ? AND user_id = ? AND comment_ru ILIKE ? ', date, user_id, "%#{text}%") if field == "transaction_comment_ru"
+        if field == "transaction_comment_en"
+          ts = Transaction.where('date = ? AND user_id IS NULL AND comment_en ILIKE ? ', date,
+                                 "%#{text}%")
+        end
+        if field == "transaction_comment_ru"
+          ts = Transaction.where('date = ? AND user_id IS NULL AND comment_ru ILIKE ? ', date,
+                                 "%#{text}%")
+        end
       end
       warning = "There is one more transaction with simillar name on this date" if !ts.nil? && ts.any?
     elsif type == "number"
-      if !user_id.present?
-        ts = Transaction.where('date = ?', date).joins(:balances).where('balances.credit = ?', text) if field == "transaction_cr_co"
-      else
-        ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.debit = ?', text) if field == "transaction_de_ow"
-        ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.credit = ?', text) if field == "transaction_cr_ow"
-        ts = Transaction.where('date = ?', date).joins(:balances).where('balances.debit = ?', text) if field == "transaction_de_co"
+      if user_id.present?
+        if field == "transaction_de_ow"
+          ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.debit = ?',
+                                                                              text)
+        end
+        if field == "transaction_cr_ow"
+          ts = Transaction.where('date = ?', date).joins(:balance_outs).where('balance_outs.credit = ?',
+                                                                              text)
+        end
+        if field == "transaction_de_co"
+          ts = Transaction.where('date = ?', date).joins(:balances).where('balances.debit = ?',
+                                                                          text)
+        end
+      elsif field == "transaction_cr_co"
+        ts = Transaction.where('date = ?', date).joins(:balances).where('balances.credit = ?',
+                                                                        text)
       end
       if is_sum == 'true'
         warning = "There is one more transaction with same cr_co+de_co on this date" if !ts.nil? && ts.any?
-      else
-        warning = "There is one more transaction with same amount on this date" if !ts.nil? && ts.any?
+      elsif !ts.nil? && ts.any?
+        warning = "There is one more transaction with same amount on this date"
       end
     end
     render json: { field: field, warning: warning }
   end
 
   private
-    # def set_owners_for_select
-    #   User.joins(:houses)
-    #     .select(" users.id,
-    #               users.name,
-    #               users.surname")
-    #     .where.not('houses.balance_closed': true)
-    #     .order('users.name')
-    #     .group('users.id')
-    #     .map{|o| [o.id, "#{o.name} #{o.surname}"]}
-    #     .to_h
 
-    # end
+  # def set_owners_for_select
+  #   User.joins(:houses)
+  #     .select(" users.id,
+  #               users.name,
+  #               users.surname")
+  #     .where.not('houses.balance_closed': true)
+  #     .order('users.name')
+  #     .group('users.id')
+  #     .map{|o| [o.id, "#{o.name} #{o.surname}"]}
+  #     .to_h
 
-    def set_owners
-      # User.joins(:houses)
-      #   .select(" users.id as owner_id,
-      #             houses.id as house_id,
-      #             houses.code as house_code,
-      #             users.name as owner_name,
-      #             users.surname as owner_surname ")
-      #   .where.not('houses.balance_closed': true)
-      #   .order('houses.code')
-      #   .map{|h| [
-      #     h.house_id,
-      #     {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}]}
-      #   .to_h
-      # User.joins(:houses)
-      #   .select(" users.id as owner_id,
-      #             houses.id as house_id,
-      #             houses.code as house_code,
-      #             users.name as owner_name,
-      #             users.surname as owner_surname ")
-      #   .where.not('houses.balance_closed': true)
-      #   .order('houses.code')
-      #   .map{|h| {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}}
-      User.joins(:houses)
-        .select(" users.id as owner_id,
+  # end
+
+  def set_owners
+    # User.joins(:houses)
+    #   .select(" users.id as owner_id,
+    #             houses.id as house_id,
+    #             houses.code as house_code,
+    #             users.name as owner_name,
+    #             users.surname as owner_surname ")
+    #   .where.not('houses.balance_closed': true)
+    #   .order('houses.code')
+    #   .map{|h| [
+    #     h.house_id,
+    #     {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}]}
+    #   .to_h
+    # User.joins(:houses)
+    #   .select(" users.id as owner_id,
+    #             houses.id as house_id,
+    #             houses.code as house_code,
+    #             users.name as owner_name,
+    #             users.surname as owner_surname ")
+    #   .where.not('houses.balance_closed': true)
+    #   .order('houses.code')
+    #   .map{|h| {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}}
+    User.joins(:houses)
+      .select(" users.id as owner_id,
                   houses.id as house_id,
                   houses.code as house_code,
                   houses.maintenance as house_maintenance,
                   users.name as owner_name,
                   users.surname as owner_surname ")
-        .where.not('houses.balance_closed': true)
-        .order('houses.code')
-        # .map{|h| {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}}
-    end
+      .where.not('houses.balance_closed': true)
+      .order('houses.code')
+    # .map{|h| {text: "#{h.house_code} (#{h.owner_name} #{h.owner_surname})", user_id: h.owner_id}}
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_transaction
-      @transaction = Transaction.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_transaction
+    @transaction = Transaction.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def transaction_params
-      params.require(:transaction).permit(:date,
-                                          :ref_no,
-                                          :house_id,
-                                          :type_id,
-                                          :user_id,
-                                          :booking_id,
-                                          :comment_en,
-                                          :comment_ru,
-                                          :comment_inner,
-                                          :hidden,
-                                          :for_acc,
-                                          :incomplite)
-    end
-
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def transaction_params
+    params.require(:transaction).permit(:date,
+                                        :ref_no,
+                                        :house_id,
+                                        :type_id,
+                                        :user_id,
+                                        :booking_id,
+                                        :comment_en,
+                                        :comment_ru,
+                                        :comment_inner,
+                                        :hidden,
+                                        :for_acc,
+                                        :incomplite)
+  end
 end

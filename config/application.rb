@@ -19,7 +19,7 @@ module Phuketmanage
       config.before_configuration do
         env_file = Rails.root.join("config", 'env_var.yml').to_s
 
-        if File.exists?(env_file)
+        if File.exist?(env_file)
           YAML.load_file(env_file).each do |key, value|
             ENV[key.to_s] = value
           end # end YAML.load_file

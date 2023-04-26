@@ -4,73 +4,73 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new                          # guest user
-    can [:confirmed, :index_supplier, :canceled], Transfer
+    user ||= User.new # guest user
+    can %i[confirmed index_supplier canceled], Transfer
     can :show, House
     # can :index, House
-    can [:create_front, :ical], Booking
+    can %i[create_front ical], Booking
     # can :about, Page
     if user.role? :owner
-      can :index, [ Transaction ]
-      can :index_front, [ Booking ]
-      can :index, [ Admin ]
+      can :index, [Transaction]
+      can :index_front, [Booking]
+      can :index, [Admin]
       can :index, TransactionFile, show: true
     end
     if user.role? 'Transfer'
       can :read, Transfer
-      can :index, [ Admin ]
+      can :index, [Admin]
     end
     if user.role? 'Maid'
-      can [:laundry, :update_laundry], Job
-      can :index, [ Admin ]
+      can %i[laundry update_laundry], Job
+      can :index, [Admin]
     end
     if user.role? 'Gardener'
-      can [:index, :create, :update], WaterUsage
-      can :index, [ Admin ]
+      can %i[index create update], WaterUsage
+      can :index, [Admin]
     end
     if user.role? 'Accounting'
-      can [:index, :new, :create, :update_invoice_ref] , Transaction
+      can %i[index new create update_invoice_ref], Transaction
       can [:edit, :update], Transaction do |t|
-        t.date >= (Date.today-30.days).beginning_of_month
+        t.date >= (Date.today - 30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
-        t.date > Date.today-1.days
+        t.date > Date.today - 1.day
       end
       can [:laundry], Job
-      can [:timeline, :timeline_data], Booking
-      can :index, [ Admin ]
+      can %i[timeline timeline_data], Booking
+      can :index, [Admin]
     end
     if user.role? 'Guest relation'
       can :manage, Job
       can [:destroy], Job, creator: user
       can :index, Transfer
-      can [:timeline, :timeline_data, :check_in_out, :update_comment_gr], Booking
-      can :index, [ Admin ]
+      can %i[timeline timeline_data check_in_out update_comment_gr], Booking
+      can :index, [Admin]
     end
     if user.role? :manager
-      can [:index, :show], User, roles: { name: ['Owner', 'Tenant'] }
-      can [:new ], User
-      can [:create, :edit, :update], User, roles: { name: ['Owner', 'Tenant'] }
+      can %i[index show], User, roles: { name: %w[Owner Tenant] }
+      can [:new], User
+      can %i[create edit update], User, roles: { name: %w[Owner Tenant] }
       cannot :destroy, User
-      can :manage, [  HouseType, House, Duration, Season, Price,
-                      Booking, Connection, JobType, Transfer, Source,
-                      Option, HouseOption, Location, HousePhoto,
-                      BookingFile, HouseGroup, TransactionFile ]
-      cannot :destroy, [ HouseType, House, Booking, JobType, Transfer, TransactionFile ]
-      can [:index, :new, :show, :create, :edit, :update, :laundry, :update_laundry], Job
-      can [:destroy], Job , creator: user
+      can :manage, [HouseType, House, Duration, Season, Price,
+                    Booking, Connection, JobType, Transfer, Source,
+                    Option, HouseOption, Location, HousePhoto,
+                    BookingFile, HouseGroup, TransactionFile]
+      cannot :destroy, [HouseType, House, Booking, JobType, Transfer, TransactionFile]
+      can %i[index new show create edit update laundry update_laundry], Job
+      can [:destroy], Job, creator: user
       can :manage, JobMessage, sender: user
-      can :index, [ Admin ]
-      can [:index, :new, :create, :update_invoice_ref, :docs] , Transaction
+      can :index, [Admin]
+      can %i[index new create update_invoice_ref docs], Transaction
       can [:edit, :update], Transaction do |t|
-        t.date >= (Date.today-30.days).beginning_of_month
+        t.date >= (Date.today - 30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
-        t.date > Date.today-1.days
+        t.date > Date.today - 1.day
       end
       can :manage, TransactionFile
       # can [ :statement, :reimbersment ], Document
-      can [:index, :create, :update], WaterUsage
+      can %i[index create update], WaterUsage
     end
     if user.role? :admin
       can :manage, :all

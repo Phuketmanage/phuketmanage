@@ -1,12 +1,10 @@
 module DocumentsHelper
-
-  def code owner
+  def code(owner)
     houses = owner.houses
-    if houses.count > 1 || owner.code.present?
-      code = owner.code
+    code = if houses.count > 1 || owner.code.present?
+      owner.code
     else
-      code = houses.first.code.gsub(/\//,'-')
+      houses.first.code.tr('/', '-')
     end
   end
-
 end

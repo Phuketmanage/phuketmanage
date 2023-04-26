@@ -5,22 +5,30 @@ class UsersController < ApplicationController
   def index
     if params['role']
       @users = User.with_role(params['role']).order(:name)
-    else
-      if current_user.role? :admin
-        @users = User.all.order(:name)
-      elsif current_user.role? :manager
-        @users = User.with_role(['Owner', 'Tenant']).order(:name)
-      end
+    elsif current_user.role? :admin
+      @users = User.all.order(:name)
+    elsif current_user.role? :manager
+      @users = User.with_role(%w[Owner Tenant]).order(:name)
     end
   end
 
   # @route GET (/:locale)/users/new (new_user)
   def new
     @user = User.new
-    if current_user.role? :admin
-      @roles = Role.all
+    @roles = if current_user.role? :admin
+      Role.all
     else
-      @roles = Role.where(name: ['Owner', 'Tenant']).all
+      Role.where(name: %w[Owner Tenant]).all
+    end
+  end
+
+  # @route GET (/:locale)/users/:id/edit (edit_user)
+  def edit
+    @user = User.find(params[:id])
+    @roles = if current_user.role? :admin
+      Role.all
+    else
+      Role.where(name: %w[Owner Tenant]).all
     end
   end
 
@@ -31,22 +39,12 @@ class UsersController < ApplicationController
       flash[:notice] = "Successfully created User."
       redirect_to users_path
     else
-      if current_user.role? :admin
-        @roles = Role.all
+      @roles = if current_user.role? :admin
+        Role.all
       else
-        @roles = Role.where(name: ['Owner', 'Tenant']).all
+        Role.where(name: %w[Owner Tenant]).all
       end
-      render :action => 'new'
-    end
-  end
-
-  # @route GET (/:locale)/users/:id/edit (edit_user)
-  def edit
-    @user = User.find(params[:id])
-    if current_user.role? :admin
-      @roles = Role.all
-    else
-      @roles = Role.where(name: ['Owner', 'Tenant']).all
+      render action: 'new'
     end
   end
 
@@ -55,14 +53,16 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     params[:user].delete(:password) if params[:user][:password].blank?
-    params[:user].delete(:password_confirmation) if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
+    if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
+      params[:user].delete(:password_confirmation)
+    end
 
     if @user.update(user_params)
       flash[:notice] = "Successfully updated User."
       redirect_to users_path
     else
-      @roles = Role.where(name: ['Owner', 'Tenant']).all
-      render :action => 'edit'
+      @roles = Role.where(name: %w[Owner Tenant]).all
+      render action: 'edit'
     end
   end
 
@@ -85,29 +85,27 @@ class UsersController < ApplicationController
   # @route GET /users/get_houses (users_get_houses)
   def get_houses
     @owner_id = params[:owner_id]
-    if !@owner_id
-      @houses = []
+    @houses = if @owner_id
+      User.find(@owner_id).houses.select(:id, :code)
     else
-      @houses = User.find(@owner_id).houses.select(:id, :code)
+      []
     end
-    render json: { houses:  @houses }
+    render json: { houses: @houses }
   end
-
 
   private
 
-    def user_params
-       params.require(:user).permit(:email,
-                                    :name,
-                                    :surname,
-                                    :locale,
-                                    :password,
-                                    :password_confirmation,
-                                    { role_ids: []},
-                                    :comment,
-                                    :code,
-                                    :tax_no,
-                                    :show_comm)
-    end
-
+  def user_params
+    params.require(:user).permit(:email,
+                                 :name,
+                                 :surname,
+                                 :locale,
+                                 :password,
+                                 :password_confirmation,
+                                 { role_ids: [] },
+                                 :comment,
+                                 :code,
+                                 :tax_no,
+                                 :show_comm)
+  end
 end

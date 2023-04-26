@@ -20,7 +20,9 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create location" do
     assert_difference('Location.count') do
-      post locations_url, params: { location: { descr_en: @location.descr_en, descr_ru: @location.descr_ru, name_en: @location.name_en, name_ru: @location.name_ru } }
+      post locations_url,
+           params: { location: { descr_en: @location.descr_en, descr_ru: @location.descr_ru, name_en: @location.name_en,
+                                 name_ru: @location.name_ru } }
     end
 
     assert_redirected_to locations_url
@@ -37,7 +39,9 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update location" do
-    patch location_url(@location), params: { location: { descr_en: @location.descr_en, descr_ru: @location.descr_ru, name_en: @location.name_en, name_ru: @location.name_ru } }
+    patch location_url(@location),
+          params: { location: { descr_en: @location.descr_en, descr_ru: @location.descr_ru, name_en: @location.name_en,
+                                name_ru: @location.name_ru } }
     assert_redirected_to locations_url
   end
 

@@ -2,15 +2,14 @@ class SourcesController < ApplicationController
   load_and_authorize_resource
   layout 'admin'
 
-  before_action :set_source, only: [:show, :edit, :update, :destroy]
+  before_action :set_source, only: %i[show edit update destroy]
 
   # @route GET (/:locale)/sources (sources)
   def index
     @sources = Source.all
   end
 
-  def show
-  end
+  def show; end
 
   # @route GET (/:locale)/sources/new (new_source)
   def new
@@ -18,8 +17,7 @@ class SourcesController < ApplicationController
   end
 
   # @route GET (/:locale)/sources/:id/edit (edit_source)
-  def edit
-  end
+  def edit; end
 
   # @route POST (/:locale)/sources (sources)
   def create
@@ -62,13 +60,14 @@ class SourcesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_source
-      @source = Source.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def source_params
-      params.require(:source).permit(:name, :syncable)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_source
+    @source = Source.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def source_params
+    params.require(:source).permit(:name, :syncable)
+  end
 end

@@ -9,30 +9,32 @@ class Admin::UsersController < ApplicationController
     @user = User.new
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
   def create
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Successfully created User."
       redirect_to root_path
     else
-      render :action => 'new'
+      render action: 'new'
     end
-  end
-
-  def edit
-    @user = User.find(params[:id])
   end
 
   def update
     @user = User.find(params[:id])
     params[:user].delete(:password) if params[:user][:password].blank?
-    params[:user].delete(:password_confirmation) if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
+    if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
+      params[:user].delete(:password_confirmation)
+    end
 
     if @user.update(user_params)
       flash[:notice] = "Successfully updated User."
       redirect_to root_path
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
@@ -43,10 +45,10 @@ class Admin::UsersController < ApplicationController
       redirect_to root_path
     end
   end
+
   private
 
   def user_params
-     params.require(:user).permit(:email, :password, :password_confirmation, { role_ids: []})
+    params.require(:user).permit(:email, :password, :password_confirmation, { role_ids: [] })
   end
-
 end

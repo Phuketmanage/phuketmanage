@@ -13,7 +13,6 @@ class JobMessage < ApplicationRecord
   belongs_to :sender, class_name: "User"
 
   def url
-    return "#{S3_HOST}#{message}"
+    "#{S3_HOST}#{message}"
   end
-
 end

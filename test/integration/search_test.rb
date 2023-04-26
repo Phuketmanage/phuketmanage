@@ -9,7 +9,7 @@ class SearchTest < ActionDispatch::IntegrationTest
   # end
 
   test 'available houses' do
-    year = Time.now.year+1
+    year = Time.now.year + 1
     # Start > Finish
     rs = "1.10.#{year}".to_date
     rf = "31.07.#{year}".to_date
@@ -18,20 +18,20 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'div.house', count: 0
 
     # Start or Finish in the past
-    rs = "1.10.#{year-2}".to_date
+    rs = "1.10.#{year - 2}".to_date
     rf = "31.07.#{year}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_match 'Begining or End of period can not be in the past', response.body
     assert_select 'div.house', count: 0
-    rs = "1.10.#{year-2}".to_date
-    rf = "30.11.#{year-2}".to_date
+    rs = "1.10.#{year - 2}".to_date
+    rf = "30.11.#{year - 2}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_match 'Begining or End of period can not be in the past', response.body
     assert_select 'div.house', count: 0
 
     # At least 2 days in advance
-    rs = Time.now.in_time_zone('Bangkok').to_date+1.day
-    rf = rs+5.days
+    rs = Time.now.in_time_zone('Bangkok').to_date + 1.day
+    rf = rs + 5.days
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_match 'You can book at least 2 days in advance', response.body
     assert_select 'div.house', count: 0
@@ -155,7 +155,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'h5.house_price', '฿116,875'
 
     rs = "10.12.#{year}".to_date
-    rf = "10.01.#{year+1}".to_date
+    rf = "10.01.#{year + 1}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 31'
     assert_select 'div.house', count: 3
@@ -163,7 +163,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'h5.house_price', '฿208,250'
 
     rs = "10.12.#{year}".to_date
-    rf = "15.01.#{year+1}".to_date
+    rf = "15.01.#{year + 1}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 36'
     assert_select 'div.house', count: 3
@@ -171,7 +171,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'h5.house_price', '฿243,250'
 
     rs = "10.12.#{year}".to_date
-    rf = "25.01.#{year+1}".to_date
+    rf = "25.01.#{year + 1}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 46'
     assert_select 'div.house', count: 3
@@ -189,14 +189,11 @@ class SearchTest < ActionDispatch::IntegrationTest
 
     # 23.07.2019 catch up
     rs = "26.12.#{year}".to_date
-    rf = "09.01.#{year+1}".to_date
+    rf = "09.01.#{year + 1}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 14'
     # assert_select 'div.house', count: 3
     # assert_select 'h5.house_title', 'Villa 1'
     # assert_select 'h5.house_price', '129625 THB'
-
-
   end
-
 end

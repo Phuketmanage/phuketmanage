@@ -20,7 +20,9 @@ class TransactionTypesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create transaction_type" do
     assert_difference('TransactionType.count') do
-      post transaction_types_url, params: { transaction_type: { credit_company: @transaction_type.credit_company, credit_owner: @transaction_type.credit_owner, debit_company: @transaction_type.debit_company, debit_owner: @transaction_type.debit_owner, name_en: @transaction_type.name_en, name_ru: @transaction_type.name_ru } }
+      post transaction_types_url,
+           params: { transaction_type: { credit_company: @transaction_type.credit_company,
+                                         credit_owner: @transaction_type.credit_owner, debit_company: @transaction_type.debit_company, debit_owner: @transaction_type.debit_owner, name_en: @transaction_type.name_en, name_ru: @transaction_type.name_ru } }
     end
 
     assert_redirected_to transaction_types_url
@@ -37,7 +39,9 @@ class TransactionTypesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update transaction_type" do
-    patch transaction_type_url(@transaction_type), params: { transaction_type: { credit_company: @transaction_type.credit_company, credit_owner: @transaction_type.credit_owner, debit_company: @transaction_type.debit_company, debit_owner: @transaction_type.debit_owner, name_en: @transaction_type.name_en, name_ru: @transaction_type.name_ru } }
+    patch transaction_type_url(@transaction_type),
+          params: { transaction_type: { credit_company: @transaction_type.credit_company,
+                                        credit_owner: @transaction_type.credit_owner, debit_company: @transaction_type.debit_company, debit_owner: @transaction_type.debit_owner, name_en: @transaction_type.name_en, name_ru: @transaction_type.name_ru } }
     assert_redirected_to transaction_type_url(@transaction_type)
   end
 

@@ -13,5 +13,4 @@ class TransactionFilesControllerTest < ActionDispatch::IntegrationTest
       delete transaction_file_path(id: file.id), xhr: true
     end
   end
-
 end

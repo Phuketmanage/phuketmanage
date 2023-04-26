@@ -1,7 +1,7 @@
 class OptionsController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_option, only: [:show, :edit, :update, :destroy]
+  before_action :set_option, only: %i[show edit update destroy]
 
   layout 'admin'
 
@@ -10,8 +10,7 @@ class OptionsController < ApplicationController
     @options = Option.order(:zindex).all
   end
 
-  def show
-  end
+  def show; end
 
   # @route GET /options/new (new_option)
   def new
@@ -19,8 +18,7 @@ class OptionsController < ApplicationController
   end
 
   # @route GET /options/:id/edit (edit_option)
-  def edit
-  end
+  def edit; end
 
   # @route POST /options (options)
   def create
@@ -61,13 +59,14 @@ class OptionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_option
-      @option = Option.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def option_params
-      params.require(:option).permit(:title_en, :title_ru, :zindex)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_option
+    @option = Option.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def option_params
+    params.require(:option).permit(:title_en, :title_ru, :zindex)
+  end
 end

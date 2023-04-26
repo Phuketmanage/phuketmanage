@@ -2,7 +2,7 @@ class DurationsController < ApplicationController
   load_and_authorize_resource :house
   # load_and_authorize_resource :duration, through: :house, shallow: true
 
-  before_action :set_duration, only: [:show, :edit, :update, :destroy]
+  before_action :set_duration, only: %i[show edit update destroy]
 
   # GET /durations
   # GET /durations.json
@@ -13,8 +13,7 @@ class DurationsController < ApplicationController
 
   # GET /durations/1
   # GET /durations/1.json
-  def show
-  end
+  def show; end
 
   # GET /durations/new
   def new
@@ -71,13 +70,14 @@ class DurationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_duration
-      @duration = Duration.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def duration_params
-      params.require(:duration).permit(:start, :finish, :house_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_duration
+    @duration = Duration.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def duration_params
+    params.require(:duration).permit(:start, :finish, :house_id)
+  end
 end

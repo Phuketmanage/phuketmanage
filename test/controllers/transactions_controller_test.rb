@@ -20,16 +20,18 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create transaction" do
     assert_difference('Transaction.count') do
-      post transactions_url,  params: {
-                                transaction: {
-                                  date: @transaction.date,
-                                  comment_en: @transaction.comment_en,
-                                  comment_inner: @transaction.comment_inner,
-                                  comment_ru: @transaction.comment_ru,
-                                  house_id: @transaction.house_id,
-                                  ref_no: @transaction.ref_no,
-                                  type_id: @transaction.type_id,
-                                  user_id: @transaction.user_id } }
+      post transactions_url, params: {
+        transaction: {
+          date: @transaction.date,
+          comment_en: @transaction.comment_en,
+          comment_inner: @transaction.comment_inner,
+          comment_ru: @transaction.comment_ru,
+          house_id: @transaction.house_id,
+          ref_no: @transaction.ref_no,
+          type_id: @transaction.type_id,
+          user_id: @transaction.user_id
+        }
+      }
     end
 
     assert_redirected_to transactions_path
@@ -41,14 +43,16 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     @owner = @booking.house.owner
     type = TransactionType.find_by(name_en: 'Rental')
     post transactions_path, params: {
-                              transaction: {
-                                date: Time.now.to_date,
-                                type_id: type.id,
-                                booking_id: @booking.id,
-                                de_ow: 100000,
-                                de_co: 20000,
-                                booking_fully_paid: true,
-                                comment_en: 'Rental'} }
+      transaction: {
+        date: Time.now.to_date,
+        type_id: type.id,
+        booking_id: @booking.id,
+        de_ow: 100_000,
+        de_co: 20_000,
+        booking_fully_paid: true,
+        comment_en: 'Rental'
+      }
+    }
     t = Transaction.last
     assert_equal @booking.id, t.booking_id
     assert_equal @house.id, t.house_id
@@ -66,16 +70,18 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update transaction" do
-    patch transaction_url(@transaction),  params: {
-                                            transaction: {
-                                              date: @transaction.date,
-                                              comment_en: @transaction.comment_en,
-                                              comment_inner: @transaction.comment_inner,
-                                              comment_ru: @transaction.comment_ru,
-                                              house_id: @transaction.house_id,
-                                              ref_no: @transaction.ref_no,
-                                              type_id: @transaction.type_id,
-                                              user_id: @transaction.user_id } }
+    patch transaction_url(@transaction), params: {
+      transaction: {
+        date: @transaction.date,
+        comment_en: @transaction.comment_en,
+        comment_inner: @transaction.comment_inner,
+        comment_ru: @transaction.comment_ru,
+        house_id: @transaction.house_id,
+        ref_no: @transaction.ref_no,
+        type_id: @transaction.type_id,
+        user_id: @transaction.user_id
+      }
+    }
     assert_redirected_to transactions_path
   end
 

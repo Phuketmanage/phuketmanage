@@ -10,9 +10,7 @@ class Log < ApplicationRecord
     t.string "action"
   end
 
-
   private
-    def add user, controller, before, after
 
-    end
+  def add(user, controller, before, after); end
 end

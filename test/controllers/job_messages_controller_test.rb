@@ -11,15 +11,14 @@ class JobMessagesControllerTest < ActionDispatch::IntegrationTest
   test "should create job message" do
     job = jobs(:two)
     assert_difference('JobMessage.count') do
-      post job_messages_url,  params: {
-                                job_message: {
-                                  message: 'Test'
-                                  },
-                                  job_id: @job.id,
-                                }, xhr: true
+      post job_messages_url, params: {
+        job_message: {
+          message: 'Test'
+        },
+        job_id: @job.id
+      }, xhr: true
     end
   end
-
 
   test "should destroy job message" do
     job_message = job_messages(:one)
@@ -27,5 +26,4 @@ class JobMessagesControllerTest < ActionDispatch::IntegrationTest
       delete job_message_url(id: job_message.id), xhr: true
     end
   end
-
 end

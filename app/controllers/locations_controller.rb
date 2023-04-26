@@ -1,7 +1,7 @@
 class LocationsController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_location, only: [:show, :edit, :update, :destroy]
+  before_action :set_location, only: %i[show edit update destroy]
 
   layout 'admin'
 
@@ -10,8 +10,7 @@ class LocationsController < ApplicationController
     @locations = Location.all.order(:name_en)
   end
 
-  def show
-  end
+  def show; end
 
   # @route GET /locations/new (new_location)
   def new
@@ -19,8 +18,7 @@ class LocationsController < ApplicationController
   end
 
   # @route GET /locations/:id/edit (edit_location)
-  def edit
-  end
+  def edit; end
 
   # @route POST /locations (locations)
   def create
@@ -61,13 +59,14 @@ class LocationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_location
-      @location = Location.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def location_params
-      params.require(:location).permit(:name_en, :name_ru, :descr_en, :descr_ru)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_location
+    @location = Location.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def location_params
+    params.require(:location).permit(:name_en, :name_ru, :descr_en, :descr_ru)
+  end
 end
