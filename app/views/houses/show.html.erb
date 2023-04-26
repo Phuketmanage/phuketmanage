@@ -1,7 +1,7 @@
-<% provide(:title, @house.send("title_#{I18n.locale}")) %>
+<% provide(:title, @house.generated_title(I18n.locale)) %>
 <p id="notice"><%= notice %></p>
 
-<h1><%= @house.send("title_#{I18n.locale}") %></h1>
+<h1><%= @house.generated_title(I18n.locale) %></h1>
 <div class="row">
   <div class="col-lg-8 mb-2">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -117,7 +117,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="makeBookingLabel">
-            <%= @house.send("title_#{I18n.locale}") %>
+            <%= @house.generated_title(I18n.locale) %>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
