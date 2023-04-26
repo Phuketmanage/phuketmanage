@@ -8,7 +8,7 @@ class UsersMailer < Devise::Mailer
   #
   #   en.transfers_mailer.created.subject
   #
-  def reset_password_instructions(record, token, opts={})
+  def reset_password_instructions(record, token, opts = {})
     headers["Custom-header"] = "Bar"
     opts[:from] = 'Sunbeam property <info@phuketmanage.com>'
     opts[:reply_to] = 'Sunbeam property <info@phuketmanage.com>'
@@ -28,7 +28,8 @@ class UsersMailer < Devise::Mailer
     @transfer = transfer
     @changes = changes
     I18n.with_locale(:en) do
-      mail to:  @settings["tranfer_supplier_email"], subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.strftime("%d.%m.%Y")}"
+      mail to: @settings["tranfer_supplier_email"],
+           subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
     end
   end
 
@@ -36,7 +37,8 @@ class UsersMailer < Devise::Mailer
     @transfer = transfer
     @changes = {}
     I18n.with_locale(:en) do
-      mail to:  @settings["tranfer_supplier_email"], subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.strftime("%d.%m.%Y")}"
+      mail to: @settings["tranfer_supplier_email"],
+           subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
     end
   end
 

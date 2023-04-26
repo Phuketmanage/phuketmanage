@@ -4,19 +4,15 @@ class AdminController < ApplicationController
   # @route GET /owner (owner)
   # @route GET (/:locale)/dashboard (dashboard)
   def index
-    if current_user.role?('Gardener')
-      redirect_to water_usages_path
-    end
-    if current_user.role?('Owner')
-      redirect_to transactions_path and return
-    end
+    redirect_to water_usages_path if current_user.role?('Gardener')
+    redirect_to transactions_path and return if current_user.role?('Owner')
+
     @notifications = Notification.order(:created_at).all
   end
 
   private
 
-    def set_en_locale
-      I18n.locale = "en"
-    end
-
+  def set_en_locale
+    I18n.locale = "en"
+  end
 end

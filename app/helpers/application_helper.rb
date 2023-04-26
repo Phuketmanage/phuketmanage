@@ -1,6 +1,5 @@
 module ApplicationHelper
-
-  def image_tag_s3 (file, options = {})
+  def image_tag_s3(file, options = {})
     image_tag("https://phuketmanage.s3.amazonaws.com/images/#{file}", options)
   end
 
@@ -13,5 +12,4 @@ module ApplicationHelper
       page_title + " | " + full_title
     end
   end
-
 end

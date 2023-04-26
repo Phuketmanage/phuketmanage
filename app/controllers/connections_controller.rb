@@ -15,7 +15,6 @@ class ConnectionsController < ApplicationController
       @connections = @house.connections
       redirect_to edit_house_path(@house.number), notice: @connection.errors.full_messages
     end
-
   end
 
   # @route DELETE (/:locale)/connections/:id (connection)
@@ -27,13 +26,12 @@ class ConnectionsController < ApplicationController
   end
 
   private
-    # def set_house
 
-    # end
+  # def set_house
 
-    def connection_params
-      params.require(:connection).permit(:house_id, :source_id, :link)
-    end
+  # end
 
-
+  def connection_params
+    params.require(:connection).permit(:house_id, :source_id, :link)
+  end
 end

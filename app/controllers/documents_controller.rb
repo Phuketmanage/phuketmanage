@@ -1,8 +1,6 @@
 class DocumentsController < ApplicationController
-
   # @route GET /documents/statement (tmp_statement)
   def statement
-
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
 
     if params[:trsc_id].present?
@@ -31,23 +29,16 @@ class DocumentsController < ApplicationController
     @t = Transaction.find(params[:trsc_id])
     @date = @t.date
     @usd = 29
-    if @t.type.name_en == 'Rental'
-      @to = { name: Booking.find(@t.booking_id).client_details,
-              address: '' }
+    @to = if @t.type.name_en == 'Rental'
+      { name: Booking.find(@t.booking_id).client_details,
+        address: '' }
     else
-      @to = { name: "#{@t.user.name} #{@t.user.surname}",
-              address: '' }
+      { name: "#{@t.user.name} #{@t.user.surname}",
+        address: '' }
     end
   end
 
-  def invoice
+  def invoice; end
 
-  end
-
-  def receipt
-
-  end
-
-
-
+  def receipt; end
 end

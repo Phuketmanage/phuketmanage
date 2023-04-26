@@ -20,7 +20,8 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create setting" do
     assert_difference('Setting.count') do
-      post settings_url, params: { setting: { description: @setting.description, value: @setting.value, var: @setting.var } }
+      post settings_url,
+           params: { setting: { description: @setting.description, value: @setting.value, var: @setting.var } }
     end
 
     assert_redirected_to setting_url(Setting.last)
@@ -37,7 +38,8 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update setting" do
-    patch setting_url(@setting), params: { setting: { description: @setting.description, value: @setting.value, var: @setting.var } }
+    patch setting_url(@setting),
+          params: { setting: { description: @setting.description, value: @setting.value, var: @setting.var } }
     assert_redirected_to setting_url(@setting)
   end
 

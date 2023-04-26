@@ -21,7 +21,8 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create transfer" do
     assert_difference('Transfer.count') do
-      post transfers_url, params: { transfer: { booking_id: @transfer.booking_id, client: @transfer.client, date: @transfer.date, from: @transfer.from, to: @transfer.to } }, xhr: true
+      post transfers_url,
+           params: { transfer: { booking_id: @transfer.booking_id, client: @transfer.client, date: @transfer.date, from: @transfer.from, to: @transfer.to } }, xhr: true
     end
 
     assert_response :success
@@ -38,7 +39,8 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update transfer" do
-    patch transfer_url(@transfer), params: { transfer: { booking_id: @transfer.booking_id, number: @transfer.number } }, xhr: true
+    patch transfer_url(@transfer),
+          params: { transfer: { booking_id: @transfer.booking_id, number: @transfer.number } }, xhr: true
     assert_response :success
   end
 

@@ -14,5 +14,4 @@ class BookingFilesControllerTest < ActionDispatch::IntegrationTest
       delete booking_file_path(id: file.id), xhr: true
     end
   end
-
 end

@@ -2,7 +2,7 @@ class SeasonsController < ApplicationController
   load_and_authorize_resource :house
   # load_and_authorize_resource :price, through: :house, shallow: true
 
-  before_action :set_season, only: [:show, :edit, :update, :destroy]
+  before_action :set_season, only: %i[show edit update destroy]
 
   # GET /seasons
   # GET /seasons.json
@@ -13,8 +13,7 @@ class SeasonsController < ApplicationController
 
   # GET /seasons/1
   # GET /seasons/1.json
-  def show
-  end
+  def show; end
 
   # GET /seasons/new
   def new
@@ -72,14 +71,14 @@ class SeasonsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_season
-      @season = Season.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def season_params
-      params.require(:season).permit(:ssd, :ssm, :sfd, :sfm, :house_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_season
+    @season = Season.find(params[:id])
+  end
 
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def season_params
+    params.require(:season).permit(:ssd, :ssm, :sfd, :sfm, :house_id)
+  end
 end

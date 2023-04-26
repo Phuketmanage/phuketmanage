@@ -1,7 +1,5 @@
 # Preview all emails at http://localhost:3000/rails/mailers/transfers_mailer
 class TransfersMailerPreview < ActionMailer::Preview
-
-
   # Preview this email at http://localhost:3000/rails/mailers/transfers_mailer/created
   def created
     transfer = Transfer.find_by(number: "4Q3YIOU")
@@ -10,8 +8,8 @@ class TransfersMailerPreview < ActionMailer::Preview
 
   def amended
     transfer = Transfer.find_by(number: "AG05XIY")
-    transfer.trsf_type == "IN" ? transfer.trsf_type = "OUT" : transfer.trsf_type = "IN"
-    transfer.date = transfer.date+1.day
+    transfer.trsf_type = (transfer.trsf_type == "IN" ? "OUT" : "IN")
+    transfer.date = transfer.date + 1.day
     transfer.time = transfer.time.split("").shuffle.join
     transfer.from = "New from".split("").shuffle.join
     transfer.client = "New name".split("").shuffle.join
@@ -28,5 +26,4 @@ class TransfersMailerPreview < ActionMailer::Preview
     transfer = Transfer.find_by(number: "XDZWPL9")
     TransfersMailer.canceled(transfer)
   end
-
 end

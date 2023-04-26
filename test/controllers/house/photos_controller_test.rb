@@ -8,10 +8,8 @@ class House::PhotosControllerTest < ActionDispatch::IntegrationTest
     @house = houses(:villa_1)
   end
 
-
   test "should get index" do
     get house_photos_path(@house.number)
     assert_response :success
   end
-
 end

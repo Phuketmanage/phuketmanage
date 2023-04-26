@@ -1,7 +1,7 @@
 class WaterUsagesController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_water_usage, only: [:show, :edit, :update, :destroy]
+  before_action :set_water_usage, only: %i[show edit update destroy]
 
   layout 'admin'
 
@@ -15,12 +15,10 @@ class WaterUsagesController < ApplicationController
       @houses = House.where(water_reading: true).order(:house_group_id, :code).all
       @water_usage = WaterUsage.new
     end
-
   end
 
   # @route GET /water_usages/:id (water_usage)
-  def show
-  end
+  def show; end
 
   # def new
   #   @water_usage = WaterUsage.new
@@ -51,7 +49,8 @@ class WaterUsagesController < ApplicationController
   def update
     respond_to do |format|
       if @water_usage.update(water_usage_params)
-        format.html { redirect_to water_usages_path(house_id: @water_usage.house_id), notice: 'Water usage was successfully updated.' }
+        format.html do
+ redirect_to water_usages_path(house_id: @water_usage.house_id), notice: 'Water usage was successfully updated.' end
         format.json { render :show, status: :ok, location: @water_usage }
       else
         format.html { render :edit }
@@ -70,13 +69,14 @@ class WaterUsagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_water_usage
-      @water_usage = WaterUsage.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def water_usage_params
-      params.require(:water_usage).permit(:house_id, :date, :amount, :amount_2, :comment)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_water_usage
+    @water_usage = WaterUsage.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def water_usage_params
+    params.require(:water_usage).permit(:house_id, :date, :amount, :amount_2, :comment)
+  end
 end

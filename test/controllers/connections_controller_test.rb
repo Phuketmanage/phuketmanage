@@ -11,11 +11,13 @@ class ConnectionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create connection" do
     assert_difference('Connection.count', 1) do
-      post connections_path,  params: {
-                                hid: @house.number,
-                                connection: {
-                                  source_id: @source.id,
-                                  link: 'https://site.com/testlink.ical' } }
+      post connections_path, params: {
+        hid: @house.number,
+        connection: {
+          source_id: @source.id,
+          link: 'https://site.com/testlink.ical'
+        }
+      }
     end
 
     assert_redirected_to edit_house_path(@house.number)
@@ -29,5 +31,4 @@ class ConnectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_house_path(connection.house.number)
   end
-
 end

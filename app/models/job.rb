@@ -35,5 +35,4 @@ class Job < ApplicationRecord
   has_many :job_messages, dependent: :destroy
   has_many :job_tracks, dependent: :destroy
   # validates :plan, presence: true
-
 end

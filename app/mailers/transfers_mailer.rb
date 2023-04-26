@@ -1,5 +1,4 @@
 class TransfersMailer < ApplicationMailer
-
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
@@ -9,7 +8,8 @@ class TransfersMailer < ApplicationMailer
     @transfer = transfer
     @changes = {}
     I18n.with_locale(:en) do
-      mail to:  @settings["tranfer_supplier_email"], subject: "New transfer - #{transfer.trsf_type} #{transfer.date.strftime("%d.%m.%Y")}"
+      mail to: @settings["tranfer_supplier_email"],
+           subject: "New transfer - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
     end
   end
 
@@ -23,7 +23,8 @@ class TransfersMailer < ApplicationMailer
     @transfer = transfer
     @changes = changes
     I18n.with_locale(:en) do
-      mail to:  @settings["tranfer_supplier_email"], subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.strftime("%d.%m.%Y")}"
+      mail to: @settings["tranfer_supplier_email"],
+           subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
     end
   end
 
@@ -31,7 +32,8 @@ class TransfersMailer < ApplicationMailer
     @transfer = transfer
     @changes = {}
     I18n.with_locale(:en) do
-      mail to:  @settings["tranfer_supplier_email"], subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.strftime("%d.%m.%Y")}"
+      mail to: @settings["tranfer_supplier_email"],
+           subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
     end
   end
 

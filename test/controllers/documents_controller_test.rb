@@ -5,5 +5,4 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
   #   get documents_invoice_url
   #   assert_response :success
   # end
-
 end

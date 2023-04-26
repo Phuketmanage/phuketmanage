@@ -37,7 +37,8 @@ class HouseTypesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update house_type" do
-    patch house_type_url(@house_type), params: { house_type: { name_en: @house_type.name_en, name_ru: @house_type.name_ru } }
+    patch house_type_url(@house_type),
+          params: { house_type: { name_en: @house_type.name_en, name_ru: @house_type.name_ru } }
     assert_redirected_to house_type_url(@house_type)
   end
 

@@ -73,21 +73,22 @@ class House < ApplicationRecord
 
   def preview
     if image.present?
-      url_parts = image.match(/^(.*[\/])(.*)$/)
+      url_parts = image.match(%r{^(.*/)(.*)$})
       image = "#{S3_HOST}#{url_parts[1]}thumb_#{url_parts[2]}"
     else
       image = ""
     end
-    return image
+    image
   end
 
   def main_photo
-    return image.present? ? "#{S3_HOST}#{image}" : ""
+    image.present? ? "#{S3_HOST}#{image}" : ""
   end
 
   def option(title_en)
     option = Option.find_by(title_en: title_en)
-    return false if !option
+    return false unless option
+
     options.where(id: option.id).any? ? true : false
   end
 
@@ -98,5 +99,4 @@ class House < ApplicationRecord
   #     h.update_attributes(number: (('1'..'9').to_a).shuffle[0..rand(1..6)].join)
   #   end
   # end
-
 end

@@ -1,7 +1,7 @@
 class TransactionTypesController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_transaction_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_transaction_type, only: %i[show edit update destroy]
   layout 'admin'
 
   # @route GET /transaction_types (transaction_types)
@@ -10,8 +10,7 @@ class TransactionTypesController < ApplicationController
   end
 
   # @route GET /transaction_types/:id (transaction_type)
-  def show
-  end
+  def show; end
 
   # @route GET /transaction_types/new (new_transaction_type)
   def new
@@ -19,8 +18,7 @@ class TransactionTypesController < ApplicationController
   end
 
   # @route GET /transaction_types/:id/edit (edit_transaction_type)
-  def edit
-  end
+  def edit; end
 
   # @route POST /transaction_types (transaction_types)
   def create
@@ -61,19 +59,20 @@ class TransactionTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_transaction_type
-      @transaction_type = TransactionType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def transaction_type_params
-      params.require(:transaction_type).permit( :name_en,
-                                                :name_ru,
-                                                :debit_company,
-                                                :credit_company,
-                                                :debit_owner,
-                                                :credit_owner,
-                                                :admin_only)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_transaction_type
+    @transaction_type = TransactionType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def transaction_type_params
+    params.require(:transaction_type).permit(:name_en,
+                                             :name_ru,
+                                             :debit_company,
+                                             :credit_company,
+                                             :debit_owner,
+                                             :credit_owner,
+                                             :admin_only)
+  end
 end

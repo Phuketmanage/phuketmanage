@@ -8,5 +8,5 @@ class Location < ApplicationRecord
     t.datetime "updated_at", precision: 6, null: false
   end
 
-has_and_belongs_to_many :houses
+  has_and_belongs_to_many :houses
 end

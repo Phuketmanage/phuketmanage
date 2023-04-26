@@ -2,7 +2,7 @@ class EmplTypesController < ApplicationController
   load_and_authorize_resource
 
   layout 'admin'
-  before_action :set_empl_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_empl_type, only: %i[show edit update destroy]
 
   # @route GET /empl_types (empl_types)
   def index
@@ -10,8 +10,7 @@ class EmplTypesController < ApplicationController
   end
 
   # @route GET /empl_types/:id (empl_type)
-  def show
-  end
+  def show; end
 
   # @route GET /empl_types/new (new_empl_type)
   def new
@@ -19,8 +18,7 @@ class EmplTypesController < ApplicationController
   end
 
   # @route GET /empl_types/:id/edit (edit_empl_type)
-  def edit
-  end
+  def edit; end
 
   # @route POST /empl_types (empl_types)
   def create
@@ -61,13 +59,14 @@ class EmplTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_empl_type
-      @empl_type = EmplType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def empl_type_params
-      params.require(:empl_type).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_empl_type
+    @empl_type = EmplType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def empl_type_params
+    params.require(:empl_type).permit(:name)
+  end
 end

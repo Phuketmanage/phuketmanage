@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :notifications, only: [:destroy]
   resources :water_usages
-  get 'users/get_houses', to: 'users#get_houses'#, as: 'get_houses'
+  get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
   get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
   get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
   resources :house_groups
@@ -52,9 +52,9 @@ Rails.application.routes.draw do
   patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
   get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
   resources :bookings
-  resources :booking_files, only: [:create, :update, :destroy]
+  resources :booking_files, only: %i[create update destroy]
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
-    get '/:locale' , to: 'pages#index'
+    get '/:locale', to: 'pages#index'
     get '/about', to: 'pages#about', as: 'page_about'
     devise_for :users
     resources :users, except: :create
@@ -78,9 +78,9 @@ Rails.application.routes.draw do
     resources :settings
     resources :house_types
     resources :sources, except: :show
-    resources :connections, only: [:create, :destroy]
+    resources :connections, only: %i[create destroy]
     get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
     resources :transfers
-    end
+  end
   root to: 'pages#index'
 end

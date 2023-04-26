@@ -1,10 +1,9 @@
 class HouseGroupsController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_house_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_house_group, only: %i[show edit update destroy]
 
   layout 'admin'
-
 
   # @route GET /house_groups (house_groups)
   def index
@@ -12,8 +11,7 @@ class HouseGroupsController < ApplicationController
   end
 
   # @route GET /house_groups/:id (house_group)
-  def show
-  end
+  def show; end
 
   # @route GET /house_groups/new (new_house_group)
   def new
@@ -21,8 +19,7 @@ class HouseGroupsController < ApplicationController
   end
 
   # @route GET /house_groups/:id/edit (edit_house_group)
-  def edit
-  end
+  def edit; end
 
   # @route POST /house_groups (house_groups)
   def create
@@ -63,13 +60,14 @@ class HouseGroupsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_house_group
-      @house_group = HouseGroup.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def house_group_params
-      params.require(:house_group).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_house_group
+    @house_group = HouseGroup.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def house_group_params
+    params.require(:house_group).permit(:name)
+  end
 end

@@ -36,13 +36,11 @@ class User < ApplicationRecord
   has_many :todos
   has_many :todos_created, class_name: 'Todo', foreign_key: 'creator_id'
 
-  scope :with_role, ->(role) { includes(:roles).where(roles: {name: role}) }
+  scope :with_role, ->(role) { includes(:roles).where(roles: { name: role }) }
 
-  def role?(role)
-    role = role.to_s if role.kind_of?(Symbol)
-    role = [role.dup] if role.kind_of?(String)
-    role.map{|r| r[0] = r[0].capitalize}
-    !roles.find_by_name(role).nil?
+  def role?(role_or_roles)
+    names = Array.wrap(role_or_roles).map(&:to_s).map(&:capitalize)
+    !!roles.find_by(name: names)
   end
 
   # def is_any_of?(role)
@@ -56,6 +54,6 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, #:registerable,
-         :rememberable#, :validatable, :invitable, ,
+  devise :database_authenticatable, :recoverable, # :registerable,
+         :rememberable # , :validatable, :invitable, ,
 end

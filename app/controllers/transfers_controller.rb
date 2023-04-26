@@ -1,12 +1,11 @@
 class TransfersController < ApplicationController
   load_and_authorize_resource
 
-  layout 'admin', except: [:index_supplier, :confirmed, :canceled]
-  before_action :set_transfer, only: [:show, :update, :destroy, :cancel]
+  layout 'admin', except: %i[index_supplier confirmed canceled]
+  before_action :set_transfer, only: %i[show update destroy cancel]
 
   # @route GET (/:locale)/transfers (transfers)
   def index
-
     if !params[:from].present? && !params[:to].present?
       today = Time.now.in_time_zone('Bangkok').to_date
       @transfers = Transfer.where('date >= ?', today).order(:date).all
@@ -20,8 +19,8 @@ class TransfersController < ApplicationController
       @transfers = Transfer.where('date >= ? AND date <= ?', from, to).order(:date).all
     end
     @transfer = Transfer.new
-    @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
-    @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
+    @select_items = House.active.order(:code).map { |h| [h.code, h.number] }
+    @select_items.push('Airport (International)', 'Airport (Domiestic)')
   end
 
   # @route GET /transfers/supplier (transfers_supplier)
@@ -46,8 +45,8 @@ class TransfersController < ApplicationController
   # @route GET (/:locale)/transfers/:id/edit (edit_transfer)
   def edit
     @transfer = Transfer.find(params[:id])
-    @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
-    @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
+    @select_items = House.active.order(:code).map { |h| [h.code, h.number] }
+    @select_items.push('Airport (International)', 'Airport (Domiestic)')
     @request_from = params[:request_from]
     respond_to do |format|
       format.js
@@ -57,25 +56,25 @@ class TransfersController < ApplicationController
   # @route POST (/:locale)/transfers (transfers)
   def create
     @transfer = Transfer.new(transfer_params)
-    trsf_booking_no = "#{(('A'..'Z').to_a+('0'..'9').to_a).shuffle[0..6].join}"
+    trsf_booking_no = "#{(('A'..'Z').to_a + ('0'..'9').to_a).sample(7).join}"
     @transfer.number = trsf_booking_no
     @transfer.status = "sent"
     respond_to do |format|
       if @transfer.save
-        if !@transfer.booking_id.nil?
-          @transfers = @transfer.booking.transfers
-        else
+        if @transfer.booking_id.nil?
           today = Time.now.in_time_zone('Bangkok').to_date
           @transfers = Transfer.where('date >= ?', today).order(:date)
+        else
+          @transfers = @transfer.booking.transfers
         end
         format.js
-        format.json { render json: {transfer: @transfer}, status: :created }
+        format.json { render json: { transfer: @transfer }, status: :created }
         TransfersMailer.created(@transfer).deliver_now
       else
         @transfers = Transfer.all
         @transfer = Transfer.new
-        @select_items = House.active.order(:code).map{|h| [h.code, h.number]}
-        @select_items.push(*['Airport (International)', 'Airport (Domiestic)'])
+        @select_items = House.active.order(:code).map { |h| [h.code, h.number] }
+        @select_items.push('Airport (International)', 'Airport (Domiestic)')
 
         format.html { render :index }
         format.json { render json: @transfer.errors, status: :unprocessable_entity }
@@ -89,11 +88,11 @@ class TransfersController < ApplicationController
     if @transfer.nil?
       @notice = "There is no such transfer with booking no #{params[:number]}"
       @color = "text-danger"
-      return
+      nil
     elsif @transfer.update(status: "confirmed")
       @notice = 'Transfer was successfully confirmed.'
       @color = "text-success"
-      return
+      nil
     else
       @notice = 'Something went wrong. Transfer was not confirmed.'
       @color = "text-danger"
@@ -103,7 +102,7 @@ class TransfersController < ApplicationController
   # @route PATCH (/:locale)/transfers/:id (transfer)
   # @route PUT (/:locale)/transfers/:id (transfer)
   def update
-    #transfer = Transfer.find_by(number: params[:id])
+    # transfer = Transfer.find_by(number: params[:id])
     @transfer.attributes = transfer_params
     changes = @transfer.changes
     # if params[:transfer].key?(:new_from)
@@ -136,19 +135,18 @@ class TransfersController < ApplicationController
       end
     end
 
-   # respond_to do |format|
-   #    if @transfer.update(transfer_params)
-   #      format.html { redirect_to admin_transfers_path, notice: 'Ammendment request was successfully sent.' }
-   #      format.json { render :show, status: :ok, location: @transfer }
-   #      if changes.any?
+    # respond_to do |format|
+    #    if @transfer.update(transfer_params)
+    #      format.html { redirect_to admin_transfers_path, notice: 'Ammendment request was successfully sent.' }
+    #      format.json { render :show, status: :ok, location: @transfer }
+    #      if changes.any?
 
-   #      end
-   #    else
-   #      format.html { render "Was not able to sent ammendment request." }
-   #      format.json { render json: @transfer.errors, status: :unprocessable_entity }
-   #    end
-   # end
-
+    #      end
+    #    else
+    #      format.html { render "Was not able to sent ammendment request." }
+    #      format.json { render json: @transfer.errors, status: :unprocessable_entity }
+    #    end
+    # end
   end
 
   # @route GET (/:locale)/transfers/:id/cancel (cancel_transfer)
@@ -175,17 +173,16 @@ class TransfersController < ApplicationController
     if @transfer.nil?
       @notice = "There is no such transfer with booking no #{params[:number]}"
       @color = "text-danger"
-      return
+      nil
     elsif @transfer.update(status: "canceled")
       @notice = 'Transfer was successfully canceled.'
       @color = "text-success"
-      return
+      nil
     else
       @notice = 'Something went wrong. Transfer was not canceled.'
       @color = "text-danger"
     end
   end
-
 
   # @route DELETE (/:locale)/transfers/:id (transfer)
   def destroy
@@ -204,15 +201,16 @@ class TransfersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
 
+  # Use callbacks to share common setup or constraints between actions.
 
-    def set_transfer
-      @transfer = Transfer.find(params[:id])
-    end
+  def set_transfer
+    @transfer = Transfer.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def transfer_params
-      params.require(:transfer).permit(:booking_id, :date, :trsf_type, :from, :time, :client, :pax, :to, :remarks, :booked_by, :number)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def transfer_params
+    params.require(:transfer).permit(:booking_id, :date, :trsf_type, :from, :time, :client, :pax, :to, :remarks,
+                                     :booked_by, :number)
+  end
 end

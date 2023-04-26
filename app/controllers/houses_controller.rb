@@ -1,8 +1,8 @@
 class HousesController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_house, only: [ :show, :edit, :update, :destroy,
-                                    :create_connection]
+  before_action :set_house, only: %i[show edit update destroy
+                                     create_connection]
   layout 'admin', except: :show
 
   # @route GET /houses (houses)
@@ -11,7 +11,7 @@ class HousesController < ApplicationController
     @houses_old = House.where(balance_closed: true).all.order(:unavailable, :code)
     # respond_to do |format|
     #   format.html
-      # format.json {render json: {houses: @houses}}
+    # format.json {render json: {houses: @houses}}
     # end
   end
 
@@ -25,22 +25,20 @@ class HousesController < ApplicationController
     # Front end
 
     if params[:rs].present? && params[:rf].present?
-      @search = Search.new( rs: params[:rs],
-                            rf: params[:rf],
-                            dtnb: @settings['dtnb'])
+      @search = Search.new(rs: params[:rs],
+                           rf: params[:rf],
+                           dtnb: @settings['dtnb'])
       answer = @search.is_house_available? @house.id
-      if !answer[:result]
-        @prices = "unavailable"
-      else
+      if answer[:result]
         @houses = [@house]
         @prices = @search.get_prices @houses
         @booking = Booking.new
+      else
+        @prices = "unavailable"
       end
     else
       @search = Search.new
     end
-
-
   end
 
   # @route GET /houses/new (new_house)
@@ -65,11 +63,11 @@ class HousesController < ApplicationController
 
   # @route POST /houses (houses)
   def create
-    options = params[:options] ? params[:options] : nil
+    options = params[:options] || nil
     @house = House.new(house_params)
     number_unique = false
-    until number_unique do
-      number = (('1'..'9').to_a).shuffle[0..rand(1..6)].join
+    until number_unique
+      number = ('1'..'9').to_a.shuffle[0..rand(1..6)].join
       house = House.find_by(number: number)
       number_unique = true if house.nil?
     end
@@ -89,7 +87,6 @@ class HousesController < ApplicationController
         format.json { render json: @house.errors, status: :unprocessable_entity }
       end
     end
-
   end
 
   # @route PATCH /houses/:id (house)
@@ -97,8 +94,6 @@ class HousesController < ApplicationController
   def update
     respond_to do |format|
       if @house.update(house_params)
-        if params[:copy_options]
-        end
         format.html { redirect_to houses_path, notice: "House #{@house.code} was successfully updated." }
         format.json { render :show, status: :ok, location: @house }
       else
@@ -122,61 +117,61 @@ class HousesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_house
-      @house = House.find_by(number: params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def house_params
-      params.require(:house).permit(
-                                    :code,
-                                    :title_en,
-                                    :title_ru,
-                                    :description_en,
-                                    :description_ru,
-                                    :owner_id,
-                                    :type_id,
-                                    :size,
-                                    :plot_size,
-                                    :rooms,
-                                    :bathrooms,
-                                    :pool,
-                                    :pool_size,
-                                    :communal_pool,
-                                    :parking,
-                                    :parking_size,
-                                    :unavailable,
-                                    :rental,
-                                    :maintenance,
-                                    :outsource_cleaning,
-                                    :outsource_linen,
-                                    :address,
-                                    :google_map,
-                                    { employee_ids: [] },
-                                    :image,
-                                    :capacity,
-                                    :seaview,
-                                    :kingBed,
-                                    :queenBed,
-                                    :singleBed,
-                                    :priceInclude_en,
-                                    :priceInclude_ru,
-                                    :cancellationPolicy_en,
-                                    :cancellationPolicy_ru,
-                                    { option_ids: [] },
-                                    { location_ids: [] },
-                                    :rules_en,
-                                    :rules_ru,
-                                    :other_en,
-                                    :other_ru,
-                                    :details,
-                                    :house_group_id,
-                                    :water_meters,
-                                    :water_reading,
-                                    :balance_closed,
-                                    :hide_in_timeline
-                                    )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_house
+    @house = House.find_by(number: params[:id])
+  end
 
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def house_params
+    params.require(:house).permit(
+      :code,
+      :title_en,
+      :title_ru,
+      :description_en,
+      :description_ru,
+      :owner_id,
+      :type_id,
+      :size,
+      :plot_size,
+      :rooms,
+      :bathrooms,
+      :pool,
+      :pool_size,
+      :communal_pool,
+      :parking,
+      :parking_size,
+      :unavailable,
+      :rental,
+      :maintenance,
+      :outsource_cleaning,
+      :outsource_linen,
+      :address,
+      :google_map,
+      { employee_ids: [] },
+      :image,
+      :capacity,
+      :seaview,
+      :kingBed,
+      :queenBed,
+      :singleBed,
+      :priceInclude_en,
+      :priceInclude_ru,
+      :cancellationPolicy_en,
+      :cancellationPolicy_ru,
+      { option_ids: [] },
+      { location_ids: [] },
+      :rules_en,
+      :rules_ru,
+      :other_en,
+      :other_ru,
+      :details,
+      :house_group_id,
+      :water_meters,
+      :water_reading,
+      :balance_closed,
+      :hide_in_timeline
+    )
+  end
 end

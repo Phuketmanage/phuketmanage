@@ -11,14 +11,8 @@ class PagesController < ApplicationController
   end
 
   # @route GET (/:locale)/about (page_about)
-  def about
-
-  end
-
+  def about; end
 
   # @route GET /test (test)
-  def test
-
-  end
-
+  def test; end
 end

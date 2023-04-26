@@ -13,7 +13,6 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 end
 
-
 module ActionDispatch::Integration
   class Session
     def default_url_options
