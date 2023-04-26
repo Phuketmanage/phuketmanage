@@ -72,3 +72,4 @@ yarn-debug.log*
 
 # Ignore enviromental variables file
 /config/env_var.yml
+/vendor
