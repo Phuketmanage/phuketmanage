@@ -580,6 +580,7 @@ class TransactionsController < ApplicationController
                                           :comment_en,
                                           :comment_ru,
                                           :comment_inner,
+                                          :cash,
                                           :hidden,
                                           :for_acc,
                                           :incomplite)

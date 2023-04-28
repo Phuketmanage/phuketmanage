@@ -101,6 +101,10 @@
   <div class="form-group">
   <% if current_user.role? ['Admin', 'Accounting'] %>
     <div class="form-check">
+      <%= form.check_box :cash, class: 'form-check-input' %>
+      <%= form.label 'cash', class: "form-check-label" %>
+    </div>
+    <div class="form-check">
       <%= form.check_box :hidden, class: 'form-check-input' %>
       <%= form.label :hidden, class: "form-check-label" %>
     </div>
