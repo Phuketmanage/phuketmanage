@@ -29,9 +29,11 @@ class Transaction < ApplicationRecord
   has_many :transaction_files
   has_many :files, dependent: :destroy, foreign_key: 'trsc_id', class_name: 'TransactionFile'
   validates :date, :type, :comment_en, presence: true
+  before_create :add_type_of_transaction_to_comment
   # after_save :check_warnings, on: [:create, :update]
 
-  def write_to_balance (type, de_ow, cr_ow, de_co, cr_co)
+
+  def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
     types2 = ['Maintenance', 'Laundry']
     types3 = ['Top up', 'From guests']
@@ -103,6 +105,14 @@ class Transaction < ApplicationRecord
       self.house_id = house.id
       self.user_id = house.owner.id if user_id.nil?
     end
+  end
+
+  private
+
+  def add_type_of_transaction_to_comment
+    cash_type = self.cash ? " T" : " C"
+    self.comment_en += cash_type
+    self.comment_ru += cash_type
   end
 
   # def log
