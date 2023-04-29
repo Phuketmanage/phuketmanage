@@ -1,24 +1,19 @@
-# README
+# Phuketmanage
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
 
-Things you may want to cover:
+```sh
+rake db:setup
+```
 
-* Ruby version
+### Quick login:
 
-* System dependencies
+```
+https://localhost:3000/unlock
+```
 
-* Configuration
+# Tests
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```sh
+rake
+```
