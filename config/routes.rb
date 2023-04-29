@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'unlock', to: 'dev#unlock' if Rails.env.development?
+
   resources :notifications, only: [:destroy]
   resources :water_usages
   get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
