@@ -12,8 +12,14 @@ rake db:setup
 https://localhost:3000/unlock
 ```
 
-# Tests
+## Tests
 
 ```sh
-rake
+rails t
+```
+
+### Coverage
+
+```sh
+open coverage/index.html
 ```
