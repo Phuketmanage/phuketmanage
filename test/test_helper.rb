@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start "rails"
+
 ENV['RAILS_ENV'] ||= 'test'
 ENV['S3_BUCKET'] = 'phuketmanage-development'
 ENV['AWS_ACCESS_KEY_ID'] = 'AKIASANYCWRAMOW5GHMY'
