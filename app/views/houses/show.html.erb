@@ -189,7 +189,7 @@
             <%= f.hidden_field :start, value: @search.rs %>
             <%= f.hidden_field :finish, value: @search.rf %>
             <%= f.hidden_field :hid, value: @house.number %>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
             <%= f.submit t('search.send'), class: "btn btn-primary"%>
           </div>
         <% end %>
@@ -210,9 +210,10 @@
         </div>
           <div class="modal-body">
             <span class="h5"><%= t('search.booking_no') %>: </span><span class="h5" id="booking_number"></span>
+            <div class="h6"><%= t('search.message_done')%></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
           </div>
       </div>
     </div>
