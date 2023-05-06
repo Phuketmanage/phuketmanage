@@ -189,7 +189,7 @@
             <%= f.hidden_field :start, value: @search.rs %>
             <%= f.hidden_field :finish, value: @search.rf %>
             <%= f.hidden_field :hid, value: @house.number %>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
             <%= f.submit t('search.send'), class: "btn btn-primary"%>
           </div>
         <% end %>
