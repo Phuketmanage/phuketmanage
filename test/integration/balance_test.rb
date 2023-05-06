@@ -556,6 +556,26 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # Prev sums
   end
 
+  test 'show payment type' do
+    from = '2022-09-01'
+    to = '2023-05-31'
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "house rental\n          /C"
+    sign_out users(:admin)
+    sign_in users(:manager)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "house rental\n          /C"
+    sign_out users(:manager)
+    sign_in users(:owner_3)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "Аренда дома"
+    sign_out users(:owner_3)
+  end
+
   test 'Show and hide comm' do
     # if show_comm set to false Owner can not see comm
     from = '2019-09-01'

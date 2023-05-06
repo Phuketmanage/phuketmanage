@@ -111,3 +111,14 @@ seven:
   comment_en: rental
   comment_ru: MyString
   comment_inner: MyString
+eight:
+  date: '10.05.2023'
+  ref_no:
+  house: villa_6
+  type: purchases
+  user: owner_3
+  comment_en: house rental
+  comment_ru: Аренда дома
+  comment_inner: MyString
+  cash: true
+
