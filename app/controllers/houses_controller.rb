@@ -75,7 +75,7 @@ class HousesController < ApplicationController
     @house.secret = SecureRandom.hex(16)
     respond_to do |format|
       if @house.save
-        format.html { redirect_to houses_path, notice: 'House #{@house.code} was successfully created.' }
+        format.html { redirect_to houses_path, notice: "House #{@house.code} was successfully created." }
         format.json { render :show, status: :created, location: @house }
       else
         @owners = User.with_role('Owner')
@@ -127,8 +127,6 @@ class HousesController < ApplicationController
   def house_params
     params.require(:house).permit(
       :code,
-      :title_en,
-      :title_ru,
       :description_en,
       :description_ru,
       :owner_id,
