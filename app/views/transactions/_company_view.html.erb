@@ -72,8 +72,9 @@
         <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
         <td><%= t.type.name_en %></td>
         <td><%= t.house.code if t.house %> <%= t.user.surname if t.house.nil? && t.user_id %></td>
-        <td>
+        <td class='comment'>
           <%= t.comment_en %>
+          <%= t.cash ? "/C" : nil %>
           <% if t.user && t.user.locale == 'ru' && !t.comment_ru.present? && current_user.role?(['Admin', 'Manager'])%>
             <%= link_to 'Translate', edit_transaction_path(t) %>
           <% end %>

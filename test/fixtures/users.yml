@@ -6,33 +6,39 @@
 #
 admin: #{}
   email: 'admin@test.com'
+  name: 'admin'
   roles: admin
   locale: en
 #
 manager: #{}
   email: 'manager@test.com'
+  name: 'manager'
   roles: manager
   locale: en
 
 accounting: #{}
   email: 'assr@test.com'
+  name: 'accounting'
   roles: accounting
   locale: en
 
 owner: #{}
   email: 'owner@test.com'
+  name: 'owner'
   roles: owner
   locale: en
   show_comm: false
 
 owner_2: #{}
   email: 'owner_2@test.com'
+  name: 'owner_2'
   roles: owner
   locale: en
   show_comm: false
 
 owner_3: #{}
   email: 'owner_3@test.com'
+  name: 'owner_3'
   roles: owner
   locale: ru
   show_comm: true
@@ -40,21 +46,25 @@ owner_3: #{}
 
 tenant: #{}
   email: 'tenant@test.com'
+  name: 'tenant'
   roles: tenant
   locale: ru
 
 owner_tenant: #{}
   email: 'owner_tenant@test.com'
+  name: 'owner_tenant'
   roles: owner, tenant
   locale: ru
 
 maid:
   email: 'maid@phuketmanage.com'
+  name: 'maid'
   roles: maid
   locale: en
 
 gardener:
   email: 'garden@phuketmanage.com'
+  name: 'gardener'
   roles: gardener
   locale: en
 
