@@ -14,6 +14,7 @@
 //= require rails-ujs
 //= require popper
 //= require bootstrap
+//= require bootstrap-select
 //= require moment
 //= require activestorage
 //= require turbolinks
