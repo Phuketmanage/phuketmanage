@@ -86,7 +86,10 @@
       <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
     </div>
     <div class="col-lg-2 form-group">
-      <%= f.select :house_number, @houses_for_select.map {|h| [h.code, h.number]} , { include_blank: 'All', selected: params[:house_number] }, class: "form-control" %>
+      <% options = @houses_for_select.map{ |h| [h.code, h.number]} %>
+      <%= f.select :house_number, options,
+        { include_blank: 'All', selected: params[:house_number] },
+        class: 'selectpicker form-control', data: { 'live-search': 'true' } %>
     </div>
     <div class="col-lg-6 form-group">
       <%= f.submit 'Update timeline', class: 'btn btn-primary' %>
