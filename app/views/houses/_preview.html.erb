@@ -1,8 +1,8 @@
       <div class="card house">
-        <%= image_tag h.preview, class: 'card-img-top', alt: h.send("title_#{I18n.locale}") if h.preview %>
+        <%= image_tag h.preview, class: 'card-img-top', alt: h.generated_title(I18n.locale) if h.preview %>
         <div class="card-body">
           <h5 class="card-title house_title">
-            <%= h.send("title_#{I18n.locale}") %>
+            <%= h.generated_title(I18n.locale) %>
             <% if from_search == true && price[:unavailable].present? %>
               <span class="badge badge-danger">Unavailable</span>
             <% end %>

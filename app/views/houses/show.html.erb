@@ -1,7 +1,7 @@
-<% provide(:title, @house.send("title_#{I18n.locale}")) %>
+<% provide(:title, @house.generated_title(I18n.locale)) %>
 <p id="notice"><%= notice %></p>
 
-<h1><%= @house.send("title_#{I18n.locale}") %></h1>
+<h1><%= @house.generated_title(I18n.locale) %></h1>
 <div class="row">
   <div class="col-lg-8 mb-2">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -117,7 +117,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="makeBookingLabel">
-            <%= @house.send("title_#{I18n.locale}") %>
+            <%= @house.generated_title(I18n.locale) %>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -189,7 +189,7 @@
             <%= f.hidden_field :start, value: @search.rs %>
             <%= f.hidden_field :finish, value: @search.rf %>
             <%= f.hidden_field :hid, value: @house.number %>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
             <%= f.submit t('search.send'), class: "btn btn-primary"%>
           </div>
         <% end %>
@@ -210,9 +210,10 @@
         </div>
           <div class="modal-body">
             <span class="h5"><%= t('search.booking_no') %>: </span><span class="h5" id="booking_number"></span>
+            <div class="h6"><%= t('search.message_done')%></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
           </div>
       </div>
     </div>
