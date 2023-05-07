@@ -33,5 +33,6 @@ $(document).on "turbolinks:load", ->
     $('#doc_add_text').text($(this).val())
   $('input[type=radio]').on 'click', ->
     console.log $(this).val()
+    $('#rb_print').prop("disabled", false)
     $('span[data-checkmark]').hide()
     $("span##{$(this).val()}").show()
