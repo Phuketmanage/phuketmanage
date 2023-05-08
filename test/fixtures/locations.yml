@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name_en: MyString
-  name_ru: MyString
+patong:
+  name_en: Patong
+  name_ru: Патонг
   descr_en: MyText
   descr_ru: MyText
 
-two:
-  name_en: MyString
-  name_ru: MyString
+phuket:
+  name_en: Phuket
+  name_ru: Пхукет
   descr_en: MyText
   descr_ru: MyText

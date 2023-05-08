@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class House < ApplicationRecord
   the_schema_is "houses" do |t|
     t.string "title_en"
@@ -89,14 +91,14 @@ class House < ApplicationRecord
     option = Option.find_by(title_en: title_en)
     return false unless option
 
-    options.where(id: option.id).any? ? true : false
+    options.where(id: option.id).any?
   end
 
   def generated_title(locale)
     if locale == :ru
-      [code, type.name_ru, rooms, "СП", bathrooms, "ВН", *locations.pluck(&:name_ru)].join(' ')
+      [code, type.name_ru, rooms, "СП", bathrooms, "ВН", *locations.pluck(:name_ru)].join(' ')
     else
-      [code, type.name_en, rooms, "BDR", bathrooms, "BTH", *locations.pluck(&:name_en)].join(' ')
+      [code, type.name_en, rooms, "BDR", bathrooms, "BTH", *locations.pluck(:name_en)].join(' ')
     end
   end
   # Was used after filed number added
