@@ -213,7 +213,7 @@ class TransactionsController < ApplicationController
         files_to_show = params['transaction']['files_to_show']
         unless files_to_show.nil?
           files_to_show.each do |f|
-            @transaction.files.find_by(url: f).update_attributes(show: true)
+            @transaction.files.find_by(url: f).update(show: true)
           end
         end
         if @transaction.errors.any?
@@ -296,7 +296,7 @@ class TransactionsController < ApplicationController
         files_to_show = params['transaction']['files_to_show']
         unless files_to_show.nil?
           files_to_show.each do |f|
-            @transaction.files.find_by(url: f).update_attributes(show: true)
+            @transaction.files.find_by(url: f).update(show: true)
           end
         end
         if @transaction.errors.any?
