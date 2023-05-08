@@ -28,7 +28,7 @@ class TransactionFilesController < ApplicationController
   def toggle_show
     file = TransactionFile.where(id: params[:id]).first
     if file.present?
-      file.update_attributes(show: params[:status]) if params[:status].present?
+      file.update(show: params[:status]) if params[:status].present?
       render json: { id: file.id }
     else
       render json: { id: params[:id], success: false }, status: :bad_request
