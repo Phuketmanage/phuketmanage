@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class LocationsControllerTest < ActionDispatch::IntegrationTest
@@ -5,7 +7,7 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     sign_in users(:manager)
-    @location = locations(:one)
+    @location = locations(:phuket)
   end
 
   test "should get index" do
