@@ -33,6 +33,9 @@
     </div>
   </div>
   <div class="col-lg-4">
+    <p class="mb-1 mr-2 text-uppercase font-weight-light text-muted small text-right">
+      CODE: <%=@house.code%>
+    </p>
     <%= render 'search/form_vertical', search: @search, btn_text: t('search.check') %>
     <% if @prices && @prices != 'unavailable' %>
       <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
