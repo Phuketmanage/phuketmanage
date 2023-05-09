@@ -133,7 +133,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'p.duration', 'Total nights: 10'
     # assert_match 'Comment for all', response.body
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'villa_1 Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
     assert_select 'h5.house_price', '฿40,000'
   end
 

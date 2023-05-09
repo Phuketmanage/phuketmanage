@@ -17,12 +17,12 @@ class HousesTest < ActionDispatch::IntegrationTest
         description_en: "New house",
         description_ru: "Новый дом",
         owner_id: @house.owner_id,
-        code: "CODE",
+        code: "NH1",
         rooms: 2,
         bathrooms: 1,
         location_ids: [locations(:patong).id],
         type_id: @house.type_id
-        # number: 4,
+        # number: (('1'..'9').to_a).shuffle[0..rand(1..6)].join,
         # size: @house.size,
         # plot_size: @house.plot_size,
         # pool: @house.pool,
@@ -36,18 +36,18 @@ class HousesTest < ActionDispatch::IntegrationTest
     new_house = House.last
     assert_redirected_to houses_url
     follow_redirect!
-    assert_select 'div.alert li', text: "House CODE was successfully created."
-    assert_equal new_house.generated_title(:en), "CODE Villa 2 BDR 1 BTH Patong"
-    assert_equal new_house.generated_title(:ru), "CODE Вилла 2 СП 1 ВН Патонг"
+    assert_select 'div.alert li', text: "House NH1 was successfully created."
+    assert_equal new_house.generated_title(:en), "Villa 2 BDR 1 BTH Patong"
+    assert_equal new_house.generated_title(:ru), "Вилла 2 СП 1 ВН Патонг"
     sign_out(:admin)
   end
 
   test "should show proper titles" do
     get root_path
     assert_response :success
-    assert_match "villa_6 Villa 3 BDR 3 BTH Phuket", response.body
+    assert_match "Villa 3 BDR 3 BTH Phuket", response.body
     get root_path, params: { locale: 'ru' }
     assert_response :success
-    assert_match "villa_6 Вилла 3 СП 3 ВН Пхукет", response.body
+    assert_match "Вилла 3 СП 3 ВН Пхукет", response.body
   end
 end
