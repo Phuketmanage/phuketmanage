@@ -464,6 +464,16 @@ class TransactionsController < ApplicationController
     render json: { field: field, warning: warning }
   end
 
+  def raw_for_acc
+    @from = params[:from]
+    @to = params[:to]
+    @owner_id = params[:owner_id]
+    @owner = User.find(@owner_id)
+    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ? AND hidden = ?', @from, @to, @owner_id, false).order(
+      :date, :created_at
+    ).all
+  end
+
   private
 
   def set_owners
