@@ -6,7 +6,7 @@
       <th width="70px">Date</th>
       <th class="text-right" width="95px">Debit</th>
       <th class="text-right" width="95px">Credit</th>
-      <th class="text-right" width="95px">Balance</th>
+      <% if current_user.role?("Admin") %><th class="text-right balance" width="95px">Balance</th><% end %>
       <th>Type</th>
       <th>House</th>
       <th width="300px">Comment</th>
@@ -21,7 +21,7 @@
     <% de_co_prev_sum = 0 %>
     <% cr_co_prev_sum = 0 %>
     <% balance_sum = 0 %>
-    <% if transactions_before.any? %>
+    <% if transactions_before.any? && current_user.role?("Admin") %>
       <% de_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.debit') %>
       <% cr_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.credit') %>
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
@@ -69,7 +69,7 @@
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
-        <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
+        <% if current_user.role?("Admin") %><td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td><% end %>
         <td><%= t.type.name_en %></td>
         <td><%= t.house.code if t.house %> <%= t.user.surname if t.house.nil? && t.user_id %></td>
         <td class='comment'>
@@ -104,8 +104,8 @@
       <td class="font-weight-bold text-right" id="de_co_sum">
         <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
-      <td class="font-weight-bold text-right" id="co_balance">
-        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
+      <% if current_user.role?("Admin") %><td class="font-weight-bold text-right" id="co_balance">
+        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td><% end %>
       <td></td>
       <td></td>
       <td></td>
