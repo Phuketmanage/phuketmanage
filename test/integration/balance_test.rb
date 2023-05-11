@@ -576,6 +576,35 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     sign_out users(:owner_3)
   end
 
+  test 'Balance column should show for admin' do
+    from = '2019-09-10'
+    to = '2023-05-31'
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", "Balance"
+    assert_select "td#co_prev_balance", "7,000.00"
+    assert_select "td.balance_sum_cell", "27,000.00"
+    assert_select "td#co_balance", "58,750.00"
+    sign_out users(:admin)
+    sign_in users(:accounting)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", false
+    assert_select "td#co_prev_balance", 0
+    assert_select "td.balance_sum_cell", 0
+    assert_select "td#co_balance", 0
+    sign_out users(:accounting)
+    sign_in users(:manager)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", false
+    assert_select "td#co_prev_balance", 0
+    assert_select "td.balance_sum_cell", 0 
+    assert_select "td#co_balance", 0
+    sign_out users(:manager)
+  end
+
   test 'Show and hide comm' do
     # if show_comm set to false Owner can not see comm
     from = '2019-09-01'
