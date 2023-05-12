@@ -68,7 +68,7 @@ class House < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :employees
   has_and_belongs_to_many :locations
-  validates :description_en, :description_ru, presence: true
+  validates :number, :description_en, :description_ru, presence: true
 
   scope :active, -> { where(unavailable: false) }
   scope :for_rent, -> { where(unavailable: false) }
