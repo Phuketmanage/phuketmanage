@@ -50,4 +50,28 @@ class HousesTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match "Вилла 3 СП 3 ВН Пхукет", response.body
   end
+
+  test "should show beds when exist" do 
+    sign_in users(:admin)
+    assert_difference('House.count') do
+      post houses_url params: { house: {
+        description_en: "New house",
+        description_ru: "Новый дом",
+        owner_id: @house.owner_id,
+        code: "MH2",
+        rooms: 2,
+        bathrooms: 1,
+        kingBed: 2,
+        location_ids: [locations(:patong).id],
+        type_id: @house.type_id}}
+    end
+    follow_redirect!
+    sign_out users(:admin)
+    get house_path(House.first.number)
+    assert_response :success
+    assert_no_match "Sleeping arrangements", response.body
+    get house_path(id: House.last.number)
+    assert_response :success
+    assert_match "Sleeping arrangements", response.body
+  end
 end

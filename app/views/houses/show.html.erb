@@ -81,13 +81,15 @@
   <% end %>
 </p>
 
-<hr />
-<h6><%= t('houses.beds') %></h6>
-<p>
-  <%= "#{t('houses.kingBed')} - #{@house.kingBed}" if @house.kingBed %>&emsp;
-  <%= "#{t('houses.queenBed')} - #{@house.queenBed}" if @house.queenBed %>&emsp;
-  <%= "#{t('houses.singleBed')} - #{@house.singleBed}" if @house.singleBed %>
-</p>
+<% if @house.kingBed || @house.queenBed || @house.singleBed %>
+  <hr />
+  <h6><%= t('houses.beds') %></h6>
+  <p>
+    <%= "#{t('houses.kingBed')} - #{@house.kingBed}" if @house.kingBed %>&emsp;
+    <%= "#{t('houses.queenBed')} - #{@house.queenBed}" if @house.queenBed %>&emsp;
+    <%= "#{t('houses.singleBed')} - #{@house.singleBed}" if @house.singleBed %>
+  </p>
+<% end %>
 
 <hr />
 <h6><%= t('houses.included') %></h6>
