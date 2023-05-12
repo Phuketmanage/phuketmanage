@@ -29,6 +29,8 @@ class Ability
       can :index, [Admin]
     end
     if user.role? 'Accounting'
+      can :reimbersment, :document
+      can :statement, :document
       can %i[index new create update_invoice_ref], Transaction
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.today - 30.days).beginning_of_month
