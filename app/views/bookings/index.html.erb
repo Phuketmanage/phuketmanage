@@ -106,7 +106,7 @@
                 <% tr = 0 %>
                 <% tc = 0 %>
                 <% tp = 0 %>
-                <% booking.transactions.each do |t| %>
+                <% booking.transactions.order(date: :asc).each do |t| %>
                   <%# received = BalanceOut.where(transaction_id: t.id).first.debit %>
                   <% received = t.balance_outs.sum(:debit) %>
                   <% tr += received %>
