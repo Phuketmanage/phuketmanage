@@ -43,6 +43,14 @@ class User < ApplicationRecord
     !!roles.find_by(name: names)
   end
 
+  def active_for_authentication? 
+    super && !balance_closed?
+  end 
+
+  def inactive_message 
+    !balance_closed? ? super : :inactive
+  end
+
   # def is_any_of?(role)
   #   role = role.split = if role.kind_of?(String)
   #   result = false
