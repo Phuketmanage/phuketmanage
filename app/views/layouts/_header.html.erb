@@ -37,6 +37,9 @@
 
       <% if signed_in? && current_user.role?(['Accounting']) %>
         <li class="nav-item">
+          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
@@ -60,6 +63,9 @@
       <% end %>
 
       <% if signed_in? && current_user.role?(['Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
         </li>
@@ -92,6 +98,9 @@
       <% end %>
 
       <% if signed_in? && current_user.role?(['Admin']) %>
+        <li class="nav-item">
+          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
         </li>
