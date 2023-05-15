@@ -4,6 +4,6 @@ class LogsController < ApplicationController
 
   # @route GET /logs (logs)
   def index
-    @logs = Log.all.order(when: :desc)
+    @logs = Log.all.order(created_at: :desc)
   end
 end

@@ -4,16 +4,17 @@
     <th width="135px">Date</th>
     <th width="150px">User</th>
     <th width="135px">Controller</th>
-    <th width="100px">Action</th>
+    <th width="100px">What</th>
+    <th width="100px">With</th>
     <th>Before</th>
     <th>After</th>
   </tr>
   <% @logs.each do |l| %>
     <tr>
-      <td><%= l.when.strftime("%d.%m.%Y %H:%M") %></td>
       <td><%= l.who %></td>
       <td><%= l.where %></td>
-      <td><%= l.action %></td>
+      <td><%= l.what %></td>
+      <td><%= l.with %></td>
       <td><%= l.before %></td>
       <td><%= l.after %></td>
     </tr>
