@@ -60,6 +60,12 @@
     <%= f.label :show_comm, class: 'form-check-label', for: 'user_show_comm' %>
   </div>
 
+  <% if user.role? ['Owner'] %>
+    <div class="form-check">
+    <%= f.check_box :balance_closed, class: 'form-check-input' %>
+    <%= f.label :balance_closed, class: 'form-check-label', for: 'balance_closed' %>
+  </div>
+  <% end %>
 
   Role:
   <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |c| %>

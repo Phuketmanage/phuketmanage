@@ -498,4 +498,21 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
   end
+  
+  test "should show balance closed checkbox" do
+    owner = users(:owner)
+    manager = users(:manager)
+    accounting = users(:accounting)
+    sign_in users(:admin)
+    get edit_user_path(owner.id)
+    assert_response :success
+    assert_match "Balance closed", response.body
+    get edit_user_path(manager.id)
+    assert_response :success
+    assert_no_match "Balance closed", response.body
+    get edit_user_path(accounting.id)
+    assert_response :success
+    assert_no_match "Balance closed", response.body
+    sign_out users(:admin)
+  end
 end
