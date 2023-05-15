@@ -615,7 +615,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#de_co_sum", "12 000,00"
     assert_select "#ow_balance", "18 000,00"
   end
-
+  
+  test 'should show files in company view' do
+    from = '2019-08-01'
+    to = Time.now.to_date
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to}
+    assert_response :success
+    assert_select "th", "Files"
+    assert_match "Files(2)", response.body
+  end
+  
   test 'Test that get warnings' do
     # For company
     # 1st record
