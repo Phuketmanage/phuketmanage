@@ -10,6 +10,7 @@
       <th>Type</th>
       <th>House</th>
       <th width="300px">Comment</th>
+      <th><%= t('files') %></th>
       <th>Actions</th>
       <th width="95px">Debit</th>
       <th width="95px">Credit</th>
@@ -80,6 +81,16 @@
           <% end %>
         </td>
         <td>
+            <% if current_user.role?(['Owner']) %>
+              <% files = t.files.where(show: true) %>
+            <% elsif current_user.role?(['Admin', 'Accounting', 'Manager']) %>
+              <% files = t.files %>
+            <% end %>
+            <% if files.any? %>
+              <%= link_to "#{t('files')}(#{files.count})", '#', data: {show_files: '', transaction: t.id} %>
+            <% end %>
+        </td>
+        <td>
           <% if current_user.role?(['Accounting', 'Manager']) && t.date >= (Date.today-1.month).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
           <% end %>
@@ -145,3 +156,23 @@
     <% end %>
   <% end %>
 </table>
+
+<div id="transaction_files" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="file_current">
+        </div>
+        <div class="files_carousel mt-2">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= hidden_field_tag 'files_host', S3_HOST %>
+
