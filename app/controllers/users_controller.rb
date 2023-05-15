@@ -106,6 +106,7 @@ class UsersController < ApplicationController
                                  :comment,
                                  :code,
                                  :tax_no,
+                                 :balance_closed,
                                  :show_comm)
   end
 end

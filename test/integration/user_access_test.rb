@@ -515,4 +515,13 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_no_match "Balance closed", response.body
     sign_out users(:admin)
   end
+  test "should update balance closed" do
+    owner = users(:owner)
+    sign_in users(:admin)
+    put "/users/#{owner.id}", params: { user: { balance_closed: '1'}}
+    assert_redirected_to users_path
+    assert_equal true, User.find(owner.id).balance_closed
+    follow_redirect!
+    assert_select 'div.alert li', text: 'Successfully updated User.'
+  end
 end
