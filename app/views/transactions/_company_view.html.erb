@@ -6,10 +6,11 @@
       <th width="70px">Date</th>
       <th class="text-right" width="95px">Debit</th>
       <th class="text-right" width="95px">Credit</th>
-      <th class="text-right" width="95px">Balance</th>
+      <% if current_user.role?("Admin") %><th class="text-right balance" width="95px">Balance</th><% end %>
       <th>Type</th>
       <th>House</th>
       <th width="300px">Comment</th>
+      <th><%= t('files') %></th>
       <th>Actions</th>
       <th width="95px">Debit</th>
       <th width="95px">Credit</th>
@@ -21,7 +22,7 @@
     <% de_co_prev_sum = 0 %>
     <% cr_co_prev_sum = 0 %>
     <% balance_sum = 0 %>
-    <% if transactions_before.any? %>
+    <% if transactions_before.any? && current_user.role?("Admin") %>
       <% de_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.debit') %>
       <% cr_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.credit') %>
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
@@ -69,14 +70,25 @@
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
-        <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
+        <% if current_user.role?("Admin") %><td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td><% end %>
         <td><%= t.type.name_en %></td>
         <td><%= t.house.code if t.house %> <%= t.user.surname if t.house.nil? && t.user_id %></td>
-        <td>
+        <td class='comment'>
           <%= t.comment_en %>
+          <%= t.cash ? "/C" : nil %>
           <% if t.user && t.user.locale == 'ru' && !t.comment_ru.present? && current_user.role?(['Admin', 'Manager'])%>
             <%= link_to 'Translate', edit_transaction_path(t) %>
           <% end %>
+        </td>
+        <td>
+            <% if current_user.role?(['Owner']) %>
+              <% files = t.files.where(show: true) %>
+            <% elsif current_user.role?(['Admin', 'Accounting', 'Manager']) %>
+              <% files = t.files %>
+            <% end %>
+            <% if files.any? %>
+              <%= link_to "#{t('files')}(#{files.count})", '#', data: {show_files: '', transaction: t.id} %>
+            <% end %>
         </td>
         <td>
           <% if current_user.role?(['Accounting', 'Manager']) && t.date >= (Date.today-1.month).beginning_of_month %>
@@ -103,8 +115,8 @@
       <td class="font-weight-bold text-right" id="de_co_sum">
         <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
       <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
-      <td class="font-weight-bold text-right" id="co_balance">
-        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td>
+      <% if current_user.role?("Admin") %><td class="font-weight-bold text-right" id="co_balance">
+        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td><% end %>
       <td></td>
       <td></td>
       <td></td>
@@ -144,3 +156,23 @@
     <% end %>
   <% end %>
 </table>
+
+<div id="transaction_files" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="file_current">
+        </div>
+        <div class="files_carousel mt-2">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= hidden_field_tag 'files_host', S3_HOST %>
+

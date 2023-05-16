@@ -5,7 +5,7 @@
       <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
       <%= select_tag :hid,
             options_for_select(House.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, @hid),
-              { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
+              { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2 selectpicker", data: {'live-search': 'true'} } %>
 
       <%= submit_tag 'Show', class: "btn btn-primary mb-2 mr-2" %>
       <% if current_user.role?('Admin') %>
@@ -106,7 +106,7 @@
                 <% tr = 0 %>
                 <% tc = 0 %>
                 <% tp = 0 %>
-                <% booking.transactions.each do |t| %>
+                <% booking.transactions.order(date: :asc).each do |t| %>
                   <%# received = BalanceOut.where(transaction_id: t.id).first.debit %>
                   <% received = t.balance_outs.sum(:debit) %>
                   <% tr += received %>

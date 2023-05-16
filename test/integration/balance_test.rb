@@ -556,6 +556,55 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # Prev sums
   end
 
+  test 'show payment type' do
+    from = '2022-09-01'
+    to = '2023-05-31'
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "house rental\n          /C"
+    sign_out users(:admin)
+    sign_in users(:manager)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "house rental\n          /C"
+    sign_out users(:manager)
+    sign_in users(:owner_3)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "td.comment", "Аренда дома"
+    sign_out users(:owner_3)
+  end
+
+  test 'Balance column should show for admin' do
+    from = '2019-09-10'
+    to = '2023-05-31'
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", "Balance"
+    assert_select "td#co_prev_balance", "7,000.00"
+    assert_select "td.balance_sum_cell", "27,000.00"
+    assert_select "td#co_balance", "58,750.00"
+    sign_out users(:admin)
+    sign_in users(:accounting)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", false
+    assert_select "td#co_prev_balance", 0
+    assert_select "td.balance_sum_cell", 0
+    assert_select "td#co_balance", 0
+    sign_out users(:accounting)
+    sign_in users(:manager)
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_response :success
+    assert_select "th.balance", false
+    assert_select "td#co_prev_balance", 0
+    assert_select "td.balance_sum_cell", 0 
+    assert_select "td#co_balance", 0
+    sign_out users(:manager)
+  end
+
   test 'Show and hide comm' do
     # if show_comm set to false Owner can not see comm
     from = '2019-09-01'
@@ -649,7 +698,17 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#de_co_sum", "12 000,00"
     assert_select "#ow_balance", "18 000,00"
   end
-
+  
+  test 'should show files in company view' do
+    from = '2019-08-01'
+    to = Time.now.to_date
+    sign_in users(:admin)
+    get transactions_path, params: { from: from, to: to}
+    assert_response :success
+    assert_select "th", "Files"
+    assert_match "Files(2)", response.body
+  end
+  
   test 'Test that get warnings' do
     # For company
     # 1st record

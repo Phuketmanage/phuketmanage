@@ -1,4 +1,5 @@
 class DocumentsController < ApplicationController
+  authorize_resource :class => false
   # @route GET /documents/statement (tmp_statement)
   def statement
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30

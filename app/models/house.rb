@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class House < ApplicationRecord
   the_schema_is "houses" do |t|
     t.string "title_en"
@@ -66,7 +68,7 @@ class House < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :employees
   has_and_belongs_to_many :locations
-  validates :title_ru, :title_ru, :description_en, :description_ru, presence: true
+  validates :number, :description_en, :description_ru, presence: true
 
   scope :active, -> { where(unavailable: false) }
   scope :for_rent, -> { where(unavailable: false) }
@@ -89,9 +91,16 @@ class House < ApplicationRecord
     option = Option.find_by(title_en: title_en)
     return false unless option
 
-    options.where(id: option.id).any? ? true : false
+    options.where(id: option.id).any?
   end
 
+  def generated_title(locale)
+    if locale == :ru
+      [type.name_ru, rooms, "СП", bathrooms, "ВН", *locations.pluck(:name_ru)].join(' ')
+    else
+      [type.name_en, rooms, "BDR", bathrooms, "BTH", *locations.pluck(:name_en)].join(' ')
+    end
+  end
   # Was used after filed number added
   # def add_numbers
   #   houses = House.all

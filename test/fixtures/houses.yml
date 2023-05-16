@@ -71,7 +71,27 @@ villa_6:
   description_en: Description
   description_ru: Описание
   owner: owner_3
-  code: villa6
+  code: villa_6
+  number: <%= (('1'..'9').to_a).shuffle[0..rand(1..6)].join %>
+  type: villa
+  size: 170
+  plot_size: 200
+  rooms: 3
+  bathrooms: 3
+  pool: true
+  pool_size: 30
+  communal_pool: false
+  parking: true
+  parking_size: 2
+  unavailable: false
+
+villa_7:
+  title_en: villa_7 Villa 3 BDR 3 BTH
+  title_ru: villa_7 Вилла 3 СП 3 ВН
+  description_en: Description
+  description_ru: Описание
+  owner: owner_3
+  code: villa_7
   number: <%= (('1'..'9').to_a).shuffle[0..rand(1..6)].join %>
   type: villa
   size: 170

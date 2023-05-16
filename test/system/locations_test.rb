@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "application_system_test_case"
 
 class LocationsTest < ApplicationSystemTestCase
   setup do
-    @location = locations(:one)
+    @location = locations(:phuket)
   end
 
   test "visiting the index" do

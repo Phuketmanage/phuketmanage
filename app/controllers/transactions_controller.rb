@@ -213,7 +213,7 @@ class TransactionsController < ApplicationController
         files_to_show = params['transaction']['files_to_show']
         unless files_to_show.nil?
           files_to_show.each do |f|
-            @transaction.files.find_by(url: f).update_attributes(show: true)
+            @transaction.files.find_by(url: f).update(show: true)
           end
         end
         if @transaction.errors.any?
@@ -296,7 +296,7 @@ class TransactionsController < ApplicationController
         files_to_show = params['transaction']['files_to_show']
         unless files_to_show.nil?
           files_to_show.each do |f|
-            @transaction.files.find_by(url: f).update_attributes(show: true)
+            @transaction.files.find_by(url: f).update(show: true)
           end
         end
         if @transaction.errors.any?
@@ -464,6 +464,16 @@ class TransactionsController < ApplicationController
     render json: { field: field, warning: warning }
   end
 
+  def raw_for_acc
+    @from = params[:from]
+    @to = params[:to]
+    @owner_id = params[:owner_id]
+    @owner = User.find(@owner_id)
+    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ? AND hidden = ?', @from, @to, @owner_id, false).order(
+      :date, :created_at
+    ).all
+  end
+
   private
 
   def set_owners
@@ -494,6 +504,7 @@ class TransactionsController < ApplicationController
                                         :comment_en,
                                         :comment_ru,
                                         :comment_inner,
+                                        :cash,
                                         :hidden,
                                         :for_acc,
                                         :incomplite)

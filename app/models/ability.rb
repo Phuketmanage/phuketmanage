@@ -29,6 +29,8 @@ class Ability
       can :index, [Admin]
     end
     if user.role? 'Accounting'
+      can :reimbersment, :document
+      can :statement, :document
       can %i[index new create update_invoice_ref], Transaction
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.today - 30.days).beginning_of_month
@@ -58,7 +60,7 @@ class Ability
                     BookingFile, HouseGroup, TransactionFile]
       cannot :destroy, [HouseType, House, Booking, JobType, Transfer, TransactionFile]
       can %i[index new show create edit update laundry update_laundry], Job
-      can [:destroy], Job, creator: user
+      can [:destroy], Job
       can :manage, JobMessage, sender: user
       can :index, [Admin]
       can %i[index new create update_invoice_ref docs], Transaction

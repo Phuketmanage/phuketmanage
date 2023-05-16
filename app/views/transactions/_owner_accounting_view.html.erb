@@ -79,7 +79,7 @@ Address:
         <td class='balance_sum_cell text-right'>
           <%= number_to_currency(balance_sum, precision: 2, unit: '') if !t.hidden %>
         </td>
-        <td><%= t.comment_en %></td>
+        <td class='comment'><%= t.comment_en %><%= t.cash ? " /C" : nil %></td>
         <td class="d-print-none">
           <% if current_user.role?(['Accounting', 'Manager']) && t.date > (Date.today-30.days).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
@@ -193,3 +193,11 @@ Address:
   <%= f.submit 'Save', class: 'btn btn-primary', disabled: disabled %>
 <% end %>
 <%= link_to 'ST', tmp_statement_path(owner_id: @owner.id), target: '_blank', class: 'd-print-none' %>
+<% if current_user.role?('Admin') %>
+  <%= link_to 'RAW INCOME', transaction_raw_for_acc_path(
+      from: @from,
+      to: @to,
+      owner_id: @owner_id,
+      house_id: @house_id
+    ), target: '_blank', class: 'd-print-none' %>
+<% end %>

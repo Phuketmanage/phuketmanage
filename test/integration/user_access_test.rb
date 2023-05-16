@@ -137,12 +137,12 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   # end
 
-  test "user can only destroy job which they own" do
+  test "user destroy jobs" do
     manager = users(:manager)
     admin = users(:admin)
     ability = Ability.new(manager)
     assert ability.can?(:destroy, Job.new(creator: manager))
-    assert ability.cannot?(:destroy, Job.new(creator: admin))
+    assert ability.can?(:destroy, Job.new(creator: admin))
   end
 
   test 'Bookings (inner)' do
@@ -469,5 +469,59 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'Transaction was successfully destroyed.'
     sign_out :user
+  end
+
+  test 'documents' do
+    trsc = Transaction.where(comment_en: 'rental').first.id
+    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:admin)
+    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    assert_response :success
+    
+    sign_in users(:accounting)
+    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    assert_response :success
+
+    sign_in users(:manager)
+    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+
+    sign_in users(:owner)
+    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+  end
+  
+  test "should show balance closed checkbox" do
+    owner = users(:owner)
+    manager = users(:manager)
+    accounting = users(:accounting)
+    sign_in users(:admin)
+    get edit_user_path(owner.id)
+    assert_response :success
+    assert_match "Balance closed", response.body
+    get edit_user_path(manager.id)
+    assert_response :success
+    assert_no_match "Balance closed", response.body
+    get edit_user_path(accounting.id)
+    assert_response :success
+    assert_no_match "Balance closed", response.body
+    sign_out users(:admin)
+  end
+  test "should update balance closed" do
+    owner = users(:owner)
+    sign_in users(:admin)
+    put "/users/#{owner.id}", params: { user: { balance_closed: '1'}}
+    assert_redirected_to users_path
+    assert_equal true, User.find(owner.id).balance_closed
+    follow_redirect!
+    assert_select 'div.alert li', text: 'Successfully updated User.'
   end
 end
