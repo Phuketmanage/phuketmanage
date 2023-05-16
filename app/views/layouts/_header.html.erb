@@ -7,137 +7,105 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
-      <% if signed_in? && current_user.role?(['Owner']) %>
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
+          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Guest relation']) %>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Owner']) %>
         <li class="nav-item">
           <%= link_to t('bookings'), bookings_front_path, class: "nav-link" %>
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Transfer']) %>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if signed_in? && current_user.role?(['Maid']) %>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if signed_in? && current_user.role?(['Gardener']) %>
-        <li class="nav-item">
-          <%= link_to 'Water usage', water_usages_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-
-      <% if signed_in? && current_user.role?(['Accounting']) %>
-        <li class="nav-item">
-          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if signed_in? && current_user.role?(['Guest relation']) %>
-        <li class="nav-item">
-          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
         <li class="nav-item">
           <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
+          <%= link_to 'Houses', houses_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Transfer']) %>
         <li class="nav-item">
           <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Maid', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin', 'Gardener', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Water', water_usages_path, class: "nav-link" %>
         </li>
       <% end %>
 
       <% if signed_in? && current_user.role?(['Manager']) %>
         <li class="nav-item">
-          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
+          <%= link_to 'Sources', sources_path, class: "nav-link" %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
-        </li>
+      <% end %>
 
-        <li class="nav-item">
-          <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Houses', houses_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Water usage', water_usages_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Sources', sources_path, class: "nav-link" %>
-        </li>
+      <% end %>
 
+      <% if signed_in? && current_user.role?(['Owner']) %>
+        <li class="nav-item">
+          <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
+        </li>
       <% end %>
 
       <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
-          <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Houses', houses_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Water', water_usages_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
           <%= link_to 'Users', users_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'Trsc types', transaction_types_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'House groups', house_groups_path, class: "nav-link" %>
         </li>
+      <% end %>
+
+      <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'Settings', settings_path, class: "nav-link" %>
         </li>
-
       <% end %>
 
       <% if signed_in? %>
