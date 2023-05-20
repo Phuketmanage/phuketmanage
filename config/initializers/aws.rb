@@ -1,3 +1,7 @@
+ENV['RAILS_ENV'] ||= 'test'
+ENV['S3_BUCKET'] = 'phuketmanage-development'
+ENV['AWS_ACCESS_KEY_ID'] = 'AKIASANYCWRAMOW5GHMY'
+ENV['AWS_SECRET_ACCESS_KEY'] = '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'
 Aws.config.update({
                     region: 'ap-southeast-1',
                     credentials: Aws::Credentials.new(ENV.fetch('AWS_ACCESS_KEY_ID', nil),
