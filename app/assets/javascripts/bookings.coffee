@@ -14,17 +14,17 @@ $(document).on "turbolinks:load", ->
       $('.timeline_left_container').prop("scrollTop", this.scrollTop)
     $('#compact_view_check_box').change ->
       if this.checked
-        $('.cell').addClass('cell_compact')
-        $('.date').addClass('date_compact')
-        $('.house_code').addClass('house_code_compact')
-        $('.job').addClass('job_compact')
-        $('.booking_data').hide()
-      else
         $('.cell').removeClass('cell_compact')
         $('.date').removeClass('date_compact')
         $('.house_code').removeClass('house_code_compact')
         $('.job').removeClass('job_compact')
         $('.booking_data').show()
+      else
+        $('.cell').addClass('cell_compact')
+        $('.date').addClass('date_compact')
+        $('.house_code').addClass('house_code_compact')
+        $('.job').addClass('job_compact')
+        $('.booking_data').hide()
     $('.hide_empl_type_jobs').change ->
       job = $("div[data-empl-type-id=#{$(this).data('empl-type-id')}]")
       if this.checked

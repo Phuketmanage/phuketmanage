@@ -11,9 +11,9 @@
 
 <%= form_with class: 'form-inline' do |f| %>
   <div class="form-check form-check-inline">
-    <%= f.check_box :compact_view, { class: 'form-check-input',
+    <%= f.check_box :full_view, { class: 'form-check-input',
                             id: 'compact_view_check_box' } %>
-    <%= f.label 'Compact view', {     class: 'form-check-label',
+    <%= f.label 'Full view', {     class: 'form-check-label',
                             for: 'compact_view_check_box' } %>
   </div>
   <div class='mr-2'>Hide house group:</div>
@@ -43,7 +43,7 @@
         <div class='month_date'> <!-- Open month -->
           <div class='month'><%= date.strftime('%B') %></div>
       <% end %>
-      <div class="date<%= ' sunday' if date.sunday? %>">
+      <div class="date date_compact<%= ' sunday' if date.sunday? %>">
         <%= day %>
       </div>
       <% if day == month_end || i+1 == @days %>
@@ -53,7 +53,7 @@
   </div>
   <div class="timeline_left_container">
     <% @houses.each do |h| %>
-      <div  class="house_code <%= 'text-muted' if h.unavailable? %>"
+      <div  class="house_code house_code_compact <%= 'text-muted' if h.unavailable? %>"
             data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
         <%= link_to h.code, '#',  class: 'hide_house',
                                   data: {house_id: h.id},
@@ -66,7 +66,7 @@
       <div class="house_line" data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
         <% @days.times do |x| %>
           <% date = @today+x.days %>
-          <div  class="cell<%= ' sunday' if date.sunday? %>"
+          <div  class="cell cell_compact<%= ' sunday' if date.sunday? %>"
                 id=<%= "x#{x+1}y#{y+1}" %>
                 data-house-id=<%= h.id %>
                 data-date=<%= date %>>
