@@ -5,7 +5,7 @@
       <% @notifications.each do |n| %>
         <div class='shadow-sm mb-2 p-2 border rounded bg-white notification' data-id='<%= n.id %>' >
           <div>
-            <b><%= n.house.code %></b>
+            <b><%= n.house.nil? ? nil : n.house.code %></b>
             <%= n.text %>
           </div>
           <div class='float-left'>
