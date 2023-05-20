@@ -12,8 +12,6 @@
       <th width="300px">Comment</th>
       <th><%= t('files') %></th>
       <th>Actions</th>
-      <th width="95px">Debit</th>
-      <th width="95px">Credit</th>
     </tr>
   </thead>
   <tbody>
@@ -39,25 +37,17 @@
         <td></td>
         <td>Balance from previous period</td>
         <td></td>
-        <td></td>
-        <td></td>
       </tr>
     <% end %>
     <% transactions.each do |t| %>
       <% de_co = t.balances.sum(:debit) %>
       <% cr_co = t.balances.sum(:credit) %>
-      <% de_ow = t.balance_outs.sum(:debit) %>
-      <% cr_ow = t.balance_outs.sum(:credit) %>
       <% de_co_sum += de_co %>
       <% cr_co_sum += cr_co %>
       <% balance_sum += de_co - cr_co %>
 
       <% next if t.for_acc %>
-      <% if (de_ow.nil? || de_ow == 0) && (cr_ow > 0 && cr_ow == de_co && (cr_co.nil? || cr_co == 0) && !t.type.name_en.in?(['Maintenance','Laundry'])) %>
-        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Owner debit = Company debit <%= t.type.name_en %>">
-      <% elsif cr_ow > 0 && cr_ow < de_co %>
-        <tr id="trsc_<%= t.id %>_row" class="table-warning <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Owner debit < Company debit">
-      <% elsif t.incomplite? %>
+      <% if t.incomplite? %>
         <tr id="trsc_<%= t.id %>_row" class="table-danger <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Support documents not ready yet">
       <% else %>
         <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
@@ -103,8 +93,6 @@
           <% end %>
           <%= link_to 'Copy', new_transaction_path(tid: t.id) %>
         </td>
-        <td class='de_ow_cell text-right'><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0%></td>
-        <td class='cr_ow_cell text-right'><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>
       </tr>
     <% end %>
   </tbody>
@@ -117,7 +105,6 @@
       <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
       <% if current_user.role?("Admin") %><td class="font-weight-bold text-right" id="co_balance">
         <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td><% end %>
-      <td></td>
       <td></td>
       <td></td>
       <td></td>
