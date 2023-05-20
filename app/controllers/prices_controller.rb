@@ -131,19 +131,6 @@ class PricesController < ApplicationController
     redirect_to house_prices_path(@house.number)
   end
 
-  def update_old
-    @house = @price.house
-    respond_to do |format|
-      if @price.update(price_params)
-        format.html { redirect_to house_prices_path(@house.number), notice: 'Price was successfully updated.' }
-        format.json { render :show, status: :ok, location: @price }
-      else
-        format.html { render :edit }
-        format.json { render json: @price.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # @route GET (/:locale)/prices/:id/update (price)
   def update
     price = Price.find(params[:id])
