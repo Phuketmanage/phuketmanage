@@ -147,24 +147,9 @@ $(document).on "turbolinks:load", ->
         $("#booking_details").html("Sale #{b.sale} - Agent #{b.agent} = #{b.sale-b.agent}/2 = #{(b.sale-b.agent)/2}, Comm: #{b.comm}/2 = #{b.comm/2}, Nett: #{b.nett}/2 = #{b.nett/2}, Client: #{b.client_details}")
       error: (data) ->
         console.log('Something went wrong')
-  $ ->
-    $("#balance_table").DataTable(
-      scrollX: true,
-      paging: false,
-      columnDefs: [ { type: 'date', 'targets': [0] } ],
-      order: [[ 0, 'desc' ]]
-    )
 
   $ ->
-    table = $("#balance_table_with_details").DataTable(
-      scrollX: true,
-      paging: false,
-      columnDefs: [ { type: 'date', 'targets': [1] } ],
-      order: [[ 1, 'asc' ]]
-    )
-
-  $ ->
-    table = $("#balance_test").DataTable(
+    table = $("#balance").DataTable(
       # scrollX: true,
       paging: false,
       ordering: false,
@@ -172,7 +157,7 @@ $(document).on "turbolinks:load", ->
       # order: [[ 1, 'asc' ]]
     )
 
-    $('#balance_test tbody').on 'click', 'td.details-control', ->
+    $('#balance tbody').on 'click', 'td.details-control', ->
       tr = $(this).closest('tr')
       row = table.row( tr )
 
