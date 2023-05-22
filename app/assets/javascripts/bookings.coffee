@@ -12,7 +12,7 @@ $(document).on "turbolinks:load", ->
     $('.timeline_container').scroll ->
       $('.timeline_top_container').prop("scrollLeft", this.scrollLeft)
       $('.timeline_left_container').prop("scrollTop", this.scrollTop)
-    $('#compact_view_check_box').change ->
+    $('#full_view_check_box').change ->
       if this.checked
         $('.cell').removeClass('cell_compact')
         $('.date').removeClass('date_compact')
@@ -314,7 +314,7 @@ allocate_job = (cell, j) ->
   jobs_qty = if jobs_qty then jobs_qty else 0
   style = "background-color:"+j.color+";"
   $(cell).append("
-    <div  class='job'
+    <div  class='job job_compact'
           style=#{style}
           data-job-id=#{j.id}
           data-job-type-id=#{j.type_id}
