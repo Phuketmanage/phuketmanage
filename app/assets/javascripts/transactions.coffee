@@ -163,7 +163,16 @@ $(document).on "turbolinks:load", ->
       order: [[ 1, 'asc' ]]
     )
 
-    $('#balance_table_with_details tbody').on 'click', 'td.details-control', ->
+  $ ->
+    table = $("#balance_test").DataTable(
+      # scrollX: true,
+      paging: false,
+      ordering: false,
+      # columnDefs: [ { type: 'date', 'targets': [1] } ],
+      # order: [[ 1, 'asc' ]]
+    )
+
+    $('#balance_test tbody').on 'click', 'td.details-control', ->
       tr = $(this).closest('tr')
       row = table.row( tr )
 

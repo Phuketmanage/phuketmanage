@@ -12,9 +12,9 @@
 <%= form_with class: 'form-inline' do |f| %>
   <div class="form-check form-check-inline">
     <%= f.check_box :full_view, { class: 'form-check-input',
-                            id: 'compact_view_check_box' } %>
+                            id: 'full_view_check_box' } %>
     <%= f.label 'Full view', {     class: 'form-check-label',
-                            for: 'compact_view_check_box' } %>
+                            for: 'full_view_check_box' } %>
   </div>
   <div class='mr-2'>Hide house group:</div>
   <% HouseGroup.order(:name).all.each do |g| %>

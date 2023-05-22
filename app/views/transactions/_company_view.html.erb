@@ -1,17 +1,19 @@
 
-<table id="balance_table_with_details" class='cell-border display compact stripe bg-white'>
+<table id="balance_test" class='cell-border display compact stripe bg-white'>
   <thead>
     <tr>
-      <th></th>
-      <th width="70px">Date</th>
-      <th class="text-right" width="95px">Debit</th>
-      <th class="text-right" width="95px">Credit</th>
-      <% if current_user.role?("Admin") %><th class="text-right balance" width="95px">Balance</th><% end %>
-      <th>Type</th>
-      <th>House</th>
-      <th width="300px">Comment</th>
-      <th><%= t('files') %></th>
-      <th>Actions</th>
+      <th></th><!-- #1 Button to open comment -->
+      <th width="70px">Date</th><!-- #2 -->
+      <th class="text-right" width="95px">Debit</th><!-- #3 -->
+      <th class="text-right" width="95px">Credit</th><!-- #4 -->
+      <% if current_user.role?("Admin") %>
+        <th class="text-right balance" width="95px">Balance</th><!-- #5 -->
+      <% end %>
+      <th>Type</th><!-- #6 -->
+      <th>House</th><!-- #7 -->
+      <th width="300px">Comment</th><!-- #8 -->
+      <th><%= t('files') %></th><!-- #9 -->
+      <th>Actions</th><!-- #10 -->
     </tr>
   </thead>
   <tbody>
@@ -25,18 +27,18 @@
       <% cr_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.credit') %>
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
       <tr>
-        <td></td>
-        <td></td>
-        <td class="text-right" id="de_co_prev_sum">
-        </td>
-        <td class="text-right" id="cr_co_prev_sum">
-        </td>
+        <td></td><!-- #1 Button to open comment -->
+        <td></td><!-- #2 Date, but no date for totals -->
+        <td class="text-right" id="de_co_prev_sum"></td>
+        <td class="text-right" id="cr_co_prev_sum"></td>
         <td class="text-right" id="co_prev_balance">
-          <%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
-        <td></td>
-        <td></td>
+          <%= number_to_currency(balance_sum, precision: 2, unit: '') %>
+        </td>
+        <td></td><!-- #6 Type, but no type for totals -->
+        <td></td><!-- #7 House, but no house for totals -->
         <td>Balance from previous period</td>
-        <td></td>
+        <td></td><!-- #9 Files, but no files for totals -->
+        <td></td><!-- #10 Actions, but no Actions for totals -->
       </tr>
     <% end %>
     <% transactions.each do |t| %>
@@ -52,17 +54,27 @@
       <% else %>
         <tr id="trsc_<%= t.id %>_row" <%= "class=text-muted" if t.hidden %> data-child-comment-inner="<%= t.comment_inner %>">
       <% end %>
+        <!-- #1 Button to open comment -->
         <% if t.comment_inner.present? %>
           <td class="details-control"><%= fa_icon "plus-circle" %></td>
         <% else %>
           <td></td>
         <% end %>
+        <!-- #2 Date -->
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
+        <!-- #3 Debit -->
         <td class='de_co_cell text-right'><%= number_to_currency(de_co, precision: 2, unit: '') if de_co > 0 %></td>
+        <!-- #4 Credit -->
         <td class='cr_co_cell text-right'><%= number_to_currency(cr_co, precision: 2, unit: '') if cr_co > 0 %></td>
-        <% if current_user.role?("Admin") %><td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td><% end %>
+        <!-- #5 Balance, only for Admin -->
+        <% if current_user.role?("Admin") %>
+          <td class='balance_sum_cell text-right'><%= number_to_currency(balance_sum, precision: 2, unit: '') %></td>
+        <% end %>
+        <!-- #6 Type -->
         <td><%= t.type.name_en %></td>
+        <!-- #7 House -->
         <td><%= t.house.code if t.house %> <%= t.user.surname if t.house.nil? && t.user_id %></td>
+        <!-- #8 Comment -->
         <td class='comment'>
           <%= t.comment_en %>
           <%= t.cash ? "/C" : nil %>
@@ -70,6 +82,7 @@
             <%= link_to 'Translate', edit_transaction_path(t) %>
           <% end %>
         </td>
+        <!-- #9 Files -->
         <td>
             <% if current_user.role?(['Owner']) %>
               <% files = t.files.where(show: true) %>
@@ -80,6 +93,7 @@
               <%= link_to "#{t('files')}(#{files.count})", '#', data: {show_files: '', transaction: t.id} %>
             <% end %>
         </td>
+        <!-- #10 Actions -->
         <td>
           <% if current_user.role?(['Accounting', 'Manager']) && t.date >= (Date.today-1.month).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
@@ -98,18 +112,29 @@
   </tbody>
   <tfoot>
     <tr>
+      <!-- #1 -->
       <td></td>
+      <!-- #2 -->
       <td class='font-weight-bold text-right'>Total:</td>
+      <!-- #3 -->
       <td class="font-weight-bold text-right" id="de_co_sum">
-        <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %></td>
-      <td class="font-weight-bold text-right" id="cr_co_sum"><%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %></td>
-      <% if current_user.role?("Admin") %><td class="font-weight-bold text-right" id="co_balance">
-        <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %></td><% end %>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+        <%= number_to_currency(de_co_prev_sum + de_co_sum, precision: 2, unit: '') %>
+      </td>
+      <!-- #4 -->
+      <td class="font-weight-bold text-right" id="cr_co_sum">
+        <%= number_to_currency(cr_co_prev_sum + cr_co_sum, precision: 2, unit: '') %>
+      </td>
+      <!-- #5 -->
+      <% if current_user.role?("Admin") %>
+        <td class="font-weight-bold text-right" id="co_balance">
+          <%= number_to_currency(de_co_prev_sum + de_co_sum - cr_co_prev_sum - cr_co_sum, precision: 2, unit: '') %>
+        </td>
+      <% end %>
+      <td></td><!-- #6 -->
+      <td></td><!-- #7 -->
+      <td></td><!-- #8 -->
+      <td></td><!-- #9 -->
+      <td></td><!-- #10 -->
     </tr>
   </tfoot>
 </table>
