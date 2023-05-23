@@ -49,6 +49,36 @@ class Transaction < ApplicationRecord
                                 .select(
                                         :type_id, "sum(balances.debit) as debit_sum",
                                         "sum(balances.credit) as credit_sum") }
+  scope :full_for_house,  ->(from, to, house_id) {
+                                where('date >= ? AND date <= ? AND house_id = ?', from, to, house_id)
+                                .order(:date, :created_at) }
+  scope :before_for_house, ->(from, house_id) {
+                                where('date < ? AND house_id = ?', from, house_id)
+                                .order(:date, :created_at) }
+  scope :by_cat_for_owner, ->(from, to) {
+                                joins(:balance_outs)
+                                .where('date >= ? AND date <= ? AND for_acc = false', from, to)
+                                .group(:type_id)
+                                .select(
+                                        :type_id,
+                                        "sum(balance_outs.debit) as debit_sum",
+                                        "sum(balance_outs.credit) as credit_sum") }
+  scope :by_cat_for_owner_for_house, ->(from, to, house_id) {
+                                joins(:balance_outs)
+                                .where('date >= ? AND date <= ? AND for_acc = false AND house_id = ?', from, to, house_id)
+                                .group(:type_id)
+                                .select(
+                                        :type_id,
+                                        "sum(balance_outs.debit) as debit_sum",
+                                        "sum(balance_outs.credit) as credit_sum") }
+# full_acc(from, to) /line # 108
+# before_acc(from, to) /line # 111
+  scope :full_acc, ->(from, to, owner_id) {
+                                where('date >= ? AND date <= ? AND user_id = ?', from, to, owner_id)
+                                .order(:date, :created_at) }
+  scope :before_acc, ->(from, owner_id) {
+                                where('date < ? AND user_id = ?', from, owner_id).all }
+
 
   def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
