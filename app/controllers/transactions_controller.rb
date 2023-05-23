@@ -29,20 +29,14 @@ class TransactionsController < ApplicationController
         # Gray balance
         if params[:commit] != 'Acc'
           if current_user.role?(['Admin'])
-            @transactions = Transaction.where('date >= ? AND date <= ?', @from, @to).order(:date, :created_at).all
-            @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(
-              :type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum"
-            )
+            @transactions = Transaction.full(@from, @to)
+            @transactions_before = Transaction.before(@from)
+            @transactions_by_cat = Transaction.by_cat(@from, @to)
           else
-            salary = TransactionType.find_by(name_en: 'Salary')
-            @transactions = Transaction.where('date >= ? AND date <= ? AND type_id !=?', @from, @to, salary.id).order(
-              :date, :created_at
-            ).all
-            @transactions_before = Transaction.where('date < ?', @from).all
-            @transactions_by_cat = Transaction.joins(:balances).where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', @from, @to, salary.id).group(:type_id).select(
-              :type_id, "sum(balances.debit) as debit_sum", "sum(balances.credit) as credit_sum"
-            )
+            filter_ids = TransactionType.find_by(name_en: 'Salary')
+            @transactions = Transaction.filtered(@from, @to, filter_ids)
+            @transactions_before = Transaction.before_filtered(@from, filter_ids)
+            @transactions_by_cat = Transaction.by_cat_filtered(@from, @to, filter_ids)
           end
           session.delete(:owner_id)
           @view = 'company'

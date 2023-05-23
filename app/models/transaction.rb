@@ -31,6 +31,25 @@ class Transaction < ApplicationRecord
   validates :date, :type, :comment_en, presence: true
   # after_save :check_warnings, on: [:create, :update]
 
+  scope :full, ->(from, to) { where('date >= ? AND date <= ?', from, to).order(:date, :created_at) }
+  scope :filtered, ->(from, to, filter_ids) { where('date >= ? AND date <= ? AND type_id !=?', from, to, filter_ids)
+                              .order(:date, :created_at)}
+  scope :before, ->(from) { where('date < ?', from) }
+  scope :before_filtered, ->(from, filter_ids) { where('date < ? AND type_id !=?', from, filter_ids) }
+  scope :by_cat, ->(from, to) { joins(:balances)
+                                .where('date >= ? AND date <= ? AND for_acc = false', from, to)
+                                .group(:type_id)
+                                .select(:type_id,
+                                        "sum(balances.debit) as debit_sum",
+                                        "sum(balances.credit) as credit_sum") }
+  scope :by_cat_filtered, ->(from, to, filter_ids) {
+                                joins(:balances)
+                                .where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', from, to, filter_ids)
+                                .group(:type_id)
+                                .select(
+                                        :type_id, "sum(balances.debit) as debit_sum",
+                                        "sum(balances.credit) as credit_sum") }
+
   def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
     types2 = %w[Maintenance Laundry]
