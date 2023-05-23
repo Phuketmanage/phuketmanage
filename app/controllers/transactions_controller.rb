@@ -61,22 +61,13 @@ class TransactionsController < ApplicationController
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
           if @house_id.nil? # House not selected
-            @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date,
-                                                                                                   :created_at).all
-            @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at).all
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false', @from, @to).group(:type_id).select(
-              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
-            )
+            @transactions = @owner.transactions.full(@from, @to)
+            @transactions_before = @owner.transactions.before(@from)
+            @transactions_by_cat = @owner.transactions.by_cat_for_owner(@from, @to)
           elsif @house_id.present? # House is selected
-            @transactions = @owner.transactions.where('date >= ? AND date <= ? AND house_id = ?', @from, @to, @house_id).order(
-              :date, :created_at
-            ).all
-            @transactions_before = @owner.transactions.where('date < ? AND house_id = ?', @from, @house_id).order(
-              :date, :created_at
-            ).all
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where('date >= ? AND date <= ? AND for_acc = false AND house_id = ?', @from, @to, @house_id).group(:type_id).select(
-              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
-            )
+            @transactions = @owner.transactions.full_for_house(@from, @to, @house_id)
+            @transactions_before = @owner.transactions.before_for_house(@from, @house_id)
+            @transactions_by_cat = @owner.transactions.by_cat_for_owner_for_house(@from, @to, @house_id)
           end
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @cr_rental = 0
@@ -99,10 +90,8 @@ class TransactionsController < ApplicationController
         # White balance
         if params[:commit] == 'Acc' && current_user.role?(%w[Admin Manager Accounting])
           @house_id = ''
-          @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(
-            :date, :created_at
-          ).all
-          @transactions_before = Transaction.where('date < ? AND user_id = ?', @from, @owner_id).all
+          @transactions = Transaction.full_acc(@from, @to, @owner_id)
+          @transactions_before = Transaction.before_acc(@from, @owner_id)
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @view = 'accounting' if params[:commit] == 'Acc'
           session[:view] = @view
