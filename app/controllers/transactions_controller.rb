@@ -38,11 +38,24 @@ class TransactionsController < ApplicationController
             @transactions_before = Transaction.before_filtered(@from, filter_ids)
             @transactions_by_cat = Transaction.by_cat_filtered(@from, @to, filter_ids)
           end
-          session.delete(:owner_id)
           @view = 'company'
-          session[:commit] = params[:commit]
-          session[:view] = @view
+          @type = 'full'
+        elsif params[:commit] == 'Acc'
+          if current_user.role?(['Admin'])
+            @transactions = Transaction.acc(@from, @to)
+            @transactions_before = Transaction.acc_before(@from)
+          else
+            filter_ids = TransactionType.find_by(name_en: 'Salary')
+            @transactions = Transaction.acc_filtered(@from, @to, filter_ids)
+            @transactions_before = Transaction.acc_before_filtered(@from, filter_ids)
+          end
+          # @view = 'company_acc'
+          @view = 'company'
+          @type = 'acc'
         end
+        session.delete(:owner_id)
+        session[:commit] = params[:commit]
+        session[:view] = @view
       # White balance
       # Balance of selected owner
       elsif !@owner_id.nil? || current_user.role?(['Owner'])
@@ -90,8 +103,8 @@ class TransactionsController < ApplicationController
         # White balance
         if params[:commit] == 'Acc' && current_user.role?(%w[Admin Manager Accounting])
           @house_id = ''
-          @transactions = Transaction.full_acc(@from, @to, @owner_id)
-          @transactions_before = Transaction.before_acc(@from, @owner_id)
+          @transactions = Transaction.full_acc_for_owner(@from, @to, @owner_id)
+          @transactions_before = Transaction.before_acc_for_owner(@from, @owner_id)
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @view = 'accounting' if params[:commit] == 'Acc'
           session[:view] = @view

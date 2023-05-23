@@ -952,4 +952,71 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     warning = JSON.parse(@response.body)
     assert_equal "", warning['warning']
   end
+
+  test 'acc view for company' do
+    sign_in users(:admin)
+    from = '2019-08-1'
+    to = '2023-05-31'
+    get transactions_path, params: { from: from, to: to, commit: 'Acc' }
+    assert_response :success
+    # warning = JSON.parse(@response.body)
+    assert_select "tr.trsc_row", 8
+
+    # Add hidden transaction and check that amount of transctions in accounting view do not change
+    type = TransactionType.find_by(name_en: 'Suppliers')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          cr_co: 13000,
+          comment_en: 'Tiling wall',
+          hidden: true
+        }
+      }
+    end
+    get transactions_path, params: { from: from, to: to, commit: 'Acc' }
+    assert_response :success
+    assert_select "tr.trsc_row", 8
+
+    # Add normal transaction and check that amount of transctions in accounting view change
+    type = TransactionType.find_by(name_en: 'Gasoline')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          cr_co: 1800,
+          comment_en: 'Gas',
+        }
+      }
+    end
+    get transactions_path, params: { from: from, to: to, commit: 'Acc' }
+    assert_response :success
+    assert_select "tr.trsc_row", 9
+
+    # Manager can not see salary
+    type = TransactionType.find_by(name_en: 'Salary')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          cr_co: 18000,
+          comment_en: 'Salary Tech'
+        }
+      }
+    end
+    get transactions_path, params: { from: from, to: to, commit: 'Acc' }
+    assert_response :success
+    assert_select "tr.trsc_row", 10
+    assert_select "tr.trsc_row td.comment", {count: 1, text: "Salary Tech"}
+    sign_out users(:admin)
+    sign_in users(:manager)
+    get transactions_path, params: { from: from, to: to, commit: 'Acc' }
+    assert_response :success
+    assert_select "tr.trsc_row", 9
+    assert_select "tr.trsc_row td.comment", {count: 0, text: "Salary Tech"}
+
+  end
 end

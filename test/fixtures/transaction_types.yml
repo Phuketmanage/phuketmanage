@@ -1,5 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+improvement:
+  name_en: "Improvements"
+  name_ru: "Улучшения"
+  debit_company: true
+  credit_company: true
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
 rental:
   name_en: Rental
   name_ru: Аренда
@@ -16,25 +25,9 @@ maintenance:
   debit_owner: false
   credit_owner: false
 
-laundry:
-  name_en: Laundry
-  name_ru: Стирка
-  debit_company: true
-  credit_company: false
-  debit_owner: false
-  credit_owner: false
-
 top_up:
   name_en: Top up
-  name_ru: Пополнение
-  debit_company: true
-  credit_company: false
-  debit_owner: false
-  credit_owner: false
-
-utilities_received:
-  name_en: From guests
-  name_ru: Платежи с гостей
+  name_ru: Пополнение баланса
   debit_company: true
   credit_company: false
   debit_owner: false
@@ -48,13 +41,13 @@ repair:
   debit_owner: true
   credit_owner: true
 
-purchases:
-  name_en: Purchases
-  name_ru: Покупки
-  debit_company: false
-  credit_company: true
-  debit_owner: true
-  credit_owner: true
+laundry:
+  name_en: Laundry
+  name_ru: Стирка
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
 
 utilities:
   name_en: Utilities
@@ -63,6 +56,138 @@ utilities:
   credit_company: true
   debit_owner: false
   credit_owner: true
+
+purchases:
+  name_en: Purchases
+  name_ru: Покупки
+  debit_company: false
+  credit_company: true
+  debit_owner: true
+  credit_owner: true
+
+salary:
+  name_en: Salary
+  name_ru: Зарплата
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+
+office:
+  name_en: "Office"
+  name_ru: "Офис"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+suppliers:
+  name_en: "Suppliers"
+  name_ru: "Подрядчики"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+utilities_received:
+  name_en: From guests
+  name_ru: Платежи с гостей
+  debit_company: true
+  credit_company: false
+  debit_owner: false
+  credit_owner: false
+
+to_owner:
+  name_en: "To owner"
+  name_ru: "Владельцу"
+  debit_company: false
+  credit_company: false
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
+common_area:
+  name_en: "Common area"
+  name_ru: "Общая территория"
+  debit_company: false
+  credit_company: false
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
+eqp_cons:
+  name_en: "Eqp & Cons"
+  name_ru: "Оборудование и расходники"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+transfer:
+  name_en: "Transfer"
+  name_ru: "Перевод"
+  debit_company: false
+  credit_company: false
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
+gasoline:
+  name_en: "Gasoline"
+  name_ru: "Бензин"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+consumables:
+  name_en: "Consumables"
+  name_ru: "Расходники"
+  debit_company: true
+  credit_company: true
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
+yearly_contracts:
+  name_en: "Yearly contracts"
+  name_ru: "Годовые контракты"
+  debit_company: false
+  credit_company: false
+  debit_owner: false
+  credit_owner: true
+  admin_only: false
+
+materials:
+  name_en: "Materials"
+  name_ru: "Материалы"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+eqp_maintenance:
+  name_en: "Eqp maintenance"
+  name_ru: "Обслуживание техники"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
+
+taxes_cccounting:
+  name_en: "Taxes & Accounting"
+  name_ru: "Налоги и бухгалтерия"
+  debit_company: false
+  credit_company: true
+  debit_owner: false
+  credit_owner: false
+  admin_only: false
 
 pest_control:
   name_en: Pest control
@@ -80,11 +205,4 @@ other:
   debit_owner: true
   credit_owner: true
 
-salary:
-  name_en: Salary
-  name_ru:
-  debit_company: false
-  credit_company: true
-  debit_owner: false
-  credit_owner: false
 
