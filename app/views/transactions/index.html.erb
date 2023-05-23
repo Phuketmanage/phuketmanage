@@ -46,9 +46,10 @@
 <% elsif current_user.role?(['Admin', 'Accounting', 'Manager']) %>
   <h1>
     Balance
-    <%= 'company view' if @view == 'company' %>
-    <%= 'owner view' if @view == 'owner' %>
-    <%= sanitize '<span class="d-print-none">accounting view</span>' if @view == 'accounting' %>
+    <%= 'company' if @view == 'company' %>
+    <%= sanitize '<span class="d-print-none">accounting</span>' if @type == 'acc' %>
+    <%= 'owner' if @view == 'owner' %>
+    <%= sanitize '<span class="d-print-none">accounting</span>' if @view == 'accounting' %>
     <% if @owner_id.present? %>
       <% owner = User.find(@owner_id) %>
       (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)

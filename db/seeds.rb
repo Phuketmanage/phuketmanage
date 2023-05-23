@@ -840,6 +840,24 @@ TransactionType.create!(
       debit_owner: true,
       credit_owner: true,
       admin_only: false
+    },
+    {
+      name_en: "Pest control",
+      name_ru: "Обработка от вредеилей",
+      debit_company: false,
+      credit_company: true,
+      debit_owner: false,
+      credit_owner: true,
+      admin_only: false
+    },
+    {
+      name_en: "Other",
+      name_ru: "Other",
+      debit_company: true,
+      credit_company: true,
+      debit_owner: true,
+      credit_owner: true,
+      admin_only: false
     }
   ]
 )
