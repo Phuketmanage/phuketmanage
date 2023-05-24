@@ -38,7 +38,6 @@ class TransactionsController < ApplicationController
             @transactions_before = Transaction.before_filtered(@from, filter_ids)
             @transactions_by_cat = Transaction.by_cat_filtered(@from, @to, filter_ids)
           end
-          @view = 'company'
           @type = 'full'
         elsif params[:commit] == 'Acc'
           if current_user.role?(['Admin'])
@@ -50,9 +49,9 @@ class TransactionsController < ApplicationController
             @transactions_before = Transaction.acc_before_filtered(@from, filter_ids)
           end
           # @view = 'company_acc'
-          @view = 'company'
           @type = 'acc'
         end
+        @view = 'company'
         session.delete(:owner_id)
         session[:commit] = params[:commit]
         session[:view] = @view

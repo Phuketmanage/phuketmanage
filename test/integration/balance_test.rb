@@ -956,7 +956,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   test 'acc view for company' do
     sign_in users(:admin)
     from = '2019-08-1'
-    to = '2023-05-31'
+    to = Time.now.to_date
     get transactions_path, params: { from: from, to: to, commit: 'Acc' }
     assert_response :success
     # warning = JSON.parse(@response.body)
@@ -1017,6 +1017,45 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "tr.trsc_row", 9
     assert_select "tr.trsc_row td.comment", {count: 0, text: "Salary Tech"}
-
   end
+
+  test "for_acc records cause mistakes" do #24.05.2023
+
+    #Company full balance does not show for_acc records but count them in totals
+    #For_acc records excluded from previous balance and from requested period
+    type = TransactionType.find_by(name_en: 'Rental')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+        transaction: {
+          date: '2019-09-5',
+          type_id: type.id,
+          booking_id: @booking.id,
+          de_ow: 20000,
+          de_co: 4000,
+          booking_fully_paid: false,
+          comment_en: 'Rental period ...',
+          for_acc: true
+        }
+      }
+    end
+    from = '2019-08-1'
+    to = '2019-09-10'
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    # get transaction after new and check that balance is 27,000 and not 31,000 that include just created
+    tr_after = transactions(:one)
+    assert_select "tr#trsc_#{tr_after.id}_row td.balance_sum_cell", '27,000.00'
+    assert_select "td#de_co_sum", '27,000.00'
+    # test that for_acc not counted in before transactions also
+    from = '2019-09-10'
+    to = '2019-09-12'
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_select "td#de_co_sum", '54,750.99'
+    # check for manager
+    sign_in users(:manager)
+    from = '2019-08-1'
+    to = '2019-09-10'
+    get transactions_path, params: { from: from, to: to, commit: 'Full' }
+    assert_select "td#de_co_sum", '27,000.00'
+  end
+
 end

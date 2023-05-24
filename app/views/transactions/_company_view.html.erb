@@ -1,5 +1,5 @@
 
-<table class='cell-border display compact stripe bg-white'>
+<table class='table table-striped table-bordered table-sm bg-white table-responsive'>
   <thead>
     <tr>
       <th></th><!-- #1 Button to open comment -->
@@ -23,8 +23,8 @@
     <% cr_co_prev_sum = 0 %>
     <% balance_sum = 0 %>
     <% if transactions_before.any? && current_user.role?("Admin") %>
-      <% de_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.debit') %>
-      <% cr_co_prev_sum = transactions_before.where(for_acc: false).joins(:balances).sum('balances.credit') %>
+      <% de_co_prev_sum = transactions_before.joins(:balances).sum('balances.debit') %>
+      <% cr_co_prev_sum = transactions_before.joins(:balances).sum('balances.credit') %>
       <% balance_sum += de_co_prev_sum - cr_co_prev_sum %>
       <tr>
         <td></td><!-- #1 Button to open comment -->
@@ -48,11 +48,11 @@
       <% cr_co_sum += cr_co %>
       <% balance_sum += de_co - cr_co %>
 
-      <% next if t.for_acc %>
+
       <% if t.incomplite? %>
         <tr id="trsc_<%= t.id %>_row" class="trsc_row table-danger <%= 'text-muted' if t.hidden %>" data-child-comment-inner="<%= t.comment_inner %>" data-toggle="tooltip" data-placement="bottom" title="Support documents not ready yet">
       <% else %>
-        <tr id="trsc_<%= t.id %>_row" class="trsc_row <%=  'class=text-muted' if t.hidden %>"data-child-comment-inner="<%= t.comment_inner %>">
+        <tr id="trsc_<%= t.id %>_row" class="trsc_row <%=  'text-muted' if t.hidden %>"data-child-comment-inner="<%= t.comment_inner %>">
       <% end %>
         <!-- #1 Button to open comment -->
         <% if t.comment_inner.present? %>

@@ -32,7 +32,7 @@ class Transaction < ApplicationRecord
   # after_save :check_warnings, on: [:create, :update]
 
   scope :full,              ->(from, to) {
-                                where('date >= ? AND date <= ?', from, to)
+                                where('date >= ? AND date <= ? AND for_acc = false', from, to)
                                 .order(:date, :created_at) }
   scope :acc,               ->(from, to) {
                                 joins(:balances)
@@ -41,7 +41,7 @@ class Transaction < ApplicationRecord
                                 .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0')
                                 .order(:date, :created_at) }
   scope :filtered,          ->(from, to, filter_ids) {
-                                where('date >= ? AND date <= ? AND type_id !=?', from, to, filter_ids)
+                                where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', from, to, filter_ids)
                                 .order(:date, :created_at)}
   scope :acc_filtered,      ->(from, to, filter_ids) {
                                 joins(:balances)
@@ -50,10 +50,10 @@ class Transaction < ApplicationRecord
                                 .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0')
                                 .order(:date, :created_at)}
 
-  scope :before,            ->(from) { where('date < ?', from) }
+  scope :before,            ->(from) { where('date < ? AND for_acc = false', from) }
   scope :acc_before,        ->(from) { where('date < ? AND hidden = false', from) }
   scope :before_filtered,   ->(from, filter_ids) {
-                                where('date < ? AND type_id !=?', from, filter_ids) }
+                                where('date < ? AND type_id !=? AND for_acc = false', from, filter_ids) }
   scope :acc_before_filtered,   ->(from, filter_ids) {
                                 joins(:balances)
                                 .where('date < ? AND type_id !=? AND hidden = false', from, filter_ids)
