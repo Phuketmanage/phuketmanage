@@ -28,27 +28,25 @@ class TransactionsController < ApplicationController
          current_user.role?(%w[Admin Manager Accounting])
         # Gray balance
         if params[:commit] != 'Acc'
-          if current_user.role?(['Admin'])
-            @transactions = Transaction.full(@from, @to)
-            @transactions_before = Transaction.before(@from)
-            @transactions_by_cat = Transaction.by_cat(@from, @to)
-          else
+          @transactions = Transaction.full(@from, @to)
+          @transactions_before = Transaction.before(@from)
+          @transactions_by_cat = Transaction.by_cat(@from, @to)
+          if !current_user.role?(['Admin'])
             filter_ids = TransactionType.find_by(name_en: 'Salary')
-            @transactions = Transaction.filtered(@from, @to, filter_ids)
-            @transactions_before = Transaction.before_filtered(@from, filter_ids)
-            @transactions_by_cat = Transaction.by_cat_filtered(@from, @to, filter_ids)
+            @transactions = @transactions.filtered(filter_ids)
+            @transactions_before = @transactions_before.filtered(filter_ids)
+            @transactions_by_cat = @transactions_by_cat.filtered(filter_ids)
           end
           @type = 'full'
+        # White balance
         elsif params[:commit] == 'Acc'
-          if current_user.role?(['Admin'])
-            @transactions = Transaction.acc(@from, @to)
-            @transactions_before = Transaction.acc_before(@from)
-          else
+          @transactions = Transaction.acc(@from, @to)
+          @transactions_before = Transaction.acc_before(@from)
+          if !current_user.role?(['Admin'])
             filter_ids = TransactionType.find_by(name_en: 'Salary')
-            @transactions = Transaction.acc_filtered(@from, @to, filter_ids)
-            @transactions_before = Transaction.acc_before_filtered(@from, filter_ids)
+            @transactions = @transactions.filtered(filter_ids)
+            @transactions_before = @transactions_before.filtered(filter_ids)
           end
-          # @view = 'company_acc'
           @type = 'acc'
         end
         @view = 'company'
@@ -72,14 +70,13 @@ class TransactionsController < ApplicationController
         session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
-          if @house_id.nil? # House not selected
-            @transactions = @owner.transactions.full(@from, @to)
-            @transactions_before = @owner.transactions.before(@from)
-            @transactions_by_cat = @owner.transactions.by_cat_for_owner(@from, @to)
-          elsif @house_id.present? # House is selected
-            @transactions = @owner.transactions.full_for_house(@from, @to, @house_id)
-            @transactions_before = @owner.transactions.before_for_house(@from, @house_id)
-            @transactions_by_cat = @owner.transactions.by_cat_for_owner_for_house(@from, @to, @house_id)
+          @transactions = @owner.transactions.full(@from, @to)
+          @transactions_before = @owner.transactions.before(@from)
+          @transactions_by_cat = @owner.transactions.by_cat_for_owner(@from, @to)
+          if @house_id.present? # House is selected
+            @transactions = @transactions.for_house(@house_id)
+            @transactions_before = @transactions_before.for_house(@house_id)
+            @transactions_by_cat = @transactions_by_cat.for_house(@house_id)
           end
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @cr_rental = 0

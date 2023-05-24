@@ -411,9 +411,6 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     get transactions_path, params: { owner_id: @owner.id, commit: 'Acc' }
     assert_response :success
-    assert_select "tr.hidden_row", count: 1
-    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '30,000.00'
-    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     get transactions_docs_path, params: {
       type: 'invoice',
       from: Time.now.to_date.beginning_of_month,
@@ -524,13 +521,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select '#cr_ow_prev_sum', ''
     assert_select '#ow_prev_balance', '-3,000.00'
     assert_select "#de_ow_sum", "255,500.00"
-    assert_select "#de_ow_hidden_sum", "30,000.00"
-    assert_select "#de_ow_sum_and_hidden", "285,500.00"
     assert_select "#cr_ow_sum", "72,200.99"
-    assert_select "#cr_ow_hidden_sum", "6,000.00"
-    assert_select "#cr_ow_sum_and_hidden", "111,200.99"
     assert_select "#ow_balance", "180,299.01"
-    assert_select "#ow_balance_and_hidden", "204,299.01"
 
     # View same as owner
     sign_in users(:owner)

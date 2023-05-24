@@ -34,50 +34,24 @@ class Transaction < ApplicationRecord
   scope :full,              ->(from, to) {
                                 where('date >= ? AND date <= ? AND for_acc = false', from, to)
                                 .order(:date, :created_at) }
-  scope :acc,               ->(from, to) {
-                                joins(:balances)
-                                .where('date >= ? AND date <= ? AND hidden = false', from, to)
-                                .group('transactions.id')
-                                .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0')
-                                .order(:date, :created_at) }
-  scope :filtered,          ->(from, to, filter_ids) {
-                                where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', from, to, filter_ids)
-                                .order(:date, :created_at)}
-  scope :acc_filtered,      ->(from, to, filter_ids) {
-                                joins(:balances)
-                                .where('date >= ? AND date <= ? AND type_id !=? AND hidden = false ', from, to, filter_ids)
-                                .group('transactions.id')
-                                .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0')
-                                .order(:date, :created_at)}
-
   scope :before,            ->(from) { where('date < ? AND for_acc = false', from) }
-  scope :acc_before,        ->(from) { where('date < ? AND hidden = false', from) }
-  scope :before_filtered,   ->(from, filter_ids) {
-                                where('date < ? AND type_id !=? AND for_acc = false', from, filter_ids) }
-  scope :acc_before_filtered,   ->(from, filter_ids) {
-                                joins(:balances)
-                                .where('date < ? AND type_id !=? AND hidden = false', from, filter_ids)
-                                .group('transactions.id')
-                                .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0') }
+
   scope :by_cat, ->(from, to) { joins(:balances)
                                 .where('date >= ? AND date <= ? AND for_acc = false', from, to)
                                 .group(:type_id)
                                 .select(:type_id,
                                         "sum(balances.debit) as debit_sum",
                                         "sum(balances.credit) as credit_sum") }
-  scope :by_cat_filtered,   ->(from, to, filter_ids) {
+  scope :acc,               ->(from, to) {
                                 joins(:balances)
-                                .where('date >= ? AND date <= ? AND type_id !=? AND for_acc = false', from, to, filter_ids)
-                                .group(:type_id)
-                                .select(
-                                        :type_id, "sum(balances.debit) as debit_sum",
-                                        "sum(balances.credit) as credit_sum") }
-  scope :full_for_house,    ->(from, to, house_id) {
-                                where('date >= ? AND date <= ? AND house_id = ?', from, to, house_id)
+                                .where('date >= ? AND date <= ? AND hidden = false', from, to)
+                                .group('transactions.id')
+                                .having('SUM(balances.debit) > 0 OR SUM(balances.credit) > 0')
                                 .order(:date, :created_at) }
-  scope :before_for_house,  ->(from, house_id) {
-                                where('date < ? AND house_id = ?', from, house_id)
-                                .order(:date, :created_at) }
+  scope :acc_before,        ->(from) { where('date < ? AND hidden = false', from) }
+  scope :filtered,          ->(filter_ids) { where('type_id !=?',filter_ids) }
+
+  scope :for_house,         ->(house_id) { where('house_id = ?', house_id) }
   scope :by_cat_for_owner,  ->(from, to) {
                                 joins(:balance_outs)
                                 .where('date >= ? AND date <= ? AND for_acc = false', from, to)
@@ -86,21 +60,11 @@ class Transaction < ApplicationRecord
                                         :type_id,
                                         "sum(balance_outs.debit) as debit_sum",
                                         "sum(balance_outs.credit) as credit_sum") }
-  scope :by_cat_for_owner_for_house, ->(from, to, house_id) {
-                                joins(:balance_outs)
-                                .where('date >= ? AND date <= ? AND for_acc = false AND house_id = ?', from, to, house_id)
-                                .group(:type_id)
-                                .select(
-                                        :type_id,
-                                        "sum(balance_outs.debit) as debit_sum",
-                                        "sum(balance_outs.credit) as credit_sum") }
-# full_acc(from, to) /line # 108
-# before_acc(from, to) /line # 111
   scope :full_acc_for_owner, ->(from, to, owner_id) {
-                                where('date >= ? AND date <= ? AND user_id = ?', from, to, owner_id)
+                                where('date >= ? AND date <= ? AND hidden = false AND user_id = ?', from, to, owner_id)
                                 .order(:date, :created_at) }
   scope :before_acc_for_owner, ->(from, owner_id) {
-                                where('date < ? AND user_id = ?', from, owner_id).all }
+                                where('date < ? AND hidden = false AND user_id = ?', from, owner_id).all }
 
 
   def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
