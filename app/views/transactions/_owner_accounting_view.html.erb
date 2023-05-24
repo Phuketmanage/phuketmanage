@@ -23,14 +23,12 @@ Address:
     <% de_ow_sum = 0 %>
     <% cr_ow_sum = 0 %>
     <% de_co_sum = 0 %>
-    <% de_ow_hidden_sum = 0 %>
-    <% cr_ow_hidden_sum = 0 %>
     <% de_ow_prev_sum = 0 %>
     <% cr_ow_prev_sum = 0 %>
     <% balance_sum = 0 %>
     <% if transactions_before.any? %>
-      <% de_ow_prev_sum = transactions_before.where(hidden: false).joins(:balance_outs).sum('balance_outs.debit') %>
-      <% cr_ow_prev_sum = transactions_before.where(hidden: false).joins(:balance_outs).sum('balance_outs.credit') %>
+      <% de_ow_prev_sum = transactions_before.joins(:balance_outs).sum('balance_outs.debit') %>
+      <% cr_ow_prev_sum = transactions_before.joins(:balance_outs).sum('balance_outs.credit') %>
       <% balance_sum += de_ow_prev_sum - cr_ow_prev_sum %>
       <tr>
         <td></td>
@@ -51,22 +49,14 @@ Address:
       <% cr_ow = t.balance_outs.sum(:credit) %>
       <% de_co = t.balances.sum(:debit) %>
       <% cr_co = t.balances.sum(:credit) %>
-      <% if t.hidden %>
-        <% de_ow_hidden_sum += de_ow %>
-        <% cr_ow_hidden_sum += cr_ow %>
-      <% end %>
       <% cr_ow_personal = cr_ow - de_co  %>
-      <% unless t.hidden %>
-        <% de_ow_sum += de_ow %>
-        <% cr_ow_sum += cr_ow_personal %>
-        <% de_co_sum += de_co %>
-        <% balance_sum += de_ow - cr_ow_personal %>
-      <% end %>
+      <% de_ow_sum += de_ow %>
+      <% cr_ow_sum += cr_ow_personal %>
+      <% de_co_sum += de_co %>
+      <% balance_sum += de_ow - cr_ow_personal %>
       <% next if (cr_ow - de_co + de_ow ) == 0 %>
       <tr id="trsc_<%= t.id %>_row"
-        <%= 'class=hidden_row style=display:none;' if t.hidden %>
         <%= 'class=for_acc_row' if t.for_acc %>
-        <%#= 'style=background-color:#FFC300' if t.for_acc %>>
         <td><span style="display:none;"><%= t.date.to_time.to_i %></span><%= t.date.strftime('%d.%m.%Y') %></td>
         <td><small>
           <%= t.ref_no %></small></td>
@@ -140,46 +130,19 @@ Address:
         <div id='de_ow_sum'>
           <%= number_to_currency(de_ow_sum, precision: 2, unit: '') %>
         </div>
-        <% if de_ow_hidden_sum > 0 %>
-          <div class="text-muted" id='de_ow_hidden_sum'>
-            <%= number_to_currency(de_ow_hidden_sum, precision: 2, unit: '') %>
-          </div>
-          <div class="text-muted" id='de_ow_sum_and_hidden'>
-            <%= number_to_currency(de_ow_sum + de_ow_hidden_sum, precision: 2, unit: '') %>
-          </div>
-        <% end %>
       </td>
       <td class="font-weight-bold text-right d-print-none">
         <div id='cr_ow_sum'>
           <%= number_to_currency(cr_ow_sum, precision: 2, unit: '') %>
         </div>
-        <% if cr_ow_hidden_sum > 0 %>
-          <div class="text-muted" id='cr_ow_hidden_sum'>
-            <%= number_to_currency(cr_ow_hidden_sum, precision: 2, unit: '') %>
-          </div>
-          <div class="text-muted" id='cr_ow_sum_and_hidden'>
-            <%= number_to_currency(cr_ow_prev_sum + cr_ow_sum + cr_ow_hidden_sum, precision: 2, unit: '') %>
-          </div>
-        <% end %>
       </td>
       <td class="font-weight-bold text-right d-print-none">
         <div id="ow_balance">
           <%= number_to_currency(de_ow_prev_sum + de_ow_sum - cr_ow_prev_sum - cr_ow_sum, precision: 2, unit: '') %>
         </div>
-        <% if de_ow_hidden_sum > 0 || cr_ow_hidden_sum > 0 %>
-          <div class="text-muted" id="ow_hidden_balance d-print-none">
-            <%= number_to_currency(de_ow_hidden_sum - cr_ow_hidden_sum, precision: 2, unit: '') %>
-          </div>
-          <div class="text-muted d-print-none" id="ow_balance_and_hidden">
-            <%= number_to_currency((de_ow_prev_sum + de_ow_sum + de_ow_hidden_sum) - (cr_ow_prev_sum + cr_ow_sum + cr_ow_hidden_sum), precision: 2, unit: '') %>
-          </div>
-        <% end %>
       </td>
       <td></td>
       <td>
-        <% if de_ow_hidden_sum > 0 || cr_ow_hidden_sum > 0 %>
-          <%= link_to 'Show hidden', '#', id: 'link_show_hidden', class: 'text-muted d-print-none' %>
-        <% end %>
       </td>
     </tr>
   </tfoot>
