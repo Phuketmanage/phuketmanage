@@ -50,6 +50,7 @@ class Transaction < ApplicationRecord
   scope :acc_before,        ->(from) { where('date < ? AND hidden = false', from) }
   scope :filtered,          ->(filter_ids) { where('type_id !=?',filter_ids) }
 
+  scope :unlinked, -> { where(house_id: nil) }
   scope :for_house,         ->(house_id) { where('house_id = ?', house_id) }
   scope :by_cat_for_owner,  ->(from, to) {
                                 joins(:balance_outs)
