@@ -86,7 +86,7 @@
         </div>
         <% if @view != 'accounting' %>
         <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <% options = @houses.map{ |h| ["#{h.code} #{h.id}", h.id] } + [['Unlinked', 'unlinked'], ['All', '']] %>
+          <% options = @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked'], ['All', '']] %>
           <% statuses = { '': 'All', 'unlinked': 'Unlinked' } %>
           <% @house_id ||= '' %>
           <%= select_tag :house_id, options_for_select(options, @house_id),
