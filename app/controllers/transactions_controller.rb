@@ -19,7 +19,7 @@ class TransactionsController < ApplicationController
     end
 
     @owner_id = params[:owner_id].present? ? params[:owner_id].to_i : nil
-    @house_id = ['unlinked', ''].include?(params[:house_id]) ? params[:house_id] : params[:house_id].to_i
+    @house_id = ['unlinked', nil].include?(params[:house_id]) ? params[:house_id] : params[:house_id].to_i
     @owners = set_owners
     @houses = []
     unless @error.present?
@@ -70,40 +70,8 @@ class TransactionsController < ApplicationController
         session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
-          if @house_id == '' # House not selected
-            @transactions = @owner.transactions.where('date >= ? AND date <= ?', @from, @to).order(:date,
-                                                                                                   :created_at)
-            @transactions_before = @owner.transactions.where('date < ?', @from).order(:date, :created_at)
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where(
-              'date >= ? AND date <= ? AND for_acc = false', @from, @to
-            ).group(:type_id).select(
-              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
-            )
-          elsif @house_id == 'unlinked' # Unlinked transactions selected
-            @transactions = @owner.transactions.where(
-              'date >= ? AND date <= ? AND house_id IS NULL', @from, @to
-            ).order(:date, :created_at)
-            @transactions_before = @owner.transactions.where(
-              'date < ? AND house_id IS NULL', @from
-            ).order(:date, :created_at)
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where(
-              'date >= ? AND date <= ? AND for_acc = false AND house_id IS NULL', @from, @to
-            ).group(:type_id).select(
-              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
-            )
-          else # House selected
-            @transactions = @owner.transactions.where(
-              'date >= ? AND date <= ? AND house_id = ?', @from, @to, @house_id
-            ).order(:date, :created_at)
-            @transactions_before = @owner.transactions.where(
-              'date < ? AND house_id = ?', @from, @house_id
-            ).order(:date, :created_at)
-            @transactions_by_cat = @owner.transactions.joins(:balance_outs).where(
-              'date >= ? AND date <= ? AND for_acc = false AND house_id = ?', @from, @to, @house_id
-            ).group(:type_id).select(
-              :type_id, "sum(balance_outs.debit) as debit_sum", "sum(balance_outs.credit) as credit_sum"
-            )
-          end
+          # byebug
+          @transactions, @transactions_before, @transactions_by_cat = owner_transactions(@owner, @from, @to, @house_id)
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @cr_rental = 0
           if @transactions.any?
@@ -477,6 +445,25 @@ class TransactionsController < ApplicationController
   end
 
   private
+
+  def owner_transactions(owner, from, to, house_id)
+    transactions = owner.transactions.full(from, to)
+    transactions_before = owner.transactions.before(from)
+    transactions_by_cat = owner.transactions.by_cat_for_owner(from, to)
+    case house_id
+    when nil # House not selected
+      [transactions, transactions_before, transactions_by_cat]
+    when 'unlinked' # House unlinked
+      transactions = transactions.unlinked
+      transactions_before = transactions_before.unlinked
+      transactions_by_cat = transactions_by_cat.unlinked
+    else # House selected
+      transactions = transactions.for_house(house_id)
+      transactions_before = transactions_before.for_house(house_id)
+      transactions_by_cat = transactions_by_cat.for_house(house_id)
+    end
+    [transactions, transactions_before, transactions_by_cat]
+  end
 
   def set_owners
     User.joins(:houses)
