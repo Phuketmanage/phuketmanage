@@ -3,19 +3,19 @@ FactoryBot.define do
     email { Faker::Internet.email } 
     password {"qweasd"}
     trait :admin do
-      roles { [create(:role, :admin)] }
+      roles { [Role.find_or_create_by(name: 'Admin')] }
     end
     trait :manager do
-      roles { [create(:role, :manager)] }
+      roles { [Role.find_or_create_by(name: 'Manager')] }
     end
     trait :accounting do
-      roles { [create(:role, :acounting)] }
+      roles { [Role.find_or_create_by(name: 'Accounting')] }
     end
     trait :owner do
-      roles { [create(:role, :owner)] }
+      roles { [Role.find_or_create_by(name: 'Owner')] }
     end
     trait :client do
-      roles { [create(:role, :client)] }
+      roles { [Role.find_or_create_by(name: 'Client')] }
     end
   end
 end

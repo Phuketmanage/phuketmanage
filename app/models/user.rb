@@ -37,6 +37,8 @@ class User < ApplicationRecord
   has_many :todos_created, class_name: 'Todo', foreign_key: 'creator_id'
 
   scope :with_role, ->(role) { includes(:roles).where(roles: { name: role }) }
+  scope :active_owners, ->()  { where('balance_closed = false')}
+  scope :inactive_owners, ->()  { where('balance_closed = true')}
 
   def role?(role_or_roles)
     names = Array.wrap(role_or_roles).map(&:to_s).map(&:capitalize)
