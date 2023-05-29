@@ -258,7 +258,6 @@ class TransactionsController < ApplicationController
             'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
           ).order('bookings.start')
         end
-        @houses_for_select = set_houses_for_select
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
       end
