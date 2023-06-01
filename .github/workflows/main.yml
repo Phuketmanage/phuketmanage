@@ -4,8 +4,9 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
 
+env:
+  DATABASE_URL: postgres://user:password@localhost:5432/phuketmanage_test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +16,8 @@ jobs:
         image: postgres:13.10
         env:
           POSTGRES_USER: user
-          POSTGRES_DB: db
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: phuketmanage_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -41,7 +43,7 @@ jobs:
       env:
         RAILS_ENV: test
         RACK_ENV: test
-        DATABASE_URL: "postgres://user:@localhost:5432/phuketmanage_test"
+        DATABASE_URL: "postgres://user:password@localhost:5432/phuketmanage_test"
         S3_BUCKET: 'test'
       run: |
         bundle exec rails db:create db:schema:load
@@ -54,4 +56,3 @@ jobs:
       with:
         name: test-results
         path: test-results
-
