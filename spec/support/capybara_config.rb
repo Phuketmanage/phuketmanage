@@ -1,7 +1,7 @@
 Capybara.register_driver :chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     'goog:chromeOptions': {
-      args: %w[ no-sandbox headless disable-gpu --window-size=1920,1080]
+      args: %w[ no-sandbox headless disable-gpu disable-dev-shm-usage --window-size=1920,1080]
     }
   )
   Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
@@ -12,7 +12,7 @@ end
 
 Capybara.register_driver :chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    'goog:chromeOptions': { args: %w[ start-maximized ] }
+    'goog:chromeOptions': { args: %w[ disable-dev-shm-usage start-maximized ] }
   )
 
   Capybara::Selenium::Driver.new(
