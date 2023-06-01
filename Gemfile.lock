@@ -60,8 +60,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.4)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     autoprefixer-rails (10.4.7.0)
       execjs (~> 2)
@@ -97,7 +97,7 @@ GEM
     builder (3.2.4)
     byebug (11.1.3)
     cancancan (3.4.0)
-    capybara (3.37.1)
+    capybara (3.39.1)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -106,7 +106,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    childprocess (4.1.0)
     chusaku (0.6.1)
       railties (>= 3.0)
     coffee-rails (4.2.2)
@@ -152,7 +151,7 @@ GEM
     globalid (1.1.0)
       activesupport (>= 5.0)
     http_accept_language (2.1.1)
-    i18n (1.12.0)
+    i18n (1.14.0)
       concurrent-ruby (~> 1.0)
     icalendar (2.7.1)
       ice_cube (~> 0.16)
@@ -170,9 +169,9 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    loofah (2.20.0)
+    loofah (2.21.3)
       crass (~> 1.0.2)
-      nokogiri (>= 1.5.9)
+      nokogiri (>= 1.12.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -183,7 +182,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.1)
+    mini_portile2 (2.8.2)
     minitest (5.18.0)
     momentjs-rails (2.29.1.1)
       railties (>= 3.1)
@@ -199,12 +198,12 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.14.3)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.15.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.14.3-arm64-darwin)
+    nokogiri (1.15.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.3-x86_64-linux)
+    nokogiri (1.15.2-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.23.0)
@@ -212,7 +211,7 @@ GEM
       ast (~> 2.4.1)
     pg (1.4.1)
     popper_js (1.16.0)
-    public_suffix (4.0.7)
+    public_suffix (5.0.1)
     puma (4.3.12)
       nio4r (~> 2.0)
     racc (1.6.2)
@@ -237,8 +236,9 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.5.0)
-      loofah (~> 2.19, >= 2.19.1)
+    rails-html-sanitizer (1.6.0)
+      loofah (~> 2.21)
+      nokogiri (~> 1.14)
     rails-i18n (6.0.0)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 7)
@@ -253,7 +253,7 @@ GEM
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (2.5.0)
+    regexp_parser (2.8.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -266,7 +266,7 @@ GEM
     rspec-mocks (3.12.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-rails (6.0.2)
+    rspec-rails (6.0.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -296,7 +296,6 @@ GEM
       rubocop (>= 1.33.0, < 2.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -309,11 +308,6 @@ GEM
       tilt
     scout_apm (5.2.0)
       parser
-    selenium-webdriver (4.3.0)
-      childprocess (>= 0.5, < 5.0)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -337,7 +331,7 @@ GEM
       backports (>= 3.16.0)
       memoist
       rubocop (>= 1.0.0)
-    thor (1.2.1)
+    thor (1.2.2)
     tilt (2.0.10)
     timeout (0.3.2)
     turbolinks (5.2.1)
@@ -359,18 +353,13 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webdrivers (5.2.0)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0)
     webrick (1.8.1)
-    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   arm64-darwin-22
@@ -385,7 +374,7 @@ DEPENDENCIES
   bootstrap-select-rails
   byebug
   cancancan
-  capybara (>= 2.15)
+  capybara
   chusaku (~> 0.6.1)
   coffee-rails
   devise
@@ -409,7 +398,6 @@ DEPENDENCIES
   rubocop-rails
   sassc-rails
   scout_apm
-  selenium-webdriver
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
@@ -419,7 +407,6 @@ DEPENDENCIES
   tzinfo-data
   uglifier
   web-console (>= 3.3.0)
-  webdrivers
   webrick (~> 1.7)
 
 RUBY VERSION
