@@ -53,6 +53,19 @@ class User < ApplicationRecord
     !balance_closed? ? super : :inactive
   end
 
+  def unpaid_bookings(booking_id = nil)
+    if !booking_id
+      houses.joins(:bookings) .where.not('bookings.status': [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]])
+                              .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
+                              .order('bookings.start')
+    else
+      houses.joins(:bookings) .where.not('(status != ? AND status != ? AND status != ?) OR bookings.id = ?',
+                                Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled], booking_id)
+                              .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
+                              .order('bookings.start')
+    end
+  end
+
   # def is_any_of?(role)
   #   role = role.split = if role.kind_of?(String)
   #   result = false

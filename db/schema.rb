@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_15_085305) do
+ActiveRecord::Schema.define(version: 2023_06_05_181200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 2023_05_15_085305) do
     t.date "check_in"
     t.date "check_out"
     t.string "comment_owner"
-    t.boolean "paid", default: false
     t.boolean "ignore_warnings", default: false
     t.index ["house_id"], name: "index_bookings_on_house_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true

@@ -73,11 +73,11 @@
     <div id='rental_calcs'></div>
   </div>
 
-  <div class="form-check money_fields mt-2 mb-1" id='check_booking_paid'>
+  <!-- <div class="form-check money_fields mt-2 mb-1" id='check_booking_paid'>
     <% booking_paid = transaction.booking.paid if transaction.booking_id %>
     <%= check_box_tag :booking_fully_paid, true, booking_paid, class: 'form-check-input' %>
     <%= label_tag 'booking_fully_paid',nil, class: "form-check-label" %>
-  </div>
+  </div> -->
 
   <div class="field" id='comment_en'>
     <%= form.label :comment_en %>

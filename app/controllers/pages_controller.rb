@@ -14,5 +14,6 @@ class PagesController < ApplicationController
   def about; end
 
   # @route GET /test (test)
-  def test; end
+  def test
+  end
 end
