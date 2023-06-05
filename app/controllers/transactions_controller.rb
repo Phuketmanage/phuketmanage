@@ -154,7 +154,6 @@ class TransactionsController < ApplicationController
       @transaction.user_id = owner.id
       @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
       @bookings = owner.unpaid_bookings
-      @bookings = owner.bookings.unpaid
     else
       @bookings = Booking.unpaid
     end
