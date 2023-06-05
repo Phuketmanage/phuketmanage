@@ -48,6 +48,12 @@
         </li>
       <% end %>
 
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_path, class: "nav-link" %>
+        </li>
+      <% end %>
+
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Transfer']) %>
         <li class="nav-item">
           <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
