@@ -29,14 +29,13 @@ class Transaction < ApplicationRecord
   has_many :transaction_files
   has_many :files, dependent: :destroy, foreign_key: 'trsc_id', class_name: 'TransactionFile'
   validates :date, :type, :comment_en, presence: true
-  # after_save :check_warnings, on: [:create, :update]
 
   scope :full,              ->(from, to) {
                                 where('date >= ? AND date <= ? AND for_acc = false', from, to)
                                 .order(:date, :created_at) }
   scope :before,            ->(from) { where('date < ? AND for_acc = false', from) }
 
-  scope :by_cat, ->(from, to) { joins(:balances)
+  scope :by_cat,            ->(from, to) { joins(:balances)
                                 .where('date >= ? AND date <= ? AND for_acc = false', from, to)
                                 .group(:type_id)
                                 .select(:type_id,
@@ -85,6 +84,7 @@ class Transaction < ApplicationRecord
       balance_outs.create!(debit: de_ow, credit: 0) if de_ow > 0
       balance_outs.create!(debit: 0, credit: de_co) if de_co > 0
       balances.create!(debit: de_co, credit: 0) if de_co > 0
+      booking.toggle_status if !booking.nil?
     elsif types2.include?(type)
       if (cr_ow.nil? || cr_ow == 0) && (de_co.nil? || de_co == 0)
         errors.add(:base,
@@ -150,6 +150,16 @@ class Transaction < ApplicationRecord
       self.user_id = house.owner.id if user_id.nil?
     end
   end
+
+  private
+
+    # def check_if_booking_paid
+    #   if type.name_en == 'Rental'
+    #     booking.is_paid?
+    #   end
+    #   # byebug
+    # end
+
 
   # def log
   #   logger.info self.changes

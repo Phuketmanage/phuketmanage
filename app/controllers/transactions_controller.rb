@@ -153,13 +153,10 @@ class TransactionsController < ApplicationController
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
       @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
-      @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-      ).order('bookings.start')
+      @bookings = owner.unpaid_bookings
+      @bookings = owner.bookings.unpaid
     else
-      @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-      ).order('bookings.start')
+      @bookings = Booking.unpaid
     end
   end
 
@@ -178,9 +175,7 @@ class TransactionsController < ApplicationController
     )
     if @transaction.user
       owner = @transaction.user
-      @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
-        'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-      ).order('bookings.start')
+      @bookings = owner.unpaid_bookings(@transaction.booking_id)
     end
   end
 
@@ -214,13 +209,9 @@ class TransactionsController < ApplicationController
             owner = User.find(params[:user_id])
             @transaction.user_id = owner.id
             @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
-            @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-            ).order('bookings.start')
+            @bookings = owner.unpaid_bookings
           else
-            @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-            ).order('bookings.start')
+            @bookings = Booking.unpaid
           end
           @s3_direct_post = S3_BUCKET.presigned_post(key: "transactions/${filename}", success_action_status: '201',
                                                      acl: 'public-read')
@@ -250,13 +241,9 @@ class TransactionsController < ApplicationController
         )
         if params[:user_id].present?
           owner = User.find(params[:user_id])
-          @bookings = owner.houses.joins(:bookings).where('bookings.paid = ? AND bookings.status != ? AND bookings.status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-          ).order('bookings.start')
+          @bookings = owner.unpaid_bookings
         else
-          @bookings = Booking.joins(:house).where('paid = ? AND status != ? AND status != ?', false, Booking.statuses[:block], Booking.statuses[:canceled]).select(
-            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-          ).order('bookings.start')
+          @bookings = Booking.unpaid
         end
         format.html { render :new }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
@@ -304,9 +291,7 @@ class TransactionsController < ApplicationController
           )
           if @transaction.user
             owner = @transaction.user
-            @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
-              'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-            ).order('bookings.start')
+            @bookings = owner.unpaid_bookings(@transaction.booking_id)
           end
 
           render :edit and return
@@ -331,9 +316,7 @@ class TransactionsController < ApplicationController
         @bookings = []
         if @transaction.user
           owner = @transaction.user
-          @bookings = owner.houses.joins(:bookings).where('(paid = ? AND status != ? AND status != ?) OR bookings.id = ?', false, Booking.statuses[:block], Booking.statuses[:canceled], @transaction.booking_id).select(
-            'bookings.id', 'bookings.start', 'bookings.finish', 'houses.code'
-          ).order('bookings.start')
+          @bookings = owner.unpaid_bookings(@transaction.booking_id)
         end
         @s3_direct_post = S3_BUCKET.presigned_post(
           key: "transactions/${filename}",
@@ -349,7 +332,7 @@ class TransactionsController < ApplicationController
 
   # @route POST /transactions/update_invoice_ref (update_invoice_ref)
   def update_invoice_ref
-    error = 'Need to select Owner' unless session[:view_user_id].present?
+    error = 'Need to select Owner' unless session[:owner_id].present?
     if session[:from].to_date.month != session[:to].to_date.month
       error = 'Can update invoice ref_no only with in one month'
     end
@@ -383,6 +366,7 @@ class TransactionsController < ApplicationController
   # @route DELETE /transactions/:id (transaction)
   def destroy
     @transaction.destroy
+    @transaction.booking.toggle_status if !@transaction.booking.nil?
     respond_to do |format|
       format.html do
         redirect_to transactions_path(

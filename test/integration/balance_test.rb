@@ -1050,4 +1050,73 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "td#de_co_sum", '27,000.00'
   end
 
+  test "should change booking status" do
+    # Create booking
+    month = Time.now.month+1
+    year = Time.now.year
+    start = "10.#{month}.#{year}"
+    finish = "25.#{month}.#{year}"
+    house = houses(:villa_1)
+    assert_difference 'Booking.count', 1 do
+      post bookings_path params: { booking: { start: start,
+                                              finish: finish,
+                                              house_id: house.id,
+                                              status: 'pending',
+                                              client_details: 'Test client' } }
+    end
+    b = Booking.last
+    b.update(sale: 100000, agent: 0, comm: 20000, nett: 80000)
+    # Add payment 50% booking status change to confirmed
+    type = TransactionType.find_by(name_en: 'Rental')
+    assert_difference 'Transaction.count', 1 do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          booking_id: b.id,
+          de_ow: 50000,
+          de_co: 10000,
+          comment_en: 'Rental payment 1'
+        }
+      }
+    end
+    t1 = Transaction.last
+    b.reload
+    assert_equal 'confirmed', b.status
+
+    # Add payment another 50% booking status change to paid
+    assert_difference 'Transaction.count', 1 do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          booking_id: b.id,
+          de_ow: 50000,
+          de_co: 10000,
+          comment_en: 'Rental payment 2'
+        }
+      }
+    end
+    t2 = Transaction.last
+    b.reload
+    assert_equal 'paid', b.status
+
+    # After remove 1 transaction booking status change to confirmed
+    assert_difference('Transaction.count', -1) do
+      delete transaction_url(t2)
+    end
+    b.reload
+    assert_equal 'confirmed', b.status
+
+
+    # After remove all transactions booking status change to pending
+    assert_difference('Transaction.count', -1) do
+      delete transaction_url(t1)
+    end
+    b.reload
+    assert_equal 'pending', b.status
+
+
+  end
+
 end

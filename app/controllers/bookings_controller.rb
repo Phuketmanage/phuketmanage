@@ -65,7 +65,7 @@ class BookingsController < ApplicationController
       end
     end
 
-    @bookings = bookings.where('finish >= :from AND start <= :to',
+    @bookings = bookings.active.where('finish >= :from AND start <= :to',
                                from: @from, to: @to).order(:start)
   end
 
@@ -312,6 +312,7 @@ class BookingsController < ApplicationController
           @booking.calc prices
           @booking.save
         end
+        @booking.toggle_status
         hid = House.find(@booking.house_id).number
         format.html { redirect_to bookings_path(hid: hid), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
@@ -399,7 +400,6 @@ class BookingsController < ApplicationController
                                     :no_check_out,
                                     :check_in,
                                     :check_out,
-                                    :paid,
                                     :ignore_warnings,
                                     :manual_price)
   end

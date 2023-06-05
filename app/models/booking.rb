@@ -32,8 +32,6 @@ class Booking < ApplicationRecord
 
   attr_accessor :manual_price
 
-  # attr_accessible :manual_price
-
   enum status: {
     temporary: 0,
     pending: 1,
@@ -53,9 +51,29 @@ class Booking < ApplicationRecord
   # has_many :statements
   validates :start, :finish, :house_id, :status, :client_details, presence: true
   validate :price_chain, unless: :allotment?
+  # after_update :toggle_status
 
   scope :active, -> { where.not(status: [:canceled]) }
   scope :real, -> { where.not(status: %i[canceled block]) }
+  scope :unpaid, -> { where.not( status: [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]] )
+                      .joins(:house)
+                      .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id').order('bookings.start') }
+
+  def toggle_status
+    if ['block', 'canceled'].exclude?(status)
+      update(status: 'pending') if transactions.count == 0
+      update(status: 'confirmed') if !fully_paid? && transactions.count >= 1
+      update(status: 'paid') if fully_paid?
+    end
+  end
+
+  def fully_paid?
+    return if status == ['block', 'canceled']
+    income = transactions.joins(:balance_outs).sum(:debit)
+    comm = transactions.joins(:balance_outs).sum(:credit)
+    to_owner = income - comm
+    to_owner == nett && nett != 0
+  end
 
   def self.check_in_out(from = nil, to = nil)
     result = []
@@ -318,9 +336,9 @@ class Booking < ApplicationRecord
 
   private
 
-  def price_chain
-    if !block? && (nett != sale - agent - comm)
-      errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+    def price_chain
+      if !block? && (nett != sale - agent - comm)
+        errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+      end
     end
-  end
 end
