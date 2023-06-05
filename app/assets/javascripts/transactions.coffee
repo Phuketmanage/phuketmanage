@@ -148,30 +148,6 @@ $(document).on "turbolinks:load", ->
       error: (data) ->
         console.log('Something went wrong')
 
-  $ ->
-    table = $("#balance").DataTable(
-      # scrollX: true,
-      paging: false,
-      ordering: false,
-      # columnDefs: [ { type: 'date', 'targets': [1] } ],
-      # order: [[ 1, 'asc' ]]
-    )
-
-    $('#balance tbody').on 'click', 'td.details-control', ->
-      tr = $(this).closest('tr')
-      row = table.row( tr )
-
-      if row.child.isShown()
-        # // This row is already open - close it
-        row.child.hide()
-        # tr.removeClass('shown')
-        tr.find('i').removeClass('fa-minus-circle').addClass('fa-plus-circle')
-      else
-        # // Open this row
-        row.child( tr.data('child-comment-inner') ).show();
-        # tr.addClass('shown')
-        tr.find('i').removeClass('fa-plus-circle').addClass('fa-minus-circle')
-
   $('#link_show_hidden').on 'click', (e) ->
     e.preventDefault()
     if $('.hidden_row').is(":hidden")
