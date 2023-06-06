@@ -6,10 +6,14 @@ class UsersController < ApplicationController
     if params['role']
       @users = User.with_role(params['role']).order(:name)
     elsif current_user.role? :admin
-      @users = User.all.order(:name)
+      @users = User.active_owners.order(:name)
     elsif current_user.role? :manager
       @users = User.with_role(%w[Owner Tenant]).order(:name)
     end
+  end
+
+  def inactive
+    @users = User.inactive_owners.order(:name)
   end
 
   # @route GET (/:locale)/users/new (new_user)
