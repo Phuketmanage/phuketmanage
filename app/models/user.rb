@@ -59,7 +59,7 @@ class User < ApplicationRecord
                               .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
                               .order('bookings.start')
     else
-      houses.joins(:bookings) .where.not('(status != ? AND status != ? AND status != ?) OR bookings.id = ?',
+      houses.joins(:bookings) .where('(status != ? AND status != ? AND status != ?) OR bookings.id = ?',
                                 Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled], booking_id)
                               .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
                               .order('bookings.start')
