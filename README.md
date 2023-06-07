@@ -16,6 +16,7 @@ https://localhost:3000/unlock
 
 ```sh
 rails t
+rspec
 ```
 
 ### Coverage
