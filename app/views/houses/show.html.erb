@@ -146,29 +146,29 @@
             <hr />
               <div class="form-row">
                 <div class="col-4">
-                  <%= f.label t('client.name') %>
+                  <%= f.label :name, t('client.name') %>
                   <%= f.text_field :name, required: true, class: 'form-control' %>
                 </div>
                 <div class="col-4">
-                  <%= f.label t('client.surname') %>
+                  <%= f.label :surname, t('client.surname') %>
                   <%= f.text_field :surname, required: true, class: 'form-control' %>
                 </div>
                 <div class="col-2">
-                  <%= f.label t('client.adult') %>
+                  <%= f.label :adult, t('client.adult') %>
                   <%= f.text_field :adult, required: true, class: 'form-control' %>
                 </div>
                 <div class="col-2">
-                  <%= f.label t('client.children') %>
+                  <%= f.label :children, t('client.children') %>
                   <%= f.text_field :children, required: true, class: 'form-control' %>
                 </div>
               </div>
               <div class="form-row">
                 <div class="col-6">
-                  <%= f.label t('client.phone') %>
+                  <%= f.label :phone, t('client.phone') %>
                   <%= f.text_field :phone, required: true, class: 'form-control' %>
                 </div>
                 <div class="col-6">
-                  <%= f.label t('client.email') %>
+                  <%= f.label :email, t('client.email') %>
                   <%= f.text_field :email, required: true, class: 'form-control' %>
                 </div>
               </div>
@@ -178,13 +178,13 @@
                   <%= f.text_field :flight_no, class: 'form-control' %>
                 </div>
                 <div class="col-6">
-                  <%= f.label t('client.flight_time') %>
+                  <%= f.label :flight_time, t('client.flight_time') %>
                   <%= f.text_field :flight_time, class: 'form-control' %>
                 </div>
               </div>
               <div class="form-row">
                 <div class="col">
-                  <%= f.label t('client.comment') %>
+                  <%= f.label :comment, t('client.comment') %>
                   <%= f.text_area :comment, class: 'form-control' %>
                 </div>
               </div>
