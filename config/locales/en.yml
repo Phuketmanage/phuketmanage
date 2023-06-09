@@ -100,6 +100,16 @@ en:
   users_mailer:
     reset_password_instructions:
       subject: Password reset request
+  booking_mailer:
+    send_request_confirmation:
+      subject: "Booking request received %{number}"
+      body: Thank you for your interest in our services. We have received your request and we are currently processing it. Please note that your request is not a confirmed booking yet. You will receive an email from us to confirm your booking within the next 24 working hours. We appreciate your patience and understanding. If you have any questions or concerns, please don't hesitate to contact us.
+      details: "Booking request details:"
+      property: "Property: %{house}"
+      period: "Rental period: %{start} - %{finish}"
+      tenant: "Tenant: %{user}"
+      comment: "Comment: %{comment}"
+      price: "Price: %{price}"
   activemodel:
     attributes:
       search:

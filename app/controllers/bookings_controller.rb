@@ -262,6 +262,7 @@ class BookingsController < ApplicationController
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     @booking.save
     BookingMailer.created(@booking).deliver_now
+    BookingMailer.send_request_confirmation(@booking, params[:booking][:email], I18n.locale).deliver_now
   end
 
   # @route GET /bookings/sync (booking_sync)
