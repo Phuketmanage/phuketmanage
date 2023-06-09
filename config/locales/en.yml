@@ -70,6 +70,8 @@ en:
     phone: Phone
     email: Email
     comment: Comment
+    flight_no: Flight No
+    flight_time: Flight Time
   balance: Balance
   bookings: Bookings
   timline: Timeline

@@ -75,6 +75,8 @@ ru:
     phone: Телефон
     email: Эл. почта
     comment: Комментарий
+    flight_no: Номер рейса
+    flight_time: Время прилета
   balance: Баланс
   bookings: Брони
   timeline: Календарь
