@@ -135,8 +135,9 @@ class BookingsController < ApplicationController
       @from = params[:from].to_date
       @to = params[:to].to_date
     end
-    @houses = House.where.not(balance_closed: true, hide_in_timeline: true)
-      .order(:unavailable, :house_group_id, :code).all
+    # @houses = House.where.not(balance_closed: true, hide_in_timeline: true)
+      # .order(:unavailable, :house_group_id, :code).all
+    @houses = House.for_timeline
     @houses_for_select = @houses
     if params[:house_number].present?
       house = params[:house_number]
