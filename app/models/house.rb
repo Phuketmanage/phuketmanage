@@ -72,6 +72,7 @@ class House < ApplicationRecord
 
   scope :active, -> { where(unavailable: false) }
   scope :for_rent, -> { where(unavailable: false) }
+  scope :for_timeline, -> { where('hide_in_timeline != true AND balance_closed != true').order(:unavailable, :house_group_id, :code) }
 
   def preview
     if image.present?
