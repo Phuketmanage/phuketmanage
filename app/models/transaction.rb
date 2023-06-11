@@ -65,6 +65,18 @@ class Transaction < ApplicationRecord
   scope :before_acc_for_owner, ->(from, owner_id) {
                                 where('date < ? AND hidden = false AND user_id = ?', from, owner_id).all }
 
+  scope :for_salary_now, -> (type_id, start, finish) {
+                                joins(:booking, :balances)
+                                .where(transactions: {type_id: type_id, date: start..finish})
+                                .where('bookings.start <= ?', finish)
+                                .group(:id, 'bookings.id')
+                                .select(:id, :booking_id, 'bookings.start as booking_start', 'bookings.finish as booking_finish', "sum(balances.debit) as income") }
+  scope :for_salary_before, -> (type_id, start, finish) {
+                                joins(:booking, :balances)
+                                .where(transactions: {type_id: type_id, date: ..(start.to_date-1.day)})
+                                .where('bookings.start': start..finish)
+                                .group(:id, 'bookings.id')
+                                .select(:id, :booking_id, 'bookings.start as booking_start', 'bookings.finish as booking_finish', "sum(balances.debit) as income") }
 
   def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
