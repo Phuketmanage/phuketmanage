@@ -169,7 +169,8 @@ class HousesController < ApplicationController
       :water_meters,
       :water_reading,
       :balance_closed,
-      :hide_in_timeline
+      :hide_in_timeline,
+      :photo_link
     )
   end
 end
