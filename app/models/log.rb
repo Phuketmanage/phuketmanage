@@ -9,8 +9,10 @@ class Log < ApplicationRecord
     t.string "what"
     t.string "with"
   end
+  validates :who, :where, :what, :with, :before, :after, presence: true
 
   private
 
-  def add(user, controller, before, after); end
+  def add(who, where, what, with, before, after)
+  end
 end
