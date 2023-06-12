@@ -1,4 +1,4 @@
-<h1>Salary#calc</h1>
+<h1>Salary</h1>
 <%= form_with(url: salary_calc_path, method: :get, local: true) do |f| %>
   <div class="form-row">
     <div class="col-6 col-lg-2 mb-1 mb-lg-0">
@@ -11,27 +11,27 @@
   </div>
 <% end %>
 
-<table class='table'>
+<table class='table table-bordered'>
+  <tr align='center'>
+    <th>Date</th>
+    <th>Booking</th>
+    <th>Company</th>
+    <th>Manager</th>
+  </tr>
   <% total = 0 %>
-  <% @ts_now.each do |t| %>
+  <% @ts.each do |t| %>
     <tr>
-      <td><%= "#{t.booking_start.strftime('%d.%m.%Y')}-#{t.booking_finish.strftime('%d.%m.%Y')}" %></td>
-      <td><%= t.income %></td>
-      <td><%= t.income*0.3 %></td>
-      <% total += t.income %>
-    </tr>
-  <% end %>
-  <% @ts_before.each do |t| %>
-    <tr>
-      <td><%= "#{t.booking_start.strftime('%d.%m.%Y')}-#{t.booking_finish.strftime('%d.%m.%Y')}" %></td>
-      <td><%= t.income %></td>
-      <td><%= t.income*0.3 %></td>
+      <td><%= t.date.strftime('%d.%m.%Y') %></td>
+      <td><%= "#{t.house_code} #{t.booking_start.strftime('%d.%m.%Y')}-#{t.booking_finish.strftime('%d.%m.%Y')}" %></td>
+      <td align='right'><%= number_to_currency(t.income, precision: 0, unit: '') %></td>
+      <td align='right'><%= number_to_currency(comm = t.income*0.3, precision: 0, unit: '') %> (<%= (comm/t.income*100).round %>%)</td>
       <% total += t.income %>
     </tr>
   <% end %>
   <tr>
     <td></td>
-    <td><%= total %></td>
-    <td><%= total*0.3 %></td>
+    <td align='right'><strong>Total:</strong></td>
+    <td align='right'><strong><%= number_to_currency(total, precision: 0, unit: '') %></strong></td>
+    <td align='right'><strong><%= number_to_currency(total*0.3, precision: 0, unit: '') %></strong></td>
   </tr>
 </table>

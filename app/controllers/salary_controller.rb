@@ -16,8 +16,7 @@ class SalaryController < ApplicationController
     end
 
     type_id = TransactionType.find_by(name_en: 'Rental').id
-    @ts_now = Transaction.for_salary_now(type_id, @from, @to)
-    @ts_before = Transaction.for_salary_before(type_id, @from, @to)
+    @ts = Transaction.for_salary(type_id, @from, @to)
 
   end
 end
