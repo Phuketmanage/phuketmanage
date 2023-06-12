@@ -34,7 +34,7 @@
   </div>
   <div class="col-lg-4">
     <p class="mb-1 mr-2 text-uppercase font-weight-light text-muted small text-right">
-      CODE: <%=@house.code%>
+      CODE: <%=@house.code%>&nbsp;<%= link_to 'Photo', @house.photo_link, target: '_blank' if @house.photo_link.present? %>
     </p>
     <%= render 'search/form_vertical', search: @search, btn_text: t('search.check') %>
     <% if @prices && @prices != 'unavailable' %>

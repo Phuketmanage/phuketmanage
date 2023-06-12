@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_05_181200) do
+ActiveRecord::Schema.define(version: 2023_06_12_150334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(version: 2023_06_05_181200) do
     t.boolean "water_reading", default: false
     t.boolean "balance_closed", default: false, null: false
     t.boolean "hide_in_timeline", default: false, null: false
+    t.string "photo_link"
     t.index ["bathrooms"], name: "index_houses_on_bathrooms"
     t.index ["code"], name: "index_houses_on_code"
     t.index ["communal_pool"], name: "index_houses_on_communal_pool"
