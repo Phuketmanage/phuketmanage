@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'reports', to: 'reports#index'
   get 'salary', to: 'salary#index'
   get 'salary/calc'
   get 'unlock', to: 'dev#unlock' if Rails.env.development?
