@@ -70,9 +70,11 @@ class House < ApplicationRecord
   has_and_belongs_to_many :locations
   validates :number, :description_en, :description_ru, presence: true
 
-  scope :active, -> { where(unavailable: false) }
-  scope :for_rent, -> { where(unavailable: false) }
-  scope :for_timeline, -> { where('hide_in_timeline != true AND balance_closed != true').order(:unavailable, :house_group_id, :code) }
+  scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }
+  scope :inactive, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: true) }
+  scope :for_rent, -> { active.where(unavailable: false) }
+  scope :not_for_rent, -> { active.where(unavailable: true) }
+  scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
 
   def preview
     if image.present?
