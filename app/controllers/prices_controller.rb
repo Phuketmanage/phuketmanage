@@ -11,7 +11,7 @@ class PricesController < ApplicationController
 
   # @route GET /houses/:house_id/prices (house_prices)
   def index
-    @houses = House.all.active
+    @houses = House.all.for_rent
     # @house = House.find(params[:house_id])
     @prices = @house.prices.all
     @durations = @house.durations.order(:start)

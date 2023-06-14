@@ -19,7 +19,7 @@ class TransfersController < ApplicationController
       @transfers = Transfer.where('date >= ? AND date <= ?', from, to).order(:date).all
     end
     @transfer = Transfer.new
-    @select_items = House.active.order(:code).map { |h| [h.code, h.number] }
+    @select_items = House.for_rent.order(:code).map { |h| [h.code, h.number] }
     @select_items.push('Airport (International)', 'Airport (Domiestic)')
   end
 
@@ -45,7 +45,7 @@ class TransfersController < ApplicationController
   # @route GET (/:locale)/transfers/:id/edit (edit_transfer)
   def edit
     @transfer = Transfer.find(params[:id])
-    @select_items = House.active.order(:code).map { |h| [h.code, h.number] }
+    @select_items = House.for_rent.order(:code).map { |h| [h.code, h.number] }
     @select_items.push('Airport (International)', 'Airport (Domiestic)')
     @request_from = params[:request_from]
     respond_to do |format|
