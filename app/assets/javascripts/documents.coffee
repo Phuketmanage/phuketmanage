@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "turbo:load", ->
   $('#document_date').on 'change', ->
     date = new Date($(this).val())
     month = (date.getMonth()+1).toString()

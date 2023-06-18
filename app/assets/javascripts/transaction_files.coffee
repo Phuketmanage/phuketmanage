@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "turbo:load", ->
   # download file
   $('a[data-download-file]').on "click", (e) ->
     e.preventDefault()

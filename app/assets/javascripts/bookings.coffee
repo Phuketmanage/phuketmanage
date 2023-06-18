@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "turbo:load", ->
 
   if !!document.getElementById('timeline')
     $('[data-toggle="tooltip"]').tooltip()
