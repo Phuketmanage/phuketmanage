@@ -5,7 +5,7 @@ describe 'Log', :type => :model do
   it 'shouldn\'t be valid' do
     expect do
       create(:log)
-    end.to raise_error
+    end.to raise_error(ActiveRecord::RecordInvalid)
   end
   it 'should be valid' do
     expect do

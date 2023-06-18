@@ -216,7 +216,6 @@ class TransactionsController < ApplicationController
                                                      acl: 'public-read')
           render :new and return
         end
-        @transaction.booking.update(paid: true) if params[:booking_fully_paid] == "true"
         format.html do
           redirect_to transactions_path(
             from: session[:from],
@@ -296,7 +295,6 @@ class TransactionsController < ApplicationController
           render :edit and return
         end
 
-        @transaction.booking.update(paid: true) if params[:booking_fully_paid] == "true"
         format.html do
           redirect_to transactions_path(
             from: session[:from],
