@@ -1,8 +1,7 @@
 class HousesController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_house, only: %i[show edit update destroy
-                                     create_connection]
+  before_action :set_house, only: %i[show edit update destroy create_connection]
   layout 'admin', except: :show
 
   # @route GET /houses (houses)
@@ -10,10 +9,10 @@ class HousesController < ApplicationController
     @houses_for_rent = House.for_rent
     @houses_not_for_rent = House.not_for_rent
     @houses_old = House.where(balance_closed: true).all.order(:unavailable, :code)
-    # respond_to do |format|
-    #   format.html
-    # format.json {render json: {houses: @houses}}
-    # end
+  end
+
+  def inactive
+    @inactive_houses = House.inactive
   end
 
   # @route GET (/:locale)/test_upload (test_upload)
@@ -124,7 +123,6 @@ class HousesController < ApplicationController
     @house = House.find_by(number: params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def house_params
     params.require(:house).permit(
       :code,

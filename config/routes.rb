@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get 'salary', to: 'salary#index'
   get 'salary/calc'
   get 'unlock', to: 'dev#unlock' if Rails.env.development?
-
+  get 'houses/inactive', to: 'houses#inactive'
   resources :notifications, only: [:destroy]
   resources :water_usages
   get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
