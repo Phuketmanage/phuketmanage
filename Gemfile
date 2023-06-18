@@ -19,12 +19,12 @@ gem 'uglifier'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks'
+
+gem 'turbo-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis'
+gem 'redis'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt'
 

@@ -17,5 +17,5 @@
 //= require bootstrap-select
 //= require moment
 //= require activestorage
-//= require turbolinks
+//= require turbo
 //= require_tree .

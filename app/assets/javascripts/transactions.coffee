@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "turbo:load", ->
   # show files from transaction list
   $('a[data-show-files]').on "click", (e) ->
     e.preventDefault()

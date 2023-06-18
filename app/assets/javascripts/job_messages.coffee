@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "turbo:load", ->
   if objDiv = document.getElementById("job_messages")
     objDiv.scrollTop = objDiv.scrollHeight
 
