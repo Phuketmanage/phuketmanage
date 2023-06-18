@@ -7,7 +7,8 @@ class HousesController < ApplicationController
 
   # @route GET /houses (houses)
   def index
-    @houses = House.where.not(balance_closed: true).all.order(:unavailable, :code)
+    @houses_for_rent = House.for_rent
+    @houses_not_for_rent = House.not_for_rent
     @houses_old = House.where(balance_closed: true).all.order(:unavailable, :code)
     # respond_to do |format|
     #   format.html
