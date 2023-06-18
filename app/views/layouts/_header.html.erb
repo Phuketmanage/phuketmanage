@@ -53,16 +53,10 @@
           <%= link_to 'Bookings', bookings_path, class: "nav-link" %>
         </li>
       <% end %>
-
-      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Transfer']) %>
+      
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to 'Transfers', transfers_path, class: "nav-link" %>
-        </li>
-      <% end %>
-
-      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Maid', 'Manager']) %>
-        <li class="nav-item">
-          <%= link_to 'Laundry', laundry_path, class: "nav-link" %>
+          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
       <% end %>
 
@@ -78,11 +72,6 @@
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
-        <li class="nav-item">
-          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
-        </li>
-      <% end %>
 
       <% if signed_in? && current_user.role?(['Owner']) %>
         <li class="nav-item">
