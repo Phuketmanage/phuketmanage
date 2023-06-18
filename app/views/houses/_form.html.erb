@@ -34,6 +34,8 @@
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Location</strong>
     <hr>
+    <%= form.label 'Project' %>
+    <%= form.text_field :project, class: 'form-control' %>
     <%= form.collection_check_boxes :location_ids, Location.order(:name_en).all, :id, :name_en do |l| %>
         <div class="form-check form-check-inline">
           <%= l.check_box(class: "form-check-input") %>
