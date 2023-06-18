@@ -506,7 +506,6 @@ Booking.create!(
       check_in: nil,
       check_out: nil,
       comment_owner: "",
-      paid: false,
       ignore_warnings: false
     },
     {
@@ -534,7 +533,6 @@ Booking.create!(
       check_in: nil,
       check_out: nil,
       comment_owner: "",
-      paid: false,
       ignore_warnings: false
     },
     {
@@ -562,7 +560,6 @@ Booking.create!(
       check_in: nil,
       check_out: nil,
       comment_owner: "",
-      paid: false,
       ignore_warnings: false
     },
     {
@@ -590,7 +587,6 @@ Booking.create!(
       check_in: nil,
       check_out: nil,
       comment_owner: "",
-      paid: false,
       ignore_warnings: false
     },
     {
@@ -618,7 +614,6 @@ Booking.create!(
       check_in: nil,
       check_out: nil,
       comment_owner: "",
-      paid: false,
       ignore_warnings: false
     }
   ]

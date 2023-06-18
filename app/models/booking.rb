@@ -26,7 +26,6 @@ class Booking < ApplicationRecord
     t.date "check_in"
     t.date "check_out"
     t.string "comment_owner"
-    t.boolean "paid", default: false
     t.boolean "ignore_warnings", default: false
   end
 
