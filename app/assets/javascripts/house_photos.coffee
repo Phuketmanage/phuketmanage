@@ -1,4 +1,4 @@
-$(document).on 'turbo:load', ->
+$(document).on "ready", ->
   $ ->
     progressBar  = $('.progress-bar.thumb');
     progressBar_preview  = $('.progress-bar.preview');

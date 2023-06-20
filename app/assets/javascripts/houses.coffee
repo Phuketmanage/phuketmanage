@@ -1,4 +1,4 @@
-$(document).on "turbo:load", ->
+$(document).on "ready", ->
   # Filtering a list as you type by house code
   $('#search_house').on "keyup", (e) ->
     value = $(this).val().toLowerCase()
