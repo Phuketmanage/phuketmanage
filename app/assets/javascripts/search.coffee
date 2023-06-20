@@ -1,4 +1,4 @@
-$(document).on "turbo:load", ->
+$(document).on "ready", ->
   $('#search_rs').change ->
     rs = moment(this.value)
     rf_min = rs.add(5, 'days').format("YYYY-MM-DD")

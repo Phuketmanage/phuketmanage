@@ -1,4 +1,4 @@
-$(document).on "turbo:load", ->
+$(document).on "ready", ->
   $('.link_new_transfer').on 'click', (e) ->
     e.preventDefault()
     $('form#new_transfer').attr('action', '/transfers')

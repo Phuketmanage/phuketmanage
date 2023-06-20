@@ -1,4 +1,4 @@
-$(document).on "turbo:load", ->
+$(document).on "ready", ->
   $('.update_job .form-control').change ->
     job_id = $(this).data('job-id')
     $("#btn_job_#{job_id}").show()
