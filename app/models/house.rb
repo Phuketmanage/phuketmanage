@@ -71,7 +71,7 @@ class House < ApplicationRecord
   validates :number, :description_en, :description_ru, presence: true
 
   scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }
-  scope :inactive, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: true) }
+  scope :inactive, -> { joins(:owner).where('users.balance_closed': true).or(where(balance_closed: true)) }
   scope :for_rent, -> { active.where(unavailable: false) }
   scope :not_for_rent, -> { active.where(unavailable: true) }
   scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
