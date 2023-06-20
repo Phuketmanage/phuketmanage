@@ -7,37 +7,15 @@
     </form>
   </div>
   <div class="col-lg-2">
-    <%= link_to 'New House', new_house_path, class: 'btn btn-primary mb-2 btn-block' %>
+    <%= link_to 'New House', new_house_path, class: 'btn btn-info mb-2 btn-block' %>
   </div>
   <div class="col-lg-2">
-    <%= link_to 'Inactive Houses', houses_inactive_path, class: 'btn btn-info mb-2 btn-block' %>
+    <%= link_to 'Inactive Houses', houses_inactive_path, class: 'btn btn-primary mb-2 btn-block' %>
   </div>
 </div>
-<h5 id="#active_houses">Houses for rent</h5>
+<h5 id="active_houses">Houses for rent</h5>
 <a href="#inactive_houses">Jump to houses not for rent</a>
 <%= render 'table', houses: @houses_for_rent %>
-<h5 id="#inactive_houses">Houses not for rent</h5>
+<h5 id="inactive_houses">Houses not for rent</h5>
 <a href="#active_houses">Back to houses for rent</a>
 <%= render 'table', houses: @houses_not_for_rent %>
-
-<h3>Houses with closed balance</h3>
-
-<% @houses_old.each do |house| %>
-  <div class='shadow-sm mb-2 p-2 border rounded bg-light text-muted' data-house-code="<%= house.code %>">
-    <div class="row">
-      <div class="col-md-2"><strong><%= house.code %></strong></div>
-      <div class="col-md-10">
-        Owner: <%= "#{house.owner.name} #{house.owner.surname}" %><br />
-        Address: <%= house.address %><br />
-      </div>
-    </div>
-    <div class="text-right">
-      <%= link_to 'Balance', transactions_path(view_user_id: house.owner.id) %> |
-      <%= link_to 'Bookings', house_bookings_path(house.number) %> |
-      <%= link_to 'Details', edit_house_path(house.number) %> |
-      <%= link_to 'Prices', house_prices_path(house.number) %> |
-      <%= link_to 'Photos', house_photos_path(house.number) %> |
-      <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
-    </div>
-  </div>
-<% end %>
