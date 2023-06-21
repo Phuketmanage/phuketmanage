@@ -1,3 +1,12 @@
-<h1>New Transaction<%= " for #{User.find(@transaction.user_id).name} #{User.find(@transaction.user_id).surname}" if @transaction.user_id %></h1>
+<h1>
+  New Transaction
+</h1>
+<h5>
+  <% if @transaction.user_id  %>
+    <% u = User.find(@transaction.user_id) %>
+    <%= " Owner: #{u.code} (#{u.name} #{u.surname})" %>
+    <%= "/ House: #{House.find(@transaction.house_id).code}" if @transaction.house_id %>
+  <% end %>
+</h5>
 
 <%= render 'form', transaction: @transaction %>

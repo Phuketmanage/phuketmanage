@@ -110,37 +110,6 @@
         <%= hidden_field_tag :owner_id, @owner_id %>
         <%= hidden_field_tag :house_id, @house_id %>
       </div>
-      <!-- <div class="form-row">
-        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <%= form.submit 'Company view',
-                class: "btn btn-primary btn-sm btn-block",
-                id: 'btn_company_view' %>
-        </div>
-        <div class="col-6  col-lg-2 mb-1 mb-lg-0">
-          <%= form.submit 'Owner view',
-                class: "btn btn-primary btn-sm btn-block",
-                id: 'btn_owner_view',
-                disabled: true %>
-        </div>
-        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <%= form.submit 'Accounting view',
-                class: "btn btn-primary btn-sm btn-block",
-                id: 'btn_owner_accounting_view',
-                disabled: true %>
-        </div>
-        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <% if !@owner_id %>
-            <%= link_to 'New Transaction', new_transaction_path,
-                  class: 'btn btn-info btn-sm btn-block' %>
-          <% else %>
-            <%= link_to 'New Transaction',
-                  new_transaction_path(
-                    user_id: @owner_id,
-                    house_id: @house_id),
-                  class: 'btn btn-info btn-sm btn-block' %>
-          <% end %>
-        </div>
-      </div> -->
       <div class="form-row">
         <div class="col-4 col-lg-2 mb-1 mb-lg-0">
           <%= form.submit 'Full',
