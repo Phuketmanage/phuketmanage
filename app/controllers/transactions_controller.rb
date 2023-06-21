@@ -153,6 +153,10 @@ class TransactionsController < ApplicationController
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
       @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
+      if params[:house_id].present?
+        @house = House.find(params[:house_id])
+        @transaction.house_id = @house.id
+      end
       @bookings = owner.unpaid_bookings
     else
       @bookings = Booking.unpaid

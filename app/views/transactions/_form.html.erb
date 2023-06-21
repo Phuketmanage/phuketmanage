@@ -20,7 +20,9 @@
       <% end %>
     </div>
     <div class="col-md-2" id='house_id', style='display:none;'>
-      <% if @transaction.user_id.present? %>
+      <% if @house.present? %>
+        <% choices_for_select = [[@house.code, @house.id]] %>
+      <% elsif @transaction.user_id.present? %>
         <% choices_for_select = House.where(owner_id: @transaction.user_id).all.order(:code).map {|h| [h.code, h.id]} %>
       <% else %>
         <% choices_for_select = House.where.not(balance_closed: true).all.order(:code).map {|h| [h.code, h.id]} %>
