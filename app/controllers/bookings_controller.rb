@@ -161,7 +161,8 @@ class BookingsController < ApplicationController
 
   # @route GET /bookings/check_in_out (bookings_check_in_out)
   def check_in_out
-    @result = Booking.check_in_out params[:from], params[:to]
+    @type = params[:commit].present? ? params[:commit] : 'All'
+    @result = Booking.check_in_out params[:from], params[:to], @type
   end
 
   # @route GET /bookings/:id (booking)
