@@ -74,7 +74,7 @@ class Booking < ApplicationRecord
     to_owner == nett && nett != 0
   end
 
-  def self.check_in_out(from = nil, to = nil)
+  def self.check_in_out(from = nil, to = nil, type = nil)
     result = []
     if !from.present? && !to.present?
       from = Time.zone.now.in_time_zone('Bangkok').to_date
@@ -90,45 +90,86 @@ class Booking < ApplicationRecord
       to = to.to_date
     end
     bookings = Booking.active.where('finish >= ? AND start <= ?', from, to).all
+    # byebug
     bookings.each do |b|
-      unless  b.no_check_in ||
-              (!b.check_in.present? && b.start < from) ||
-              (b.check_in.present? && (b.check_in < from || b.check_in > to))
-        line_in = {}
-        line_in[:booking_id] = b.id
-        line_in[:type] = 'IN'
-        line_in[:status] = b.status
-        line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
-        line_in[:house] = b.house.code
-        line_in[:client] = b.client_details
-        line_in[:source] = b.source.name if b.source
-        line_in[:comment] = b.comment_gr
-        line_in[:transfers] = []
+      next if type == 'Block' && b.status != 'block'
+      if  (type == 'All' || type != 'Check out') &&
+          ((!b.check_in && b.start >= from && b.start <= to) ||
+          (b.check_in && b.check_in >= from && b.check_in <= to))
+        line = {}
+        line[:booking_id] = b.id
+        line[:type] = 'IN'
+        line[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+        line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :IN)
         transfers.each do |t|
           line_in[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
         end
-        result << line_in
+        line[:status] = b.status
+        line[:house] = b.house.code
+        line[:client] = b.client_details
+        line[:source] = b.source.name if b.source
+        line[:comment] = b.comment_gr
+        result << line
       end
-      next if b.no_check_out ||
-              (!b.check_out.present? && b.finish > to) ||
-              (b.check_out.present? && (b.check_out < from || b.check_out > to))
+      if  (type == 'All' || type != 'Check in') &&
+          ((!b.check_out.present? && b.finish >= from && b.finish <= to) ||
+          (b.check_out.present? && b.check_out >= from && b.check_out <= to))
+        line = {}
+        line[:booking_id] = b.id
+        line[:type] = 'OUT'
+        line[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+        line[:transfers] = []
+        transfers = b.transfers.where(trsf_type: :OUT)
+        transfers.each do |t|
+          line_out[:transfers] << "#{t.time} #{t.remarks}"
+        end
+        line[:status] = b.status
+        line[:house] = b.house.code
+        line[:client] = b.client_details
+        line[:source] = b.source.name if b.source
+        line[:comment] = b.comment_gr
+        result << line
+      end
 
-      line_out = {}
-      line_out[:booking_id] = b.id
-      line_out[:type] = 'OUT'
-      line_out[:status] = b.status
-      line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
-      line_out[:house] = b.house.code
-      line_out[:client] = b.client_details
-      line_out[:source] = b.source.name if b.source
-      line_out[:comment] = b.comment_gr
-      line_out[:transfers] = []
-      transfers = b.transfers.where(trsf_type: :OUT)
-      transfers.each do |t|
-        line_out[:transfers] << "#{t.time} #{t.remarks}"
-      end
-      result << line_out
+      # unless  b.no_check_in ||
+      #         (!b.check_in.present? && b.start < from) ||
+      #         (b.check_in.present? && (b.check_in < from || b.check_in > to))
+      #   line_in = {}
+      #   line_in[:booking_id] = b.id
+      #   line_in[:type] = 'IN'
+      #   line_in[:status] = b.status
+      #   line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+      #   line_in[:house] = b.house.code
+      #   line_in[:client] = b.client_details
+      #   line_in[:source] = b.source.name if b.source
+      #   line_in[:comment] = b.comment_gr
+      #   line_in[:transfers] = []
+      #   transfers = b.transfers.where(trsf_type: :IN)
+      #   transfers.each do |t|
+      #     line_in[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
+      #   end
+      #   result << line_in
+      # end
+      # next if b.no_check_out ||
+      #         (!b.check_out.present? && b.finish > to) ||
+      #         (b.check_out.present? && (b.check_out < from || b.check_out > to))
+
+      # line_out = {}
+      # line_out[:booking_id] = b.id
+      # line_out[:type] = 'OUT'
+      # line_out[:status] = b.status
+      # line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+      # line_out[:house] = b.house.code
+      # line_out[:client] = b.client_details
+      # line_out[:source] = b.source.name if b.source
+      # line_out[:comment] = b.comment_gr
+      # line_out[:transfers] = []
+      # transfers = b.transfers.where(trsf_type: :OUT)
+      # transfers.each do |t|
+      #   line_out[:transfers] << "#{t.time} #{t.remarks}"
+      # end
+      # result << line_out
     end
     result.sort_by { |r| r[:date].to_date }
   end

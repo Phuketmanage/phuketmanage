@@ -1,4 +1,4 @@
-<h1>Check in/out</h1>
+<h1>Check in/out - <%= @type %></h1>
 
 <%= form_with(url: bookings_check_in_out_path, local: true, method: :get) do |f| %>
   <div class="form-row">
@@ -8,9 +8,11 @@
     <div class="col-lg-2 form-group">
       <%= date_field_tag :to, {}, value: params[:to], class: "form-control" %>
     </div>
-    <div class="col-lg-3 form-group">
-      <%= f.submit 'Show', class: 'btn btn-primary' %>
-      <%= link_to 'Drop filter', bookings_check_in_out_path, class: 'btn btn-secondary'  %>
+    <div class="col-lg-4 form-group">
+      <%= f.submit 'All', class: 'btn btn-primary' %>
+      <%= f.submit 'Check in', class: 'btn btn-primary' %>
+      <%= f.submit 'Check out', class: 'btn btn-primary' %>
+      <%= f.submit 'Block', class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>
