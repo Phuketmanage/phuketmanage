@@ -282,6 +282,7 @@ $(document).on "ready", ->
     e.preventDefault()
     printJS("https:#{$(this).data('print')}", $(this).data('type'))
 
+  # Calculate booking price when dates and house choosen. If status block = set prices to zero
   $('#booking_start').on 'change', (e) ->
     $('#booking_finish').attr('min', "#{$(this).val()}")
     check_price()
@@ -290,6 +291,34 @@ $(document).on "ready", ->
     check_price()
   $('#booking_house_id').on 'change', (e) ->
     check_price()
+  $('#booking_status').on 'change', (e) ->
+    check_price()
+
+  # Calc comm
+  $('#calc_agent_comm').on 'click', (e) ->
+    e.preventDefault()
+    sale = $('#booking_sale').val()
+    comm = $('#booking_comm').val()
+    agent_comm = Math.round(sale*0.1)
+    comm = comm - agent_comm
+    $('#booking_agent').val(agent_comm)
+    $('#booking_comm').val(comm)
+    check_percents()
+
+  $('#calc_comm').on 'click', (e) ->
+    e.preventDefault()
+    sale = $('#booking_sale').val()
+    comm = Math.round(sale*0.2)
+    $('#booking_agent').val(0)
+    $('#booking_comm').val(comm)
+    check_percents()
+
+check_percents = () ->
+  sale = $('#booking_sale').val()
+  comm = $('#booking_comm').val()
+  agent_comm = $('#booking_agent').val()
+  $('#comm_percent').text(Math.round(comm/sale*100))
+  $('#agent_comm_percent').text(Math.round(agent_comm/sale*100))
 
 close_dates = (h) ->
   for b in h.bookings
@@ -347,8 +376,8 @@ check_price = ()->
   start = $('#booking_start').val()
   finish = $('#booking_finish').val()
   house_id = $('#booking_house_id').val()
-  if start != '' && finish != '' && house_id != '' &&
-  !$('#manual_price_check_box').is(':checked')
+  status = $('#booking_status').val()
+  if start != '' && finish != '' && house_id != '' && status != 'block' && !$('#manual_price_check_box').is(':checked')
     $.ajax
       url: '/bookings/get_price',
       type: "get",
@@ -363,5 +392,10 @@ check_price = ()->
         $('#comm_percent').text(comm_percent)
       error: (data) ->
         console.log('Was not able to get price for this period')
+  if status == 'block'
+    $('#booking_sale').val(0)
+    $('#booking_agent').val(0)
+    $('#booking_comm').val(0)
+    $('#booking_nett').val(0)
 
 
