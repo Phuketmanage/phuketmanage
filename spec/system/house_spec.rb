@@ -43,7 +43,7 @@ describe 'House' do
       before { sign_in admin }
 
       describe '#unavailable' do
-        before { visit houses_path}
+        before { visit houses_path }
 
         context 'when house is for rent' do
           let(:unavailable) { false }
