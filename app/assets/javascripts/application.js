@@ -17,4 +17,5 @@
 //= require bootstrap-select
 //= require moment
 //= require activestorage
+//= require vanillajs-datepicker/dist/js/datepicker-full.js
 //= require_tree .
