@@ -45,6 +45,7 @@ ru:
     rules: Правила дома
     other: Другое
     location: Район
+    project: Проект
     capacity:
       one: "человек"
       few: "%{count} человека"

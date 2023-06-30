@@ -46,6 +46,7 @@ en:
     rules: House rules
     other: Other
     location: Location
+    project: Project
     capacity:
       one: "1 person"
       other: "%{count} persons"
