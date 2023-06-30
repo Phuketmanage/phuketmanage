@@ -14,8 +14,8 @@ FactoryBot.define do
       name_ru { "Таунхаус" }
     end
 
-    trait :appartment do
-      name_en { "Appartment" }
+    trait :apartment do
+      name_en { "Apartment" }
       name_ru { "Апартаменты" }
     end
   end
