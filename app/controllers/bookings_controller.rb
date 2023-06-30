@@ -69,6 +69,10 @@ class BookingsController < ApplicationController
                                from: @from, to: @to).order(:start)
   end
 
+  def canceled
+    @bookings = Booking.canceled
+  end
+
   # @route GET /owner/bookings (bookings_front)
   def index_front
     @from = params[:from]
