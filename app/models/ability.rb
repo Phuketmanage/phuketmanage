@@ -58,6 +58,7 @@ class Ability
                     Booking, Connection, JobType, Transfer, Source,
                     Option, HouseOption, Location, HousePhoto,
                     BookingFile, HouseGroup, TransactionFile]
+      cannot :inactive, House
       cannot :destroy, [HouseType, House, Booking, JobType, Transfer, TransactionFile]
       can %i[index new show create edit update laundry update_laundry], Job
       can [:destroy], Job
