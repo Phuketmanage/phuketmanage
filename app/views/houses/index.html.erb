@@ -15,9 +15,13 @@
     </div>
   <% end %> 
 </div>
-<h5 id="active_houses">Houses for rent</h5>
-<a href="#inactive_houses">Jump to houses not for rent</a>
-<%= render 'table', houses: @houses_for_rent %>
-<h5 id="inactive_houses">Houses not for rent</h5>
-<a href="#active_houses">Back to houses for rent</a>
-<%= render 'table', houses: @houses_not_for_rent %>
+<div class="for_rent">
+  <h5 id="active_hs">Houses for rent</h5>
+  <a href="#inactive_hs">Jump to houses not for rent</a>
+  <%= render 'table', houses: @houses_for_rent %>
+</div>
+<div class="not_for_rent">
+  <h5 id="inactive_hs">Houses not for rent</h5>
+  <a href="#active_hs">Back to houses for rent</a>
+  <%= render 'table', houses: @houses_not_for_rent %>
+</div>
