@@ -201,7 +201,9 @@ HouseType.create!(
   ]
 )
 
-House.create!(
+owner1 = User.find_by(name:"Owner1")
+owner2 = User.find_by(name:"Owner2")
+owner1.houses.create!(
   [
     {
       title_en: "House1",
@@ -210,7 +212,7 @@ House.create!(
         "Villa is located at one of the newest projects of 2016 Laguna Park, part of the posh resort Laguna Phuket. Laguna has been named the most successful hotel project on Phuket for several years in the row. It is renowned all around the world.",
       description_ru:
         "Villa  находится в одном из новых проектов 2016 года “Laguna Park”, входящий в состав фешенебельного курорта «Laguna Phuket». Вот уже на протяжении нескольких лет «Лагуна» признается самым успешным отельным проектом на Пхукете и является авторитетом для тысяч туристов со всего мира. ",
-      owner_id: 3,
+      # owner_id: owner1.id,
       type_id: 1,
       code: "HS1",
       size: nil,
@@ -257,66 +259,13 @@ House.create!(
       hide_in_timeline: false
     },
     {
-      title_en: "House2",
-      title_ru: "Дом2",
-      description_en:
-        "Secure housing development, pool, roof terrace, 3 bedrooms / 3 bathrooms, not far from Bangtao Beach. There is a restaurant in development where you can have breakfast of eat during the day. Easy to go anywhere around with rented car - beautiful beaches, attractions, shopping, restaurants etc.",
-      description_ru:
-        "Вилла в очень необычном аутентичном стиле с высокими потолками. Абсолютно закрытая от посторонних глаз зеленая территория, личный бассейн и терраса на крыше, где по утрам можно пить кофе. В доме  3 спальни с отдельными санузлами, 2 из низ с выходят прямо на бассейн, а третий на 2 этаже. В доме полностью оборудованная кухня, но если вы не хотите готовить сами, то на территории комплекса есть очень милый ресторанчик, где можно позавтракать или перекусить в течении дня. Есть бесплатная парковка.",
-      owner_id: 4,
-      type_id: 1,
-      code: "HS2",
-      size: nil,
-      plot_size: nil,
-      rooms: 2,
-      bathrooms: 2,
-      pool: false,
-      pool_size: "",
-      communal_pool: false,
-      parking: true,
-      parking_size: nil,
-      unavailable: false,
-      number: "47",
-      secret: "ab0d9d820b873e6e7090f210e729d5ac",
-      rental: true,
-      maintenance: true,
-      outsource_cleaning: false,
-      outsource_linen: false,
-      address: "Address2",
-      google_map: "",
-      image: nil,
-      capacity: 6,
-      seaview: false,
-      kingBed: 3,
-      queenBed: nil,
-      singleBed: nil,
-      priceInclude_en:
-        "Included: internet, cleaning 2 times a week and linen change 1 time a week, water, electricity (limit 75 kWh/day, extra 7 B/Unit).",
-      priceInclude_ru:
-        "Включено: интернет, уборка 2 раза в неделю и смена белья 1 раз в неделю, вода, электричество (лимит 75 кВт/день, свыше 7 бат/кВт).",
-      cancellationPolicy_en: "",
-      cancellationPolicy_ru: "",
-      rules_en: "- Take off your shoes before entering the apartment;",
-      rules_ru: "- Снимайте обувь перед входом в помещение;",
-      other_ru:
-        "По закону Таиланда все приезжие должны регистрироваться в иммиграционной службе. Мы можем помочь сделать регистрацию, дайте знать если вам это необходимо. ",
-      other_en:
-        "According to Thai law all guests need to register in Immigration office after arrival. We can assist you with registration, please let us know if you need help.",
-      details: "",
-      house_group_id: 1,
-      water_meters: 1,
-      water_reading: true,
-      balance_closed: false,
-      hide_in_timeline: true
-    },
-    {
       title_en: "House3",
       title_ru: "Дом3",
       description_en:
         "Villa located on the hill of Kamala Beach. Luxury villa near all facilities that you need, Private pool with a beautiful garden in the house for you to relax with privacy, 3 bedrooms and huge living room with kichen near private pool. Kamala Beach is just 10 minute drive from the villa.",
       description_ru:
         "Вилла, расположенная на холме пляжа Камала. Роскошная вилла рядом со всеми необходимыми удобствами. Частный бассейн с красивым садом в доме для отдыха в уединении, 3 спальни и огромная гостиная с кухней рядом с частным бассейном. Пляж Камала находится всего в 10 минутах езды от виллы.",
-      owner_id: 3,
+      # owner_id: owner1.id,
       type_id: 1,
       code: "HS3",
       size: nil,
@@ -369,7 +318,7 @@ House.create!(
         "Villa is an ideal place for a private perfectly relaxing holiday. The villa is furnished with an interesting design, handwoven rugs, solid teak wood furniture and all imaginary amenities.",
       description_ru:
         "Идеальное место для совершенно спокойного приватного отдыха. Вилла оформлена интересными дизайнерскими решениями, коврами ручной работы, обставлена мебелью из массива тикового дерева, и всеми мыслимыми дополнительными удобствами. В доме 3 спальни и каждая из них  оборудованна отдельным сейфом,  смарт ТВ, кондиционером, потолочным феном и отдельным санузлом",
-      owner_id: 3,
+      # owner_id: owner1.id,
       type_id: 1,
       code: "HS4",
       size: nil,
@@ -417,6 +366,64 @@ House.create!(
     }
   ]
 )
+house1 = owner1.houses.find_by(code: 'HS1')
+house3 = owner1.houses.find_by(code: 'HS3')
+house4 = owner1.houses.find_by(code: 'HS4')
+
+owner2.houses.create!(
+  title_en: "House2",
+  title_ru: "Дом2",
+  description_en:
+    "Secure housing development, pool, roof terrace, 3 bedrooms / 3 bathrooms, not far from Bangtao Beach. There is a restaurant in development where you can have breakfast of eat during the day. Easy to go anywhere around with rented car - beautiful beaches, attractions, shopping, restaurants etc.",
+  description_ru:
+    "Вилла в очень необычном аутентичном стиле с высокими потолками. Абсолютно закрытая от посторонних глаз зеленая территория, личный бассейн и терраса на крыше, где по утрам можно пить кофе. В доме  3 спальни с отдельными санузлами, 2 из низ с выходят прямо на бассейн, а третий на 2 этаже. В доме полностью оборудованная кухня, но если вы не хотите готовить сами, то на территории комплекса есть очень милый ресторанчик, где можно позавтракать или перекусить в течении дня. Есть бесплатная парковка.",
+  # owner_id: owner2.id,
+  type_id: 1,
+  code: "HS2",
+  size: nil,
+  plot_size: nil,
+  rooms: 2,
+  bathrooms: 2,
+  pool: false,
+  pool_size: "",
+  communal_pool: false,
+  parking: true,
+  parking_size: nil,
+  unavailable: false,
+  number: "47",
+  secret: "ab0d9d820b873e6e7090f210e729d5ac",
+  rental: true,
+  maintenance: true,
+  outsource_cleaning: false,
+  outsource_linen: false,
+  address: "Address2",
+  google_map: "",
+  image: nil,
+  capacity: 6,
+  seaview: false,
+  kingBed: 3,
+  queenBed: nil,
+  singleBed: nil,
+  priceInclude_en:
+    "Included: internet, cleaning 2 times a week and linen change 1 time a week, water, electricity (limit 75 kWh/day, extra 7 B/Unit).",
+  priceInclude_ru:
+    "Включено: интернет, уборка 2 раза в неделю и смена белья 1 раз в неделю, вода, электричество (лимит 75 кВт/день, свыше 7 бат/кВт).",
+  cancellationPolicy_en: "",
+  cancellationPolicy_ru: "",
+  rules_en: "- Take off your shoes before entering the apartment;",
+  rules_ru: "- Снимайте обувь перед входом в помещение;",
+  other_ru:
+    "По закону Таиланда все приезжие должны регистрироваться в иммиграционной службе. Мы можем помочь сделать регистрацию, дайте знать если вам это необходимо. ",
+  other_en:
+    "According to Thai law all guests need to register in Immigration office after arrival. We can assist you with registration, please let us know if you need help.",
+  details: "",
+  house_group_id: 1,
+  water_meters: 1,
+  water_reading: true,
+  balance_closed: false,
+  hide_in_timeline: true
+)
+house2 = owner2.houses.find_by(code: 'HS2')
 
 Duration.create!(
   [
@@ -484,7 +491,7 @@ Booking.create!(
     {
       start: "2022-05-15",
       finish: "2022-06-05",
-      house_id: 2,
+      house_id: house2.id,
       tenant_id: nil,
       status: "confirmed",
       number: "LJ9KPDO",
@@ -511,7 +518,7 @@ Booking.create!(
     {
       start: "2022-06-22",
       finish: "2022-07-02",
-      house_id: 2,
+      house_id: house2.id,
       tenant_id: nil,
       status: "confirmed",
       number: "ZOVAYDS",
@@ -538,7 +545,7 @@ Booking.create!(
     {
       start: "2022-08-01",
       finish: "2022-08-31",
-      house_id: 1,
+      house_id: house1.id,
       tenant_id: nil,
       status: "pending",
       number: "CJP5ISM",
@@ -565,7 +572,7 @@ Booking.create!(
     {
       start: "2022-07-05",
       finish: "2022-07-28",
-      house_id: 2,
+      house_id: house2.id,
       tenant_id: nil,
       status: "temporary",
       number: "AUKPLYJ",
@@ -592,7 +599,7 @@ Booking.create!(
     {
       start: "2022-12-14",
       finish: "2022-12-21",
-      house_id: 2,
+      house_id: house2.id,
       tenant_id: nil,
       status: "confirmed",
       number: "GEJXUMD",
@@ -863,9 +870,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 1,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "New wall",
       comment_ru: "Новая стена",
       comment_inner: "",
@@ -905,9 +912,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house2.id,
       type_id: 3,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "Maintenance copy",
       comment_ru: "Обслуживание copy",
       comment_inner: "",
@@ -940,9 +947,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 1,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "New wall copy",
       comment_ru: "Новая стена copy",
       comment_inner: "",
@@ -984,7 +991,7 @@ Transaction.create!(
       ref_no: "",
       house_id: nil,
       type_id: 3,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Maintenance ",
       comment_ru: "Обслуживание ",
       comment_inner: "",
@@ -1017,9 +1024,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 2,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "Rental 15.5.2022 - 5.6.2022",
       comment_ru: "Аренда 15.5.2022 - 5.6.2022",
       comment_inner: "",
@@ -1059,9 +1066,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 2,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "Rental 15.5.2022 - 5.6.2022",
       comment_ru: "Аренда 15.5.2022 - 5.6.2022",
       comment_inner: "",
@@ -1101,9 +1108,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 3,
-      user_id: 3,
+      user_id: house1.owner.id,
       comment_en: "Maintenance ",
       comment_ru: "Обслуживание ",
       comment_inner: "",
@@ -1136,9 +1143,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 2,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "Rental 15.5.2022 - 5.6.2022",
       comment_ru: "Аренда 15.5.2022 - 5.6.2022",
       comment_inner: "",
@@ -1178,9 +1185,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 1,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "New search",
       comment_ru: "Новый поиск",
       comment_inner: "",
@@ -1222,7 +1229,7 @@ Transaction.create!(
       ref_no: "",
       house_id: nil,
       type_id: 3,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Maintenance ",
       comment_ru: "Обслуживание ",
       comment_inner: "",
@@ -1262,9 +1269,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 1,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Test",
       comment_ru: "Test",
       comment_inner: "",
@@ -1296,7 +1303,7 @@ Transaction.create!(
       ref_no: "",
       house_id: nil,
       type_id: 3,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Maintenance ",
       comment_ru: "Обслуживание ",
       comment_inner: "",
@@ -1329,9 +1336,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 1,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Fix toilet",
       comment_ru: "Ремонт туалета",
       comment_inner: "",
@@ -1371,9 +1378,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 2,
+      house_id: house2.id,
       type_id: 1,
-      user_id: 3,
+      user_id: house2.owner.id,
       comment_en: "Remove wall",
       comment_ru: "Удаление стены",
       comment_inner: "",
@@ -1413,9 +1420,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 1,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Fix door",
       comment_ru: "Ремонт двери",
       comment_inner: "",
@@ -1455,9 +1462,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 4,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Balance top up",
       comment_ru: "Пополнение баланса",
       comment_inner: "",
@@ -1487,9 +1494,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 4,
+      house_id: house4.id,
       type_id: 1,
-      user_id: 4,
+      user_id: house4.owner.id,
       comment_en: "Maintenance ",
       comment_ru: "Обслуживание ",
       comment_inner: "",
@@ -1529,9 +1536,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 1,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Change light",
       comment_ru: "Change light",
       comment_inner: "",
@@ -1571,9 +1578,9 @@ Transaction.create!(
   [
     {
       ref_no: "",
-      house_id: 1,
+      house_id: house1.id,
       type_id: 1,
-      user_id: 3,
+      user_id: owner1.id,
       comment_en: "Change light",
       comment_ru: "Change light",
       comment_inner: "",
