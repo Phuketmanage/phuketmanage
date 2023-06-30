@@ -1,0 +1,3 @@
+<h1>Canceled Bookings</h1>
+<%= link_to 'Active Bookings', bookings_path, class: 'btn btn-primary mb-2' %>
+<%= render 'table', bookings: @bookings, error: @error %>
