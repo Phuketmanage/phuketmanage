@@ -8,6 +8,7 @@ class AdminController < ApplicationController
     redirect_to transactions_path and return if current_user.role?('Owner')
 
     @notifications = Notification.order(:created_at).all
+    @bookings = Booking.pending
   end
 
   private
