@@ -15,14 +15,8 @@ class HouseTest < ActiveSupport::TestCase
                           bathrooms: 1,
                           location_ids: [locations(:patong).id],
                           type_id: @house.type_id)
-    assert_not new_house.valid?
-    number_unique = false
-    until number_unique
-      number = ('1'..'9').to_a.shuffle[0..rand(1..6)].join
-      house = House.find_by(number: number)
-      number_unique = true if house.nil?
-    end
-    new_house.number = number
-    assert new_house.valid? 
+    assert new_house.valid?
+    new_house.save!
+    assert new_house.number != nil
   end
 end

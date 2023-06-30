@@ -64,13 +64,6 @@ class HousesController < ApplicationController
   def create
     options = params[:options] || nil
     @house = House.new(house_params)
-    number_unique = false
-    until number_unique
-      number = ('1'..'9').to_a.shuffle[0..rand(1..6)].join
-      house = House.find_by(number: number)
-      number_unique = true if house.nil?
-    end
-    @house.number = number
     @house.secret = SecureRandom.hex(16)
     respond_to do |format|
       if @house.save

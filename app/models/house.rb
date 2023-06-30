@@ -68,7 +68,8 @@ class House < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :employees
   has_and_belongs_to_many :locations
-  validates :number, :description_en, :description_ru, presence: true
+  validates :description_en, :description_ru, presence: true
+  before_create :generate_number
 
   scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }
   scope :inactive, -> { joins(:owner).where('users.balance_closed': true).or(where(balance_closed: true)) }
@@ -103,6 +104,18 @@ class House < ApplicationRecord
     else
       [type.name_en, rooms, "BDR", bathrooms, "BTH", *locations.pluck(:name_en)].join(' ')
     end
+  end
+
+  private
+
+  def generate_number
+    number_unique = false
+    until number_unique
+      number = ('1'..'9').to_a.shuffle[0..rand(1..6)].join
+      house = House.find_by(number: number)
+      number_unique = true if house.nil?
+    end
+    self.number = number
   end
   # Was used after filed number added
   # def add_numbers
