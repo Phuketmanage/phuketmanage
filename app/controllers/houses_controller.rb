@@ -158,6 +158,7 @@ class HousesController < ApplicationController
       :cancellationPolicy_ru,
       { option_ids: [] },
       { location_ids: [] },
+      :project,
       :rules_en,
       :rules_ru,
       :other_en,
