@@ -61,6 +61,9 @@
   <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
 </p>
 <p>
+  <%= t('houses.project') %>: <%#= @house.project %>
+</p>
+<p>
   <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
 <br />
   <%= @house.pool ? "#{t('houses.pool')}, " : '' %>
@@ -132,6 +135,7 @@
           <div class="modal-body">
             <p>
               <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %><br />
+              <%= t('houses.project') %>: <%= @house.project %><br />
               <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
             </p>
             <div class="row">

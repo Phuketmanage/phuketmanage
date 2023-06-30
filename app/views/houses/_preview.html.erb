@@ -18,6 +18,7 @@
           <% end %>
 
           <p><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></p>
+          <p><%= t('houses.project') %>: <%= h.project %></p>
           <p>
             <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %>
             <br />
