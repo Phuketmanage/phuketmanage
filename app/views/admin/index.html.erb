@@ -1,7 +1,7 @@
 <% if current_user.role?('Admin') %>
   <div class="row">
     <div class="col-md-6">
-      <h5>Notifications</h5>
+      <h5>Water Notifications</h5>
       <% @notifications.each do |n| %>
         <div class='shadow-sm mb-2 p-2 border rounded bg-white notification' data-id='<%= n.id %>' >
           <div>
@@ -13,6 +13,26 @@
           </div>
           <div class="text-right">
               <small><%= n.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M:%S') %></small>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-6">
+      <h5>Pending Bookings</h5>
+      <% @bookings.each do |b| %>
+        <div class='shadow-sm mb-2 p-2 border rounded bg-white notification pending_booking' data-id='<%= b.id %>' >
+          <div>
+            <b><%= b.house.generated_title(:en) %></b>
+            <div>Rental period: <%= b.start.strftime("%d.%m.%Y") + "-" + b.finish.strftime("%d.%m.%Y") %></div>
+            <div>Tenant: <%= b.client_details %></div>
+            <div>Comment: <%= b.comment_gr %></div>
+            <div>Price: <%= b.sale %></div>
+          </div>
+          <div class='float-left'>
+            <small><%= link_to 'Review Booking', edit_booking_path(b.id) %></small>
+          </div>
+          <div class="text-right">
+              <small><%= b.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M:%S') %></small>
           </div>
         </div>
       <% end %>
