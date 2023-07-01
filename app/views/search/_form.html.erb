@@ -2,7 +2,7 @@
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-  <div class="form-row" id="rangepicker">
+  <div class="form-row js_rangepicker">
     <div class="col-md-4">
       <%= f.label :rs %>
       <%= f.text_field :rs, class: 'form-control', autocomplete: 'off'%>
