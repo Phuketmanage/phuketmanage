@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :house do
-    desc = Random.rand(1..10)
-    description_en { "House#{desc}" }
-    description_ru { "House#{desc}" }
-    code { "HS#{desc}" }
-    rooms { "#{Random.rand(1..4)}" }
-    bathrooms { "#{Random.rand(1..3)}"}
-    number { "#{(('1'..'9').to_a).shuffle[0..rand(1..6)].join}" }
+    sequence(:number) { |n| 100_000 + n }
+    sequence(:description_en) { |n| "House#{100_000 + n}" }
+    sequence(:description_ru) { |n| "Вилла#{100_000 + n}" }
+    sequence(:code) { |n| "HS#{100_000 + n}" }
+    rooms { Random.rand(1..4) }
+    bathrooms { Random.rand(1..3) }
     address { Faker::Address.full_address }
+    owner { build :user }
+    type { build :house_type }
   end
 end
