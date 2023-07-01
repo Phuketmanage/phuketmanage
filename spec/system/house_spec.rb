@@ -9,7 +9,6 @@ describe 'House' do
   subject { page }
 
   describe "Access" do
-
     context "when manager" do
       before { sign_in manager }
 
@@ -59,6 +58,7 @@ describe 'House' do
 
       describe '#balance_closed' do
         before { visit houses_inactive_path }
+        
         context 'when house is inactive' do
           let(:balance_closed) { true }
           it { is_expected.to have_selector('.inactive_houses .house', text: house.title_en) }
