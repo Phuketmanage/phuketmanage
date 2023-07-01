@@ -52,7 +52,7 @@ describe 'House' do
 
         context 'when house is not for rent' do
           let(:unavailable) { true }
-          it { is_expected.to have_selector('.for_rent .house', text: house.title_en) }
+          it { is_expected.to have_selector('.not_for_rent .house', text: house.title_en) }
         end
       end
 
