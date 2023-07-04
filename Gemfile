@@ -72,6 +72,7 @@ group :development do
   gem "rubocop-rails"
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rails-erd'
 end
 
 group :test do
