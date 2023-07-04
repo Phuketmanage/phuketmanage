@@ -1115,8 +1115,54 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     b.reload
     assert_equal 'pending', b.status
+  end
 
+  test 'unlinked' do
+    sign_in users(:admin)
+    owner = users(:owner)
+    house = houses(:villa_1)
+    # From Fixtures ownwer have 6 trasnction all linked to villa_1
+    # Add unlinked
+    type = TransactionType.find_by(name_en: 'Maintenance')
+    assert_difference('Transaction.count', 1) do
+      post transactions_path, params: {
+        transaction: {
+          date: Time.now.to_date,
+          type_id: type.id,
+          user_id: owner.id,
+          de_co: 15000,
+          comment_en: 'Maintenance'
+        }
+      }
+    end
 
+    # Show all
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 7
+    # Show only for villa_1
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, house_id: house.id, commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 6
+    # Show only for villa_1
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, house_id: 'unlinked', commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 1
+
+    # Should be same for owner
+    sign_in users(:owner)
+    # Show all
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 7
+    # Show only for villa_1
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, house_id: house.id, commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 6
+    # Show only for villa_1
+    get transactions_path, params: { from: '2019-08-01', to: Time.now.to_date, owner_id: owner.id, house_id: 'unlinked', commit: 'Full' }
+    assert_response :success
+    assert_select 'tr.trsc_row', 1
   end
 
 end

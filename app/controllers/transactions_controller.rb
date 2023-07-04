@@ -66,11 +66,10 @@ class TransactionsController < ApplicationController
           @owner = User.find(@owner_id)
           @locale = 'en'
         end
-        @houses = @owner.houses.select(:id, :code)
+        @houses = @owner.houses.active.select(:id, :code)
         session[:commit] = params[:commit]
         # Gray balance (owner can see only this)
         if params[:commit] != 'Acc'
-          # byebug
           @transactions, @transactions_before, @transactions_by_cat = owner_transactions(@owner, @from, @to, @house_id)
           type_rental_id = TransactionType.find_by(name_en: 'Rental').id
           @cr_rental = 0
@@ -451,9 +450,9 @@ class TransactionsController < ApplicationController
     transactions_before = owner.transactions.before(from)
     transactions_by_cat = owner.transactions.by_cat_for_owner(from, to)
     case house_id
-    when nil # House not selected
+    when nil, 0 # All houses
       [transactions, transactions_before, transactions_by_cat]
-    when 'unlinked' # House unlinked
+    when 'unlinked' # Unlinked
       transactions = transactions.unlinked
       transactions_before = transactions_before.unlinked
       transactions_by_cat = transactions_by_cat.unlinked
