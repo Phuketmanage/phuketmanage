@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-md-2"><strong><%= house.code %></strong></div>
       <div class="col-md-10">
+        Title: <%= house.generated_title(I18n.locale) %><br/>
         Owner: <%= "#{house.owner.name} #{house.owner.surname}" %><br />
         Address: <%= house.address %><br />
       </div>
