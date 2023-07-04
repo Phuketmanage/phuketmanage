@@ -57,12 +57,12 @@
     </div>
   </div>
 </div>
-<p>
-  <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %>
-</p>
-<p>
-  <%= t('houses.project') %>: <%#= @house.project %>
-</p>
+<% if @house.locations.any? %>
+  <div><%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
+<% end %>
+<% if @house.project %>
+  <div><%= t('houses.project') %>: <%= @house.project %></div>
+<% end %>
 <p>
   <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
 <br />
