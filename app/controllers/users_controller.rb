@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   def get_houses
     @owner_id = params[:owner_id]
     @houses = if @owner_id
-      User.find(@owner_id).houses.select(:id, :code)
+      User.find(@owner_id).houses.active.select(:id, :code)
     else
       []
     end

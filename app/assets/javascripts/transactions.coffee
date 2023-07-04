@@ -97,21 +97,20 @@ $(document).on "ready", ->
       },
       success: (data) ->
         if data['houses'].length <= 1
-          $('#for_house').attr(disabled: true)
-          $('#view_house_id').val('')
+          $('#house_id').prop('disabled', true);
+          $('#house_id').empty()
+          li = $('<option/>', {value: 'All', text: 'All'})
+          $('#house_id').append(li)
         if data['houses'].length > 1
-          $('#for_house').attr(disabled: false)
-          $('div.dropdown-menu[aria-labelledby="for_house"]').empty()
-          item_all = $('<a></a>', {href: '#', text: 'All', class: 'dropdown-item'})
-          $('#for_house').val('All')
-          $('div.dropdown-menu[aria-labelledby="for_house"]').append(item_all)
+          $('#house_id').prop('disabled', false);
+          $('#house_id').empty()
+          li = $('<option/>', {value: 'All', text: 'All'})
+          $('#house_id').append(li)
           for h in data['houses']
-            item = $('<a></a>', {
-                                  href: '#',
-                                  text: h['code'],
-                                  class: 'dropdown-item'
-                                  'data-house-id': h['id']})
-            $('div.dropdown-menu[aria-labelledby="for_house"]').append(item)
+            li = $('<option/>', {value: h['id'], text: h['code']})
+            $('#house_id').append(li)
+          li = $('<option/>', {value: 'unlinked', text: 'Unlinked'})
+          $('#house_id').append(li)
       error: (data) ->
         console.log('Something went wrong')
     react_to_select_house($(this).data('house-id'))

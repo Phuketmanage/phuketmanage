@@ -9,29 +9,16 @@
       <div class="col-6 col-lg-2 mb-1 mb-lg-0">
         <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
       </div>
-        <div class="col-lg-2 mb-1 mb-lg-0">
-          <div class="dropdown for_house">
-            <%= text_field_tag :for_house,
-                !@houses.empty? && @house_id ? @houses.where(id: @house_id).first[:code] : t('all_houses'),
-                class:"form-control dropdown-toggle mb-2 mr-sm-2",
-                placeholder: t('select_house'),
-                autocomplete: "off",
-                data: { toggle: 'dropdown', display: "static" },
-                disabled: @houses.length <= 1 %>
-            <div class="dropdown-menu" aria-labelledby="for_house">
-              <a class="dropdown-item" href="#"><%= t('all_houses') %></a>
-              <% if @houses %>
-              <% @houses.each do |h| %>
-              <a class="dropdown-item" href="#"
-                                        data-house-id="<%= h[:id] %>"
-                                        ><%= h[:code] %></a>
-              <% end %>
-              <% end %>
-            </div>
-          </div>
+
+        <div class="col-md-2 form-group">
+          <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
+          <%= form.select :house_id,
+                options,
+                          {}, { class: "form-control"} %>
         </div>
+
         <%= hidden_field_tag :owner_id, @owner.id %>
-        <%= hidden_field_tag :house_id, @house_id %>
+        <%#= hidden_field_tag :house_id, @house_id %>
         <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
     </div>
   <% end %>
@@ -85,12 +72,11 @@
           </div>
         </div>
         <% if @view != 'accounting' %>
-        <div class="col-6 col-lg-2 mb-1 mb-lg-0">
-          <% options = @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked'], ['All', '']] %>
-          <% statuses = { '': 'All', 'unlinked': 'Unlinked' } %>
-          <% @house_id ||= '' %>
-          <%= select_tag :house_id, options_for_select(options, @house_id),
-            class: 'selectpicker form-control', data: { 'live-search': 'true' } %>
+        <div class="col-md-2 form-group">
+          <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
+          <%= form.select :house_id,
+                options,
+                          {}, { class: "form-control", disabled: @house_id.present? ? false : true} %>
         </div>
         <% end %>
         <%= hidden_field_tag :owner_id, @owner_id %>
