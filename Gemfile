@@ -87,3 +87,5 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'webrick', '~> 1.7'
 
 gem "terser", "~> 1.1"
+
+gem "jsbundling-rails", "~> 1.1"

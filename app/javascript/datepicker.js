@@ -1,4 +1,6 @@
-$(document).ready(function () {
+import { DateRangePicker }  from "vanillajs-datepicker";
+
+document.addEventListener("DOMContentLoaded", () => {
   elements = document.querySelectorAll('.js_rangepicker')
   if (elements) {
     for (elem of elements){
