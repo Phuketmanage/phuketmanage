@@ -212,9 +212,10 @@ class Booking < ApplicationRecord
     timeline[:houses] = []
     # houses = House.order(:unavailable, :house_group_id, :code)
     houses = if house_number.present?
-      House.where(number: house_number).all
+      houses = House.where(number: house_number).all
     else
-      House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
+      # House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
+      houses = House.for_timeline
     end
     y = 1
     houses.each do |h|
