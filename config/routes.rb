@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'report/bookings', to: 'reports#bookings'
+  get 'report/balance', to: 'reports#balance'
   get 'reports', to: 'reports#index'
   get 'salary', to: 'salary#index'
   get 'salary/calc'

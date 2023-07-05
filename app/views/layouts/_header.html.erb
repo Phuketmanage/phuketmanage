@@ -59,7 +59,11 @@
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
         </li>
       <% end %>
-
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Reports', reports_path, class: "nav-link" %>
+        </li>
+      <% end %>
       <% if signed_in? && current_user.role?(['Admin', 'Gardener', 'Manager']) %>
         <li class="nav-item">
           <%= link_to 'Water', water_usages_path, class: "nav-link" %>
