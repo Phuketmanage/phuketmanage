@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_18_220147) do
+ActiveRecord::Schema.define(version: 2023_07_05_162133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -496,17 +496,24 @@ ActiveRecord::Schema.define(version: 2023_06_18_220147) do
   add_foreign_key "booking_files", "bookings"
   add_foreign_key "booking_files", "users"
   add_foreign_key "bookings", "houses"
+  add_foreign_key "bookings", "sources", name: "bookings_source_id_fk"
   add_foreign_key "bookings", "users", column: "tenant_id"
   add_foreign_key "connections", "houses"
   add_foreign_key "connections", "sources"
   add_foreign_key "durations", "houses"
+  add_foreign_key "empl_types_job_types", "empl_types", name: "empl_types_job_types_empl_type_id_fk"
+  add_foreign_key "empl_types_job_types", "job_types", name: "empl_types_job_types_job_type_id_fk"
   add_foreign_key "employees", "empl_types", column: "type_id"
+  add_foreign_key "employees_houses", "employees", name: "employees_houses_employee_id_fk"
+  add_foreign_key "employees_houses", "houses", name: "employees_houses_house_id_fk"
   add_foreign_key "house_options", "houses"
   add_foreign_key "house_options", "options"
   add_foreign_key "house_photos", "houses"
   add_foreign_key "houses", "house_groups"
   add_foreign_key "houses", "house_types", column: "type_id"
   add_foreign_key "houses", "users", column: "owner_id"
+  add_foreign_key "houses_locations", "houses", name: "houses_locations_house_id_fk"
+  add_foreign_key "houses_locations", "locations", name: "houses_locations_location_id_fk"
   add_foreign_key "job_messages", "jobs"
   add_foreign_key "job_messages", "users", column: "sender_id"
   add_foreign_key "job_tracks", "jobs"
@@ -519,6 +526,8 @@ ActiveRecord::Schema.define(version: 2023_06_18_220147) do
   add_foreign_key "jobs", "users", column: "creator_id"
   add_foreign_key "notifications", "houses"
   add_foreign_key "prices", "houses"
+  add_foreign_key "roles_users", "roles", name: "roles_users_role_id_fk"
+  add_foreign_key "roles_users", "users", name: "roles_users_user_id_fk"
   add_foreign_key "seasons", "houses"
   add_foreign_key "transaction_files", "transactions", column: "trsc_id"
   add_foreign_key "transactions", "bookings"
