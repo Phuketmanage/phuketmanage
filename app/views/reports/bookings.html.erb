@@ -1,0 +1,45 @@
+<h1>Bookings</h1>
+<%= form_with(url: report_bookings_path, method: :get, local: true) do |f| %>
+  <div class="form-row">
+    <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+      <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+    </div>
+    <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+    </div>
+    <div class="col col-lg-2">
+      <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] }, @house_id) %>
+      <%= f.select :house_id,
+            options,
+                      {}, { class: "form-control"} %>
+    </div>
+
+    <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
+  </div>
+<% end %>
+
+
+<div>
+  <% if @details.any? %>
+    <div class="bg-white">
+      <table class="table">
+        <tr>
+          <th>Source</th>
+          <th>Bookings</th>
+          <th>Volume</th>
+        </tr>
+        <% @details.each do |key, value| %>
+          <tr>
+            <td><%= key.present? ? Source.find(key).name : 'Direct' %></td>
+            <td><%= value %></td>
+            <td><%= value/@total.to_f*100 %> %</td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-white p-3">
+      No bookings for this period
+    </div>
+  <% end %>
+</div>
