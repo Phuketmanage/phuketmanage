@@ -4,10 +4,7 @@
     <title><%= full_title(yield(:title)) %></title>
     <%= render 'layouts/rails_default' %>
     <%= render 'layouts/shim' %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-    <%= javascript_include_tag "old_application", "data-turbo-track": "reload", defer: true %>
   </head>
-
   <body>
     <%= render 'layouts/header' %>
     <main class="container" role='main'>
@@ -15,7 +12,5 @@
       <%= yield %>
       <%= debug(params) if Rails.env.development? %>
     </main>
-
-
   </body>
 </html>
