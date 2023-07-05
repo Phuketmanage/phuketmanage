@@ -49,6 +49,8 @@ jobs:
         S3_BUCKET: 'test'
       run: |
         bundle exec rails db:create db:schema:load
+    - name: Compile assets
+      run: bundle exec rails assets:precompile
 
     - name: Run minitest
       run: bundle exec rake test
