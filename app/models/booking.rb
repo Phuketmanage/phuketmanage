@@ -53,6 +53,7 @@ class Booking < ApplicationRecord
   # after_update :toggle_status
 
   scope :active, -> { where.not(status: [:canceled]) }
+  scope :for_owner, -> { where.not(status: [:canceled, :temporary]) }
   scope :real, -> { where.not(status: %i[canceled block]) }
   scope :unpaid, -> { where.not( status: [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]] )
                       .joins(:house)

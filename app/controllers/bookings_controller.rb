@@ -99,7 +99,7 @@ class BookingsController < ApplicationController
       @hid = nil unless current_user.houses.where(number: @hid).any?
       house_ids = current_user.houses.ids
     end
-    bookings = Booking.where(house_id: house_ids, status: %w[confirmed block], allotment: false).all
+    bookings = Booking.for_owner.where(house_id: house_ids, allotment: false).all
 
     if !@from.present? && !@to.present?
       @from = Time.zone.now.in_time_zone('Bangkok').to_date
