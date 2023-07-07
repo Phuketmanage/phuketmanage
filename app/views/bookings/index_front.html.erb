@@ -11,12 +11,12 @@
         <% if current_user.role?('Admin') %>
           <% owner = House.find_by(number: @hid).owner if @hid.present? %>
           <% owner = User.find(@oid) if @oid.present? %>
-          <% options_for_select_hid = owner.houses.where(unavailable: false).order(:code).map{|h| [h.code, h.number]} %>
+          <% options = options_for_select(owner.houses.active.order(:code).map{|h| [h.code, h.number]}, @hid) %>
         <% else %>
-          <% options_for_select_hid = current_user.houses.where(unavailable: false).order(:code).map{|h| [h.code, h.number]} %>
+          <% options = options_for_select(current_user.houses.active.order(:code).map{|h| [h.code, h.number]}, @hid) %>
         <% end %>
         <%= select_tag :hid,
-              options_for_select(options_for_select_hid, @hid),
+              options,
                 { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2" } %>
       <% end %>
       <% if current_user.role?('Admin') %>

@@ -4,17 +4,13 @@
       <%= date_field_tag :from, {}, value: @from, class: "form-control mb-2 mr-sm-2" %>
       <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-sm-2" %>
       <%= select_tag :hid,
-            options_for_select(House.where(unavailable: false).order(:code).map                   {|h| [h.code, h.number]}, @hid),
+            options_for_select(House.active.order(:code).map {|h| [h.code, h.number]}, @hid),
               { include_blank: 'All houses', class: "form-control mb-2 mr-sm-2 selectpicker", data: {'live-search': 'true'} } %>
 
       <%= submit_tag 'Active', class: "btn btn-primary mb-2 mr-2" %>
-      <%= link_to 'Canceled', bookings_canceled_path, class: "btn btn-warning mb-2 mr-2" %>
-      <% if current_user.role?('Admin') %>
-        <% !@hid.present? ? disabled_class = "disabled" : disabled_class = "" %>
-        <%= link_to 'Owner view', bookings_front_path(hid: @hid), class: "btn btn-primary mb-2 mr-2 #{disabled_class}", target: "_blank" %>
-      <% end %>
-      <%= link_to 'Drop filter', bookings_path, class: 'btn btn-secondary mb-2 mr-2'  %>
-      <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: 'btn btn-info mb-2 mr-2'  %>
+      <%= link_to 'Canceled', bookings_canceled_path, class: "btn btn-primary mb-2 mr-2" %>
+      <% !@hid.present? ? disabled_class = "disabled" : disabled_class = "" %>
+      <%= link_to 'Owner view', bookings_front_path(hid: @hid, from: @from, to: @to), class: "btn btn-primary mb-2 mr-2 #{disabled_class}", target: "_blank" %>
       <% if @hid %>
         <%= link_to 'New Booking', new_house_booking_path(@hid), class: 'btn btn-info mb-2 mr-2' %>
       <% else %>
