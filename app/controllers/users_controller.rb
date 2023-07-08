@@ -94,7 +94,6 @@ class UsersController < ApplicationController
     else
       []
     end
-    byebug
     render json: { houses: @houses }
   end
 
