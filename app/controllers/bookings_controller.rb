@@ -38,82 +38,40 @@ class BookingsController < ApplicationController
   # @route GET /bookings (bookings)
   # @route GET (/:locale)/houses/:hid/bookings (house_bookings)
   def index
-    @from = params[:from]
-    @to = params[:to]
-    if (@from.present? && !@to.present?) || (!@from.present? && @to.present?)
-      @error = 'Both dates should be selected'
-      @bookings = [] and return
-    end
-
-    # @oid = params[:oid]
+    @from, @to, @error = set_period(params)
+    flash[:alert] = @error if @error
     @hid = params[:hid]
-
-    house_ids = if @hid.present?
-      House.where(number: @hid).ids
-    elsif @oid.present?
-      User.find(@oid).houses.ids
-    else
-      House.ids
+    params[:view_as_owner].present? ? @view_as_owner = true : @view_as_owner = false
+    @houses = set_houses
+    @bookings = Booking.active.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
+    if @hid.present?
+      @bookings = @bookings.where(house_id: @hid)
     end
-    bookings = Booking.where(house_id: house_ids).all
-    if !@from.present? && !@to.present?
-      @from = Time.zone.now.in_time_zone('Bangkok').to_date
-      @to = if bookings.any?
-        bookings.maximum(:finish).in_time_zone('Bangkok').to_date
-      else
-        @from
-      end
-    end
-
-    @bookings = bookings.active.where('finish >= :from AND start <= :to',
-                               from: @from, to: @to).order(:start)
   end
 
   def canceled
-    @bookings = Booking.canceled
+    @from, @to, @error = set_period(params)
+    flash[:alert] = @error if @error
+    @hid = params[:hid]
+    @houses = set_houses
+    @bookings = Booking.canceled.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
+    if @hid.present?
+      @bookings = @bookings.where(house_id: @hid)
+    end
+
   end
 
   # @route GET /owner/bookings (bookings_front)
   def index_front
-    @from = params[:from]
-    @to = params[:to]
-    if (@from.present? && !@to.present?) || (!@from.present? && @to.present?)
-      @error = 'Both dates should be selected'
-      @bookings = [] and return
-    end
-
+    @from, @to, @error = set_period(params)
+    flash[:alert] = @error if @error
     @hid = params[:hid]
-    @oid = params[:oid]
-    if @hid.present? && current_user.role?('Admin')
-      # Admin look bookings for selected house
-      house_ids = House.where(number: @hid).ids
-      @oid = House.find_by(number: @hid).owner.id
-    elsif @oid.present? && current_user.role?('Admin')
-      # Admin look bookings for selected owner
-      house_ids = User.find(@oid).houses.ids
-    elsif @hid.present? && current_user.houses.where(number: @hid).any?
-      # Owner look bookings for selected house
-      house_ids = House.where(number: @hid).ids
-    else
-      # Owner look bookings
-      @hid = nil unless current_user.houses.where(number: @hid).any?
-      house_ids = current_user.houses.ids
+    @houses = set_houses
+    house_ids = current_user.houses.ids
+    @bookings = Booking.for_owner.where(finish: @from.., start: ..@to, house_id: house_ids, allotment: false).all
+    if @hid.present?
+      @bookings = @bookings.where(house_id: @hid)
     end
-    bookings = Booking.for_owner.where(house_id: house_ids, allotment: false).all
-
-    if !@from.present? && !@to.present?
-      @from = Time.zone.now.in_time_zone('Bangkok').to_date
-      @to = if bookings.any?
-        bookings.maximum(:finish).in_time_zone('Bangkok').to_date
-      else
-        @from
-      end
-      @to = @from if @to < @from
-    end
-
-    @bookings = bookings.where('(start >= :from AND start <= :to) OR
-                                (finish >= :from AND finish <= :to)',
-                               from: @from, to: @to).order(:start)
     @one_house = true if current_user.houses.ids.count == 1
   end
 
@@ -374,6 +332,34 @@ class BookingsController < ApplicationController
   end
 
   private
+
+  def set_houses
+    if current_user.role?('Owner')
+      current_user.houses.active.order(:code)
+    else
+      House.active.order(:code)
+    end
+  end
+
+  def set_period params
+    from = params[:from]
+    to = params[:to]
+    error = false
+    if !from.present? && !to.present?
+      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      if current_user.role?('Owner')
+        house_ids = current_user.houses.ids
+        bookings = Booking.for_owner.where(finish: @from.., house_id: house_ids, allotment: false)
+      else
+        bookings = Booking.active.where(finish: @from..)
+      end
+      to = bookings.maximum(:finish).in_time_zone('Bangkok').to_date if bookings.any?
+      to = from if !to.present? || to < from
+    elsif !from.present? || !to.present?
+      error = 'Both dates should be selected'
+    end
+    [from, to, error]
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_booking

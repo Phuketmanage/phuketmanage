@@ -16,15 +16,27 @@ class ReportsController < ApplicationController
 
   def bookings
     @from, @to, @error = set_period(params)
+    @house_id = params[:house_id].present? ? params[:house_id] : nil
+    @houses = House.active
     if !@error
-      @house_id = params[:house_id].present? ? params[:house_id] : nil
-      @houses = House.active
       @total = Booking.where(start: ..@to.to_date, finish: @from.to_date..).count
       if @house_id.present?
         @details = Booking.where(start: ..@to.to_date, finish: @from.to_date.., house_id: @house_id).group(:source_id).order(count: :desc).count
       else
         @details = Booking.where(start: ..@to.to_date, finish: @from.to_date..).group(:source_id).order(count: :desc).count
       end
+    else
+      flash[:alert] = @error
+    end
+  end
+
+  def salary
+    @from, @to, @error = set_period(params)
+    if !@error
+      type_id = TransactionType.find_by(name_en: 'Rental').id
+      @ts = Transaction.for_salary(type_id, @from, @to)
+    else
+      flash[:alert] = @error
     end
   end
 

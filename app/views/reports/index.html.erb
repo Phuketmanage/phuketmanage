@@ -1,3 +1,7 @@
 <h1>Reports</h1>
 
 <%= link_to 'Bookings', report_bookings_path %>
+
+<% if current_user.role?("Admin") %>
+  <%= link_to 'Salary', report_salary_path %>
+<% end %>

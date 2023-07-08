@@ -9,17 +9,15 @@
       <div class="col-6 col-lg-2 mb-1 mb-lg-0">
         <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
       </div>
-
-        <div class="col-md-2 form-group">
-          <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
-          <%= form.select :house_id,
-                options,
-                          {}, { class: "form-control"} %>
-        </div>
-
-        <%= hidden_field_tag :owner_id, @owner.id %>
-        <%#= hidden_field_tag :house_id, @house_id %>
-        <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
+      <div class="col-md-2 form-group">
+        <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
+        <%= form.select :house_id,
+              options,
+                        {}, { class: "form-control"} %>
+      </div>
+      <%= hidden_field_tag :owner_id, @owner.id %>
+      <%#= hidden_field_tag :house_id, @house_id %>
+      <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
     </div>
   <% end %>
 
