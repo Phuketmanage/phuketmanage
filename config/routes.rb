@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
   get 'report/bookings', to: 'reports#bookings'
   get 'report/balance', to: 'reports#balance'
+  get 'report/salary', to: 'reports#salary'
   get 'reports', to: 'reports#index'
-  get 'salary', to: 'salary#index'
-  get 'salary/calc'
   get 'unlock', to: 'dev#unlock' if Rails.env.development?
   get 'houses/inactive', to: 'houses#inactive'
   resources :notifications, only: [:destroy]

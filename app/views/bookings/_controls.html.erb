@@ -1,0 +1,21 @@
+<%= form_with(url: path, method: :get, local: true) do |form| %>
+        <div class="form-row mb-2">
+        <div class="col-4 col-lg-2 mb-1 mb-lg-0">
+        <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+        </div>
+        <div class="col-4 col-lg-2">
+          <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
+
+        </div>
+        <% if houses.count > 1 %>
+        <div class="col-4 col-lg-2">
+        <%= select_tag :hid,
+              options_for_select(houses.map {|h| [h.code, h.id]}, @hid),
+                { include_blank: 'All houses', class: "form-control selectpicker", data: {'live-search': 'true'} } %>
+        </div>
+        <% end %>
+        <div class="col-auto">
+        <%= submit_tag 'Show', class: "btn btn-primary" %>
+        </div>
+        </div>
+  <% end %>

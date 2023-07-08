@@ -51,7 +51,7 @@ class Ability
     end
     if user.role? :manager
       can %i[index show], User, roles: { name: %w[Owner Tenant] }
-      can [:new], User
+      can [:new, :get_houses], User
       can %i[create edit update], User, roles: { name: %w[Owner Tenant] }
       cannot :destroy, User
       can :manage, [HouseType, House, Duration, Season, Price,
@@ -74,6 +74,7 @@ class Ability
       can :manage, TransactionFile
       # can [ :statement, :reimbersment ], Document
       can %i[index create update], WaterUsage
+      can [:index, :bookings], :report
     end
     if user.role? :admin
       can :manage, :all

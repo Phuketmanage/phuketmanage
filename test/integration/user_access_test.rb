@@ -515,6 +515,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_no_match "Balance closed", response.body
     sign_out users(:admin)
   end
+
   test "should update balance closed" do
     owner = users(:owner)
     sign_in users(:admin)
@@ -524,4 +525,19 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert li', text: 'Successfully updated User.'
   end
+
+  test "reports" do
+    # Maager can not see salary reports
+    sign_in users(:manager)
+    get reports_path
+    assert_response :success
+    assert_select 'a', {text: 'Salary', count: 0}
+    get report_bookings_path
+    assert_response :success
+    get report_salary_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'div.alert', 'You are not authorized to access this page.'
+  end
+
 end

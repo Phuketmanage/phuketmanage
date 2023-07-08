@@ -1,3 +1,6 @@
-<h1>Canceled Bookings</h1>
-<%= link_to 'Active Bookings', bookings_path, class: 'btn btn-primary mb-2' %>
-<%= render 'table', bookings: @bookings, error: @error %>
+<h1>Canceled bookings <%= @house.code if @house %> (<%= @bookings.count %>)</h1>
+<%= render 'tabs' %>
+<div class="bg-white p-2 border-top-0">
+  <%= render 'controls', path: bookings_canceled_path, houses: @houses %>
+  <%= render 'table', bookings: @bookings %>
+</div>
