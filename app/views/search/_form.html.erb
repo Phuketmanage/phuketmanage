@@ -2,16 +2,16 @@
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-  <div class="form-row js_rangepicker">
+  <div class="form-row shadow-sm mb-2 p-2 border rounded  bg-white js_rangepicker"
+              data-start="<%= @search && @search.rs.present? ? @search.rs.to_date.strftime('%d.%m.%Y') : '' %>"
+              data-finish="<%= @search && @search.rf.present? ? @search.rf.to_date.strftime('%d.%m.%Y') : '' %>">
     <div class="col-md-4">
-      <%= f.label :rs %>
-      <%= f.text_field :rs, class: 'form-control', autocomplete: 'off'%>
+      <%= f.text_field :rs, class: 'form-control-plaintext border pl-2', readonly: true, autocomplete: 'off', placeholder: t('search.checkin') %>
     </div>
     <div class="col-md-4">
-      <%= f.label :rf %>
-      <%= f.text_field :rf, class: 'form-control', autocomplete: 'off'%>
+      <%= f.text_field :rf, class: 'form-control-plaintext border pl-2', readonly: true, autocomplete: 'off', placeholder: t('search.checkout') %>
     </div>
-    <div class="col-md-4 d-flex align-items-end pt-2">
+    <div class="col-md-4">
       <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
     </div>
   </div>

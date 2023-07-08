@@ -13,11 +13,11 @@
             <p class="duration"><%= "#{t('search.search_duration')} #{@search.duration}" %></p>
             <p><%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %></p>
           <% else %>
-            <%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %>
+            <p><%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %></p>
           <% end %>
 
           <% if h.locations.any? %>
-          <div><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
+            <div><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
           <% end %>
           <% if h.project %>
             <div><%= t('houses.project') %>: <%= h.project %></div>
