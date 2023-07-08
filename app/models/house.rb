@@ -77,6 +77,16 @@ class House < ApplicationRecord
   scope :not_for_rent, -> { active.where(unavailable: true).order(:code) }
   scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
 
+  def occupied_days
+    from = Time.zone.now.in_time_zone('Bangkok').to_date
+    bs = bookings.active.where(finish: from..)
+    occupied_days = []
+    bs.each do |b|
+      occupied_days += (b.start..b.finish).to_a
+    end
+    occupied_days.select{|v| v > from}.map{|v| v.strftime('%d.%m.%Y')}.to_json
+  end
+
   def preview
     if image.present?
       url_parts = image.match(%r{^(.*/)(.*)$})

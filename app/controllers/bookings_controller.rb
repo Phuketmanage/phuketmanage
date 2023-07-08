@@ -335,9 +335,9 @@ class BookingsController < ApplicationController
 
   def set_houses
     if current_user.role?('Owner')
-      current_user.houses.active.order(:code)
+      current_user.houses.for_rent.order(:code)
     else
-      House.active.order(:code)
+      House.for_rent.order(:code)
     end
   end
 

@@ -32,7 +32,7 @@
           <tr>
             <td><%= key.present? ? Source.find(key).name : 'Direct' %></td>
             <td><%= value %></td>
-            <td><%= value/@total.to_f*100 %> %</td>
+            <td><%= (value/@total.to_f*100).round(2) %> %</td>
           </tr>
         <% end %>
       </table>

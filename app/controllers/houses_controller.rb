@@ -22,7 +22,7 @@ class HousesController < ApplicationController
   # @route GET (/:locale)/houses/:id
   def show
     # Front end
-
+    @occupied_days = @house.occupied_days
     if params[:rs].present? && params[:rf].present?
       @search = Search.new(rs: params[:rs],
                            rf: params[:rf],
