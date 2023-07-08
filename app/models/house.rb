@@ -73,8 +73,8 @@ class House < ApplicationRecord
 
   scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }
   scope :inactive, -> { joins(:owner).where('users.balance_closed': true).or(where(balance_closed: true)) }
-  scope :for_rent, -> { active.where(unavailable: false) }
-  scope :not_for_rent, -> { active.where(unavailable: true) }
+  scope :for_rent, -> { active.where(unavailable: false).order(:code) }
+  scope :not_for_rent, -> { active.where(unavailable: true).order(:code) }
   scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
 
   def preview
