@@ -19,7 +19,16 @@ class TransactionsController < ApplicationController
     end
 
     @owner_id = params[:owner_id].present? ? params[:owner_id].to_i : nil
-    @house_id = ['unlinked', nil].include?(params[:house_id]) ? params[:house_id] : params[:house_id].to_i
+    @houses_count = 0
+    @houses_count = User.find(@owner_id).houses.count if @owner_id.present?
+    # @house_id = ['unlinked', nil].include?(params[:house_id]) ? params[:house_id] : params[:house_id].to_i
+    # byebug
+    # byebug
+    if ["unlinked", nil].include?(params[:house_id])
+      @house_id = params[:house_id]
+    elsif params[:house_id].to_i > 0
+      @house_id = params[:house_id].to_i
+    end
     @owners = set_owners
     @houses = []
     unless @error.present?
@@ -146,7 +155,7 @@ class TransactionsController < ApplicationController
       owner = User.find(params[:user_id])
       @transaction.user_id = owner.id
       @transaction.house_id = owner.houses.first.id if owner.houses.count == 1
-      if params[:house_id].present?
+      if params[:house_id].present? && (params[:house_id].to_i > 0)
         @house = House.find(params[:house_id])
         @transaction.house_id = @house.id
       end

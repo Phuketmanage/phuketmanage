@@ -96,21 +96,21 @@ $(document).on "ready", ->
         owner_id: $(this).data('owner-id')
       },
       success: (data) ->
+        $('#house_id').empty()
+        li = $('<option/>', {text: 'All', value: ''})
+        $('#house_id').append(li)
+        console.log data['houses'].length
         if data['houses'].length <= 1
           $('#house_id').prop('disabled', true);
-          $('#house_id').empty()
-          li = $('<option/>', {value: 'All', text: 'All'})
-          $('#house_id').append(li)
+          $('#house_id').hide()
         if data['houses'].length > 1
           $('#house_id').prop('disabled', false);
-          $('#house_id').empty()
-          li = $('<option/>', {value: 'All', text: 'All'})
-          $('#house_id').append(li)
+          $('#house_id').show()
           for h in data['houses']
-            li = $('<option/>', {value: h['id'], text: h['code']})
+            li = $('<option/>', {text: h['code'], value: h['id']})
             $('#house_id').append(li)
-          li = $('<option/>', {value: 'unlinked', text: 'Unlinked'})
-          $('#house_id').append(li)
+        li = $('<option/>', {text: 'Unlinked', value: 'unlinked'})
+        $('#house_id').append(li)
       error: (data) ->
         console.log('Something went wrong')
     react_to_select_house($(this).data('house-id'))
