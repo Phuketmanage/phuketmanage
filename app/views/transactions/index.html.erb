@@ -15,8 +15,7 @@
               options,
                         {}, { class: "form-control"} %>
       </div>
-      <%= hidden_field_tag :owner_id, @owner.id %>
-      <%#= hidden_field_tag :house_id, @house_id %>
+      <%#= hidden_field_tag :owner_id, @owner.id %>
       <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
     </div>
   <% end %>
@@ -35,11 +34,18 @@
     <%= sanitize '<span class="d-print-none">accounting</span>' if @type == 'acc' %>
     <%= 'owner' if @view == 'owner' %>
     <%= sanitize '<span class="d-print-none">accounting</span>' if @view == 'accounting' %>
-    <% if @owner_id.present? %>
-      <% owner = User.find(@owner_id) %>
-      (<%= owner.code.present? ? owner.code : owner.houses.first.code %>)
-    <% end %>
   </h1>
+
+  <h5>
+    <% if @owner_id.present? %>
+      <% u = User.find(@owner_id) %>
+      <%= "Owner: #{u.code} (#{u.name} #{u.surname})" %>
+      <% if @house_id.present? && (@house_id.to_i > 0)  %>
+        <%= "/ House: #{House.find(@house_id).code}" %>
+      <% end %>
+    <% end %>
+  </h5>
+
 
   <div class="mb-2 d-print-none">
     <%= form_with(url: transactions_path, method: :get, local: true) do |form| %>
@@ -70,14 +76,15 @@
           </div>
         </div>
         <% if @view != 'accounting' %>
-        <div class="col-md-2 form-group">
+        <div class="col-md-2">
           <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
           <%= form.select :house_id,
                 options,
-                          {}, { class: "form-control", disabled: @house_id.present? ? false : true} %>
+                          {}, { class: "form-control", style: @houses_count > 1 ? '' : "display: none;"} %>
         </div>
         <% end %>
         <%= hidden_field_tag :owner_id, @owner_id %>
+        <%#= hidden_field_tag :house_id, @house_id %>
       </div>
       <div class="form-row">
         <div class="col-4 col-lg-2 mb-1 mb-lg-0">
