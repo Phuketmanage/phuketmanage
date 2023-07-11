@@ -45,7 +45,7 @@
             <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
           </div>
           <div class="col-md-4 col-lg-12">
-            <%= link_to t('search.book'), search_path(params: {rs: @search.rs, rf: @search.rf, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+            <%= link_to t('search.book'), search_path(params: {period: @search.period, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
           </div>
         </div>
       </div>
@@ -140,8 +140,8 @@
             </p>
             <div class="row">
               <div class="col-8 h5">
-              <%= l(@search.rs, format: '%d %b %Y') %> -
-              <%= l(@search.rf, format: '%d %b %Y') %>
+              <%= l(@search.period.split.first.to_date, format: '%d %b %Y' ) %> -
+              <%= l(@search.period.split.last.to_date, format: '%d %b %Y') %>
               </div>
               <div class="col-4 text-right h5">
                 <%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %>
@@ -195,8 +195,8 @@
 
           </div>
           <div class="modal-footer">
-            <%= f.hidden_field :start, value: @search.rs %>
-            <%= f.hidden_field :finish, value: @search.rf %>
+            <%= f.hidden_field :start, value: @search.period.split.first %>
+            <%= f.hidden_field :finish, value: @search.period.split.last %>
             <%= f.hidden_field :hid, value: @house.number %>
             <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
             <%= f.submit t('search.send'), class: "btn btn-primary"%>

@@ -13,5 +13,4 @@
  *= require_tree .
  *= require_self
  *= require bootstrap-select
- *= require vanillajs-datepicker/dist/css/datepicker-bs5.min.css
  */

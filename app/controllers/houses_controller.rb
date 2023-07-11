@@ -23,9 +23,8 @@ class HousesController < ApplicationController
   def show
     # Front end
     @occupied_days = @house.occupied_days
-    if params[:rs].present? && params[:rf].present?
-      @search = Search.new(rs: params[:rs],
-                           rf: params[:rf],
+    if params[:period].present?
+      @search = Search.new(period: params[:period],
                            dtnb: @settings['dtnb'])
       answer = @search.is_house_available? @house.id
       if answer[:result]
