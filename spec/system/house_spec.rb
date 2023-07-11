@@ -8,6 +8,28 @@ describe 'House' do
   let!(:house) { create :house, unavailable: unavailable, balance_closed: balance_closed }
   subject { page }
 
+  describe "view" do
+    context "when visiting root page in en" do
+      before { visit "/" }
+      it { is_expected.to have_content "Project: #{house.project}"}
+    end
+
+    context "when visiting root page in ru" do
+      before { visit "/?locale=ru" }
+      it { is_expected.to have_content "Проект: #{house.project}"}
+    end
+
+    context "when visiting show page in en" do
+    before { visit "/houses/#{house.number}?locale=en" }
+    it { is_expected.to have_content "Project: #{house.project}"}
+    end
+
+    context "when visiting show page in ru" do
+    before { visit "/houses/#{house.number}?locale=ru" }
+    it { is_expected.to have_content "Проект: #{house.project}"}
+    end
+  end
+
   describe "Access" do
     context "when manager" do
       before { sign_in manager }

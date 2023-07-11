@@ -11,5 +11,6 @@ FactoryBot.define do
     address { Faker::Address.full_address }
     owner { build :user }
     type { build :house_type }
+    project { Faker::Address.city }
   end
 end
