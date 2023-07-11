@@ -49,11 +49,11 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 7'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿21,000'
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿26,600'
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿44,800'
 
     rs = "12.07.#{year}".to_date
@@ -61,7 +61,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 7'
     assert_select 'div.house', count: 1
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿26,600'
 
     # True only if days between bookngs set to 2
@@ -70,7 +70,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 9'
     assert_select 'div.house', count: 1
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
 
     # True only if days between bookngs set to 2
     rs = "21.07.#{year}".to_date
@@ -84,14 +84,14 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 9'
     assert_select 'div.house', count: 1
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
 
     rs = "20.07.#{year}".to_date
     rf = "25.07.#{year}".to_date
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 5'
     assert_select 'div.house', count: 1
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
 
     # Price calculations
     rs = "15.11.#{year}".to_date
@@ -99,11 +99,11 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 10', count: 3
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿40,000'
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿54,000'
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿94,000'
 
     rs = "15.11.#{year}".to_date
@@ -111,7 +111,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 16'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿54,400'
 
     rs = "15.11.#{year}".to_date
@@ -119,7 +119,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 20'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿79,900'
 
     rs = "1.11.#{year}".to_date
@@ -127,7 +127,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 34'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿105,000'
 
     rs = "15.11.#{year}".to_date
@@ -135,7 +135,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 30'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿118,300'
 
     rs = "15.11.#{year}".to_date
@@ -143,7 +143,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 40'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿188,300'
 
     rs = "10.12.#{year}".to_date
@@ -151,7 +151,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 15'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿116,875'
 
     rs = "10.12.#{year}".to_date
@@ -159,7 +159,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 31'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿208,250'
 
     rs = "10.12.#{year}".to_date
@@ -167,7 +167,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 36'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿243,250'
 
     rs = "10.12.#{year}".to_date
@@ -175,7 +175,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 46'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿295,750'
 
     # 23.07.2019 catch up
@@ -184,7 +184,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 17'
     assert_select 'div.house', count: 3
-    assert_select 'h5.house_title', 'Villa 3 BDR 3 BTH'
+    assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿129,625'
 
     # 23.07.2019 catch up
@@ -193,7 +193,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     get search_path params: { search: { rs: rs, rf: rf } }
     assert_select 'p.duration', 'Total nights: 14'
     # assert_select 'div.house', count: 3
-    # assert_select 'h5.house_title', 'villa_1 Villa 3 BDR 3 BTH'
+    # assert_select 'h5.house_title', 'villa_1 Villa 3 BDR'
     # assert_select 'h5.house_price', '129625 THB'
   end
 end

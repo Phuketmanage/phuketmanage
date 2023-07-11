@@ -86,8 +86,8 @@ villa_6:
   unavailable: false
 
 villa_7:
-  title_en: villa_7 Villa 3 BDR 3 BTH
-  title_ru: villa_7 Вилла 3 СП 3 ВН
+  title_en: villa_7 Villa 3 BDR
+  title_ru: villa_7 Вилла 3 СП
   description_en: Description
   description_ru: Описание
   owner: owner_3

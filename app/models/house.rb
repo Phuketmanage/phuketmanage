@@ -110,9 +110,9 @@ class House < ApplicationRecord
 
   def generated_title(locale)
     if locale == :ru
-      [type.name_ru, rooms, "СП", bathrooms, "ВН", *locations.pluck(:name_ru)].join(' ')
+      [type.name_ru, rooms, "СП", *locations.pluck(:name_ru)].join(' ')
     else
-      [type.name_en, rooms, "BDR", bathrooms, "BTH", *locations.pluck(:name_en)].join(' ')
+      [type.name_en, rooms, "BDR", *locations.pluck(:name_en)].join(' ')
     end
   end
 

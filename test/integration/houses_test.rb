@@ -37,18 +37,18 @@ class HousesTest < ActionDispatch::IntegrationTest
     assert_redirected_to houses_url
     follow_redirect!
     assert_select 'div.alert li', text: "House NH1 was successfully created."
-    assert_equal new_house.generated_title(:en), "Villa 2 BDR 1 BTH Patong"
-    assert_equal new_house.generated_title(:ru), "Вилла 2 СП 1 ВН Патонг"
+    assert_equal new_house.generated_title(:en), "Villa 2 BDR Patong"
+    assert_equal new_house.generated_title(:ru), "Вилла 2 СП Патонг"
     sign_out(:admin)
   end
 
   test "should show proper titles" do
     get root_path
     assert_response :success
-    assert_match "Villa 3 BDR 3 BTH Phuket", response.body
+    assert_match "Villa 3 BDR Phuket", response.body
     get root_path, params: { locale: 'ru' }
     assert_response :success
-    assert_match "Вилла 3 СП 3 ВН Пхукет", response.body
+    assert_match "Вилла 3 СП Пхукет", response.body
   end
 
   test "should show beds when exist" do 
