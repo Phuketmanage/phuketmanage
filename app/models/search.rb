@@ -1,9 +1,9 @@
 class Search
   include ActiveModel::Model
 
-  attr_accessor :stage, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
+  attr_accessor :stage, :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
 
-  validates :rs, :rf, presence: true
+  # validates :period, presence: true
   validate :start_end_correct
 
   def initialize(attributes = {})
@@ -11,8 +11,10 @@ class Search
     return if attributes.empty?
 
     # return if !rs.present? || !rf.present?
-    @rs = rs.to_date
-    @rf = rf.to_date
+    # return if !period.present?
+    @period = period
+    @rs = rs.present? ? rs.to_date : period.split.first.to_date
+    @rf = rf.present? ? rf.to_date : period.split.last.to_date
     @rs_e = rs - dtnb.to_i.days unless rs.nil?
     @rf_e = rf + dtnb.to_i.days unless rf.nil?
     @duration = (rf - rs).to_i if !rs.nil? || !rs.nil?
@@ -132,11 +134,11 @@ class Search
   def start_end_correct
     return if rs.nil? || rf.nil?
 
-    errors.add(:rf, I18n.t('search.rf_less_rs')) if rf < rs
+    errors.add(:period, I18n.t('search.rf_less_rs')) if rf < rs
     if rs < Time.now.in_time_zone('Bangkok').to_date || rf < Time.now.in_time_zone('Bangkok').to_date
       errors.add(:duration, I18n.t('search.in_the_past'))
     end
-    errors.add(:rs, I18n.t('search.too_soon')) if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
+    errors.add(:period, I18n.t('search.too_soon')) if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
     errors.add(:duration, I18n.t('search.too_short')) if duration < 5
   end
 end
