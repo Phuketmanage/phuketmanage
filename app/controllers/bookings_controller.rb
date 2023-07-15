@@ -138,7 +138,7 @@ class BookingsController < ApplicationController
   def new
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map { |h| [h.code, h.id] }
-    @booking.house = House.find_by(number: params[:hid]) if params[:hid]
+    @booking.house = House.find_by(id: params[:hid]) if params[:hid]
     @tenants = User.with_role('Tenant')
   end
 
