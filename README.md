@@ -1,5 +1,7 @@
 # Phuketmanage
 
+Property management website that allow to manage houses and bookings. It helps with keeping track of all incomes and expenses, providing owners with access to reports, and assists in organizing internal company work for rental, maintenance as well as tenants' check in/out.
+
 ## Installation
 
 ```sh
