@@ -1,4 +1,4 @@
-class Admin::UsersController < ApplicationController
+class Admin::UsersControllerOld < ApplicationController
   load_and_authorize_resource
 
   def index
