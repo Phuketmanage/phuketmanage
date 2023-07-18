@@ -33,9 +33,41 @@ rake db:setup
 https://localhost:3000/unlock
 ```
 
+## Work
+
+The idea is that we do not directly commit to master, only through a pull request, so the master can simply be reset to the current version in the repository
+
+#### 1. Download
+```sh
+git fetch --all -p
+git checkout master
+git reset --hard origin/master
+bundle install
+```
+
+#### 2. Start changes in branch
+```sh
+git checkout -b [branch-name]
+```
+
+#### 3. Commit
+
+```sh
+git add -A
+git commit -m "[commit description]"
+git push -u origin [branch-name]
+```
+
+If have small changes after commit ammend them no need to create new commit
+```sh
+git add xxx xxx
+git commit --amend --no-edit
+git push -f
+```
+
 ## Tests
 
-All closed issues have to be covered by tests except mentionned that test are not required.
+All closed issues have to be covered by tests except when mentionned that tests are not required.
 ```sh
 rails t
 rspec
