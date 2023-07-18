@@ -54,7 +54,7 @@ git checkout -b [branch-name]
 
 ```sh
 git add -A
-git commit -m "[commit description]"
+git commit -m [commit description]
 git push -u origin [branch-name]
 ```
 
