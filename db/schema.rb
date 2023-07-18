@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_05_162133) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_07_18_204248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "transaction_id", null: false
     t.decimal "debit", precision: 9, scale: 2
     t.decimal "credit", precision: 10, scale: 2
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "ref_no_iv"
     t.string "ref_no_re"
     t.string "ref_no"
@@ -31,8 +30,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "transaction_id", null: false
     t.decimal "debit", precision: 9, scale: 2
     t.decimal "credit", precision: 10, scale: 2
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "ref_no"
     t.index ["transaction_id"], name: "index_balances_on_transaction_id"
   end
@@ -42,8 +41,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "url"
     t.string "name"
     t.text "comment"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["booking_id"], name: "index_booking_files_on_booking_id"
     t.index ["user_id"], name: "index_booking_files_on_user_id"
@@ -54,8 +53,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.date "finish"
     t.bigint "house_id", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "status"
     t.string "number"
     t.string "ical_UID"
@@ -89,9 +88,9 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "house_id", null: false
     t.bigint "source_id", null: false
     t.string "link"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "last_sync"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_sync", precision: nil
     t.index ["house_id"], name: "index_connections_on_house_id"
     t.index ["source_id"], name: "index_connections_on_source_id"
   end
@@ -100,15 +99,15 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.integer "start"
     t.integer "finish"
     t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["house_id"], name: "index_durations_on_house_id"
   end
 
   create_table "empl_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "empl_types_job_types", id: false, force: :cascade do |t|
@@ -120,8 +119,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
   create_table "employees", force: :cascade do |t|
     t.bigint "type_id", null: false
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["type_id"], name: "index_employees_on_type_id"
   end
 
@@ -133,8 +132,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
 
   create_table "house_groups", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "house_options", force: :cascade do |t|
@@ -142,8 +141,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "option_id", null: false
     t.string "comment_en"
     t.string "comment_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["house_id"], name: "index_house_options_on_house_id"
     t.index ["option_id"], name: "index_house_options_on_option_id"
   end
@@ -153,16 +152,16 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "url"
     t.string "title_en"
     t.string "title_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["house_id"], name: "index_house_photos_on_house_id"
   end
 
   create_table "house_types", force: :cascade do |t|
     t.string "name_en"
     t.string "name_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "comm"
   end
 
@@ -172,8 +171,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.text "description_en"
     t.text "description_ru"
     t.bigint "owner_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "type_id", null: false
     t.string "code"
     t.integer "size"
@@ -239,8 +238,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "sender_id", null: false
     t.text "message"
     t.boolean "is_system"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "file", default: false
     t.index ["job_id"], name: "index_job_messages_on_job_id"
     t.index ["sender_id"], name: "index_job_messages_on_sender_id"
@@ -249,17 +248,17 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
   create_table "job_tracks", force: :cascade do |t|
     t.bigint "job_id", null: false
     t.bigint "user_id", null: false
-    t.datetime "visit_time", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "visit_time", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_tracks_on_job_id"
     t.index ["user_id"], name: "index_job_tracks_on_user_id"
   end
 
   create_table "job_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "code"
     t.string "color"
     t.boolean "for_house_only"
@@ -271,8 +270,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "house_id"
     t.string "time"
     t.text "comment"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.date "plan"
     t.date "closed"
@@ -301,16 +300,16 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "name_ru"
     t.text "descr_en"
     t.text "descr_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "logs", force: :cascade do |t|
     t.string "where"
     t.text "before"
     t.text "after"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "who"
     t.string "what"
     t.string "with"
@@ -320,16 +319,16 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "level"
     t.string "text"
     t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["house_id"], name: "index_notifications_on_house_id"
   end
 
   create_table "options", force: :cascade do |t|
     t.string "title_en"
     t.string "title_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "zindex"
   end
 
@@ -338,8 +337,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.integer "season_id"
     t.integer "duration_id"
     t.integer "amount"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["duration_id"], name: "index_prices_on_duration_id"
     t.index ["house_id"], name: "index_prices_on_house_id"
     t.index ["season_id"], name: "index_prices_on_season_id"
@@ -347,8 +346,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles_users", id: false, force: :cascade do |t|
@@ -363,8 +362,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.integer "sfd"
     t.integer "sfm"
     t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["house_id"], name: "index_seasons_on_house_id"
   end
 
@@ -372,14 +371,14 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "var"
     t.string "value"
     t.string "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sources", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "syncable", default: false
     t.index ["syncable"], name: "index_sources_on_syncable"
   end
@@ -387,8 +386,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
   create_table "transaction_files", force: :cascade do |t|
     t.bigint "trsc_id", null: false
     t.string "url", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "show", default: false
     t.index ["trsc_id"], name: "index_transaction_files_on_trsc_id"
   end
@@ -400,8 +399,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.boolean "credit_company"
     t.boolean "debit_owner"
     t.boolean "credit_owner"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "admin_only", default: false
   end
 
@@ -413,8 +412,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "comment_en"
     t.string "comment_ru"
     t.string "comment_inner"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.date "date"
     t.bigint "booking_id"
     t.boolean "hidden", default: false
@@ -442,8 +441,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "booked_by"
     t.string "number"
     t.integer "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_transfers_on_booking_id"
     t.index ["number"], name: "index_transfers_on_number"
   end
@@ -452,14 +451,14 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
+    t.datetime "invitation_created_at", precision: nil
+    t.datetime "invitation_sent_at", precision: nil
+    t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.string "invited_by_type"
     t.bigint "invited_by_id"
@@ -484,8 +483,8 @@ ActiveRecord::Schema.define(version: 2023_07_05_162133) do
     t.bigint "house_id", null: false
     t.date "date"
     t.integer "amount"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "amount_2"
     t.string "comment"
     t.index ["house_id"], name: "index_water_usages_on_house_id"
