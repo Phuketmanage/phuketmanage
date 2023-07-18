@@ -35,7 +35,7 @@ https://localhost:3000/unlock
 
 ## Work
 
-The idea is that we do not directly commit to master, only through a pull request, so the master can simply be reset to the current version in the repository
+The idea is that we do not commit directly to master, only through a pull request, so the master can simply be reset to the current version in the repository
 
 #### 1. Download
 ```sh
@@ -86,3 +86,6 @@ When approaching a task, you start by reviewing the ticket. If you have a genera
 
 ## Recommendations
 Toggl Track - time tracking
+
+## Troubleshooting
+After assets update `rails assets:precompile` may be required
