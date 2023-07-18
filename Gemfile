@@ -74,6 +74,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rails-erd'
+  # Shows better errors description and webconsole directly on errors page
+  gem "better_errors", "~> 2.9.0"
+  gem "binding_of_caller"
 end
 
 group :test do
