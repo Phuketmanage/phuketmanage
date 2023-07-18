@@ -130,6 +130,10 @@ GEM
       devise (>= 4.6)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     execjs (2.8.1)
     factory_bot (6.2.1)
@@ -390,6 +394,7 @@ DEPENDENCIES
   coffee-rails
   devise
   devise_invitable (~> 2.0.0)
+  dotenv-rails
   factory_bot_rails
   faker
   flag-icons-rails
