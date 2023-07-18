@@ -4,13 +4,21 @@ Property management website that allow to manage houses and bookings. It helps w
 
 ## Main structure
 Houses - list of houses, from here can go to Balance | Bookings | House Details | Prices | Photos.
+
 Bookinngs - all bookings that cann be filtered by date or house.
+
 Timeline - calendar that show houses occupancy, cleanings schedule.  
+
 Check in/out - information for guests relation manager to help with check in or check out process.
+
 Balannce - finantial report. Can see transactionns for company or for selected owner.
+
 Reports - some reports and analytics.
+
 Water - water meter reading to control connsomption.
+
 Users - have different roles: manager, accounting, guest relation, owner, client, maid, gardener, transfer
+
 Jobs - jobs that company staff have to accomplish. Allow to keep record on main points of process.
 
 ## Installation
