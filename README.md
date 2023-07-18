@@ -79,6 +79,11 @@ rspec
 open coverage/index.html
 ```
 
+## Database graphic schema
+```sh
+open erd.pdf
+```
+
 ## Payment
 The main principle is to be paid for closed tickets and for the standard workflow after training/learning, but not for the training/learning itself.
 
