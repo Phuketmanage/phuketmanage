@@ -524,6 +524,34 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#cr_ow_sum", "72,200.99"
     assert_select "#ow_balance", "180,299.01"
 
+    # CSS export
+    get transactions_path, params: { from: from, to: to, owner_id: @owner.id, commit: 'Full' }
+    assert_select "a", "Export to CSV" # CSS export button
+    get transactions_path(format: :csv), params: { from: from, to: to, owner_id: @owner.id, commit: 'Full' }
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+    assert_equal 13, csv.size
+    # CSV Headers
+    assert_equal "Date", csv[0][0]
+    assert_equal "Debit", csv[0][1]
+    assert_equal "Credit", csv[0][2]
+    assert_equal "Balance", csv[0][3]
+    assert_equal "Type", csv[0][4]
+    assert_equal "House", csv[0][5]
+    assert_equal "Comment", csv[0][6]
+    # CSV Prev balance
+    assert_equal "14,000.00", csv[1][3]
+    assert_equal "Balance from previous period", csv[1][6]
+    # CSV Last transaction and total balance
+    assert_equal "19.07.2023", csv[12][0]
+    assert_equal "24,000.00", csv[12][1]
+    assert_nil csv[12][2]
+    assert_equal "221,299.01", csv[12][3]
+    assert_equal "Rental", csv[12][4]
+    assert_equal "villa_3", csv[12][5]
+    assert_equal "Rental cash", csv[12][6]
+
     # View same as owner
     sign_in users(:owner)
     get balance_front_path, params: { from: from, to: to }
@@ -590,7 +618,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "th.balance", false
     assert_select "td#co_prev_balance", 0
-    assert_select "td.balance_sum_cell", 0 
+    assert_select "td.balance_sum_cell", 0
     assert_select "td#co_balance", 0
     sign_out users(:manager)
   end
@@ -688,7 +716,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "#de_co_sum", "12 000,00"
     assert_select "#ow_balance", "18 000,00"
   end
-  
+
   test 'should show files in company view' do
     from = '2019-08-01'
     to = Time.now.to_date
@@ -698,7 +726,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "th", "Files"
     assert_match "Files(2)", response.body
   end
-  
+
   test 'Test that get warnings' do
     # For company
     # 1st record
