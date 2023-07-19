@@ -42,7 +42,7 @@
           <div class='row'>
             <div class="col">
           <% if from_search == true %>
-            <%= link_to t('houses.view'), show_house_path(h.number, params: {rs: search.rs, rf: search.rf}), class: "btn btn-primary", target: "_blank" %>
+            <%= link_to t('houses.view'), show_house_path(h.number, params: {period: search.period}), class: "btn btn-primary", target: "_blank" %>
           <% else %>
             <%= link_to t('houses.view'), show_house_path(h.number), class: "btn btn-primary", target: "_blank" %>
           <% end %>

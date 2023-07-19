@@ -1,8 +1,7 @@
 class SearchController < ApplicationController
   # @route GET (/:locale)/search (search)
   def index
-    @search = Search.new(rs: params[:search][:rs],
-                         rf: params[:search][:rf],
+    @search = Search.new(period: params['search']['period'],
                          dtnb: @settings['dtnb'])
     # redirect_to root_path and return if !@search.valid?
 

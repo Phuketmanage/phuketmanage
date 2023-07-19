@@ -129,7 +129,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     year = Time.now.year + 1
     rs = "15.11.#{year}".to_date
     rf = "25.11.#{year}".to_date
-    get search_path params: { search: { rs: rs, rf: rf } }
+    period = "#{rs} to #{rf}"
+    get search_path params: { search: { period: period } }
     assert_select 'p.duration', 'Total nights: 10'
     # assert_match 'Comment for all', response.body
     assert_select 'div.house', count: 3

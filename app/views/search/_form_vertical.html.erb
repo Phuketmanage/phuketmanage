@@ -2,16 +2,10 @@
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-  <div class='shadow-sm mb-2 p-2 border rounded bg-white js_rangepicker'
-              data-occupied-days="<%= @occupied_days %>"
-              data-start="<%= params[:rs].present? ? params[:rs].to_date.strftime('%d.%m.%Y') : '' %>"
-              data-finish="<%= params[:rf].present? ? params[:rf].to_date.strftime('%d.%m.%Y') : '' %>">
+  <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
     <div class="form-row">
       <div class="col-md-4 col-lg-12 mb-1">
-        <%= f.text_field :rs, autocomplete: 'off', readonly: true, class: 'form-control-plaintext border pl-2', placeholder: t('search.checkin') %>
-      </div>
-      <div class="col-md-4 col-lg-12 mb-1">
-        <%= f.text_field :rf, autocomplete: 'off', readonly: true, class: 'form-control-plaintext border pl-2', placeholder: t('search.checkout') %>
+        <%= f.text_field :period, autocomplete: 'off', readonly: true, class: 'form-control-plaintext border pl-2 js_rangepicker', placeholder: t('search.dates'), data: {occupied_days: @occupied_days}, value: params['period'] %>
       </div>
       <div class="col-md-4 col-lg-12">
         <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
