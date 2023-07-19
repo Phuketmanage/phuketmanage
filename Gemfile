@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.2'
+ruby '3.2.2'
 
 gem "rails", "~> 7.0.6"
 # Use postgresql as the database for Active Record
@@ -60,6 +60,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -73,6 +74,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rails-erd'
+  # Shows better errors description and webconsole directly on errors page
+  gem "better_errors", "~> 2.9.0"
+  gem "binding_of_caller"
 end
 
 group :test do

@@ -34,8 +34,7 @@ en:
     message_done: Thank you for your interest in our services. We have received your request and we are currently processing it. Please note that your request is not a confirmed booking yet. You will receive an email from us to confirm your booking within the next 24 working hours. We appreciate your patience and understanding. If you have any questions or concerns, please don't hesitate to contact us.
     booking_no: Booking number
     close: Close
-    checkin: Check in
-    checkout: Check out
+    dates: Сhoose preferred dates
   houses:
     description: Description
     beds: Sleeping arrangements
