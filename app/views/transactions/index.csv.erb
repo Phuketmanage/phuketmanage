@@ -10,11 +10,6 @@
   de_ow_prev_sum = 0
   cr_ow_prev_sum = 0
   balance_sum = 0
-  if @transactions_before.any?
-    de_ow_prev_sum = @transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.debit')
-    cr_ow_prev_sum = @transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.credit')
-    balance_sum += de_ow_prev_sum - cr_ow_prev_sum
-  end
   %>
   <%# Headers %>
 <%= CSV.generate_line headers -%>

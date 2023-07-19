@@ -94,10 +94,12 @@
                 class: "btn btn-primary btn-sm btn-block",
                 id: 'btn_acc' %>
         </div>
+        <% if params[:owner_id].present? %>
         <div class="col-4 col-lg-2">
           <%= link_to 'Export to CSV', transactions_path(:params => request.params, :format => :csv),
                   class: 'btn btn-info btn-sm btn-block' %>
         </div>
+        <% end %>
         <div class="col-4 col-lg-2">
           <% if !@owner_id %>
             <%= link_to 'Add', new_transaction_path,
