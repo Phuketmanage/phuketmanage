@@ -109,8 +109,8 @@ class SearchTest < ActionDispatch::IntegrationTest
     rf = "25.11.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: period} }
-    assert_select 'p.duration', 'Total nights: 10', count: 3
-    assert_select 'div.house', count: 3
+    assert_select 'p.duration', 3, 'Total nights: 10'
+    assert_select 'div.house', 3
     assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿40,000'
     assert_select 'h5.house_title', 'Villa 3 BDR'

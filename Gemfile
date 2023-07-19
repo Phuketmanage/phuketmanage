@@ -5,11 +5,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.2.2'
 
-gem 'rails', '<7'
+gem "rails", "~> 7.0.6"
 # Use postgresql as the database for Active Record
-gem 'pg', '>= 0.18', '< 2.0'
+gem "pg", "~> 1.3"
 # Use Puma as the app server
-gem 'puma'
+gem "puma", "~> 6"
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 # Use Uglifier as compressor for JavaScript assets
@@ -20,7 +20,7 @@ gem 'sassc-rails'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 
-gem 'turbo-rails'
+gem "turbo-rails", "~> 1.4.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 # Use Redis adapter to run Action Cable in production
@@ -50,7 +50,7 @@ gem 'aws-sdk-s3', '~> 1.0.0.rc2'
 gem 'barnes'
 gem 'font_awesome5_rails'
 gem 'momentjs-rails'
-gem 'rails-i18n', '~> 6.0.0'
+gem 'rails-i18n', '~> 7.0.0'
 gem 'scout_apm'
 gem 'the_schema_is'
 gem 'twilio-ruby'
@@ -65,7 +65,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen', '>= 3.0.5'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'chusaku', '~> 0.6.1' # annotations for routes
