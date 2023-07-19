@@ -1,3 +1,5 @@
+require 'csv'
+
 class TransactionsController < ApplicationController
   load_and_authorize_resource
 
@@ -107,6 +109,13 @@ class TransactionsController < ApplicationController
           @view = 'accounting' if params[:commit] == 'Acc'
           session[:view] = @view
         end
+      end
+    end
+    respond_to do |format|
+      format.html
+      format.csv do
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = "attachment; filename=transactions.csv"
       end
     end
   end
