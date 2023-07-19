@@ -1,6 +1,5 @@
 <% if current_user.role?(['Owner']) %>
   <h1><%= t('balance') %></h1>
-
   <%= form_with(url: balance_front_path, method: :get, local: true, class: 'd-print-none') do |form| %>
     <div class="form-row mb-1">
       <div class="col-6 col-lg-2">
@@ -16,12 +15,11 @@
                         {}, { class: "form-control"} %>
       </div>
       <div class="col-6 col-lg-2">
-      <%#= hidden_field_tag :owner_id, @owner.id %>
+        <%#= hidden_field_tag :owner_id, @owner.id %>
         <%= submit_tag t('show'), class: "btn btn-primary btn-block" %>
       </div>
     </div>
   <% end %>
-
   <% if @error %>
     <div class="alert alert-warning" role="alert">
       <%= @error %>
@@ -37,7 +35,6 @@
     <%= 'owner' if @view == 'owner' %>
     <%= sanitize '<span class="d-print-none">accounting</span>' if @view == 'accounting' %>
   </h1>
-
   <h5>
     <% if @owner_id.present? %>
       <% u = User.find(@owner_id) %>
@@ -47,8 +44,6 @@
       <% end %>
     <% end %>
   </h5>
-
-
   <div class="mb-2 d-print-none">
     <%= form_with(url: transactions_path, method: :get, local: true) do |form| %>
       <div class="form-row">
@@ -69,7 +64,7 @@
             <div class="dropdown-menu" aria-labelledby="balance_of">
               <a class="dropdown-item" href="#" data-owner-name="Company">Company</a>
               <% @owners.each do |o| %>
-              <a class="dropdown-item" href="#"
+                <a class="dropdown-item" href="#"
                                         data-owner-id="<%= o[:owner_id] %>"
                                         data-owner-name="<%= "#{o[:owner_name]} #{o[:owner_surname]}" %>"
                                         ><%= "#{o[:house_code]} (#{o[:owner_name]} #{o[:owner_surname]}) #{o[:house_maintenance] ? 'M' : ''}" %></a>
@@ -78,12 +73,12 @@
           </div>
         </div>
         <% if @view != 'accounting' %>
-        <div class="col-6 col-lg-2">
-          <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
-          <%= form.select :house_id,
+          <div class="col-6 col-lg-2">
+            <% options = options_for_select([['All', '']] + @houses.map{ |h| ["#{h.code}", h.id] } + [['Unlinked', 'unlinked']], @house_id) %>
+            <%= form.select :house_id,
                 options,
                           {}, { class: "form-control", style: @houses_count > 1 ? '' : "display: none;"} %>
-        </div>
+          </div>
         <% end %>
         <%= hidden_field_tag :owner_id, @owner_id %>
         <%#= hidden_field_tag :house_id, @house_id %>
@@ -100,34 +95,36 @@
                 id: 'btn_acc' %>
         </div>
         <div class="col-4 col-lg-2">
+          <%= link_to 'Export to CSV', transactions_path(:params => request.params, :format => :csv),
+                  class: 'btn btn-info btn-sm btn-block' %>
+        </div>
+        <div class="col-4 col-lg-2">
           <% if !@owner_id %>
             <%= link_to 'Add', new_transaction_path,
-                  class: 'btn btn-info btn-sm btn-block' %>
+                  class: 'btn btn-success btn-sm btn-block' %>
           <% else %>
             <%= link_to 'Add',
                   new_transaction_path(
                     user_id: @owner_id,
                     house_id: @house_id),
-                  class: 'btn btn-info btn-sm btn-block' %>
+                  class: 'btn btn-success btn-sm btn-block' %>
           <% end %>
         </div>
       </div>
     <% end %>
   </div>
-
   <% if @error %>
     <div class="alert alert-warning" role="alert">
       <%= @error %>
     </div>
   <% else %>
     <% if @warnings %>
-    <% @warnings.each do |w| %>
-      <div class="alert alert-warning warning" role="alert">
-        <%= w %>
-      </div>
+      <% @warnings.each do |w| %>
+        <div class="alert alert-warning warning" role="alert">
+          <%= w %>
+        </div>
+      <% end %>
     <% end %>
-    <% end %>
-
     <% if @view == 'company' %>
       <%= render 'company_view', transactions: @transactions, transactions_before: @transactions_before %>
     <% elsif @view == 'owner' %>
