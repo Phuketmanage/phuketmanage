@@ -5,7 +5,7 @@
   <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
     <div class="form-row">
       <div class="col-md-4 col-lg-12 mb-1">
-        <%= f.text_field :period, autocomplete: 'off', readonly: true, class: 'form-control-plaintext border pl-2 js_rangepicker', placeholder: t('search.dates'), data: {occupied_days: @occupied_days}, value: params['period'] %>
+        <%= f.text_field :period, autocomplete: 'off', readonly: true, class: 'form-control-plaintext border pl-2 js_rangepicker', placeholder: t('search.dates'), data: {occupied_days: @occupied_days, locale: I18n.locale }, value: params['period'] %>
       </div>
       <div class="col-md-4 col-lg-12">
         <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>

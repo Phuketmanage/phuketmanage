@@ -4,7 +4,7 @@
   <% end %>
   <div class="form-row shadow-sm mb-2 p-2 border rounded  bg-white">
     <div class="col-md-8">
-      <%= f.text_field :period, class: 'form-control-plaintext border pl-2 js_rangepicker', readonly: true, autocomplete: 'off', placeholder: t('search.dates') %>
+      <%= f.text_field :period, class: 'form-control-plaintext border pl-2 js_rangepicker', readonly: true, autocomplete: 'off', placeholder: t('search.dates'), data: { locale: I18n.locale } %>
     </div>
     <div class="col-md-4">
       <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
