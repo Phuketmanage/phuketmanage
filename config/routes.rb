@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     resources :users, except: :create
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
-    resources :houses, only: :show
+    get 'houses/:id', to: 'houses#show', as: 'show_house'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'
