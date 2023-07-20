@@ -131,7 +131,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <%= form_with(model: @booking, url: '/booking/new') do |f| %>
+        <%= form_with(model: @booking, url: '/booking/new', data: { remote: true }) do |f| %>
           <div class="modal-body">
             <p>
               <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %><br />
