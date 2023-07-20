@@ -544,7 +544,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_equal "14,000.00", csv[1][3]
     assert_equal "Balance from previous period", csv[1][6]
     # CSV Last transaction and total balance
-    assert_equal "19.07.2023", csv[12][0]
+    assert_equal Time.now.strftime('%d.%m.%Y'), csv[12][0]
     assert_equal "24,000.00", csv[12][1]
     assert_nil csv[12][2]
     assert_equal "221,299.01", csv[12][3]
