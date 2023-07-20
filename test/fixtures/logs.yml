@@ -1,13 +1,1 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  who: one
-  where: MyString
-  before: MyText
-  after: MyText
-
-two:
-  who: two
-  where: MyString
-  before: MyText
-  after: MyText
