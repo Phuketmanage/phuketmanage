@@ -69,6 +69,8 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'chusaku', '~> 0.6.1' # annotations for routes
+  gem "letter_opener", "~> 1.8"
+  gem 'rails-erd'
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem 'spring'
