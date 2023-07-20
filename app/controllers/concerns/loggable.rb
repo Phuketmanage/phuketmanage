@@ -26,9 +26,17 @@ module Loggable
     def log_event(subject)
       return true unless loggin_enabled?
 
-      track_changes(subject)
-      Log.add(user_email: actor_email, user_roles: actor_roles, location: action_location,
-              model_gid: subject.to_global_id, before: @past_values, applied_changes: @new_values)
+      @subject = subject
+      track_changes
+
+      transaction = Log.new(user_email: actor_email, user_roles: actor_roles, location: action_location, model_gid: subject_gid, before: @past_values,
+                            applied_changes: @new_values)
+      if transaction.save
+        true
+      else
+        logger.error { "Error logging action at #{action_location}. Reasons: #{transaction.errors.full_messages}" }
+        raise ActiveRecord::Rollback
+      end
     end
 
     private
@@ -61,10 +69,10 @@ module Loggable
       "#{controller_name}##{action_name}"
     end
 
-    def track_changes(subject)
-      input_hash = subject.previous_changes
+    def track_changes
+      input_hash = @subject.previous_changes
 
-      @past_values = subject.as_json
+      @past_values = @subject.as_json
       @new_values = {}
 
       return unless input_hash.any?
@@ -73,6 +81,10 @@ module Loggable
         @past_values[key] = values[0]
         @new_values[key] = values[1]
       end
+    end
+
+    def subject_gid
+      @subject.to_global_id
     end
   end
 end
