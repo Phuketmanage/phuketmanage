@@ -1,18 +1,13 @@
 class Log < ApplicationRecord
-  the_schema_is "logs" do |t|
-    t.string "where"
-    t.text "before"
-    t.text "after"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "who"
-    t.string "what"
-    t.string "with"
-  end
-  validates :who, :where, :what, :with, :before, :after, presence: true
+  # t.string "user_email" (user email)
+  # t.jsonb "user_roles" (user roles)
+  # t.string "location" (controller#action)
+  # t.string "model_gid"(model gid)
+  # t.jsonb "before" (full model before)
+  # t.jsonb "applied_changes"(new changes)
 
-  private
+validates :user_email, :user_roles, :location, :model_gid, :before, :applied_changes, presence: true
 
-  def add(who, where, what, with, before, after)
-  end
+# Defines Log.add method, alias to create
+self.singleton_class.send(:alias_method, :add, :create)
 end
