@@ -84,6 +84,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'faker'
   gem 'simplecov'
   gem 'shoulda-matchers', '~> 5.0'
