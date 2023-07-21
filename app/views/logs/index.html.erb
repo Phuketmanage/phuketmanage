@@ -13,11 +13,11 @@
     <tr>
       <td><%= l.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %></td>
       <td><%= l.user_email %></td>
-      <td><%= format_roles(l.user_roles) %></td>
+      <td><%= l.user_roles %></td>
       <td><%= l.location %></td>
       <td><%= l.model_gid %></td>
-      <td><%= format_logs(l.before) %></td>
-      <td><%= format_logs(l.applied_changes) %></td>
+      <td><pre><%= JSON.pretty_generate(l.before) %></pre></td>
+      <td><pre><%= JSON.pretty_generate(l.applied_changes) %></pre></td>
     </tr>
   <% end %>
 </table>

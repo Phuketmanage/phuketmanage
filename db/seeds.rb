@@ -162,7 +162,7 @@ Setting.create!(
     {
       var: "tranfer_supplier_email",
       value: "bytheair@gmail.com",
-      description: "tranfer supplier email"
+      description: "transfer supplier email"
     },
     { var: "usd_rate", value: "33", description: "usd rate" },
     { var: "user_activity_logging", value: "true", description: "Enable users activity logging. Values: true, false" }

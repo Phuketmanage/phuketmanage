@@ -6,6 +6,12 @@
 ## Accepts:
 # subject - model instance object
 #
+## Returns:
+# - True if the action was successful
+# - False if action failed.
+#
+# If there was failure it sends error message to Rails error log.
+#
 ## Usage
 #
 # 1. Enable global usage in settings ['user_activity_logging'] == 'true'
@@ -24,24 +30,23 @@ module Loggable
 
   included do
     def log_event(subject)
-      return true unless loggin_enabled?
+      return true unless logging_enabled?
 
       @subject = subject
-      track_changes
 
-      transaction = Log.new(user_email: actor_email, user_roles: actor_roles, location: action_location, model_gid: subject_gid, before: @past_values,
-                            applied_changes: @new_values)
+      transaction = Log.new(user_email: actor_email, user_roles: actor_roles, location: action_location,
+                            model_gid: subject_gid, before: previous_state, applied_changes: new_values)
       if transaction.save
         true
       else
         logger.error { "Error logging action at #{action_location}. Reasons: #{transaction.errors.full_messages}" }
-        raise ActiveRecord::Rollback
+        false
       end
     end
 
     private
 
-    def loggin_enabled?
+    def logging_enabled?
       @settings['user_activity_logging'] == 'true'
     end
 
@@ -54,33 +59,23 @@ module Loggable
     end
 
     def actor_roles
-      if current_user
-        roles = []
-        current_user.roles.each do |role|
-          roles << role.name
-        end
-        roles
-      else
-        'Unauthorized'
-      end
+      current_user.roles.pluck(:name).join(', ').presence || ["Unauthorized"]
     end
 
     def action_location
       "#{controller_name}##{action_name}"
     end
 
-    def track_changes
-      input_hash = @subject.previous_changes
+    def new_values
+      @subject.previous_changes.transform_values(&:last)
+    end
 
-      @past_values = @subject.as_json
-      @new_values = {}
+    def old_values
+      @subject.previous_changes.transform_values(&:first)
+    end
 
-      return unless input_hash.any?
-
-      input_hash.each do |key, values|
-        @past_values[key] = values[0]
-        @new_values[key] = values[1]
-      end
+    def previous_state
+      @subject.as_json.merge(old_values)
     end
 
     def subject_gid
