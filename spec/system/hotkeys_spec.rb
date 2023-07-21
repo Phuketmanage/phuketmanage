@@ -1,0 +1,40 @@
+require 'rails_helper'
+
+describe 'Hotkeys' do
+  let(:admin) { create(:user, :admin) }
+  let(:manager) { create(:user, :manager) }
+  let(:accounting) { create(:user, :accounting) }
+  let(:owner) { create(:user, :owner) }
+
+  describe 'Transaction index page', js: true do
+    let(:start_page) { transactions_path }
+    let(:desired_page) { new_transaction_path(locale: :en) }
+    context 'when pressed Shift+A' do
+      let(:keys) { [:shift, 'a'] }
+      context 'for admin' do
+        it "opens new transaction page" do
+          sign_in admin
+          visit start_page
+          page.send_keys keys
+          expect(page).to have_current_path(desired_page)
+        end
+      end
+      context 'for accounting' do
+        it "opens new transaction page" do
+          sign_in manager
+          visit start_page
+          page.send_keys keys
+          expect(page).to have_current_path(desired_page)
+        end
+      end
+      context 'for accounting' do
+        it "opens new transaction page" do
+          sign_in accounting
+          visit start_page
+          page.send_keys keys
+          expect(page).to have_current_path(desired_page)
+        end
+      end
+    end
+  end
+end
