@@ -11,7 +11,7 @@
   </tr>
   <% @logs.each do |l| %>
     <tr>
-      <td><%= l.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %></td>
+      <td><%= l.created_at.to_fs(:logs) %></td>
       <td><%= l.user_email %></td>
       <td><%= l.user_roles %></td>
       <td><%= l.location %></td>
