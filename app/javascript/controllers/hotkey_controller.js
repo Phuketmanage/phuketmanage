@@ -1,3 +1,10 @@
+// Hotkey Controller
+//
+// Connect it to the link or button element and specify hotkeys. When the hotkey is entered, the link will be clicked.
+//
+// Here is an example using a link generator:
+// <%= link_to 'Add', some_path, data: { "controller": "hotkey", "hotkeys": "Shift + a" } %>
+//
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
