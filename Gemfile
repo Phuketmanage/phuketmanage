@@ -54,6 +54,7 @@ gem 'rails-i18n', '~> 7.0.0'
 gem 'scout_apm'
 gem 'the_schema_is'
 gem 'twilio-ruby'
+gem 'stimulus-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
