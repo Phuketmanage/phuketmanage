@@ -367,6 +367,8 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     statsd-ruby (1.5.0)
+    stimulus-rails (1.2.1)
+      railties (>= 6.0.0)
     terser (1.1.17)
       execjs (>= 0.3.0, < 3)
     the_schema_is (0.0.5)
@@ -451,6 +453,7 @@ DEPENDENCIES
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
+  stimulus-rails
   terser (~> 1.1)
   the_schema_is
   turbo-rails (~> 1.4.0)
