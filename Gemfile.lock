@@ -344,6 +344,8 @@ GEM
       tilt
     scout_apm (5.3.5)
       parser
+    shoulda-matchers (5.3.0)
+      activesupport (>= 5.2.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -441,6 +443,7 @@ DEPENDENCIES
   rubocop-rails
   sassc-rails
   scout_apm
+  shoulda-matchers (~> 5.0)
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)

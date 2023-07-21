@@ -86,6 +86,7 @@ group :test do
   gem 'capybara'
   gem 'faker'
   gem 'simplecov'
+  gem 'shoulda-matchers', '~> 5.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
