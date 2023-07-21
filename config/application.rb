@@ -11,6 +11,11 @@ module Phuketmanage
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    # Adds data: { remote: true } to all generated forms (default setting before Rails 6). Used by old forms submiting JS.
+    #
+    # TODO: #268 Mail to manager about new booking - link should open list with bookings for house
+    config.action_view.form_with_generates_remote_forms = true
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
