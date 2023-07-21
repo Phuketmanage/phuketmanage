@@ -8,6 +8,4 @@ class Log < ApplicationRecord
 
 validates :user_email, :user_roles, :location, :model_gid, :before, :applied_changes, presence: true
 
-# Defines Log.add method, alias to create
-self.singleton_class.send(:alias_method, :add, :create)
 end
