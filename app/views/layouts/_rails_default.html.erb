@@ -4,5 +4,13 @@
 <%= stylesheet_link_tag    'application', media: 'all', 'data-turbo-track': 'reload' %>
 <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 <%= javascript_include_tag "old_application", "data-turbo-track": "reload", defer: true %>
+<%# Used by Rspec system tests to mock browser time %>
+<% if Rails.env.test? && defined?(Capybara) && Capybara.mock_browser_time? %>
+  <%= javascript_include_tag "timemachine", "data-turbo-track": "reload" %>
+  <% unix_millis = (Time.now.to_f * 1000.0).to_i %>
+  <script type="text/javascript" >
+    sinon.useFakeTimers(<%= unix_millis %>);
+  </script>
+<% end %>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

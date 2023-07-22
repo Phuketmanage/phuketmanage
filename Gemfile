@@ -70,4 +70,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'faker'
   gem 'simplecov'
+  gem 'timecop'
 end

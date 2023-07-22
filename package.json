@@ -6,6 +6,7 @@
     "@hotwired/turbo-rails": "^7.3.0",
     "esbuild": "^0.18.11",
     "flatpickr": "^4.6.13",
+    "sinon": "^15.2.0",
     "stimulus-flatpickr": "^3.0.0-0"
   },
   "scripts": {
