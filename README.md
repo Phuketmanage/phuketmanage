@@ -7,7 +7,7 @@ Houses - list of houses, from here can go to Balance | Bookings | House Details 
 
 Bookinngs - all bookings that cann be filtered by date or house.
 
-Timeline - calendar that show houses occupancy, cleanings schedule.  
+Timeline - calendar that show houses occupancy, cleanings schedule.
 
 Check in/out - information for guests relation manager to help with check in or check out process.
 
@@ -71,6 +71,40 @@ All closed issues have to be covered by tests except when mentionned that tests 
 ```sh
 rails t
 rspec
+```
+
+## Rspec system tests
+
+By default system tests will use `:rack_test` driver without JS support to run tests faster.
+
+To run tests that rely on JS: add `js: true`. It will run those tests with `:selenium_chrome_headless` driver. Examples:
+
+- In describe block (will run all tests inside using chrome):
+
+```ruby
+describe 'whole test block needs js', js: true do
+```
+
+- In 'it' block to activate engine only for specific test:
+
+```ruby
+it "runs specific test that needs js", js: true do
+```
+
+Add `js_visual: true` to use selenium_chrome driver (will open browser window).
+
+### Screenshots
+
+The default systems tests (without `js: true` or `js_visual: true`) will not save screenshots. Both options (js, js_visual) will save screenshot in 'tmp/screenshots' to help you identify the problem, so you can use it for debug purpose. Example:
+
+```sh
+Failures:
+
+  1) Search when hide checkbox checked hides unavailable houses
+     Failure/Error: expect(page).to have_selector('div.col.wrong', count: 3, visible: true)
+       expected to find css "div.col.wrong" 3 times but there were no matches
+
+     [Screenshot Image]: /phuketmanage/tmp/screenshots/failures_r_spec_some_failed_test_409.png
 ```
 
 ## Coverage
