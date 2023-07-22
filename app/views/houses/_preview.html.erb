@@ -1,3 +1,4 @@
+<div class="col mb-2" <% if from_search == true && price[:unavailable].present? %> data-reveal-target="item" <% end %> >
       <div class="card house">
         <%= image_tag h.preview, class: 'card-img-top', alt: h.generated_title(I18n.locale) if h.preview %>
         <div class="card-body">
@@ -54,3 +55,4 @@
 
         </div>
       </div>
+    </div>
