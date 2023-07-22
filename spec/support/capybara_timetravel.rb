@@ -9,10 +9,3 @@ Capybara.class_eval do
     @mock_browser_time
   end
 end
-
-# Enables setting browser time
-RSpec.configure do |config|
-  config.around(:each, :mock_browser_time) do |example|
-    Capybara.mock_browser_time { example.run }
-  end
-end

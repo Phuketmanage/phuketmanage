@@ -13,4 +13,7 @@ RSpec.configure do |config|
     driven_by :selenium_chrome
     Capybara.page.current_window.resize_to(1024, 768)
   end
+  config.around(:each, :mock_browser_time) do |example|
+    Capybara.mock_browser_time { example.run }
+  end
 end

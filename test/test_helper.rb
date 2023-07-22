@@ -7,6 +7,7 @@ ENV['AWS_ACCESS_KEY_ID'] = 'AKIASANYCWRAMOW5GHMY'
 ENV['AWS_SECRET_ACCESS_KEY'] = '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'
 
 require_relative '../config/environment'
+require_relative '../spec/support/capybara_timetravel'
 require 'rails/test_help'
 
 class ActiveSupport::TestCase
