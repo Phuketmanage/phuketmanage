@@ -21,8 +21,8 @@
   </div>
   <% if current_user && current_user.role?(['Admin', 'Accounting', 'Manager']) %>
     <div class="form-check mb-2">
-      <input class="form-check-input form-check-input-xl" type="checkbox" value="" id="checkboxHideUnavailable">
-      <label class="form-check-label" for="checkboxHideUnavailable">
+      <input class="form-check-input form-check-input-xl" type="checkbox" value="" id="checkboxHideUnavailable" data-action="click->reveal#toggle">
+      <label class="form-check-label" for="checkboxHideUnavailable" >
         Hide unavailable
       </label>
     </div>

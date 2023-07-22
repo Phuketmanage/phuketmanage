@@ -4,8 +4,12 @@
 
 import { application } from "./application"
 
+
 import FlatpickrController from "./flatpickr_controller"
 application.register("flatpickr", FlatpickrController)
 
 import HotkeyController from "./hotkey_controller"
 application.register("hotkey", HotkeyController)
+
+import Reveal from 'stimulus-reveal-controller'
+application.register('reveal', Reveal)

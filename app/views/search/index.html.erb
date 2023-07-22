@@ -1,11 +1,11 @@
-<h1><%= t('search.results') %></h1>
-<%= render 'form', search: @search %>
-<p><small><%= t('search.period_limits') %></small></p>
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-2">
-<% @houses.each do |h| %>
-  <% next if @prices[h.id].nil?  %>
-  <div class="col mb-2">
-    <%= render 'houses/preview', h: h, price: @prices[h.id], from_search: true, search: @search %>
+<div data-controller="reveal" data-reveal-hidden-class="d-none" >
+  <h1><%= t('search.results') %></h1>
+  <%= render 'form', search: @search %>
+  <p><small><%= t('search.period_limits') %></small></p>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-2">
+    <% @houses.each do |h| %>
+      <% next if @prices[h.id].nil?  %>
+      <%= render 'houses/preview', h: h, price: @prices[h.id], from_search: true, search: @search %>
+    <% end %>
   </div>
-<% end %>
 </div>
