@@ -34,6 +34,7 @@ ru:
     booking_no: Номер брони
     close: Закрыть
     dates: Выберите предпочтительные даты
+    duration_shorter_than_minimal: Минимальный срок аренды для выбранного объекта %{min_house_period} ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.
   houses:
     description: Описание
     beds: Спальные места
@@ -118,7 +119,7 @@ ru:
       period: "Период аренды: %{start} - %{finish}"
       tenant: "Гость: %{user}"
       comment: "Комментарий: %{comment}"
-      price: "Стоимость: %{price}"  
+      price: "Стоимость: %{price}"
   activerecord:
     attributes:
       user:
