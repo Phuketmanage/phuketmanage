@@ -1,5 +1,6 @@
 class PricesController < ApplicationController
   include SeasonsHelper
+  include Loggable
   load_and_authorize_resource :house, id_param: :number
   # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
@@ -135,6 +136,7 @@ class PricesController < ApplicationController
   def update
     price = Price.find(params[:id])
     if price.update(price_params)
+      log_event(price)
       render json: { price_id: price.id, status: :ok }
     else
       render json: { errors: price.errors, price_id: price.id }, status: :unprocessable_entity
