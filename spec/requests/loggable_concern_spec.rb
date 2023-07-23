@@ -22,7 +22,7 @@ RSpec.describe Loggable, type: :controller do
     end
   end
 
-  # Drawes route for anonymous controller
+  # Draws route for anonymous controller
   before do
     routes.draw do
       post 'test_loggable_concern' => 'anonymous#test_loggable_concern'

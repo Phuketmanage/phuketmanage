@@ -14,7 +14,7 @@
 #
 ## Usage
 #
-# 1. Enable global usage in settings ['user_activity_logging'] == 'true'
+# 1. Enable global usage in the settings, adding var: 'user_activity_logging_enabled'
 #
 # 2. Add in controller:
 # include Loggable
