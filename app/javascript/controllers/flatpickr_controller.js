@@ -1,9 +1,9 @@
 // import stimulus-flatpickr wrapper controller to extend it
-import Flatpickr from 'stimulus-flatpickr'
+import Flatpickr from 'stimulus-flatpickr';
 
 // you can also import a translation file
-import { Russian } from 'flatpickr/dist/l10n/ru.js'
-import { english } from "flatpickr/dist/l10n/default.js";
+import { Russian } from 'flatpickr/dist/l10n/ru';
+import { english } from 'flatpickr/dist/l10n/default';
 
 // import a theme (could be in your main CSS entry too...)
 // import 'flatpickr/dist/themes/dark.css'
@@ -12,24 +12,21 @@ import { english } from "flatpickr/dist/l10n/default.js";
 export default class extends Flatpickr {
   locales = {
     ru: Russian,
-    en: english
+    en: english,
   };
 
   connect() {
-    // sets your language (you can also set some global setting for all time pickers)
     this.config = {
+      altFormat: "d.m.y",
+      altInput: true,
+      dateFormat: "Y-m-d",
       locale: this.locale,
-      dateFormat: "d.m.Y",
-      mode: "range"
-    }
+      mode: 'range',
+    };
     super.connect();
   }
 
   get locale() {
-    if (this.locales && this.data.has("locale")) {
-      return this.locales[this.data.get("locale")];
-    } else {
-      return "";
-    }
+    return this.locales[this.data.get('locale')] || english;
   }
 }
