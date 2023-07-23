@@ -84,7 +84,7 @@ class House < ApplicationRecord
     bs.each do |b|
       occupied_days += (b.start..b.finish).to_a
     end
-    occupied_days.select{|v| v > from}.map{|v| v.strftime('%d.%m.%Y')}.to_json
+    occupied_days.select{|v| v > from}
   end
 
   def preview
