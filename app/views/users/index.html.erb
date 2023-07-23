@@ -6,9 +6,9 @@
 
 <%= provide(:title,  title) %>
 <h1><%= title %></h1>
-<%= link_to 'Create new user', new_user_path, class: "btn btn-info mb-2" %>
 <% if current_user.role?("Admin") %>
   <%= link_to 'Inactive users', users_inactive_path, class: "btn btn-primary mb-2" %>
 <% end %>
+<%= link_to 'Add', new_user_path, class: "btn btn-success mb-2" %>
 <%= render 'table' %>
 <%#= link_to 'Invite new user', new_user_invitation_path, { class: "nav-link" } %>

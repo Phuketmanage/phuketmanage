@@ -9,3 +9,6 @@ application.register("flatpickr", FlatpickrController)
 
 import HotkeyController from "./hotkey_controller"
 application.register("hotkey", HotkeyController)
+
+import Reveal from 'stimulus-reveal-controller'
+application.register('reveal', Reveal)

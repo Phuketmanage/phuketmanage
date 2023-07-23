@@ -6,14 +6,14 @@
       <input type="text" class="form-control" id="search_house" placeholder="Filter by code">
     </form>
   </div>
-  <div class="col-lg-2">
-    <%= link_to 'New House', new_house_path, class: 'btn btn-info mb-2 btn-block' %>
-  </div>
-  <% if current_user.role?('Admin') %>
+    <% if current_user.role?('Admin') %>
     <div class="col-lg-2">
       <%= link_to 'Inactive Houses', houses_inactive_path, class: 'btn btn-primary mb-2 btn-block' %>
     </div>
-  <% end %> 
+  <% end %>
+  <div class="col-lg-2">
+    <%= link_to 'Add', new_house_path, class: 'btn btn-success mb-2 btn-block' %>
+  </div>
 </div>
 <div class="for_rent">
   <h5 id="active_hs">Houses for rent</h5>
