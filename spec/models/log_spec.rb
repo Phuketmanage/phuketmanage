@@ -2,16 +2,46 @@
 
 require 'rails_helper'
 
-describe 'Log', :type => :model do
-  let(:owner) { create(:user, :owner)}
-  it 'shouldn\'t be valid' do
-    expect do
-      create(:log)
-    end.to raise_error(ActiveRecord::RecordInvalid)
+describe Log do
+  let(:log) { build(:log) }
+
+  it "is valid with valid attributes" do
+    expect(log).to be_valid
   end
-  it 'should be valid' do
+
+  it "is not valid without a user_email" do
+    log.user_email = nil
+    expect(log).to be_invalid
+  end
+
+  it "is not valid without a user_roles" do
+    log.user_roles = nil
+    expect(log).to be_invalid
+  end
+
+  it "is not valid without a location" do
+    log.location = nil
+    expect(log).to be_invalid
+  end
+
+  it "is not valid without a model_gid" do
+    log.model_gid = nil
+    expect(log).to be_invalid
+  end
+
+  it "is not valid without a before_values" do
+    log.before_values = nil
+    expect(log).to be_invalid
+  end
+
+  it "is not valid without a applied_changes" do
+    log.applied_changes = nil
+    expect(log).to be_invalid
+  end
+
+  it 'is valid' do
     expect do
       log.save
-    end.to change { Log.count }.by(1)
+    end.to change(described_class, :count).by(1)
   end
 end
