@@ -14,6 +14,9 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  # Parallel Testing with Processes
+  # parallelize(workers: :number_of_processors)
 end
 
 module ActionDispatch::Integration
