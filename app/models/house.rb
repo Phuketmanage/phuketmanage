@@ -77,14 +77,23 @@ class House < ApplicationRecord
   scope :not_for_rent, -> { active.where(unavailable: true).order(:code) }
   scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
 
-  def occupied_days
-    from = Time.zone.now.in_time_zone('Bangkok').to_date
-    bs = bookings.active.where(finish: from..)
-    occupied_days = []
-    bs.each do |b|
-      occupied_days += (b.start..b.finish).to_a
+  def occupied_days(dtnb = 0)
+    starting_date = Time.zone.now.in_time_zone('Bangkok').to_date
+    bookings = self.bookings.active.where(finish: starting_date..).pluck(:start, :finish)
+
+    return [] if bookings.blank?
+
+    bookings.map do |range|
+      # Wrap dates with days to next booking
+      from = range.first.advance(days: -dtnb.to_i).iso8601
+      to = range.last.advance(days: dtnb.to_i).iso8601
+
+      # Create Flatpickr acceptable format
+      {
+        from:,
+        to:
+      }
     end
-    occupied_days.select{|v| v > from}
   end
 
   def preview
@@ -102,7 +111,7 @@ class House < ApplicationRecord
   end
 
   def option(title_en)
-    option = Option.find_by(title_en: title_en)
+    option = Option.find_by(title_en:)
     return false unless option
 
     options.where(id: option.id).any?
@@ -122,7 +131,7 @@ class House < ApplicationRecord
     number_unique = false
     until number_unique
       number = ('1'..'9').to_a.shuffle[0..rand(1..6)].join
-      house = House.find_by(number: number)
+      house = House.find_by(number:)
       number_unique = true if house.nil?
     end
     self.number = number

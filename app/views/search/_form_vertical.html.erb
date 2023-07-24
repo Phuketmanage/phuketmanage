@@ -15,7 +15,7 @@
                     flatpickr_locale: I18n.locale,
                     flatpickr_now: Date.current.iso8601,
                     flatpickr_min_date: Date.current.iso8601,
-                    flatpickr_disable: @occupied_days
+                    flatpickr_disable: @occupied_days.to_json
                   },
             value: params['period'] %>
       </div>
