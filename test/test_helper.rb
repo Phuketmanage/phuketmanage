@@ -32,6 +32,7 @@ module ActiveSupport
   parallelize(workers: 4)
 
   # Add more helper methods to be used by all tests here...
+  end
 end
 
 module ActionDispatch
