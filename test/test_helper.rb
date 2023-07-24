@@ -16,7 +16,7 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 
   # Parallel Testing with Processes
-  parallelize(workers: 4)
+  parallelize(workers: 6)
 end
 
 module ActionDispatch::Integration
