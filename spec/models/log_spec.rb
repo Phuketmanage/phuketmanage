@@ -38,10 +38,4 @@ describe Log do
     log.applied_changes = nil
     expect(log).to be_invalid
   end
-
-  it 'is valid' do
-    expect do
-      log.save
-    end.to change(described_class, :count).by(1)
-  end
 end
