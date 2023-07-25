@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :booking do
     client_details { Faker::Name.last_name }

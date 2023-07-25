@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.email } 
-    password {"qweasd"}
+    email { Faker::Internet.email }
+    password { "qweasd" }
     trait :admin do
       roles { [Role.find_or_create_by(name: 'Admin')] }
     end

@@ -9,14 +9,14 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create new booking' do
-    year = Time.now.year + 1
+    year = Time.zone.now.year + 1
     # House not available
     start = "7.07.#{year}".to_date
     finish = "14.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -28,8 +28,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "10.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -41,8 +41,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "27.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -55,8 +55,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "28.07.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -69,8 +69,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "05.08.#{year}".to_date
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -83,8 +83,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "10.08.#{year}".to_date
     house = houses(:villa_3)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -97,14 +97,14 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "29.07.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
     end
     hid = House.find(Booking.last.house_id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
@@ -113,24 +113,24 @@ class BookingsTest < ActionDispatch::IntegrationTest
     finish = "9.07.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
-      post bookings_path params: { booking: { start: start,
-                                              finish: finish,
+      post bookings_path params: { booking: { start:,
+                                              finish:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
     end
     hid = House.find(Booking.last.house_id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully created.'
   end
 
   test 'Guest search and create booking' do
-    year = Time.now.year + 1
+    year = Time.zone.now.year + 1
     rs = "15.11.#{year}".to_date
     rf = "25.11.#{year}".to_date
     period = "#{rs} to #{rf}"
-    get search_path params: { search: { period: period } }
+    get search_path params: { search: { period: } }
     assert_select 'p.duration', 'Total nights: 10'
     # assert_match 'Comment for all', response.body
     assert_select 'div.house', count: 3
@@ -139,7 +139,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update booking' do
-    year = Time.now.year + 1
+    year = Time.zone.now.year + 1
     # Change only dates - house not available
     new_start = "29.06.#{year}".to_date
     put booking_path(@booking.id), params: { booking: { start: new_start,
@@ -158,20 +158,20 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     hid = House.find(@booking.house.id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
     # Change only dates - house available = success
     new_start = "2.07.#{year}".to_date
-    house = houses(:villa_1)
+    houses(:villa_1)
     put booking_path(@booking.id), params: { booking: { start: new_start,
                                                         finish: @booking.finish,
                                                         house_id: @booking.house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     hid = House.find(@booking.house.id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.start, new_start
@@ -196,7 +196,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     hid = House.find(new_house.id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.house.id, new_house.id
@@ -235,7 +235,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     hid = House.find(new_house.id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
@@ -249,7 +249,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     hid = House.find(@booking.house.id).number
-    assert_redirected_to bookings_path(hid: hid)
+    assert_redirected_to bookings_path(hid:)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
     assert_equal @booking.reload.start, new_start

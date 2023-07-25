@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'Datepickr', js: true, freeze: '2051-02-02' do
+describe 'Datepickr', freeze: '2051-02-02', js: true do
   let(:house) { create(:house) }
   let(:current_date) { '2051-02-02'.to_date }
   let(:booking) do

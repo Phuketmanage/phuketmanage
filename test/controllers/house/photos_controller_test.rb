@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class House::PhotosControllerTest < ActionDispatch::IntegrationTest
+class HousePhotosControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

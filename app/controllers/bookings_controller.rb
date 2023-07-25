@@ -49,6 +49,7 @@ class BookingsController < ApplicationController
     end
   end
 
+  # @route GET /bookings/canceled (bookings_canceled)
   def canceled
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error

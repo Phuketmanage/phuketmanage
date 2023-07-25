@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Transaction' do
-  let(:admin) { create(:user, :admin)}
+  let(:admin) { create(:user, :admin) }
 
-  it "should be valid for save" do
+  it "is valid for save" do
     sign_in admin
     visit new_transaction_path
   end

@@ -21,7 +21,8 @@ class WaterUsagesControllerTest < ActionDispatch::IntegrationTest
   test "should create water_usage" do
     assert_difference('WaterUsage.count') do
       post water_usages_url,
-           params: { water_usage: { amount: @water_usage.amount, date: Date.today, house_id: @water_usage.house_id } }
+           params: { water_usage: { amount: @water_usage.amount, date: Time.zone.today,
+                                    house_id: @water_usage.house_id } }
     end
   end
 

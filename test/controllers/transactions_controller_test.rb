@@ -44,7 +44,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Rental')
     post transactions_path, params: {
       transaction: {
-        date: Time.now.to_date,
+        date: Time.zone.now.to_date,
         type_id: type.id,
         booking_id: @booking.id,
         de_ow: 100_000,

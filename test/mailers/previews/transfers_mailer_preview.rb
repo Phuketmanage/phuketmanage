@@ -10,12 +10,12 @@ class TransfersMailerPreview < ActionMailer::Preview
     transfer = Transfer.find_by(number: "AG05XIY")
     transfer.trsf_type = (transfer.trsf_type == "IN" ? "OUT" : "IN")
     transfer.date = transfer.date + 1.day
-    transfer.time = transfer.time.split("").shuffle.join
-    transfer.from = "New from".split("").shuffle.join
-    transfer.client = "New name".split("").shuffle.join
-    transfer.pax = "2+3".split("").shuffle.join
-    transfer.to = "International terminal".split("").shuffle.join
-    transfer.remarks = "COT1200".split("").shuffle.join
+    transfer.time = transfer.time.chars.shuffle.join
+    transfer.from = "New from".chars.shuffle.join
+    transfer.client = "New name".chars.shuffle.join
+    transfer.pax = "2+3".chars.shuffle.join
+    transfer.to = "International terminal".chars.shuffle.join
+    transfer.remarks = "COT1200".chars.shuffle.join
     changes = transfer.changes
     transfer.save
     TransfersMailer.amended(transfer, changes)

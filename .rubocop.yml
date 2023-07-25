@@ -1,12 +1,20 @@
 require:
-  - the_schema_is/cops
   - rubocop-rails
   - rubocop-performance
-  # - rubocop-rspec
-  # - rubocop-capybara
+  - rubocop-rspec
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-minitest
+
+inherit_mode:
+  merge:
+    - Exclude
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - db/**/*
+    - vendor/**/*
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -20,3 +28,8 @@ Layout/EndAlignment:
 Style/StringLiterals:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Minitest/EmptyLineBeforeAssertionMethods:
+  Enabled: false

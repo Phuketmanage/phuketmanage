@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # @route GET /users/inactive (users_inactive)
   def inactive
     @users = User.inactive_owners.order(:name)
   end
