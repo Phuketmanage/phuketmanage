@@ -104,11 +104,11 @@
           <% if !@owner_id %>
             <%= link_to "Add", new_transaction_path,
                 class: 'btn btn-success btn-sm btn-block',
-                data: { "controller": "hotkey", "hotkeys": "Shift + a" } %>
+                data: { "controller": "hotkeys hotkeys-actions", "hotkeys-bindings-value": {"shift+a": "hotkeys-actions#click"}, "hotkeys-actions-target": "element" } %>
           <% else %>
             <%= link_to 'Add', new_transaction_path( user_id: @owner_id, house_id: @house_id),
                 class: 'btn btn-success btn-sm btn-block',
-                data: { "controller": "hotkey", "hotkeys": "Shift + a" } %>
+                data: { "controller": "hotkeys hotkeys-actions", "hotkeys-bindings-value": {"shift+a": "hotkeys-actions#click"}, "hotkeys-actions-target": "element" } %>
           <% end %>
         </div>
         <% if params[:owner_id].present? %>
