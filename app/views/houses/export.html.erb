@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="d-print-none d-flex align-items-center justify-content-end flex-grow-1 py-2">
+      <button type="button" class="col-2 btn btn-primary btn-block" onclick="window.print();">Print</button>
+    </div>
+  </div>
+  <h5 id="active_hs">Houses for rent</h5>
+  <% if @houses_for_rent.blank? %>
+    <span>There are no houses for rent.</span>
+  <% else %>
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>House Code</th>
+              <th>Project/Address</th>
+              <th>Google Map</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: "export_house", collection: @houses_for_rent, as: :house %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+  <h5 id="nactive_hs">Houses not for rent</h5>
+  <% if @houses_not_for_rent.blank? %>
+    <span> There are no houses not for rent.</span>
+  <% else %>
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>House Code</th>
+              <th>Project/Address</th>
+              <th>Google Map</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: "export_house", collection: @houses_not_for_rent, as: :house %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>

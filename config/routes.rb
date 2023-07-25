@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     resources :prices, only: [:index]
     get 'photos', to: 'house_photos#index', as: 'photos'
     get 'photos/add', to: 'house_photos#add'
+    get 'export', on: :collection
   end
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'

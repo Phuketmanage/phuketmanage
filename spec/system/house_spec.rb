@@ -5,28 +5,28 @@ describe 'House' do
   let(:manager) { create(:user, :manager) }
   let(:balance_closed) { false }
   let(:unavailable) { false }
-  let!(:house) { create :house, unavailable: unavailable, balance_closed: balance_closed }
+  let!(:house) { create :house, unavailable:, balance_closed: }
   subject { page }
 
   describe "view" do
     context "when visiting root page in en" do
       before { visit "/" }
-      it { is_expected.to have_content "Project: #{house.project}"}
+      it { is_expected.to have_content "Project: #{house.project}" }
     end
 
     context "when visiting root page in ru" do
       before { visit "/?locale=ru" }
-      it { is_expected.to have_content "Проект: #{house.project}"}
+      it { is_expected.to have_content "Проект: #{house.project}" }
     end
 
     context "when visiting show page in en" do
-    before { visit "/houses/#{house.number}?locale=en" }
-    it { is_expected.to have_content "Project: #{house.project}"}
+      before { visit "/houses/#{house.number}?locale=en" }
+      it { is_expected.to have_content "Project: #{house.project}" }
     end
 
     context "when visiting show page in ru" do
-    before { visit "/houses/#{house.number}?locale=ru" }
-    it { is_expected.to have_content "Проект: #{house.project}"}
+      before { visit "/houses/#{house.number}?locale=ru" }
+      it { is_expected.to have_content "Проект: #{house.project}" }
     end
   end
 
@@ -65,7 +65,7 @@ describe 'House' do
       before { sign_in admin }
 
       describe '#unavailable' do
-        before { visit houses_path}
+        before { visit houses_path }
 
         context 'when house is for rent' do
           let(:unavailable) { false }
@@ -80,10 +80,54 @@ describe 'House' do
 
       describe '#balance_closed' do
         before { visit houses_inactive_path }
-        
+
         context 'when house is inactive' do
           let(:balance_closed) { true }
           it { is_expected.to have_selector('.inactive_houses .house', text: house.title_en) }
+        end
+      end
+    end
+  end
+  describe 'Export' do
+    before { sign_in admin }
+    it "has export button on houses index" do
+      visit houses_path
+      expect(page).to have_link('Export list')
+    end
+    context 'export page' do
+      before do
+        visit export_houses_path
+      end
+      it "there is export page without menu block" do
+        expect(page).to have_no_selector('nav')
+      end
+      it "there is print button" do
+        expect(page).to have_button('Print')
+      end
+      it "has section headers" do
+        expect(page).to have_selector('h5#active_hs', text: 'Houses for rent')
+        expect(page).to have_selector('h5#nactive_hs', text: 'Houses not for rent')
+      end
+      context 'block Houses for rent' do
+        it "has table headers" do
+          expect(page).to have_selector('th', text: 'House Code')
+          expect(page).to have_selector('th', text: 'Project/Address')
+          expect(page).to have_selector('th', text: 'Google Map')
+        end
+        it "has table content" do
+          expect(page).to have_selector('strong', text: house.code)
+          expect(page).to have_selector('span', text: "Project: #{house.project}")
+          expect(page).to have_selector('span', text: "Address: #{house.address}")
+          expect(page).to have_selector('span', text: "Google map: #{house.google_map}")
+        end
+      end
+      context 'block Houses not for rent' do
+        let(:unavailable) { true }
+        it "shows unavaliable houses" do
+          expect(page).to have_selector('strong', text: house.code)
+          expect(page).to have_selector('span', text: "Project: #{house.project}")
+          expect(page).to have_selector('span', text: "Address: #{house.address}")
+          expect(page).to have_selector('span', text: "Google map: #{house.google_map}")
         end
       end
     end
