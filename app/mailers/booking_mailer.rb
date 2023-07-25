@@ -11,12 +11,12 @@ class BookingMailer < ApplicationMailer
            subject: "New booking for #{@booking.house.code}: #{booking.start.strftime('%d.%m.%Y')} - #{booking.finish.strftime('%d.%m.%Y')}"
     end
   end
-  
+
   def send_request_confirmation(booking, email, locale)
     @booking = booking
     I18n.with_locale(locale) do
       mail to: email,
-        subject: (t 'booking_mailer.send_request_confirmation.subject', number: @booking.number)
+           subject: (t 'booking_mailer.send_request_confirmation.subject', number: @booking.number)
     end
   end
 end

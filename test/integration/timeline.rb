@@ -29,5 +29,4 @@ class TiemelineTest < ActionDispatch::IntegrationTest
     assert_select "div.house_code", 5
     assert_select "div.house_code[data-house-id=#{villa.id}]", 0
   end
-
 end

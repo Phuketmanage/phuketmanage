@@ -7,6 +7,6 @@ class ApplicationMailer < ActionMailer::Base
   private
 
   def set_settings
-    @settings = Setting.all.map { |s| [s.var, s.value] }.to_h
+    @settings = Setting.all.to_h { |s| [s.var, s.value] }
   end
 end

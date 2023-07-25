@@ -4,7 +4,7 @@ class TransfersMailerTest < ActionMailer::TestCase
   setup do
     @transfer = transfers(:one)
     @changes = {}
-    @settings = Setting.all.map { |s| [s.var, s.value] }.to_h
+    @settings = Setting.all.to_h { |s| [s.var, s.value] }
   end
 
   test "created" do

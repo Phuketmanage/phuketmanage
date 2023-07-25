@@ -9,7 +9,7 @@ module ApplicationHelper
     if page_title.empty?
       base_title
     else
-      page_title + " | " + full_title
+      "#{page_title} | #{full_title}"
     end
   end
 end

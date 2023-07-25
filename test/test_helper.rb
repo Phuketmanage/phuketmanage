@@ -9,17 +9,21 @@ ENV['AWS_SECRET_ACCESS_KEY'] = 'SVrCNcgkT+RuLSyYa/BQ8PH/HBHxc3VRIryHXMVr'
 require_relative '../config/environment'
 require 'rails/test_help'
 
-class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
+module ActiveSupport
+  class TestCase
+    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+    fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+    # Add more helper methods to be used by all tests here...
+  end
 end
 
-module ActionDispatch::Integration
-  class Session
-    def default_url_options
-      { locale: I18n.locale }
+module ActionDispatch
+  module Integration
+    class Session
+      def default_url_options
+        { locale: I18n.locale }
+      end
     end
   end
 end

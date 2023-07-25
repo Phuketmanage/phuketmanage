@@ -20,7 +20,6 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create job" do
-    new_name = 'test'
     assert_difference('Job.count') do
       post jobs_url,
            params: { job: { booking_id: @job.booking_id, comment: @job.comment, plan: @job.plan, house_id: @job.house_id,

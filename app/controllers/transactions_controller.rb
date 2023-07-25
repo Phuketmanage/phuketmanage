@@ -451,6 +451,7 @@ class TransactionsController < ApplicationController
     render json: { field: field, warning: warning }
   end
 
+  # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
   def raw_for_acc
     @from = params[:from]
     @to = params[:to]
