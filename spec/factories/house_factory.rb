@@ -14,7 +14,7 @@ FactoryBot.define do
     project { Faker::Address.city }
     unavailable { false }
     after(:create) do |house|
-      create_list :duration, 1 , house: house
+      create_list :duration, 1, house: house
     end
     trait :with_seasons do
       after(:create) do |house|
