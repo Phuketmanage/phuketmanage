@@ -12,6 +12,7 @@ class Ability
     # can :about, Page
     if user.role? :owner
       can :index, [Transaction]
+      can :read, :translation
       can :index_front, [Booking]
       can :index, [Admin]
       can :index, TransactionFile, show: true
@@ -38,6 +39,7 @@ class Ability
       can [:destroy], Transaction do |t|
         t.date > Date.today - 1.day
       end
+      can :read, :translation
       can [:laundry], Job
       can %i[timeline timeline_data], Booking
       can :index, [Admin]
@@ -72,6 +74,7 @@ class Ability
         t.date > Date.today - 1.day
       end
       can :manage, TransactionFile
+      can :read, :translation
       # can [ :statement, :reimbersment ], Document
       can %i[index create update], WaterUsage
       can [:index, :bookings], :report
