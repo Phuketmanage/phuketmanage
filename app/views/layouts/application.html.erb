@@ -6,7 +6,7 @@
     <%= render 'layouts/shim' %>
   </head>
   <body>
-    <%= render 'layouts/header' %>
+    <%= render 'layouts/header' unless local_assigns[:print] %>
     <main class="container" role='main'>
       <%= render 'shared/flash' unless flash.empty? %>
       <%= yield %>

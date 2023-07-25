@@ -10,6 +10,13 @@ class HousesController < ApplicationController
     @houses_not_for_rent = House.not_for_rent
   end
 
+  # @route GET /houses/export (export_houses)
+  def export
+    @houses_for_rent = House.for_rent
+    @houses_not_for_rent = House.not_for_rent
+    render layout: 'application', locals: { print: true }
+  end
+
   # @route GET /houses/inactive (houses_inactive)
   def inactive
     @inactive_houses = House.inactive

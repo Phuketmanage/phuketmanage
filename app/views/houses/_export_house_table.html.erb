@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>House Code</th>
+          <th>Project/Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "export_house", collection: houses, as: :house %>
+      </tbody>
+    </table>
+  </div>
+</div>

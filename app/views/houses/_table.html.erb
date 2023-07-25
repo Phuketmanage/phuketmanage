@@ -6,10 +6,7 @@
         Title: <%= house.generated_title(I18n.locale) %><br/>
         Owner: <%= "#{house.owner.name} #{house.owner.surname}" %><br/>
         Project: <%= house.project.present? ? house.project : '-' %><br/>
-        Address: <%= house.address %><br/>
-        <% if house.google_map.present? %>
-          <%= link_to "Google map", house.google_map, target: :blank %>
-        <% end %>
+        Address: <%=  link_to_google_map(house.address, house.google_map) %><br/>
       </div>
     </div>
     <div class="text-right">

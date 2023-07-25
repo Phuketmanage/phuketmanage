@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="d-print-none d-flex align-items-center justify-content-end flex-grow-1 py-2">
+      <button type="button" class="col-2 btn btn-primary btn-block" onclick="window.print();">Print</button>
+    </div>
+  </div>
+  <h5 id="active_hs">Houses for rent</h5>
+  <% if @houses_for_rent.blank? %>
+    <span>There are no houses for rent.</span>
+  <% else %>
+    <%= render partial: "export_house_table", object: @houses_for_rent, as: :houses %>
+  <% end %>
+  <h5 id="nactive_hs">Houses not for rent</h5>
+  <% if @houses_not_for_rent.blank? %>
+    <span> There are no houses not for rent.</span>
+  <% else %>
+    <%= render partial: "export_house_table", object: @houses_not_for_rent, as: :houses %>
+  <% end %>
+</div>

@@ -102,4 +102,45 @@ describe 'House' do
       end
     end
   end
+  describe 'Export' do
+    before { sign_in admin }
+    it "has export button on houses index" do
+      visit houses_path
+      expect(page).to have_link('Export list')
+    end
+    context 'export page' do
+      before do
+        visit export_houses_path
+      end
+      it "there is export page without menu block" do
+        expect(page).to have_no_selector('nav')
+      end
+      it "there is print button" do
+        expect(page).to have_button('Print')
+      end
+      it "has section headers" do
+        expect(page).to have_selector('h5#active_hs', text: 'Houses for rent')
+        expect(page).to have_selector('h5#nactive_hs', text: 'Houses not for rent')
+      end
+      context 'block Houses for rent' do
+        it "has table headers" do
+          expect(page).to have_selector('th', text: 'House Code')
+          expect(page).to have_selector('th', text: 'Project/Address')
+        end
+        it "has table content" do
+          expect(page).to have_selector('strong', text: house.code)
+          expect(page).to have_selector('span', text: "Project: #{house.project}")
+          expect(page).to have_selector('span', text: "Address: #{house.address}")
+        end
+      end
+      context 'block Houses not for rent' do
+        let(:unavailable) { true }
+        it "shows unavaliable houses" do
+          expect(page).to have_selector('strong', text: house.code)
+          expect(page).to have_selector('span', text: "Project: #{house.project}")
+          expect(page).to have_selector('span', text: "Address: #{house.address}")
+        end
+      end
+    end
+  end
 end
