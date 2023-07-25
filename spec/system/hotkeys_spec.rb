@@ -11,9 +11,9 @@ describe 'Hotkeys' do
   describe 'Transaction index page', js: true do
     let(:start_page) { transactions_path }
     let(:desired_page) { new_transaction_path(locale: :en) }
-    let(:keys) { [:shift, 'a'] }
+    let(:keys) { [:shift, 'N'] }
 
-    context 'when pressed Shift+A' do
+    context 'when pressed Shift+N' do
       context 'when admin' do
         it "opens new transaction page" do
           sign_in admin
@@ -42,8 +42,8 @@ describe 'Hotkeys' do
       end
     end
 
-    context 'when only A pressed' do
-      let(:keys) { ['a'] }
+    context 'when only n pressed' do
+      let(:keys) { ['n'] }
 
       it "doese nothing" do
         sign_in admin
