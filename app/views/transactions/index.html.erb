@@ -1,7 +1,7 @@
 <% if current_user.role?(['Owner']) %>
   <h1><%= t('balance') %></h1>
   <%= form_with(url: balance_front_path, method: :get, local: true, class: 'd-print-none') do |form| %>
-    <div class="form-row mb-1">
+    <div class="form-row mb-2">
       <div class="col-6 col-lg-2">
         <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
       </div>
@@ -14,9 +14,15 @@
               options,
                         {}, { class: "form-control"} %>
       </div>
-      <div class="col-6 col-lg-2">
-        <%#= hidden_field_tag :owner_id, @owner.id %>
-        <%= submit_tag t('show'), class: "btn btn-primary btn-block" %>
+      <div class="form-row col-12 col-lg-4 mt-2 mt-lg-0">
+        <div class="col-6">
+          <%#= hidden_field_tag :owner_id, @owner.id %>
+          <%= submit_tag t('show'), class: "btn btn-primary btn-block" %>
+        </div>
+        <div class="col-6">
+          <%= link_to 'Export to CSV', transactions_path(:params => request.params, :format => :csv),
+                  class: 'btn btn-info btn-block' %>
+        </div>
       </div>
     </div>
   <% end %>
@@ -84,23 +90,17 @@
         <%#= hidden_field_tag :house_id, @house_id %>
       </div>
       <div class="form-row">
-        <div class="col-4 col-lg-2">
+        <div class="col-4 col-lg-2 p-1">
           <%= form.submit 'Full',
                 class: "btn btn-primary btn-sm btn-block",
                 id: 'btn_white' %>
         </div>
-        <div class="col-4 col-lg-2">
+        <div class="col-4 col-lg-2 p-1">
           <%= form.submit 'Acc',
                 class: "btn btn-primary btn-sm btn-block",
                 id: 'btn_acc' %>
         </div>
-        <% if params[:owner_id].present? %>
-          <div class="col-4 col-lg-2">
-            <%= link_to 'Export to CSV', transactions_path(:params => request.params, :format => :csv),
-                  class: 'btn btn-info btn-sm btn-block' %>
-          </div>
-        <% end %>
-        <div class="col-4 col-lg-2">
+        <div class="col-4 col-lg-2 p-1">
           <% if !@owner_id %>
             <%= link_to "Add", new_transaction_path,
                 class: 'btn btn-success btn-sm btn-block',
@@ -111,6 +111,12 @@
                 data: { "controller": "hotkey", "hotkeys": "Shift + a" } %>
           <% end %>
         </div>
+        <% if params[:owner_id].present? %>
+          <div class="col-4 col-lg-2 p-1">
+            <%= link_to 'Export to CSV', transactions_path(:params => request.params, :format => :csv),
+                  class: 'btn btn-info btn-sm btn-block' %>
+          </div>
+        <% end %>
         <div class="mt-2 mr-1 d-flex align-items-center justify-content-end flex-grow-1">
           <span class="text-secondary">Hotkeys:
             <kbd class="text-secondary bg-white">Shift</kbd> + <kbd class="text-secondary bg-white">a</kbd>

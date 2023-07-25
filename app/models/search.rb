@@ -40,6 +40,11 @@ class Search
       # result[:overlapped] = overlapped.map(&:number)
       result[:overlapped] = overlapped.map { |b| "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}" }
     end
+
+    if duration_shorter_than_minimal?(house_id)
+      result[:result] = false
+    end
+
     result
   end
 
@@ -126,6 +131,25 @@ class Search
     else
       { available: House.for_rent.all.order("RANDOM()"),
         unavailable_ids: booked_house_ids }
+    end
+  end
+
+  def duration_shorter_than_minimal?(house_id)
+    !check_house_min_booking_period(house_id)
+  end
+
+  def check_house_min_booking_period(house_id)
+    min_house_period = Duration.where(house_id:).minimum(:start)
+    if min_house_period.nil?
+      errors.add(:base, I18n.t('search.unavailable'))
+      false
+    else
+      if @duration >= min_house_period
+        return true
+      else
+        errors.add(:base, I18n.t('search.duration_shorter_than_minimal', min_house_period:))
+        false
+      end
     end
   end
 

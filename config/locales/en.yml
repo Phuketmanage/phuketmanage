@@ -35,6 +35,7 @@ en:
     booking_no: Booking number
     close: Close
     dates: Сhoose preferred dates
+    duration_shorter_than_minimal: This house minimum rental period is %{min_house_period} nights. Please modify your rental period to increase it.
   houses:
     description: Description
     beds: Sleeping arrangements

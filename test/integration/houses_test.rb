@@ -51,7 +51,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     assert_match "Вилла 3 СП Пхукет", response.body
   end
 
-  test "should show beds when exist" do 
+  test "should show beds when exist" do
     sign_in users(:admin)
     assert_difference('House.count') do
       post houses_url params: { house: {
@@ -73,5 +73,28 @@ class HousesTest < ActionDispatch::IntegrationTest
     get house_path(id: House.last.number)
     assert_response :success
     assert_match "Sleeping arrangements", response.body
+  end
+
+  test 'minimal duration for selected house search' do
+    # The duration period is less than house min booking period
+    year = Time.now.year + 1
+    rs = "22.07.#{year}".to_date
+    rf = "25.07.#{year}".to_date
+    period = "#{rs} to #{rf}"
+    house = houses(:villa_1)
+
+    get house_path(id: house.number, locale: :en, params: { period: period, commit: "Check price" })
+    assert_select 'div.alert li', text: 'This house minimum rental period is 5 nights. Please modify your rental period to increase it.'
+    # ru
+    get house_path(id: house.number, locale: :ru, params: { period: period, commit: "Check price" })
+    assert_select 'div.alert li', text: 'Минимальный срок аренды для выбранного объекта 5 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
+
+    # If duration is ok - no error messages
+    rs = "22.07.#{year}".to_date
+    rf = "28.07.#{year}".to_date
+    period = "#{rs} to #{rf}"
+
+    get house_path(id: house.number, locale: :en, params: { period: period, commit: "Check price" })
+    assert_select 'div.alert li', count: 0
   end
 end
