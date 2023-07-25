@@ -1616,6 +1616,56 @@ Transaction.last.balances.create!(
   [{ debit: "200.0", credit: "0.0", ref_no: nil }]
 )
 
+#20
+Transaction.create!(
+  [
+    {
+      ref_no: "",
+      house_id: nil,
+      type_id: 12, # Type: Suppliers
+      user_id: nil,
+      comment_en: "Pool service",
+      comment_ru: "Обслуживание бассейна",
+      comment_inner: "",
+      date: "2023-07-19",
+      booking_id: nil,
+      hidden: false,
+      for_acc: false,
+      incomplite: false,
+      cash: false,
+      transfer: false
+    }
+  ]
+)
+Transaction.last.balances.create!(
+  [{ debit: "0.0", credit: "10700.0", ref_no: nil }]
+)
+
+#20
+Transaction.create!(
+  [
+    {
+      ref_no: "",
+      house_id: nil,
+      type_id: 22, # Type: Eqp maintenance
+      user_id: nil,
+      comment_en: "Car service",
+      comment_ru: "Обслуживание автомобиля",
+      comment_inner: "",
+      date: "2023-07-19",
+      booking_id: nil,
+      hidden: true,
+      for_acc: false,
+      incomplite: false,
+      cash: false,
+      transfer: false
+    }
+  ]
+)
+Transaction.last.balances.create!(
+  [{ debit: "0.0", credit: "3200.0", ref_no: nil }]
+)
+
 Job.create!(
   [
     {
