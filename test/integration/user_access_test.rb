@@ -333,7 +333,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.now - 10.days,
+          date: 10.days.ago,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -390,7 +390,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Date.today - 2.days,
+          date: Time.zone.today - 2.days,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -425,7 +425,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Date.today,
+          date: Time.zone.today,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -451,7 +451,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Date.today,
+          date: Time.zone.today,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -473,32 +473,32 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   test 'documents' do
     trsc = Transaction.where(comment_en: 'rental').first.id
-    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
     sign_in users(:admin)
-    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
     assert_response :success
-    
+
     sign_in users(:accounting)
-    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
     assert_response :success
 
     sign_in users(:manager)
-    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
     sign_in users(:owner)
-    get tmp_reimbersment_path, params: {locale: 'en', trsc_id: trsc}
+    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
   end
-  
+
   test "should show balance closed checkbox" do
     owner = users(:owner)
     manager = users(:manager)
@@ -519,9 +519,9 @@ class UserAccessTest < ActionDispatch::IntegrationTest
   test "should update balance closed" do
     owner = users(:owner)
     sign_in users(:admin)
-    put "/users/#{owner.id}", params: { user: { balance_closed: '1'}}
+    put "/users/#{owner.id}", params: { user: { balance_closed: '1' } }
     assert_redirected_to users_path
-    assert_equal true, User.find(owner.id).balance_closed
+    assert User.find(owner.id).balance_closed
     follow_redirect!
     assert_select 'div.alert li', text: 'Successfully updated User.'
   end
@@ -531,7 +531,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     sign_in users(:manager)
     get reports_path
     assert_response :success
-    assert_select 'a', {text: 'Salary', count: 0}
+    assert_select 'a', { text: 'Salary', count: 0 }
     get report_bookings_path
     assert_response :success
     get report_salary_path
@@ -539,5 +539,4 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
   end
-
 end

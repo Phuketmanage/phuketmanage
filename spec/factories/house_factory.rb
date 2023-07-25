@@ -9,8 +9,8 @@ FactoryBot.define do
     rooms { Random.rand(1..4) }
     bathrooms { Random.rand(1..3) }
     address { Faker::Address.full_address }
-    owner { build :user }
-    type { build :house_type }
+    owner { build(:user) }
+    type { build(:house_type) }
     project { Faker::Address.city }
   end
 end

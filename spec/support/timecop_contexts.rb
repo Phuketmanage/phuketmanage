@@ -22,8 +22,9 @@ RSpec.configure do |config|
   #   context 'freeze to now', freeze: true do
   config.around(:each, freeze: ->(value) { value.present? }) do |example|
     # Default is current time rounded to seconds
-    time = extract_travel_time(example.metadata[:freeze]) || Time.now.change(usec: 0)
-    raise 'Only travel or freeze:' + example.location if example.metadata[:travel]
+    time = extract_travel_time(example.metadata[:freeze]) || Time.zone.now.change(usec: 0)
+    raise "Only travel or freeze:#{example.location}" if example.metadata[:travel]
+
     Timecop.freeze(time) { example.run }
   end
 
@@ -37,8 +38,9 @@ RSpec.configure do |config|
   #   context 'travel', travel: -> { 15.days.since(user.created_at) } do
   config.around(:each, travel: ->(value) { value.present? }) do |example|
     time = extract_travel_time(example.metadata[:travel])
-    raise 'Invalid travel option specified: ' + example.location unless time
-    raise 'Only travel or freeze: ' + example.location if example.metadata[:freeze]
+    raise "Invalid travel option specified: #{example.location}" unless time
+    raise "Only travel or freeze: #{example.location}" if example.metadata[:freeze]
+
     Timecop.travel(time) { example.run }
   end
 end

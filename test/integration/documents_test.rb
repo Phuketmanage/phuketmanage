@@ -32,7 +32,7 @@ class DocumentsTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    get "/documents/reimbersment", params: {trsc_id: Transaction.last.id}
+    get "/documents/reimbersment", params: { trsc_id: Transaction.last.id }
     assert_response :success
     assert_select "#rb_print[disabled=disabled]", 1
     sign_out users(:admin)

@@ -17,6 +17,7 @@ class HousesController < ApplicationController
     render layout: 'application', locals: { print: true }
   end
 
+  # @route GET /houses/inactive (houses_inactive)
   def inactive
     @inactive_houses = House.inactive
   end
@@ -26,7 +27,7 @@ class HousesController < ApplicationController
     @house = House.new
   end
 
-  # @route GET (/:locale)/houses/:id
+  # @route GET (/:locale)/houses/:id (show_house)
   def show
     # Front end
     @occupied_days = @house.occupied_days

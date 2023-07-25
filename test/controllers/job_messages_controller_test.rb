@@ -9,7 +9,7 @@ class JobMessagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create job message" do
-    job = jobs(:two)
+    jobs(:two)
     assert_difference('JobMessage.count') do
       post job_messages_url, params: {
         job_message: {

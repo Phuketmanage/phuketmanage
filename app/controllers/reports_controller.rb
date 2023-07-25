@@ -2,9 +2,11 @@ class ReportsController < ApplicationController
   load_and_authorize_resource :class => false
   layout 'admin'
 
+  # @route GET /reports (reports)
   def index
   end
 
+  # @route GET /report/balance (report_balance)
   def balance
     # @totals = get_owners_totals
     @users = User.joins(:roles, {transactions: :balance_outs})
@@ -14,6 +16,7 @@ class ReportsController < ApplicationController
                   .select('users.name', '(sum(balance_outs.debit) - sum(balance_outs.credit)) as balance')
   end
 
+  # @route GET /report/bookings (report_bookings)
   def bookings
     @from, @to, @error = set_period(params)
     @house_id = params[:house_id].present? ? params[:house_id] : nil
@@ -30,6 +33,7 @@ class ReportsController < ApplicationController
     end
   end
 
+  # @route GET /report/salary (report_salary)
   def salary
     @from, @to, @error = set_period(params)
     if !@error

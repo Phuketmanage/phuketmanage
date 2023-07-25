@@ -37,8 +37,8 @@ class HousesTest < ActionDispatch::IntegrationTest
     assert_redirected_to houses_url
     follow_redirect!
     assert_select 'div.alert li', text: "House NH1 was successfully created."
-    assert_equal new_house.generated_title(:en), "Villa 2 BDR Patong"
-    assert_equal new_house.generated_title(:ru), "Вилла 2 СП Патонг"
+    assert_equal("Villa 2 BDR Patong", new_house.generated_title(:en))
+    assert_equal("Вилла 2 СП Патонг", new_house.generated_title(:ru))
     sign_out(:admin)
   end
 
@@ -63,7 +63,8 @@ class HousesTest < ActionDispatch::IntegrationTest
         bathrooms: 1,
         kingBed: 2,
         location_ids: [locations(:patong).id],
-        type_id: @house.type_id}}
+        type_id: @house.type_id
+      } }
     end
     follow_redirect!
     sign_out users(:admin)
@@ -77,24 +78,26 @@ class HousesTest < ActionDispatch::IntegrationTest
 
   test 'minimal duration for selected house search' do
     # The duration period is less than house min booking period
-    year = Time.now.year + 1
+    year = Time.zone.now.year + 1
     rs = "22.07.#{year}".to_date
     rf = "25.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     house = houses(:villa_1)
 
-    get house_path(id: house.number, locale: :en, params: { period: period, commit: "Check price" })
-    assert_select 'div.alert li', text: 'This house minimum rental period is 5 nights. Please modify your rental period to increase it.'
+    get house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
+    assert_select 'div.alert li',
+                  text: 'This house minimum rental period is 5 nights. Please modify your rental period to increase it.'
     # ru
-    get house_path(id: house.number, locale: :ru, params: { period: period, commit: "Check price" })
-    assert_select 'div.alert li', text: 'Минимальный срок аренды для выбранного объекта 5 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
+    get house_path(id: house.number, locale: :ru, params: { period:, commit: "Check price" })
+    assert_select 'div.alert li',
+                  text: 'Минимальный срок аренды для выбранного объекта 5 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
 
     # If duration is ok - no error messages
     rs = "22.07.#{year}".to_date
     rf = "28.07.#{year}".to_date
     period = "#{rs} to #{rf}"
 
-    get house_path(id: house.number, locale: :en, params: { period: period, commit: "Check price" })
+    get house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
     assert_select 'div.alert li', count: 0
   end
 end

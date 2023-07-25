@@ -6,7 +6,7 @@ class HouseTest < ActiveSupport::TestCase
     @house.locations << locations(:phuket)
   end
 
-  test "should save with number" do 
+  test "should save with number" do
     new_house = House.new(description_en: "New house",
                           description_ru: "Новый дом",
                           owner_id: @house.owner_id,
@@ -15,8 +15,8 @@ class HouseTest < ActiveSupport::TestCase
                           bathrooms: 1,
                           location_ids: [locations(:patong).id],
                           type_id: @house.type_id)
-    assert new_house.valid?
+    assert_predicate new_house, :valid?
     new_house.save!
-    assert new_house.number != nil
+    assert_not new_house.number.nil?
   end
 end

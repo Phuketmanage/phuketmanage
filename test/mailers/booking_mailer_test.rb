@@ -3,7 +3,7 @@ require 'test_helper'
 class BookingMailerTest < ActionMailer::TestCase
   setup do
     @booking = bookings(:_1)
-    @settings = Setting.all.map { |s| [s.var, s.value] }.to_h
+    @settings = Setting.all.to_h { |s| [s.var, s.value] }
   end
 
   test "created" do
