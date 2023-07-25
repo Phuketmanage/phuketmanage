@@ -148,6 +148,9 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
+    easy_translate (0.5.1)
+      thread
+      thread_safe
     erubi (1.12.0)
     execjs (2.8.1)
     factory_bot (6.2.1)
@@ -387,6 +390,8 @@ GEM
       memoist
       rubocop (>= 1.0.0)
     thor (1.2.2)
+    thread (0.2.2)
+    thread_safe (0.3.6)
     tilt (2.2.0)
     timecop (0.9.6)
     timeout (0.4.0)
@@ -438,6 +443,7 @@ DEPENDENCIES
   devise
   devise_invitable (~> 2.0.0)
   dotenv-rails
+  easy_translate
   factory_bot_rails
   faker
   flag-icons-rails
