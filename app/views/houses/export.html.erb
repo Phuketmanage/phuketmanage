@@ -8,42 +8,12 @@
   <% if @houses_for_rent.blank? %>
     <span>There are no houses for rent.</span>
   <% else %>
-    <div class="row">
-      <div class="col-12">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>House Code</th>
-              <th>Project/Address</th>
-              <th>Google Map</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render partial: "export_house", collection: @houses_for_rent, as: :house %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <%= render partial: "export_house_table", object: @houses_for_rent, as: :houses %>
   <% end %>
   <h5 id="nactive_hs">Houses not for rent</h5>
   <% if @houses_not_for_rent.blank? %>
     <span> There are no houses not for rent.</span>
   <% else %>
-    <div class="row">
-      <div class="col-12">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>House Code</th>
-              <th>Project/Address</th>
-              <th>Google Map</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render partial: "export_house", collection: @houses_not_for_rent, as: :house %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <%= render partial: "export_house_table", object: @houses_not_for_rent, as: :houses %>
   <% end %>
 </div>

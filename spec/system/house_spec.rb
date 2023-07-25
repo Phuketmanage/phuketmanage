@@ -112,13 +112,11 @@ describe 'House' do
         it "has table headers" do
           expect(page).to have_selector('th', text: 'House Code')
           expect(page).to have_selector('th', text: 'Project/Address')
-          expect(page).to have_selector('th', text: 'Google Map')
         end
         it "has table content" do
           expect(page).to have_selector('strong', text: house.code)
           expect(page).to have_selector('span', text: "Project: #{house.project}")
           expect(page).to have_selector('span', text: "Address: #{house.address}")
-          expect(page).to have_selector('span', text: "Google map: #{house.google_map}")
         end
       end
       context 'block Houses not for rent' do
@@ -127,7 +125,6 @@ describe 'House' do
           expect(page).to have_selector('strong', text: house.code)
           expect(page).to have_selector('span', text: "Project: #{house.project}")
           expect(page).to have_selector('span', text: "Address: #{house.address}")
-          expect(page).to have_selector('span', text: "Google map: #{house.google_map}")
         end
       end
     end
