@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :transction_type do
+  factory :transaction_type do
     trait :improvements do
       name_en { "Improvements" }
       name_ru { "Улучшения" }
