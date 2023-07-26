@@ -112,8 +112,18 @@
             <td><%= t.house.code if t.house %></td>
           <% end %>
           <%# locale = t.user.locale || I18n.locale  %>
-          <td class='comment'><%= t.send("comment_#{@locale}") %>
-            <%= (current_user.role?(['Admin', 'Accounting', 'Manager']) && t.cash) ? "/C" : nil %>
+          <td class='comment'>
+            <% if current_user.role?(['Admin', 'Accounting', 'Manager']) %>
+              <% if t.booking_id.present? %>
+                <% b = Booking.find(t.booking_id) %>
+                <%= link_to t.send("comment_#{@locale}"), house_bookings_path(t.house_id, params: {from: b.start, to: b.finish}) %>
+              <% else %>
+                <%= t.send("comment_#{@locale}") %>
+              <% end %>
+              <%= t.cash ? "/C" : nil %>
+            <% else %>
+              <%= t.send("comment_#{@locale}") %>
+            <% end %>
           </td>
           <td>
             <% if current_user.role?(['Owner']) %>
