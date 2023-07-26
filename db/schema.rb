@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_18_204248) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_23_133709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -305,14 +305,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_204248) do
   end
 
   create_table "logs", force: :cascade do |t|
-    t.string "where"
-    t.text "before"
-    t.text "after"
+    t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "who"
-    t.string "what"
-    t.string "with"
+    t.string "user_email"
+    t.string "model_gid"
+    t.jsonb "user_roles"
+    t.jsonb "before_values"
+    t.jsonb "applied_changes"
   end
 
   create_table "notifications", force: :cascade do |t|

@@ -2,21 +2,22 @@
 <table class="table">
   <tr>
     <th width="135px">Date</th>
-    <th width="150px">User</th>
-    <th width="135px">Controller</th>
-    <th width="100px">What</th>
-    <th width="100px">With</th>
-    <th>Before</th>
-    <th>After</th>
+    <th width="150px">User email</th>
+    <th width="100px">User roles</th>
+    <th width="135px">Controller and action</th>
+    <th width="100px">Model GID</th>
+    <th>Before values</th>
+    <th>Applied changes</th>
   </tr>
   <% @logs.each do |l| %>
     <tr>
-      <td><%= l.who %></td>
-      <td><%= l.where %></td>
-      <td><%= l.what %></td>
-      <td><%= l.with %></td>
-      <td><%= l.before %></td>
-      <td><%= l.after %></td>
+      <td><%= l.created_at.to_fs(:logs) %></td>
+      <td><%= l.user_email %></td>
+      <td><%= l.user_roles %></td>
+      <td><%= l.location %></td>
+      <td><%= l.model_gid %></td>
+      <td><pre><%= JSON.pretty_generate(l.before_values) %></pre></td>
+      <td><pre><%= JSON.pretty_generate(l.applied_changes) %></pre></td>
     </tr>
   <% end %>
 </table>

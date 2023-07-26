@@ -1,13 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  who: one
-  where: MyString
-  before: MyText
-  after: MyText
+# user_email, :user_roles, :location, :model_gid, :before, :applied_changes
 
-two:
-  who: two
-  where: MyString
-  before: MyText
-  after: MyText
+one:
+  user_email: admin@test.com
+  user_roles: Admin
+  location:  prices#update
+  model_gid: gid://phuketmanage/Price/55
+  before_values: { "amount" :8008, "id": 55, "house_id": 4, "season_id": 19, "duration_id ": 10, "created_at": "2023-07-23T13:40:02.194Z", "updated_at": "2023-07-23T13:55:13.942Z" }
+  applied_changes: { "amount": 8009, "updated_at": "2023-07-23T13:55:24.590Z" }
