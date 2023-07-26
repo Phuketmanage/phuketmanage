@@ -15,6 +15,10 @@ export default class extends Flatpickr {
     en: english,
   };
 
+  locale = {
+    firstDayOfWeek: 1
+  };
+
   connect() {
     this.config = {
       altFormat: "d.m.y",
