@@ -24,8 +24,8 @@ describe 'Booking' do
 
   it "shows bookings with status canceled" do
     sign_in admin
-    create(:booking, house:, start: date_start, finish: date_finish, status: "canceled")
-    visit "/bookings/canceled"
+    create(:booking, house: house, start: date_start, finish: date_finish, status: "canceled")
+    visit "/bookings/canceled?from=#{(DateTime.now - 1.year).strftime("%Y-%m-%d")}&to=#{(DateTime.now + 2.years).strftime("%Y-%m-%d")}"
     # Count by rows in table: 1 record produce 2 rows and 1 extra from table header
     expect(page).to have_selector('table tr', minimum: 3)
   end

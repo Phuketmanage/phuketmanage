@@ -112,7 +112,7 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.18.11.tgz#6526c7e1b40d5b9f0a222c6b767c22f6fb97aa57"
   integrity sha512-rQI4cjLHd2hGsM1LqgDI7oOCYbQ6IBOVsX9ejuRMSze0GqXUG2ekwiKkiBU1pRGSeCqFFHxTrcEydB2Hyoz9CA==
 
-"@hotwired/stimulus@^3.0.0", "@hotwired/stimulus@^3.2.1":
+"@hotwired/stimulus@^3.0.0", "@hotwired/stimulus@^3.0.1", "@hotwired/stimulus@^3.2.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.1.tgz#e3de23623b0c52c247aba4cd5d530d257008676b"
   integrity sha512-HGlzDcf9vv/EQrMJ5ZG6VWNs8Z/xMN+1o2OhV1gKiSG6CqZt5MCBB1gRg5ILiN3U0jEAxuDTNPRfBcnZBDmupQ==
@@ -168,12 +168,25 @@ flatpickr@^4.6.13:
   resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.13.tgz#8a029548187fd6e0d670908471e43abe9ad18d94"
   integrity sha512-97PMG/aywoYpB4IvbvUJi0RQi8vearvU0oov1WW3k0WZPBMrTQVqekSX5CjSG/M4Q3i6A/0FKXC7RyAoAUUSPw==
 
+hotkeys-js@^3.8.7:
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.11.2.tgz#c7893a01a1faa96db621bdd5c9baa1b4b0c7d3c0"
+  integrity sha512-hLuR+wtvrVrVFHku5cud44cPXQf5ke+96TonRaGzlNSt22rh2LH65avLYFNsc+QpzMuOEQG/IxJT5mEop99rvg==
+
 stimulus-flatpickr@^3.0.0-0:
   version "3.0.0-0"
   resolved "https://registry.yarnpkg.com/stimulus-flatpickr/-/stimulus-flatpickr-3.0.0-0.tgz#af9bfa70bd1b74654312580101387c9d13ee32f2"
   integrity sha512-TLfxen1OS+3Jy594+VmYkJz/IRaH5wqxxdbVB1aalS1+3EJgy/shqB/Fd4ttKWC8EIOVd8Pzx22oVnjNep3mTA==
   dependencies:
     "@hotwired/stimulus" "^3.0.0"
+
+stimulus-hotkeys@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/stimulus-hotkeys/-/stimulus-hotkeys-2.3.0.tgz#95e5c25cc47ca4eaa82a65831d57dae8cc97640a"
+  integrity sha512-oDQu7yrrEAsu3ohFAI1E7hNMIn/4IGLtGlyRoAds0Q3JO509Ua0MhoQkBYl0ZdVOMOKTZchjjIDhT2pNUaZHWQ==
+  dependencies:
+    "@hotwired/stimulus" "^3.0.1"
+    hotkeys-js "^3.8.7"
 
 stimulus-reveal-controller@^4.1.0:
   version "4.1.0"

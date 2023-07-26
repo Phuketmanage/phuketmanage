@@ -5,8 +5,7 @@ require 'rails_helper'
 describe 'User' do
   let(:admin) { create(:user, :admin) }
   let(:owner_closed) { create(:user, :owner, balance_closed: true) }
-
-  it 'signs in' do
+  it 'should sign in' do
     visit "/en/users/sign_in"
     fill_in 'Email', with: admin.email
     fill_in 'Password', with: 'qweasd'
