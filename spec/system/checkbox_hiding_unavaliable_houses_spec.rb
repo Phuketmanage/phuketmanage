@@ -7,12 +7,12 @@ describe 'Checkbox hiding unavaliable houses' do
   let(:manager) { create(:user, :manager) }
   let(:accounting) { create(:user, :accounting) }
   let(:owner) { create(:user, :owner) }
-  let(:house) { House.find_by(title_en: 'Villa 1') }
+  let(:house) { create(:house, :with_seasons, owner: owner) }
   let!(:booking) do
-    create(:booking, house:, start: DateTime.now, finish: DateTime.now + 1.year, status: "pending")
+    create(:booking, house: house, start: DateTime.now, finish: DateTime.now + 1.year, status: "pending")
   end
-  let(:period_from) { Time.zone.today.advance(days: 3).strftime("%Y-%m-%d") }
-  let(:period_to) { Time.zone.today.advance(days: 10).strftime("%Y-%m-%d") }
+  let(:period_from) { 5.days.from_now.strftime("%Y-%m-%d") }
+  let(:period_to) { 10.days.from_now.strftime("%Y-%m-%d") }
   let(:search_path) { "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search" }
 
   it "hides checkbox for unauthorized user" do
@@ -48,6 +48,7 @@ describe 'Checkbox hiding unavaliable houses' do
 
   it "hides unavailable houses", js: true do
     sign_in admin
+    create_list(:house, 2, :with_seasons)
     visit search_path
     expect(page).to have_selector('div.col.mb-2', count: 3, visible: true)
     expect(page).to have_selector('span.badge.badge-danger', count: 1, visible: true)

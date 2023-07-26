@@ -6,7 +6,7 @@ describe 'Datepickr', freeze: '2051-02-02', js: true do
   let(:house) { create(:house) }
   let(:current_date) { '2051-02-02'.to_date }
   let(:booking) do
-    create(:booking, house:, start: current_date + 3.days, finish: current_date + 10.days, status: "pending") # Booked from 5 Febrary 2023 to 12 Febrary 2023
+    create(:booking, house: house, start: current_date + 3.days, finish: current_date + 10.days, status: "pending") # Booked from 5 Febrary 2023 to 12 Febrary 2023
   end
 
   context 'on main page when clicking date field' do

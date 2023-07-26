@@ -14,25 +14,21 @@ describe 'House' do
   describe "view" do
     context "when visiting root page in en" do
       before { visit "/" }
-
       it { is_expected.to have_content "Project: #{house.project}" }
     end
 
     context "when visiting root page in ru" do
       before { visit "/?locale=ru" }
-
       it { is_expected.to have_content "Проект: #{house.project}" }
     end
 
     context "when visiting show page in en" do
       before { visit "/houses/#{house.number}?locale=en" }
-
       it { is_expected.to have_content "Project: #{house.project}" }
     end
 
     context "when visiting show page in ru" do
       before { visit "/houses/#{house.number}?locale=ru" }
-
       it { is_expected.to have_content "Проект: #{house.project}" }
     end
   end
