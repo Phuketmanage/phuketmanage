@@ -26,3 +26,4 @@ jobs:
         stale-pr-message: 'PR is stale, any updates?'
         close-pr-message: 'PR closed due to inactivity'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
+        debug-only: true
