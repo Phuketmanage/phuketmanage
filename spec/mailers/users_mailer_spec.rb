@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UsersMailer, type: :mailer do
-  let(:user) { create(:user, :admin) }
+  let(:user) { create(:user, :owner) }
 
   describe "Reset password instructions" do
     let(:token) { user.send(:set_reset_password_token) }
