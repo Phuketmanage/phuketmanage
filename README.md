@@ -65,6 +65,22 @@ git commit --amend --no-edit
 git push -f
 ```
 
+#### Conventional Commits
+
+The commit message should be structured as follows:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+```
+
+Types: `fix:` used when a commit represents a bug fix, `feat:` introduces a new feature, `chore:` anything that isn’t outside-user-facing, `ci:`, `docs:`, `style:`, `refactor:`, `test:`.
+
+Scope is a noun describing where changes was made.
+
+`!` after the type/scope introduces a breaking changes. Example: `feat(search): add filters`
+
 ## Tests
 
 All closed issues have to be covered by tests except when mentionned that tests are not required.
