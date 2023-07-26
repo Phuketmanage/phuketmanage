@@ -15,16 +15,15 @@ export default class extends Flatpickr {
     en: english,
   };
 
-  locale = {
-    firstDayOfWeek: 1
-  };
-
   connect() {
     this.config = {
       altFormat: "d.m.y",
       altInput: true,
       dateFormat: "Y-m-d",
-      locale: this.locale,
+      locale: {
+        firstDayOfWeek: 1,
+        ...this.locale,
+      },
       mode: 'range',
     };
     super.connect();
