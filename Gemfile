@@ -46,6 +46,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'faker'
 end
 
 group :development do
@@ -69,7 +70,6 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
-  gem 'faker'
   gem 'selenium-webdriver'
   gem 'simplecov'
   gem 'timecop'
