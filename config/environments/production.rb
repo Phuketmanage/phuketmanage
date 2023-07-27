@@ -68,11 +68,14 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = false
 
+  # Host settings
+  host_options = { host: 'www.phuketmanage.com', protocol: 'https' }
+  Rails.application.routes.default_url_options = host_options
+
   # Action Mailer settings
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  host = 'www.phuketmanage.com'
-  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.default_url_options = host_options
   ActionMailer::Base.smtp_settings = {
     address: 'smtp.sendgrid.net',
     port: '587',

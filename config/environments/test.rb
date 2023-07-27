@@ -37,13 +37,17 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
+  # Host settings
+  host_options = { protocol: 'http', port: 3000, host: 'localhost' }
+  Rails.application.routes.default_url_options = host_options
+
   config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = host_options
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
