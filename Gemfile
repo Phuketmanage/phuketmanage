@@ -38,7 +38,6 @@ gem "terser", "~> 1.1"
 gem 'the_schema_is'
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
-gem 'webrick', '~> 1.7'
 gem 'easy_translate'
 
 group :development, :test do
@@ -73,6 +72,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'simplecov'
+  gem 'webrick', require: false # Simplecov wants it
   gem 'timecop'
   gem "webmock"
 end
