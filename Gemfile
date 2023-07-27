@@ -71,7 +71,7 @@ group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'simplecov'
+  gem 'simplecov', require: false
   gem 'webrick', require: false # Simplecov wants it
   gem 'timecop'
   gem "webmock"

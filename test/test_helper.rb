@@ -1,5 +1,4 @@
 require 'simplecov'
-SimpleCov.start "rails"
 
 ENV['RAILS_ENV'] ||= 'test'
 ENV['S3_BUCKET'] = 'phuketmanage-development'
@@ -14,24 +13,27 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-  # Setup databases
-  # parallelize_setup do |worker|
-  #
-  # end
-
-  # Cleanup databases
-  parallelize_teardown do |_worker|
-    ActiveRecord::Base.connection.begin_transaction
-    ActiveRecord::Base.connection.tables.each do |table|
-      ActiveRecord::Base.connection.execute("TRUNCATE #{table} CASCADE")
+    parallelize_setup do |worker|
+      # Set simplecov command name
+      SimpleCov.command_name "Minitest-#{worker}"
     end
-    ActiveRecord::Base.connection.commit_transaction
-  end
 
-  # Run tests in parallel
-  parallelize(workers: 4)
+    parallelize_teardown do |_worker|
+      # Cleanup databases
+      ActiveRecord::Base.connection.begin_transaction
+      ActiveRecord::Base.connection.tables.each do |table|
+        ActiveRecord::Base.connection.execute("TRUNCATE #{table} CASCADE")
+      end
+      ActiveRecord::Base.connection.commit_transaction
 
-  # Add more helper methods to be used by all tests here...
+      # Generate simplecov report
+      SimpleCov.result
+    end
+
+    # Run tests in parallel
+    parallelize(workers: 4)
+
+    # Add more helper methods to be used by all tests here...
   end
 end
 
