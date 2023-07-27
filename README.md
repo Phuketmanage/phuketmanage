@@ -83,13 +83,26 @@ Scope is a noun describing where changes was made.
 
 ## Tests
 
-All closed issues have to be covered by tests except when mentionned that tests are not required.
+All closed issues have to be covered by tests except when mentioned that tests are not required.
 ```sh
+# Prepares test DB and precompiles assets. Run each time when changing working branch.
+rails tests:setup
+
+# Run both suites
+rails tests:run
+
+# Or run them individually
 rails t
 rspec
 ```
 
-## Rspec system tests
+### Coverage
+
+```sh
+open coverage/index.html
+```
+
+### Rspec system tests
 
 By default system tests will use `:rack_test` driver without JS support to run tests faster.
 
@@ -121,12 +134,6 @@ Failures:
        expected to find css "div.col.wrong" 3 times but there were no matches
 
      [Screenshot Image]: /phuketmanage/tmp/screenshots/failures_r_spec_some_failed_test_409.png
-```
-
-## Coverage
-
-```sh
-open coverage/index.html
 ```
 
 ## Database graphic schema
