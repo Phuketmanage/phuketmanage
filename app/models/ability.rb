@@ -12,7 +12,6 @@ class Ability
     # can :about, Page
     if user.role? :owner
       can :index, [Transaction]
-      can :read, :translation
       can :index_front, [Booking]
       can :index, [Admin]
       can :index, TransactionFile, show: true

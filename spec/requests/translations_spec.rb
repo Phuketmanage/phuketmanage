@@ -5,7 +5,7 @@ RSpec.describe "Translations" do
 
   describe "GET /translate" do
     context 'when unauthorized' do
-      it "returns http success" do
+      it "returns http 302 Found" do
         get translate_path
         expect(response).to have_http_status(:found)
       end
