@@ -9,3 +9,6 @@ application.register("flatpickr", FlatpickrController)
 
 import HotkeysActionsController from "./hotkeys_actions_controller"
 application.register("hotkeys-actions", HotkeysActionsController)
+
+import TranslateController from "./translate_controller"
+application.register("translate", TranslateController)

@@ -39,6 +39,7 @@ gem 'the_schema_is'
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
 gem 'webrick', '~> 1.7'
+gem 'easy_translate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -73,4 +74,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'simplecov'
   gem 'timecop'
+  gem "webmock"
 end

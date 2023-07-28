@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     resources :connections, only: %i[create destroy]
     get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
     resources :transfers
+    get 'translate', to: "translations#show"
   end
   root to: 'pages#index'
 end
