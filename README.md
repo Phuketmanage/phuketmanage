@@ -109,6 +109,16 @@ it "runs specific test that needs js", js: true do
 
 Add `js_visual: true` to use selenium_chrome driver (will open browser window).
 
+### VCR
+
+To run specs that calls external APIs you should use VCR to save response.
+
+```ruby
+VCR.use_cassette('translation') do
+  get translate_path(language: :en, text: "Переведи этот текст")
+end
+```
+
 ### Screenshots
 
 The default systems tests (without `js: true` or `js_visual: true`) will not save screenshots. Both options (js, js_visual) will save screenshot in 'tmp/screenshots' to help you identify the problem, so you can use it for debug purpose. Example:

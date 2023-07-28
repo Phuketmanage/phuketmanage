@@ -74,4 +74,6 @@ group :test do
   gem 'selenium-webdriver'
   gem 'simplecov'
   gem 'timecop'
+  gem "vcr"
+  gem "webmock"
 end

@@ -1,29 +1,25 @@
 module ControllerMacros
   def login_admin
     before do
-      @request.env["devise.mapping"] = Devise.mappings[:admin]
-      sign_in FactoryBot.create(:admin)
+      sign_in FactoryBot.create(:user, :admin)
     end
   end
 
   def login_manager
     before do
-      @request.env["devise.mapping"] = Devise.mappings[:manager]
-      sign_in FactoryBot.create(:manager)
+      sign_in FactoryBot.create(:user, :manager)
     end
   end
 
   def login_accounting
     before do
-      @request.env["devise.mapping"] = Devise.mappings[:accounting]
-      sign_in FactoryBot.create(:accounting)
+      sign_in FactoryBot.create(:user, :accounting)
     end
   end
 
   def login_owner
     before do
-      @request.env["devise.mapping"] = Devise.mappings[:owner]
-      sign_in FactoryBot.create(:owner)
+      sign_in FactoryBot.create(:user, :owner)
     end
   end
 end

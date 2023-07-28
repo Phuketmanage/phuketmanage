@@ -130,6 +130,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.2.2)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     date (3.3.3)
     debug_inspector (1.1.0)
@@ -172,6 +174,7 @@ GEM
       railties (>= 4.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    hashdiff (1.0.1)
     http_accept_language (2.1.1)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -406,6 +409,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
+    vcr (6.2.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -413,6 +417,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webmock (3.18.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.1)
     websocket (1.2.9)
     websocket-driver (0.7.5)
@@ -479,7 +487,9 @@ DEPENDENCIES
   turbo-rails (~> 1.4.0)
   twilio-ruby
   tzinfo-data
+  vcr
   web-console (>= 3.3.0)
+  webmock
   webrick (~> 1.7)
 
 RUBY VERSION
