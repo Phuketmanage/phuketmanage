@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Translations" do
-  let(:user) { create(:user, :owner) }
+  let(:user) { create(:user, :account) }
 
   describe "GET /translate" do
     context 'when unauthorized' do
@@ -20,9 +20,11 @@ RSpec.describe "Translations" do
       end
 
       it "translates the text" do
-        VCR.use_cassette('translation_ru2en') do
-          get translate_path(language: :en, text: "Переведи этот текст")
-        end
+        stub_request(:post, "https://translation.googleapis.com/language/translate/v2?key=AIzaSyDZps_zndKZ7PopkO46xAfJhuwFWCHbiz8&prettyPrint=false&target=en")
+          .to_return(status: 200, body: '{"data":{"translations":[{"translatedText":"Translate this text","detectedSourceLanguage":"ru"}]}}')
+
+        get translate_path(language: :en, text: "Переведи этот текст")
+
         expect(response.body).to eq("Translate this text")
       end
     end
