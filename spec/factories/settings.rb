@@ -24,5 +24,11 @@ FactoryBot.define do
       var { "user_activity_logging_enabled" }
       description { "Enable users activity logging." }
     end
+
+    trait :min_days_before_check_in do
+      var { "min_days_before_check_in" }
+      value { 2 }
+      description { "Minimal days before any check in." }
+    end
   end
 end

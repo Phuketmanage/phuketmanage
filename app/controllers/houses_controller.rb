@@ -34,6 +34,9 @@ class HousesController < ApplicationController
     if params[:period].present?
       @search = Search.new(period: params[:period],
                            dtnb: @settings['dtnb'])
+      @min_date = @search.min_date
+      return unless @search.valid?
+
       answer = @search.is_house_available? @house.id
       if answer[:result]
         @houses = [@house]
@@ -44,6 +47,7 @@ class HousesController < ApplicationController
       end
     else
       @search = Search.new
+      @min_date = @search.min_date
     end
   end
 

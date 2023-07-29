@@ -165,7 +165,8 @@ Setting.create!(
       description: "tranfer supplier email"
     },
     { var: "usd_rate", value: "33", description: "usd rate" },
-    { var: "user_activity_logging_enabled", description: "Enable users activity logging." }
+    { var: "user_activity_logging_enabled", description: "Enable users activity logging." },
+    { var: "min_days_before_check_in", value: "1", description: "Minimal days before any check in." }
   ]
 )
 
