@@ -25,18 +25,15 @@ describe 'Booking', js: true do
   end
 
   context 'when user is admin' do
-    # TODO: rewrite to macros
-    let(:admin) { create(:user, :admin) }
+    login_admin
 
     it "shows bookings with status not canceled" do
-      sign_in admin
       visit "/bookings?from=#{current_date}&to=#{current_date + 2.years}"
       # Count by rows in table: 1 record produce 2 rows and 1 extra from table header
       expect(page).to have_selector('table tr', count: 9)
     end
 
     it "shows bookings with status canceled" do
-      sign_in admin
       create(:booking, house: house_one, start: date_start, finish: date_finish, status: "canceled")
       visit "/bookings/canceled?from=#{current_date}&to=#{current_date + 2.years}"
       # Count by rows in table: 1 record produce 2 rows and 1 extra from table header
@@ -44,7 +41,6 @@ describe 'Booking', js: true do
     end
 
     it "shows pending on dashboard view" do
-      sign_in admin
       visit dashboard_path
       expect(page).to have_selector('div.pending_booking', count: 4)
     end
