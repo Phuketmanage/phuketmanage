@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_23_133709) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_29_152725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,7 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_23_133709) do
     t.integer "comm"
     t.integer "nett"
     t.boolean "synced", default: false
-    t.boolean "allotment"
+    t.boolean "allotment", default: false
     t.boolean "transfer_in", default: false
     t.boolean "transfer_out", default: false
     t.string "client_details"
