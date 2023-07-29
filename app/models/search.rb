@@ -22,7 +22,7 @@ class Search
   end
 
   def min_date
-    @min_date ||= Time.now.in_time_zone('Bangkok').to_date + 1.day + min_days_before_check_in
+    @min_date ||= Date.current + 1.day + min_days_before_check_in
   end
 
   def is_house_available?(house_id, booking_id = nil)
@@ -152,7 +152,7 @@ class Search
     return if rs.nil? || rf.nil?
 
     errors.add(:base, I18n.t('search.rf_less_rs')) if rf < rs
-    if rs < Time.now.in_time_zone('Bangkok').to_date || rf < Time.now.in_time_zone('Bangkok').to_date
+    if rs < Date.current || rf < Date.current
       errors.add(:base, I18n.t('search.in_the_past'))
     end
     errors.add(:base, I18n.t('search.too_soon', count: min_days_before_check_in)) if rs < min_date
