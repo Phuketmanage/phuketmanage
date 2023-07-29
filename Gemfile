@@ -14,6 +14,7 @@ gem "rails", "~> 7.0.6"
 gem 'sassc-rails' # Use SCSS for stylesheets
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'webrick', require: false
 
 # App
 gem 'barnes'
@@ -72,7 +73,6 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
-  gem 'webrick', require: false # Simplecov wants it
   gem 'timecop'
   gem "webmock"
 end
