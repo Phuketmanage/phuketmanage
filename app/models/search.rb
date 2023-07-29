@@ -158,11 +158,11 @@ class Search
   def start_end_correct
     return if rs.nil? || rf.nil?
 
-    errors.add(:period, I18n.t('search.rf_less_rs')) if rf < rs
+    errors.add(:base, I18n.t('search.rf_less_rs')) if rf < rs
     if rs < Time.now.in_time_zone('Bangkok').to_date || rf < Time.now.in_time_zone('Bangkok').to_date
-      errors.add(:duration, I18n.t('search.in_the_past'))
+      errors.add(:base, I18n.t('search.in_the_past'))
     end
-    errors.add(:period, I18n.t('search.too_soon')) if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
-    errors.add(:duration, I18n.t('search.too_short')) if duration < 5
+    errors.add(:base, I18n.t('search.too_soon')) if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
+    errors.add(:base, I18n.t('search.too_short')) if duration < 5
   end
 end
