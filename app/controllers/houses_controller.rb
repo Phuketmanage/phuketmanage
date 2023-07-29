@@ -30,7 +30,7 @@ class HousesController < ApplicationController
   # @route GET (/:locale)/houses/:id (show_house)
   def show
     # Front end
-    @occupied_days = @house.occupied_days
+    @occupied_days = @house.occupied_days(@settings['dtnb'])
     if params[:period].present?
       @search = Search.new(period: params[:period],
                            dtnb: @settings['dtnb'])
