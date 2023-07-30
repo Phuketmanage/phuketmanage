@@ -22,7 +22,7 @@ class Search
   end
 
   def min_date
-    @min_date ||= Date.current + 1.day + min_days_before_check_in
+    @min_date ||= Date.current + min_days_before_check_in
   end
 
   def is_house_available?(house_id, booking_id = nil)
