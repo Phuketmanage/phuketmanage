@@ -2,7 +2,6 @@ class Search
   include ActiveModel::Model
 
   attr_accessor :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
-  attr_reader :min_days_before_check_in, :min_date
 
   validate :start_end_correct
 
