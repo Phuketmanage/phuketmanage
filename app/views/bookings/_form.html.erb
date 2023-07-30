@@ -1,33 +1,26 @@
-<%= form_with(model: booking, local: true) do |form| %>
+<%= form_with(model: booking, local: true, data: {controller: "booking"}) do |form| %>
   <%= render 'shared/error_messages', object: form.object %>
-
   <div class="row">
     <div class="col-md-2 form-group">
       <%= form.date_field :start, class: 'form-control' %>
     </div>
-
     <div class="col-md-2 form-group">
       <%= form.date_field :finish, class: 'form-control' %>
     </div>
     <div class="col-md-2 form-group">
-      <%= form.select :house_id,
-            @houses,
-                      { prompt: 'Select house' }, { class: "form-control",  } %>
+      <%= form.select :house_id, @houses, { prompt: 'Select house' }, { class: "form-control" } %>
     </div>
     <div class="col-md-2 form-group">
       <% if controller.action_name == 'new' %>
         <%= form.select :status, ['pending', 'block'], {}, { class: "form-control"} %>
       <% else %>
-        <%= form.select :status, ['pending','confirmed', 'paid', 'block', 'canceled'], {}, { class: "form-control"} %>
+        <%= form.select :status, ['pending','confirmed', 'paid', 'block', 'canceled'], {}, { class: "form-control" } %>
       <% end %>
     </div>
     <div class="col-md-2 form-group">
-      <%= form.select :source_id,
-            Source.all.map {|s| [s.name, s.id]},
-                      { include_blank: 'Our booking' }, { class: "form-control",  } %>
+      <%= form.select :source_id, Source.all.map {|s| [s.name, s.id]}, { include_blank: 'Our booking' }, { class: "form-control" } %>
     </div>
   </div>
-
   <div class='row'>
     <div class="col-md-6 form-group">
       <%= form.label :client_details %>
@@ -38,40 +31,41 @@
     <div class="row">
       <div class="col">
         <div class="form-check">
-          <%= form.check_box :manual_price, { class: 'form-check-input',
-                                  id: 'manual_price_check_box' } %>
-          <%= form.label "Manual initial price", {     class: 'form-check-label',
-                                  for: 'manual_price_check_box' } %>
-
+          <%= form.check_box :manual_price, { class: 'form-check-input', id: 'manual_price_check_box' } %>
+          <%= form.label "Manual initial price", { class: 'form-check-label',for: 'manual_price_check_box' } %>
         </div>
       </div>
     </div>
   <% end %>
   <div class="row">
-    <div class="col-md-2 form-group">
+    <div class="col-md-3 form-group">
       <%= form.label :sale %>
-      <%= form.number_field :sale, class: 'form-control calcs' %>
-      <small>Origial: <%= @booking_original.sale if !@booking_original.nil? %></small>
+      <%= form.number_field :sale, class: 'form-control calcs', data: { "booking-target": "saleField", "action": "input->booking#updateNettField input->booking#updateAgentPercentage input->booking#updateCommissionPercentage" } %>
+      <small class="ml-1 text-secondary">Origial: <%= @booking_original.sale if !@booking_original.nil? %></small>
     </div>
-    <div class="col-md-2 form-group">
+    <div class="col-md-3 form-group">
       <%= form.label :agent %>
-      <span id='agent_comm_percent'><%= (@booking.agent/@booking.sale.to_f*100).round(2) if !@booking_original.nil? %></span> %
-      | <%= link_to '10%', '#', id: "calc_agent_comm" %>
-      <%= form.number_field :agent, class: 'form-control calcs' %>
+      <span class="ml-1 badge bg-primary text-white" data-booking-target="agentPercentage">0%</span>
+      <%= form.number_field :agent, class: 'form-control calcs', data: { "booking-target": "agentField", "action": "input->booking#updateNettField input->booking#updateAgentPercentage"} %>
     </div>
-    <div class="col-md-2 form-group">
-      <%= form.label :comm %> <span id='comm_percent'><%= (@booking.comm/@booking.sale.to_f*100).round(2) if !@booking_original.nil? %></span> %
-      | <%= link_to '20%', '#', id: "calc_comm" %>
-      <%= form.number_field :comm, class: 'form-control calcs' %>
-      <small>Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
+    <div class="col-md-3 form-group">
+      <%= form.label :comm %>
+      <span class="ml-1 badge bg-primary text-white" data-booking-target="commPercentage">0%</span>
+      <i class="bi bi-lightning-charge text-secondary dropdown-toggle float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <%= link_to "20% to comm", '#', class: "dropdown-item", data: { "action": "click->booking#calculateCommPercent" } %>
+        <%= link_to "10% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateAgentPercent" } %>
+        <%= link_to "50/50", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFiftyFifty" } %>
+      </div>
+      <%= form.number_field :comm, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updateNettField input->booking#updateCommissionPercentage"} %>
+      <small class="ml-1 text-secondary">Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
     </div>
-    <div class="col-md-2 form-group">
+    <div class="col-md-3 form-group">
       <%= form.label :nett %>
-      <%= form.number_field :nett, class: 'form-control calcs' %>
-      <small>Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
+      <%= form.number_field :nett, class: 'form-control calcs', data: { "booking-target": "nettField"} %>
+      <small class="ml-1 text-secondary">Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
     </div>
   </div>
-
   <div class="row">
     <div class="col form-group">
       <%= form.label 'Comment inner (owner will not see)' %>
@@ -90,7 +84,6 @@
       <%= form.text_area :comment_gr, class: 'form-control', rows: 2 %>
     </div>
   </div>
-
   <div class="row">
     <div class="col-md-2 form-group">
       <%= form.label 'Check in date if other from booking start' %>
@@ -101,42 +94,30 @@
       <%= form.date_field :check_out, class: 'form-control calcs' %>
     </div>
   </div>
-
   <div class="form-check form-check-inline">
-    <%= form.check_box :allotment, { class: 'form-check-input',
-                            id: 'unavailable_check_box' } %>
-    <%= form.label :allotment, {     class: 'form-check-label',
-                            for: 'unavailable_check_box' } %>
+    <%= form.check_box :allotment, { class: 'form-check-input', id: 'unavailable_check_box' } %>
+    <%= form.label :allotment, { class: 'form-check-label', for: 'unavailable_check_box' } %>
   </div>
   <div class="form-check form-check-inline">
-    <%= form.check_box :no_check_in, { class: 'form-check-input',
-                            id: 'no_check_in_check_box' } %>
-    <%= form.label :no_check_in, {     class: 'form-check-label',
-                            for: 'no_check_in_check_box' } %>
+    <%= form.check_box :no_check_in, { class: 'form-check-input', id: 'no_check_in_check_box' } %>
+    <%= form.label :no_check_in, { class: 'form-check-label', for: 'no_check_in_check_box' } %>
   </div>
   <div class="form-check form-check-inline">
-    <%= form.check_box :no_check_out, { class: 'form-check-input',
-                            id: 'no_check_out_check_box' } %>
-    <%= form.label :no_check_out, {     class: 'form-check-label',
-                            for: 'no_check_out_check_box' } %>
+    <%= form.check_box :no_check_out, { class: 'form-check-input', id: 'no_check_out_check_box' } %>
+    <%= form.label :no_check_out, { class: 'form-check-label', for: 'no_check_out_check_box' } %>
   </div>
   <% if current_user.role?('Admin') %>
-
     <div class="form-check form-check-inline">
-      <%= form.check_box :ignore_warnings, { class: 'form-check-input',
-                              id: 'ignore_warnings_check_box' } %>
-      <%= form.label :ignore_warnings, {     class: 'form-check-label',
-                              for: 'ignore_warnings_check_box' } %>
+      <%= form.check_box :ignore_warnings, { class: 'form-check-input', id: 'ignore_warnings_check_box' } %>
+      <%= form.label :ignore_warnings, { class: 'form-check-label', for: 'ignore_warnings_check_box' } %>
     </div>
   <% end %>
-
-  <%#= hidden_field_tag :house_id, @booking.house.id if @booking %>
   <div  class='mt-3'>
-      <%= form.submit 'Save booking', class: 'btn btn-primary' %>
-      <% if @booking.house %>
-        <%= link_to 'Back', house_bookings_path(@booking.house.number), class: 'btn btn-secondary' %>
-      <% else %>
-        <%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
-      <% end %>
+    <%= form.submit 'Save booking', class: 'btn btn-primary' %>
+    <% if @booking.house %>
+      <%= link_to 'Back', house_bookings_path(@booking.house.number), class: 'btn btn-secondary' %>
+    <% else %>
+      <%= link_to 'Back', bookings_path, class: 'btn btn-secondary' %>
+    <% end %>
   </div>
 <% end %>

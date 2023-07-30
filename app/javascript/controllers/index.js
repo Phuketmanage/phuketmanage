@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import BookingController from "./booking_controller"
+application.register("booking", BookingController)
+
 import FlatpickrController from "./flatpickr_controller"
 application.register("flatpickr", FlatpickrController)
 
