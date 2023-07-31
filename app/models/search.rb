@@ -1,7 +1,7 @@
 class Search
   include ActiveModel::Model
 
-  attr_accessor :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
+  attr_accessor :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration, :type, :bdr, :location
 
   validate :start_end_correct
 
@@ -9,6 +9,10 @@ class Search
     super
     return if attributes.empty?
 
+    @period = period
+    @type = type
+    @bdr = bdr
+    @location = location
     @rs = rs.present? ? rs.to_date : period.split.first.to_date
     @rf = rf.present? ? rf.to_date : period.split.last.to_date
     @rs_e = rs - dtnb.to_i.days unless rs.nil?
@@ -118,12 +122,16 @@ class Search
     ).all.map do |b|
       { house_id: b.house_id, start: b.start, finish: b.finish }
     end
-    booked_house_ids = overlapped_bookings.map { |b| b[:house_id] }
+    booked_house_ids = overlapped_bookings.pluck(:house_id)
+    houses = House.for_rent
+    houses = houses.joins(:locations).where(locations: { name_en: @location }) if location.present?
+    houses = houses.joins(:type).where(house_types: { name_en: @type }) if type.present?
+    houses = houses.where(rooms: @bdr) if bdr.present?
     available_houses = if booked_house_ids.any? && !management
-      { available: House.for_rent.where.not(id: booked_house_ids).order("RANDOM()"),
+      { available: houses.where.not(id: booked_house_ids).order("RANDOM()"),
         unavailable_ids: [] }
     else
-      { available: House.for_rent.all.order("RANDOM()"),
+      { available: houses.order("RANDOM()"),
         unavailable_ids: booked_house_ids }
     end
   end
@@ -151,9 +159,7 @@ class Search
     return if rs.nil? || rf.nil?
 
     errors.add(:base, I18n.t('search.rf_less_rs')) if rf < rs
-    if rs < Date.current || rf < Date.current
-      errors.add(:base, I18n.t('search.in_the_past'))
-    end
+    errors.add(:base, I18n.t('search.in_the_past')) if rs < Date.current || rf < Date.current
     errors.add(:base, I18n.t('search.too_soon', count: min_days_before_check_in)) if rs < min_date
     errors.add(:base, I18n.t('search.too_short')) if duration < 5
   end

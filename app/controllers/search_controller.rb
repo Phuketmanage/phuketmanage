@@ -1,7 +1,8 @@
 class SearchController < ApplicationController
   # @route GET (/:locale)/search (search)
   def index
-    @search = Search.new(period: params['search']['period'], dtnb: @settings['dtnb'])
+    @search = Search.new(period: params['search']['period'], type: params['search']['type'],
+                         bdr: params['search']['bdr'], location: params['search']['location'], dtnb: @settings['dtnb'])
     @min_date = @search.min_date
     @houses = []
     render :index and return unless @search.valid?
@@ -18,6 +19,6 @@ class SearchController < ApplicationController
   private
 
   def search_params
-    params.require(:search).permit(:stage, :rs, :rf)
+    params.require(:search).permit(:stage, :period, :type, :bdr, :location)
   end
 end
