@@ -8,8 +8,8 @@ RSpec.describe House do
 
     let(:current_date) { '2023-02-01'.to_date }
     let(:bookings) do
-      create(:booking, house:, start: current_date, finish: current_date + 6.days, status: "pending") # Booked from 1 Febrary 2023 to 7 Febrary 2023
-      create(:booking, house:, start: current_date + 9.days, finish: current_date + 16.days, status: "pending") # Booked from 10 Febrary 2023 to 17 Febrary 2023
+      create(:booking, :pending, house:, start: current_date, finish: current_date + 6.days) # Booked from 1 Febrary 2023 to 7 Febrary 2023
+      create(:booking, :pending, house:, start: current_date + 9.days, finish: current_date + 16.days) # Booked from 10 Febrary 2023 to 17 Febrary 2023
     end
 
     let(:valid_output) { [{ from: "2023-02-01", to: "2023-02-07" }, { from: "2023-02-10", to: "2023-02-17" }] }

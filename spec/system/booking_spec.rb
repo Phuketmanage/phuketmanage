@@ -15,12 +15,10 @@ describe 'Booking' do
     login_admin
 
     let!(:booking_pending) do
-      create(:booking, house: create(:house, :with_seasons), start: date_start, finish: date_finish,
-                       status: :pending)
+      create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
     let!(:booking_canceled) do
-      create(:booking, house: create(:house, :with_seasons), start: date_start, finish: date_finish,
-                       status: :canceled)
+      create(:booking, :canceled, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
 
     context "when visiting bookings" do
@@ -62,14 +60,14 @@ describe 'Booking' do
     let(:house_three) { create(:house, :with_seasons, owner: owner_two) }
 
     before do
-      create(:booking, house: house_one, start: date_start, finish: date_finish,
-                       sale: 10_000, agent: 0, comm: 2_000, nett: 8_000, status: :pending)
-      create(:booking, house: house_two, start: date_start, finish: date_finish + 2.days,
-                       sale: 12_000, agent: 0, comm: 2_400, nett: 9_600, status: :confirmed)
-      create(:booking, house: house_three, start: date_start, finish: date_finish,
-                       sale: 20_000, agent: 2_000, comm: 2_000, nett: 16_000, status: :pending)
-      create(:booking, house: house_three, start: date_start + 12.days, finish: date_finish + 14.days,
-                       sale: 30_000, agent: 0, comm: 6_000, nett: 24_000, status: :pending)
+      create(:booking, :pending, house: house_one, start: date_start, finish: date_finish,
+                       sale: 10_000, agent: 0, comm: 2_000, nett: 8_000)
+      create(:booking, :confirmed, house: house_two, start: date_start, finish: date_finish + 2.days,
+                       sale: 12_000, agent: 0, comm: 2_400, nett: 9_600)
+      create(:booking, :pending, house: house_three, start: date_start, finish: date_finish,
+                       sale: 20_000, agent: 2_000, comm: 2_000, nett: 16_000)
+      create(:booking, :pending, house: house_three, start: date_start + 12.days, finish: date_finish + 14.days,
+                       sale: 30_000, agent: 0, comm: 6_000, nett: 24_000)
     end
 
     context "when owner_one" do

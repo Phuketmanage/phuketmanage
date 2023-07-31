@@ -8,5 +8,14 @@ FactoryBot.define do
     comm { 0 }
     nett { 1000 }
     allotment { false }
+    trait :pending do
+      status { "pending" }
+    end
+    trait :confirmed do
+      status { "confirmed" }
+    end
+    trait :canceled do
+      status { "canceled" }
+    end
   end
 end
