@@ -80,17 +80,17 @@ class HousesTest < ActionDispatch::IntegrationTest
     # The duration period is less than house min booking period
     year = Time.zone.now.year + 1
     rs = "22.07.#{year}".to_date
-    rf = "25.07.#{year}".to_date
+    rf = "27.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     house = houses(:villa_1)
 
     get house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
     assert_select 'div.alert li',
-                  text: 'This house minimum rental period is 5 nights. Please modify your rental period to increase it.'
+                  text: 'This house minimum rental period is 6 nights. Please modify your rental period to increase it.'
     # ru
     get house_path(id: house.number, locale: :ru, params: { period:, commit: "Check price" })
     assert_select 'div.alert li',
-                  text: 'Минимальный срок аренды для выбранного объекта 5 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
+                  text: 'Минимальный срок аренды для выбранного объекта 6 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
 
     # If duration is ok - no error messages
     rs = "22.07.#{year}".to_date

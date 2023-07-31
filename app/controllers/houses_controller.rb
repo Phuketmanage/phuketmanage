@@ -1,7 +1,10 @@
+# rubocop:disable RSpec/Metrics/ClassLength
+
 class HousesController < ApplicationController
   load_and_authorize_resource id_param: :number
 
-  before_action :set_house, only: %i[show edit update destroy create_connection]
+  before_action :set_house, only: %i[show edit update destroy]
+  before_action :search, only: :show
   layout 'admin', except: :show
 
   # @route GET /houses (houses)
@@ -29,22 +32,8 @@ class HousesController < ApplicationController
 
   # @route GET (/:locale)/houses/:id (show_house)
   def show
-    # Front end
     @occupied_days = @house.occupied_days(@settings['dtnb'])
-    if params[:period].present?
-      @search = Search.new(period: params[:period],
-                           dtnb: @settings['dtnb'])
-      answer = @search.is_house_available? @house.id
-      if answer[:result]
-        @houses = [@house]
-        @prices = @search.get_prices @houses
-        @booking = Booking.new
-      else
-        @prices = "unavailable"
-      end
-    else
-      @search = Search.new
-    end
+    @min_date = @search.min_date
   end
 
   # @route GET /houses/new (new_house)
@@ -120,6 +109,29 @@ class HousesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_house
     @house = House.find_by(number: params[:id])
+  end
+
+  def search
+    if params[:period].blank?
+      @search = Search.new
+    else
+      preform_search
+    end
+  end
+
+  def preform_search
+    @search = Search.new(period: params[:period], dtnb: @settings['dtnb'])
+
+    return unless @search.valid?
+
+    answer = @search.is_house_available? @house.id
+    if answer[:result]
+      @houses = [@house]
+      @prices = @search.get_prices @houses
+      @booking = Booking.new
+    else
+      @prices = "unavailable"
+    end
   end
 
   def house_params

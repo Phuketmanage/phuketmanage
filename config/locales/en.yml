@@ -19,7 +19,9 @@ en:
     results: Search results
     rf_less_rs: End of stay can not be less then beginig
     in_the_past: Begining or End of period can not be in the past
-    too_soon: You can book at least 2 days in advance
+    too_soon:
+      one: You can book at least 1 day in advance
+      other: You can book at least %{count} days in advance
     too_short: Minimum rental period is 5 days
     period_limits: 'Limits: min 5 days, max 180 days. In case you need to check price for longer period please contact us by phone or email.'
     search_duration: 'Total nights:'

@@ -8,6 +8,7 @@ class PagesController < ApplicationController
   def index
     @search = Search.new
     @houses = House.where(unavailable: false).order('random()')
+    @min_date = @search.min_date
   end
 
   # @route GET (/:locale)/about (page_about)

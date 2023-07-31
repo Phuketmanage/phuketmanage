@@ -10,3 +10,7 @@ two:
   value: monkeyfuntravels@hotmail.com
   description:
 
+three:
+  var: min_days_before_check_in
+  value: 2
+  description: Minimal days before any check in.

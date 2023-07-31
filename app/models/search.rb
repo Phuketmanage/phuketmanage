@@ -1,23 +1,27 @@
 class Search
   include ActiveModel::Model
 
-  attr_accessor :stage, :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
+  attr_accessor :period, :rs, :rf, :dtnb, :rs_e, :rf_e, :duration
 
-  # validates :period, presence: true
   validate :start_end_correct
 
   def initialize(attributes = {})
     super
     return if attributes.empty?
 
-    # return if !rs.present? || !rf.present?
-    # return if !period.present?
-    @period = period
     @rs = rs.present? ? rs.to_date : period.split.first.to_date
     @rf = rf.present? ? rf.to_date : period.split.last.to_date
     @rs_e = rs - dtnb.to_i.days unless rs.nil?
     @rf_e = rf + dtnb.to_i.days unless rf.nil?
     @duration = (rf - rs).to_i if !rs.nil? || !rs.nil?
+  end
+
+  def min_days_before_check_in
+    @min_days_before_check_in ||= Setting.where(var: 'min_days_before_check_in').limit(1).pluck(:value)[0].to_i || 0
+  end
+
+  def min_date
+    @min_date ||= Date.current + min_days_before_check_in
   end
 
   def is_house_available?(house_id, booking_id = nil)
@@ -37,13 +41,10 @@ class Search
     end
     if overlapped.any?
       result[:result] = false
-      # result[:overlapped] = overlapped.map(&:number)
       result[:overlapped] = overlapped.map { |b| "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}" }
     end
 
-    if duration_shorter_than_minimal?(house_id)
-      result[:result] = false
-    end
+    result[:result] = false if duration_shorter_than_minimal?(house_id)
 
     result
   end
@@ -55,14 +56,6 @@ class Search
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration
       ).first
-      # Management can check price out of min and max house period
-      # if durations.nil? && house.durations.any? && management
-      #   min = house.durations.minimum(:finish)
-      #   max = house.durations.maximum(:finish)
-      #   d = house.durations.order(:start)
-      #   durations = d.first if duration < min
-      #   durations = d.last if duration > max
-      # end
       next if durations.nil?
 
       seasons = get_seasons house.seasons
@@ -72,7 +65,7 @@ class Search
         price = amount * s[:days]
         total += price
       end
-      result[house.id] = { total: total,
+      result[house.id] = { total:,
                            per_day: total / duration.to_f.round,
                            unavailable: unavailable_ids.include?(house.id) }
     end
@@ -107,7 +100,7 @@ class Search
     s = [rs, ss].max
     f = [rf, sf].min
     days = (f.to_date - s.to_date).to_i
-    hash = { id: sid, days: days, ss: ss, sf: sf }
+    hash = { id: sid, days:, ss:, sf: }
   end
 
   def overlapping?(ss, sf, rs, rf)
@@ -123,7 +116,8 @@ class Search
       'start <= ? AND finish >= ? AND status != ?', rf_e, rs_e,
       Booking.statuses[:canceled]
     ).all.map do |b|
-                            { house_id: b.house_id, start: b.start, finish: b.finish } end
+      { house_id: b.house_id, start: b.start, finish: b.finish }
+    end
     booked_house_ids = overlapped_bookings.map { |b| b[:house_id] }
     available_houses = if booked_house_ids.any? && !management
       { available: House.for_rent.where.not(id: booked_house_ids).order("RANDOM()"),
@@ -144,12 +138,10 @@ class Search
       errors.add(:base, I18n.t('search.unavailable'))
       false
     else
-      if @duration >= min_house_period
-        return true
-      else
-        errors.add(:base, I18n.t('search.duration_shorter_than_minimal', min_house_period:))
-        false
-      end
+      return true if @duration >= min_house_period
+
+      errors.add(:base, I18n.t('search.duration_shorter_than_minimal', min_house_period:))
+      false
     end
   end
 
@@ -159,10 +151,10 @@ class Search
     return if rs.nil? || rf.nil?
 
     errors.add(:base, I18n.t('search.rf_less_rs')) if rf < rs
-    if rs < Time.now.in_time_zone('Bangkok').to_date || rf < Time.now.in_time_zone('Bangkok').to_date
+    if rs < Date.current || rf < Date.current
       errors.add(:base, I18n.t('search.in_the_past'))
     end
-    errors.add(:base, I18n.t('search.too_soon')) if (rs - Time.now.in_time_zone('Bangkok').to_date).to_i < 2
+    errors.add(:base, I18n.t('search.too_soon', count: min_days_before_check_in)) if rs < min_date
     errors.add(:base, I18n.t('search.too_short')) if duration < 5
   end
 end
