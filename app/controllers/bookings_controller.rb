@@ -169,8 +169,7 @@ class BookingsController < ApplicationController
 
   # @route POST /bookings (bookings)
   def create
-    search = Search.new(rs: params[:booking][:start],
-                        rf: params[:booking][:finish],
+    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
                         dtnb: 0)
     answer = search.is_house_available? @booking.house_id
     unless answer[:result]
@@ -205,8 +204,7 @@ class BookingsController < ApplicationController
 
   # @route POST /booking/new (booking_new)
   def create_front
-    search = Search.new(rs: params[:booking][:start],
-                        rf: params[:booking][:finish],
+    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
                         dtnb: @settings['dtnb'])
     house = House.find_by(number: params[:booking][:hid])
     answer = search.is_house_available? house.id
@@ -246,8 +244,7 @@ class BookingsController < ApplicationController
   # @route PATCH /bookings/:id (booking)
   # @route PUT /bookings/:id (booking)
   def update
-    search = Search.new(rs: params[:booking][:start],
-                        rf: params[:booking][:finish],
+    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
                         dtnb: 0) # dtnb: @settings['dtnb'])
     house_id = params[:booking][:house_id]
     answer = search.is_house_available? house_id, @booking.id

@@ -10,9 +10,11 @@ class Search
     return if attributes.empty?
 
     @period = period
-    @type = type
-    @bdr = bdr
-    @location = location
+    @type = type.reject(&:empty?) if type.present?
+    @bdr = bdr.reject(&:empty?) if bdr.present?
+    @location = location.reject(&:empty?) if location.present?
+    return if period.blank?
+
     @rs = rs.present? ? rs.to_date : period.split.first.to_date
     @rf = rf.present? ? rf.to_date : period.split.last.to_date
     @rs_e = rs - dtnb.to_i.days unless rs.nil?
@@ -124,9 +126,13 @@ class Search
     end
     booked_house_ids = overlapped_bookings.pluck(:house_id)
     houses = House.for_rent
-    houses = houses.joins(:locations).where(locations: { name_en: @location }) if location.present?
-    houses = houses.joins(:type).where(house_types: { name_en: @type }) if type.present?
-    houses = houses.where(rooms: @bdr) if bdr.present?
+    if @location.present?
+      houses = houses.joins(:locations).where(locations: (I18n.locale == :ru ? { name_ru: @location } : { name_en: @location }))
+    end
+    if @type.present?
+      houses = houses.joins(:type).where(house_types: (I18n.locale == :ru ? { name_ru: @type } : { name_en: @type }))
+    end
+    houses = houses.where(rooms: @bdr) if @bdr.present?
     available_houses = if booked_house_ids.any? && !management
       { available: houses.where.not(id: booked_house_ids).order("RANDOM()"),
         unavailable_ids: [] }
@@ -156,7 +162,9 @@ class Search
   private
 
   def start_end_correct
-    return if rs.nil? || rf.nil?
+    errors.add(:base, I18n.t('search.date_not_set')) if period.blank?
+    errors.add(:base, I18n.t('search.both_dates')) if period.split.length < 3
+    return unless !rs.nil? || !rf.nil?
 
     errors.add(:base, I18n.t('search.rf_less_rs')) if rf < rs
     errors.add(:base, I18n.t('search.in_the_past')) if rs < Date.current || rf < Date.current
