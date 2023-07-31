@@ -24,7 +24,12 @@
         <%= hidden_field_tag 'hid', @house.number %>
       <% end %>
       <div id='photo_previews' class='mt-2'>
-        <%= render @photos %>
+        <ul data-controller="sortable">
+          <% @photos.map do |photo| %>
+            <li data-sortable-id="<%= photo.id %>" data-sortable-update-url="<%=  house_photos_sort_path(photo.id) %>"> 
+              <%= render photo %>
+            </li>
+          <% end %>
       </div>
     </div>
   </div>

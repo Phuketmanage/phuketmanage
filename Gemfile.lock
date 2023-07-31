@@ -289,10 +289,14 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    ranked-model (0.4.8)
+      activerecord (>= 4.2)
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (2.8.1)
+    requestjs-rails (0.0.10)
+      rails (>= 6.0.0)
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -468,6 +472,8 @@ DEPENDENCIES
   rails (~> 7.0.6)
   rails-erd
   rails-i18n (~> 7.0.0)
+  ranked-model (~> 0.4.8)
+  requestjs-rails (~> 0.0.10)
   rspec-rails
   rubocop-minitest
   rubocop-performance
