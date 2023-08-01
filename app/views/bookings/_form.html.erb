@@ -53,9 +53,9 @@
       <span class="ml-1 badge bg-primary text-white" data-booking-target="commPercentage">0%</span>
       <i class="bi bi-lightning-charge text-secondary dropdown-toggle float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <%= link_to "20% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTwentyPercent" } %>
-        <%= link_to "10% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTenPercent" } %>
-        <%= link_to "Divide company comm 50/50", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFiftyFifty" } %>
+        <%= link_to "20% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTwentyPercent:prevent" } %>
+        <%= link_to "10% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTenPercent:prevent" } %>
+        <%= link_to "Divide company comm 50/50", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFiftyFifty:prevent" } %>
       </div>
       <%= form.number_field :comm, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updateNettField input->booking#updatePercentage"} %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
