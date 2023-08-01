@@ -24,7 +24,6 @@ export default class extends Controller {
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = 0
 
-    this.updateNettField()
     this.updatePercentage()
   }
 
@@ -36,7 +35,6 @@ export default class extends Controller {
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = 0
 
-    this.updateNettField()
     this.updatePercentage()
   }
 
@@ -47,7 +45,6 @@ export default class extends Controller {
 
     this.agentFieldTarget.value = halfValue.toFixed(0)
 
-    this.updateNettField()
     this.updatePercentage()
   }
 
