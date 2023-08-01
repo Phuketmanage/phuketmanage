@@ -40,13 +40,13 @@
   <div class="row">
     <div class="col-md-3 form-group">
       <%= form.label :sale %>
-      <%= form.number_field :sale, class: 'form-control calcs', data: { "booking-target": "saleField", "action": "input->booking#updateNettField input->booking#updatePercentage" } %>
+      <%= form.number_field :sale, class: 'form-control calcs', data: { "booking-target": "saleField", "action": "input->booking#updatePercentage" } %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.sale if !@booking_original.nil? %></small>
     </div>
     <div class="col-md-3 form-group">
       <%= form.label :agent %>
       <span class="ml-1 badge bg-primary text-white" data-booking-target="agentPercentage">0%</span>
-      <%= form.number_field :agent, class: 'form-control calcs', data: { "booking-target": "agentField", "action": "input->booking#updateNettField input->booking#updatePercentage"} %>
+      <%= form.number_field :agent, class: 'form-control calcs', data: { "booking-target": "agentField", "action": "input->booking#updatePercentage"} %>
     </div>
     <div class="col-md-3 form-group">
       <%= form.label :comm %>
@@ -57,7 +57,7 @@
         <%= link_to "10% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTenPercent:prevent" } %>
         <%= link_to "Divide company comm 50/50", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFiftyFifty:prevent" } %>
       </div>
-      <%= form.number_field :comm, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updateNettField input->booking#updatePercentage"} %>
+      <%= form.number_field :comm, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updatePercentage"} %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
     </div>
     <div class="col-md-3 form-group">

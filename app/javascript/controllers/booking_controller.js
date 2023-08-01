@@ -48,16 +48,6 @@ export default class extends Controller {
     this.updatePercentage()
   }
 
-  updateNettField() {
-    const saleValue = Number(this.saleFieldTarget.value)
-    const agentValue = Number(this.agentFieldTarget.value)
-    const commValue = Number(this.commFieldTarget.value)
-
-    const nettValue = saleValue - agentValue - commValue
-
-    this.nettFieldTarget.value = nettValue.toFixed(0)
-  }
-
   updatePercentage() {
     const saleValue = Number(this.saleFieldTarget.value)
     const agentValue = Number(this.agentFieldTarget.value)
