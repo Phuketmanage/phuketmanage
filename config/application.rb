@@ -23,9 +23,9 @@ module Phuketmanage
     #
     config.time_zone = "Bangkok"
     # config.eager_load_paths << Rails.root.join("extras")
-    if !Rails.env.production?
+    unless Rails.env.production?
       config.before_configuration do
-        env_file = Rails.root.join("config", 'env_var.yml').to_s
+        env_file = Rails.root.join("config/env_var.yml").to_s
 
         if File.exist?(env_file)
           YAML.load_file(env_file).each do |key, value|
@@ -34,5 +34,8 @@ module Phuketmanage
         end # end if File.exists?
       end # end config.before_configuration
     end
+
+    # Redirect errors to errors controller
+    config.exceptions_app = routes
   end
 end
