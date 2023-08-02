@@ -13,13 +13,13 @@
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
         </li>
@@ -42,13 +42,13 @@
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Houses', houses_path, class: "nav-link" %>
         </li>
       <% end %>
 
-      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_path, class: "nav-link" %>
         </li>
