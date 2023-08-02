@@ -31,7 +31,9 @@ class Ability
     if user.role? 'Accounting'
       can :reimbersment, :document
       can :statement, :document
+      can %i[index], House
       can %i[index new create update_invoice_ref], Transaction
+      can %i[index canceled timeline timeline_data], Booking
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.today - 30.days).beginning_of_month
       end
@@ -39,8 +41,8 @@ class Ability
         t.date > Date.today - 1.day
       end
       can :read, :translation
-      can [:laundry], Job
-      can %i[timeline timeline_data], Booking
+      can :manage, Job
+      can [:destroy], Job, creator: user
       can :index, [Admin]
     end
     if user.role? 'Guest relation'
