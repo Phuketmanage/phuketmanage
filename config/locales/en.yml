@@ -17,8 +17,8 @@ en:
     search: Search
     check: Check price
     results: Search results
-    rf_less_rs: End of stay can not be less then beginig
-    in_the_past: Begining or End of period can not be in the past
+    rf_less_rs: End of stay can not be less then beginning
+    in_the_past: Beginning or End of period can not be in the past
     too_soon:
       one: You can book at least 1 day in advance
       other: You can book at least %{count} days in advance
@@ -36,7 +36,7 @@ en:
     message_done: Thank you for your interest in our services. We have received your request and we are currently processing it. Please note that your request is not a confirmed booking yet. You will receive an email from us to confirm your booking within the next 24 working hours. We appreciate your patience and understanding. If you have any questions or concerns, please don't hesitate to contact us.
     booking_no: Booking number
     close: Close
-    dates: Сhoose preferred dates
+    dates: Choose preferred dates
     duration_shorter_than_minimal: This house minimum rental period is %{min_house_period} nights. Please modify your rental period to increase it.
   houses:
     description: Description
@@ -77,9 +77,8 @@ en:
     comment: Comment
     flight_no: Flight No
     flight_time: Flight Time
-  balance: Balance
   bookings: Bookings
-  timline: Timeline
+  timeline: Timeline
   show: Show
   drop_filter: Drop filter
   date_text: Date
@@ -125,9 +124,9 @@ en:
   devise:
     log_in: Log in
     log_out: Log out
-    change_your_password: Сhange your password
+    change_your_password: Change your password
     passwords:
       edit:
         new_password: New password
         confirm_new_password: Repeat new password
-        сhange_my_password: Change password
+        change_my_password: Change password
