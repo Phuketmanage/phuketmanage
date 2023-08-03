@@ -15,7 +15,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     rf = "31.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
-    assert_match 'End of stay can not be less then beginig', response.body
+    assert_match 'End of stay can not be less then beginning', response.body
     assert_select 'div.house', count: 0
 
     # Start or Finish in the past
@@ -23,13 +23,13 @@ class SearchTest < ActionDispatch::IntegrationTest
     rf = "31.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
-    assert_match 'Begining or End of period can not be in the past', response.body
+    assert_match 'Beginning or End of period can not be in the past', response.body
     assert_select 'div.house', count: 0
     rs = "1.10.#{year - 2}".to_date
     rf = "30.11.#{year - 2}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
-    assert_match 'Begining or End of period can not be in the past', response.body
+    assert_match 'Beginning or End of period can not be in the past', response.body
     assert_select 'div.house', count: 0
 
     # At least 2 days in advance
