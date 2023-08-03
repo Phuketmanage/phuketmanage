@@ -16,7 +16,7 @@ class HousePhotosController < ApplicationController
   def sort
     @photo = HousePhoto.find(params[:id])
     @photo.update(position_position: params[:position])
-    head :no_content
+    head :ok
   end
 
   # @route GET /houses/:house_id/photos/add (house_photos_add)
