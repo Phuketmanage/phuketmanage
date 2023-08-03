@@ -97,6 +97,10 @@ body {
  * Personal
  */
 
+.vh-75 {
+  height: 75vh;
+}
+
 .accordion .card .card-header h5 a:not(.collapsed) .rotate-icon {
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);

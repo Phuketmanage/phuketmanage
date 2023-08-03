@@ -96,4 +96,11 @@ Rails.application.routes.draw do
     get 'translate', to: "translations#show"
   end
   root to: 'pages#index'
+
+  # Errors
+  match "/422", to: "errors#unprocessable_content", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
+  match "*unmatched", to: "errors#not_found", via: :all, constraints: lambda { |req|
+    req.path.exclude? '/files'
+  }
 end

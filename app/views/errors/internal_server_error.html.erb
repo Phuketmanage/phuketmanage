@@ -1,0 +1,13 @@
+<div class="vh-75 d-flex align-items-center justify-content-center">
+  <div class="text-center">
+    <h1 class="display-1 fw-bold">500</h1>
+    <p class="fs-3"> <span class="text-danger"><%= t('errors.oops') %>!</span> <%= t('errors.500.short') %></p>
+    <p class="lead">
+      <%= t('errors.500.description') %>
+    </p>
+    <a href="<%= root_path %>" class="btn btn-primary"><%= t('errors.back_to_home') %></a>
+    <p class="mt-5 text-sm text-muted">
+      <%= t('errors.request_id') %>: <%= controller.request.uuid %>
+    </p>
+  </div>
+</div>

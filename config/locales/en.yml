@@ -129,4 +129,17 @@ en:
       edit:
         new_password: New password
         confirm_new_password: Repeat new password
-        change_my_password: Change password
+        сhange_my_password: Change password
+  errors:
+    oops: Oops
+    back_to_home: Back To Home
+    404:
+      short: Page not found.
+      description: The page you're looking for doesn't exist.
+    422:
+      short: Unprocessable Content.
+      description: The change you wanted was rejected. Maybe you tried to change something you didn't have access to.
+    500:
+      short: Internal Server Error.
+      description: Unfortunately we're having trouble loading the page you are looking for. Please come back in a while.
+    request_id: Request ID

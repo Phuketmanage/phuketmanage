@@ -30,6 +30,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render '/errors/not_found', status: :not_found
+  end
+
   protected
 
   def authenticate_inviter!
