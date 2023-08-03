@@ -10,8 +10,7 @@ export default class extends Controller {
 
   connect() {
     this.sortable = Sortable.create(this.element, {
-      onEnd: this.onEnd.bind(this),
-      group: this.groupValue
+      onEnd: this.onEnd.bind(this)
     });
   }
 
