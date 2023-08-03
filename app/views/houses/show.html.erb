@@ -12,7 +12,7 @@
       </ol>
       <div class="carousel-inner">
         <% i = 0 %>
-        <% @house.photos.order(:url).each do |photo| %>
+        <% @house.photos.rank(:position).each do |photo| %>
           <% i += 1 %>
           <div class="carousel-item <%= 'active' if i == 1 %>">
             <img src="<%= photo.original %>" class="d-block w-100" alt="<%= photo.send("title_#{I18n.locale}") %>">
