@@ -8,5 +8,14 @@ FactoryBot.define do
     comm { (sale * 0.02).to_i - agent }
     nett { sale - agent - comm }
     allotment { false }
+    trait :pending do
+      status { "pending" }
+    end
+    trait :confirmed do
+      status { "confirmed" }
+    end
+    trait :canceled do
+      status { "canceled" }
+    end
   end
 end

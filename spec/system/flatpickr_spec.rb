@@ -6,7 +6,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
   let(:house) { create(:house) }
   let(:current_date) { '2023-02-01'.to_date }
   let(:booking) do
-    create(:booking, house:, start: current_date + 5.days, finish: current_date + 11.days, status: "pending") # Booked from Mon 6 Febrary 2023 to Sun 12 Febrary 2023
+    create(:booking, :pending, house:, start: current_date + 5.days, finish: current_date + 11.days) # Booked from Mon 6 Febrary 2023 to Sun 12 Febrary 2023
   end
   let(:enable_dtnb) { create(:setting, :dtnb) }
 
