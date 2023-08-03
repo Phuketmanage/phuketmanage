@@ -24,7 +24,9 @@
         <%= hidden_field_tag 'hid', @house.number %>
       <% end %>
       <div id='photo_previews' class='mt-2'>
-        <%= render @photos %>
+        <ul data-controller="sortable">
+          <%= render(partial: "house_photo", collection: @photos) %>
+        </ul>
       </div>
     </div>
   </div>

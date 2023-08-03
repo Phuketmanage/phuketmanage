@@ -7,18 +7,25 @@ class HousePhotosController < ApplicationController
 
   # @route GET /houses/:house_id/photos (house_photos)
   def index
-    @photos = @house.photos.order(:url)
+    @photos = @house.photos.rank(:position)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}",
                                                success_action_status: '201', acl: 'public-read')
+  end
+
+  # @route PUT /house_photos/:id/sort (house_photos_sort)
+  def sort
+    @photo = HousePhoto.find(params[:id])
+    @photo.update(position_position: params[:position])
+    head :ok
   end
 
   # @route GET /houses/:house_id/photos/add (house_photos_add)
   def add
     url = params[:photo_url]
     preview = params[:preview]
-    render json: { status: 'duplicate' } and return if HousePhoto.find_by(url: url)
+    render json: { status: 'duplicate' } and return if HousePhoto.find_by(url:)
 
-    photo = @house.photos.create!(url: url, title_en: '', title_ru: '')
+    photo = @house.photos.create!(url:, title_en: '', title_ru: '')
     # If preview is empty set it to first uploaded image
     @house.update(image: url) unless @house.image.present?
     file_name = photo.url.match(%r{^.*/(.*)$})

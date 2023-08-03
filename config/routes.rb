@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     get 'photos/add', to: 'house_photos#add'
     get 'export', on: :collection
   end
+  put 'house_photos/:id/sort', to: 'house_photos#sort', as: 'house_photos_sort'
   delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
   delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
   patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'

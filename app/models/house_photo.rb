@@ -10,6 +10,9 @@ class HousePhoto < ApplicationRecord
 
   belongs_to :house
 
+  include RankedModel
+  ranks :position
+
   def original
     "#{S3_HOST}#{url}"
   end

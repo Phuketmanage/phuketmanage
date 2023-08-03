@@ -40,6 +40,8 @@ gem 'the_schema_is'
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
 gem 'easy_translate'
+gem "ranked-model", "~> 0.4.8"
+gem "requestjs-rails", "~> 0.0.10"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

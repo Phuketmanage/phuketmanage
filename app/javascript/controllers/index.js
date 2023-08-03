@@ -15,3 +15,6 @@ application.register("hotkeys-actions", HotkeysActionsController)
 
 import TranslateController from "./translate_controller"
 application.register("translate", TranslateController)
+
+import SortableController from "./sortable_controller.js"
+application.register('sortable', SortableController)
