@@ -22,13 +22,13 @@
   </div>
   <div class="form-row shadow-sm mb-2 p-2 border rounded  bg-white">
     <div class="col-md-4 form-group">
-      <%= f.select :type, types, {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.house_type')}} %>
+      <%= f.select :type, options_for_select(types.map{|t| [ t.send("name_#{I18n.locale}"), t.id]}), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.house_type')}} %>
     </div>
     <div class="col-md-2 form-group">
       <%= f.select :bdr, bdrs, {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.bdr')}} %>
     </div>
     <div class="col-md-2 form-group">
-      <%= f.select :location, locations, {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.location')}} %>
+      <%= f.select :location, options_for_select(locations.map{|l| [ l.send("name_#{I18n.locale}"), l.id]}), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.location')}} %>
     </div>
   </div>
 <% end %>

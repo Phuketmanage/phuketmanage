@@ -126,12 +126,8 @@ class Search
     end
     booked_house_ids = overlapped_bookings.pluck(:house_id)
     houses = House.for_rent
-    if @location.present?
-      houses = houses.joins(:locations).where(locations: (I18n.locale == :ru ? { name_ru: @location } : { name_en: @location }))
-    end
-    if @type.present?
-      houses = houses.joins(:type).where(house_types: (I18n.locale == :ru ? { name_ru: @type } : { name_en: @type }))
-    end
+    houses = houses.joins(:locations).where(locations: { id: @location }) if @location.present?
+    houses = houses.joins(:type).where(house_types: { id: @type }) if @type.present?
     houses = houses.where(rooms: @bdr) if @bdr.present?
     available_houses = if booked_house_ids.any? && !management
       { available: houses.where.not(id: booked_house_ids).order("RANDOM()"),

@@ -5,6 +5,9 @@ class SearchController < ApplicationController
                          bdr: params['search']['bdr'], location: params['search']['location'], dtnb: @settings['dtnb'])
     @min_date = @search.min_date
     @houses = []
+    @locations = Location.all
+    @bdrs = House.all.count.positive? ? House.all.pluck(:rooms).sort.uniq : [0]
+    @types = HouseType.all
     render :index and return unless @search.valid?
 
     # Management can see prices even for occupied houses
