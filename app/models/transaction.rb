@@ -86,7 +86,7 @@ class Transaction < ApplicationRecord
 
   def write_to_balance(type, de_ow, cr_ow, de_co, cr_co)
     types1 = ['Rental']
-    types2 = %w[Maintenance Laundry]
+    types2 = ['Maintenance', 'Laundry', 'Cleaning', 'Welcome packs']
     types3 = ['Top up', 'From guests']
     types4 = %w[Repair Purchases Consumables Improvements]
     types5 = ['Utilities', 'Yearly contracts', 'Insurance', 'To owner', 'Common area', 'Transfer']
