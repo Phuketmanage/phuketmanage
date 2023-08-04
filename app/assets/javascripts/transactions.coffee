@@ -474,8 +474,36 @@ react_to_select_trsc_type = (selected, init) ->
       $("#house_id").show()
       $("#owner_id").show()
       if $('form').attr('method') == 'post' && init == false
-        $('#transaction_comment_en').val("Laundry ")
-        $('#transaction_comment_ru').val("Стирка ")
+        $('#transaction_comment_en').val("Laundry")
+        $('#transaction_comment_ru').val("Стирка")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
+    if selected == 'Cleaning'
+      if init == false
+        $("#transaction_de_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
+      $("#de_co_label").text('Pay to Phaethon')
+      $("#de_co").show()
+      $("#house_id").show()
+      $("#owner_id").show()
+      if $('form').attr('method') == 'post' && init == false
+        $('#transaction_comment_en').val("Cleaning")
+        $('#transaction_comment_ru').val("Уборка")
+      $("#comment_ru").show()
+      $("#comment_inner").show()
+    if selected == 'Welcome packs'
+      if init == false
+        $("#transaction_de_ow").val('')
+        $("#transaction_de_co").val('')
+        $("#transaction_cr_co").val('')
+      $("#de_co_label").text('Pay to Phaethon')
+      $("#de_co").show()
+      $("#house_id").show()
+      $("#owner_id").show()
+      if $('form').attr('method') == 'post' && init == false
+        $('#transaction_comment_en').val("Welcome packs")
+        $('#transaction_comment_ru').val("Приветственные наборы")
       $("#comment_ru").show()
       $("#comment_inner").show()
     if jQuery.inArray(selected, ['Repair','Purchases', 'Consumables', 'Improvements']) != -1

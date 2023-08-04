@@ -1,4 +1,4 @@
-Role.create!(
+taxesRole.create!(
   [
     { name: "Admin" },
     { name: "Manager" },
@@ -834,15 +834,6 @@ TransactionType.create!(
       credit_company: true,
       debit_owner: false,
       credit_owner: false,
-      admin_only: false
-    },
-    {
-      name_en: "Taxes & Accounting",
-      name_ru: "Налоги и бухгалтерия",
-      debit_company: true,
-      credit_company: true,
-      debit_owner: true,
-      credit_owner: true,
       admin_only: false
     },
     {
