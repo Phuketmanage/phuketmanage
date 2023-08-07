@@ -1,7 +1,7 @@
 class TranslationsController < ApplicationController
 
   authorize_resource class: false
-  # @route GET (/:locale)/translate (translate)
+  # @route GET (/:locale)/translate {locale: nil} (translate)
   def show
     translation = translate(params['text'], params['language'])
     render plain: translation

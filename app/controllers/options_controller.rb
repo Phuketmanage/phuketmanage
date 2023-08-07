@@ -5,22 +5,22 @@ class OptionsController < ApplicationController
 
   layout 'admin'
 
-  # @route GET /options (options)
+  # @route GET (/:locale)/options {locale: nil} (options)
   def index
     @options = Option.order(:zindex).all
   end
 
   def show; end
 
-  # @route GET /options/new (new_option)
+  # @route GET (/:locale)/options/new {locale: nil} (new_option)
   def new
     @option = Option.new
   end
 
-  # @route GET /options/:id/edit (edit_option)
+  # @route GET (/:locale)/options/:id/edit {locale: nil} (edit_option)
   def edit; end
 
-  # @route POST /options (options)
+  # @route POST (/:locale)/options {locale: nil} (options)
   def create
     @option = Option.new(option_params)
 
@@ -35,8 +35,8 @@ class OptionsController < ApplicationController
     end
   end
 
-  # @route PATCH /options/:id (option)
-  # @route PUT /options/:id (option)
+  # @route PATCH (/:locale)/options/:id {locale: nil} (option)
+  # @route PUT (/:locale)/options/:id {locale: nil} (option)
   def update
     respond_to do |format|
       if @option.update(option_params)
@@ -49,7 +49,7 @@ class OptionsController < ApplicationController
     end
   end
 
-  # @route DELETE /options/:id (option)
+  # @route DELETE (/:locale)/options/:id {locale: nil} (option)
   def destroy
     @option.destroy
     respond_to do |format|

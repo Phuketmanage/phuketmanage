@@ -14,10 +14,6 @@ class ApplicationController < ActionController::Base
     @settings = Setting.all.map { |s| [s.var, s.value] }.to_h
   end
 
-  def default_url_options
-    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
-  end
-
   rescue_from ActiveRecord::RecordNotFound do
     render '/errors/not_found', status: :not_found
   end

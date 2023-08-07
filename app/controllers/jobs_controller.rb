@@ -6,7 +6,7 @@ class JobsController < ApplicationController
   after_action :system_message_update, only: [:update]
   layout 'admin'
 
-  # @route GET /jobs (jobs)
+  # @route GET (/:locale)/jobs {locale: nil} (jobs)
   def index
     @job = Job.new
     @status = params[:status]
@@ -18,7 +18,7 @@ class JobsController < ApplicationController
     end
   end
 
-  # @route GET /jobs/index_new (jobs_new)
+  # @route GET (/:locale)/jobs/index_new {locale: nil} (jobs_new)
   def index_new
     maids = EmplType.find_by(name: 'Maids').employees.ids
     @jobs = Job.where(closed: nil, employee_id: maids).order(:plan)
@@ -27,7 +27,7 @@ class JobsController < ApplicationController
     render :index
   end
 
-  # @route GET /laundry (laundry)
+  # @route GET (/:locale)/laundry {locale: nil} (laundry)
   def laundry
     from = params[:from]
     to = params[:to]
@@ -56,7 +56,7 @@ class JobsController < ApplicationController
     end
   end
 
-  # @route GET /jobs/job_order (job_order)
+  # @route GET (/:locale)/jobs/job_order {locale: nil} (job_order)
   def job_order
     if !params[:from].present? || !params[:to].present?
       # need to return error message
@@ -97,7 +97,7 @@ class JobsController < ApplicationController
     render json: { jobs: jobs }
   end
 
-  # @route GET /jobs/:id (job)
+  # @route GET (/:locale)/jobs/:id {locale: nil} (job)
   def show
     @message = JobMessage.new
     @messages = @job.job_messages.last(10)
@@ -116,18 +116,18 @@ class JobsController < ApplicationController
     end
   end
 
-  # @route GET /jobs/new (new_job)
+  # @route GET (/:locale)/jobs/new {locale: nil} (new_job)
   def new
     @job = Job.new
     @houses = House.all.order(:code)
   end
 
-  # @route GET /jobs/:id/edit (edit_job)
+  # @route GET (/:locale)/jobs/:id/edit {locale: nil} (edit_job)
   def edit
     @houses = House.all.order(:code)
   end
 
-  # @route POST /jobs (jobs)
+  # @route POST (/:locale)/jobs {locale: nil} (jobs)
   def create
     @job = Job.new(job_params)
     @job.creator_id = current_user.id
@@ -156,8 +156,8 @@ class JobsController < ApplicationController
     end
   end
 
-  # @route PATCH /jobs/:id (job)
-  # @route PUT /jobs/:id (job)
+  # @route PATCH (/:locale)/jobs/:id {locale: nil} (job)
+  # @route PUT (/:locale)/jobs/:id {locale: nil} (job)
   def update
     if params[:done].present?
       @job_status_toggled = true
@@ -178,13 +178,13 @@ class JobsController < ApplicationController
     end
   end
 
-  # @route PATCH /jobs/:id/update_laundry (update_laundry)
+  # @route PATCH (/:locale)/jobs/:id/update_laundry {locale: nil} (update_laundry)
   def update_laundry
     @job.update(job_params)
     redirect_to laundry_path
   end
 
-  # @route DELETE /jobs/:id (job)
+  # @route DELETE (/:locale)/jobs/:id {locale: nil} (job)
   def destroy
     @job.destroy
     respond_to do |format|

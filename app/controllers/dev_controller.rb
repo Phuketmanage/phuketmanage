@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DevController < ApplicationController
-  # @route GET /unlock (unlock)
+  # @route GET (/:locale)/unlock {locale: nil} (unlock)
   def unlock
     user = User.find_by(id: params[:user_id]) || User.first
     sign_in user, bypass_sign_in: true

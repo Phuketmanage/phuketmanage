@@ -5,21 +5,21 @@ class HousePhotosController < ApplicationController
   before_action :get_photo, only: [:update]
   layout 'admin'
 
-  # @route GET /houses/:house_id/photos (house_photos)
+  # @route GET (/:locale)/houses/:house_id/photos {locale: nil} (house_photos)
   def index
     @photos = @house.photos.rank(:position)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}",
                                                success_action_status: '201', acl: 'public-read')
   end
 
-  # @route PUT /house_photos/:id/sort (house_photos_sort)
+  # @route PUT (/:locale)/house_photos/:id/sort {locale: nil} (house_photos_sort)
   def sort
     @photo = HousePhoto.find(params[:id])
     @photo.update(position_position: params[:position])
     head :ok
   end
 
-  # @route GET /houses/:house_id/photos/add (house_photos_add)
+  # @route GET (/:locale)/houses/:house_id/photos/add {locale: nil} (house_photos_add)
   def add
     url = params[:photo_url]
     preview = params[:preview]
@@ -32,7 +32,7 @@ class HousePhotosController < ApplicationController
     render json: { status: :ok, id: photo.id, file_name: file_name[1] } and return
   end
 
-  # @route PATCH /house_photos/:id (house_photo_update)
+  # @route PATCH (/:locale)/house_photos/:id {locale: nil} (house_photo_update)
   def update
     @photo.update(house_photo_params)
     if params[:commit] == "Use as default"
@@ -46,8 +46,8 @@ class HousePhotosController < ApplicationController
     # end
   end
 
-  # @route DELETE /house_photos/:id (house_photo_delete)
-  # @route DELETE /houses/:hid/delete_photos (house_photo_delete_all)
+  # @route DELETE (/:locale)/house_photos/:id {locale: nil} (house_photo_delete)
+  # @route DELETE (/:locale)/houses/:hid/delete_photos {locale: nil} (house_photo_delete_all)
   def delete
     if params[:hid]
       house = House.find_by(number: params[:hid])

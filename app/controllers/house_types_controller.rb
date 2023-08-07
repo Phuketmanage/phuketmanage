@@ -3,23 +3,23 @@ class HouseTypesController < ApplicationController
   before_action :set_house_type, only: %i[show edit update destroy]
   layout 'admin'
 
-  # @route GET (/:locale)/house_types (house_types)
+  # @route GET (/:locale)/house_types {locale: nil} (house_types)
   def index
     @house_types = HouseType.all
   end
 
-  # @route GET (/:locale)/house_types/:id (house_type)
+  # @route GET (/:locale)/house_types/:id {locale: nil} (house_type)
   def show; end
 
-  # @route GET (/:locale)/house_types/new (new_house_type)
+  # @route GET (/:locale)/house_types/new {locale: nil} (new_house_type)
   def new
     @house_type = HouseType.new
   end
 
-  # @route GET (/:locale)/house_types/:id/edit (edit_house_type)
+  # @route GET (/:locale)/house_types/:id/edit {locale: nil} (edit_house_type)
   def edit; end
 
-  # @route POST (/:locale)/house_types (house_types)
+  # @route POST (/:locale)/house_types {locale: nil} (house_types)
   def create
     @house_type = HouseType.new(house_type_params)
 
@@ -34,8 +34,8 @@ class HouseTypesController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/house_types/:id (house_type)
-  # @route PUT (/:locale)/house_types/:id (house_type)
+  # @route PATCH (/:locale)/house_types/:id {locale: nil} (house_type)
+  # @route PUT (/:locale)/house_types/:id {locale: nil} (house_type)
   def update
     respond_to do |format|
       if @house_type.update(house_type_params)
@@ -48,7 +48,7 @@ class HouseTypesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/house_types/:id (house_type)
+  # @route DELETE (/:locale)/house_types/:id {locale: nil} (house_type)
   def destroy
     @house_type.destroy
     respond_to do |format|

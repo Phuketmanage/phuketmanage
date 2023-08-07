@@ -4,7 +4,7 @@ class TransfersController < ApplicationController
   layout 'admin', except: %i[index_supplier confirmed canceled]
   before_action :set_transfer, only: %i[show update destroy cancel]
 
-  # @route GET (/:locale)/transfers (transfers)
+  # @route GET (/:locale)/transfers {locale: nil} (transfers)
   def index
     if !params[:from].present? && !params[:to].present?
       today = Date.current
@@ -23,18 +23,18 @@ class TransfersController < ApplicationController
     @select_items.push('Airport (International)', 'Airport (Domiestic)')
   end
 
-  # @route GET /transfers/supplier (transfers_supplier)
+  # @route GET (/:locale)/transfers/supplier {locale: nil} (transfers_supplier)
   def index_supplier
     today = Date.current
     @transfers = Transfer.where('date >= ?', today).order(:date)
   end
 
-  # @route GET (/:locale)/transfers/:id (transfer)
+  # @route GET (/:locale)/transfers/:id {locale: nil} (transfer)
   def show
     render json: @transfer
   end
 
-  # @route GET (/:locale)/transfers/new (new_transfer)
+  # @route GET (/:locale)/transfers/new {locale: nil} (new_transfer)
   def new
     @transfer = Transfer.new
     respond_to do |format|
@@ -42,7 +42,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/transfers/:id/edit (edit_transfer)
+  # @route GET (/:locale)/transfers/:id/edit {locale: nil} (edit_transfer)
   def edit
     @transfer = Transfer.find(params[:id])
     @select_items = House.for_rent.order(:code).map { |h| [h.code, h.number] }
@@ -53,7 +53,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/transfers (transfers)
+  # @route POST (/:locale)/transfers {locale: nil} (transfers)
   def create
     @transfer = Transfer.new(transfer_params)
     trsf_booking_no = "#{(('A'..'Z').to_a + ('0'..'9').to_a).sample(7).join}"
@@ -82,7 +82,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route GET /transfers/:number/confirmed (supplier_confirm_transfer)
+  # @route GET (/:locale)/transfers/:number/confirmed {locale: nil} (supplier_confirm_transfer)
   def confirmed
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
@@ -99,8 +99,8 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/transfers/:id (transfer)
-  # @route PUT (/:locale)/transfers/:id (transfer)
+  # @route PATCH (/:locale)/transfers/:id {locale: nil} (transfer)
+  # @route PUT (/:locale)/transfers/:id {locale: nil} (transfer)
   def update
     # transfer = Transfer.find_by(number: params[:id])
     @transfer.attributes = transfer_params
@@ -149,7 +149,7 @@ class TransfersController < ApplicationController
     # end
   end
 
-  # @route GET (/:locale)/transfers/:id/cancel (cancel_transfer)
+  # @route GET (/:locale)/transfers/:id/cancel {locale: nil} (cancel_transfer)
   def cancel
     respond_to do |format|
       if @transfer.update(status: 'canceling')
@@ -167,7 +167,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route GET /transfers/:number/canceled (supplier_cancel_transfer)
+  # @route GET (/:locale)/transfers/:number/canceled {locale: nil} (supplier_cancel_transfer)
   def canceled
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
@@ -184,7 +184,7 @@ class TransfersController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/transfers/:id (transfer)
+  # @route DELETE (/:locale)/transfers/:id {locale: nil} (transfer)
   def destroy
     @transfer.destroy
     respond_to do |format|

@@ -3,7 +3,7 @@ class PagesController < ApplicationController
 
   layout 'test', only: :test
 
-  # @route GET (/:locale)/:locale
+  # @route GET /(:locale) {locale: nil} (locale_root)
   # @route GET / (root)
   def index
     @search = Search.new
@@ -14,9 +14,9 @@ class PagesController < ApplicationController
     @types = HouseType.all
   end
 
-  # @route GET (/:locale)/about (page_about)
+  # @route GET (/:locale)/about {locale: nil} (page_about)
   def about; end
 
-  # @route GET /test (test)
+  # @route GET (/:locale)/test {locale: nil} (test)
   def test; end
 end

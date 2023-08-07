@@ -1,8 +1,8 @@
 class AdminController < ApplicationController
   load_and_authorize_resource
   before_action :set_en_locale
-  # @route GET /owner (owner)
-  # @route GET (/:locale)/dashboard (dashboard)
+  # @route GET (/:locale)/owner {locale: nil} (owner)
+  # @route GET (/:locale)/dashboard {locale: nil} (dashboard)
   def index
     redirect_to water_usages_path if current_user.role?('Gardener')
     redirect_to transactions_path and return if current_user.role?('Owner')
