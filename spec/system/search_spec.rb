@@ -44,7 +44,7 @@ describe 'Search' do
 
   context 'when pass with type' do
     before do
-      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Btype%5D%5B%5D=#{villa.name_en}"
+      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Searchs&search%5Btype%5D%5B%5D=#{villa.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -54,7 +54,7 @@ describe 'Search' do
 
   context 'when pass with location' do
     before do
-      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.name_en}"
+      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -64,7 +64,7 @@ describe 'Search' do
 
   context 'when pass with type and location' do
     before do
-      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.name_en}&search%5Btype%5D%5B%5D=#{villa.name_en}"
+      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -73,7 +73,7 @@ describe 'Search' do
   end
   context 'when pass all parameters' do
     before do
-      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.name_en}&search%5Btype%5D%5B%5D=#{villa.name_en}&search%5Bbdr%5D%5B%5D=3"
+      visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}&search%5Bbdr%5D%5B%5D=3"
     end
 
     it { is_expected.to have_selector('.house', count: 1) }

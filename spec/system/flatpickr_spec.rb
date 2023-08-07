@@ -5,6 +5,8 @@ require 'rails_helper'
 describe 'Flatpickr', freeze: '2023-02-01', js: true do
   let(:house) { create(:house) }
   let(:current_date) { '2023-02-01'.to_date }
+  let!(:type) { create(:house_type, :villa) }
+  let!(:location) { create(:location) }
   let(:booking) do
     create(:booking, :pending, house:, start: current_date + 5.days, finish: current_date + 11.days) # Booked from Mon 6 Febrary 2023 to Sun 12 Febrary 2023
   end
@@ -14,7 +16,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
     context 'when min_days_before_check_in not set' do
       before do
         visit '/'
-        find(:css, '.form-control').click
+        find(:css, '.fp-input').click
       end
 
       it "shows calendar" do
@@ -46,7 +48,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       before do
         create(:setting, :min_days_before_check_in)
         visit '/'
-        find(:css, '.form-control').click
+        find(:css, '.fp-input').click
       end
 
       it "today is not avaliable" do
@@ -116,7 +118,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
     context 'when 2 min_days_before_check_in are set' do
       before do
         create(:setting, :min_days_before_check_in)
-        visit '/'
+        visit house_path(house.number)
         find(:css, '.form-control').click
       end
 

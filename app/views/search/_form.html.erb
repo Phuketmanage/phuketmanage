@@ -5,7 +5,7 @@
   <div class="form-row shadow-sm mb-2 p-2 border rounded  bg-white">
     <div class="col-md-8">
       <%= f.text_field :period,
-          class: 'border pl-2',
+          class: 'border pl-2 fp-input',
           readonly: true,
           autocomplete: 'off',
           placeholder: t('search.dates'),
@@ -22,13 +22,13 @@
   </div>
   <div class="form-row shadow-sm mb-2 p-2 border rounded  bg-white">
     <div class="col-md-4 form-group">
-      <%= f.select :type, options_for_select(types.map{|t| [ t.send("name_#{I18n.locale}"), t.id]}, selected: params[:search][:type]), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.house_type')}} %>
+      <%= f.select :type, options_for_select(types.map{|t| [ t.send("name_#{I18n.locale}"), t.id]}, selected: params[:search].present? ? params[:search][:type] : nil), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.house_type')}} %>
     </div>
     <div class="col-md-2 form-group">
       <%= f.select :bdr, bdrs, {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.bdr')}} %>
     </div>
     <div class="col-md-2 form-group">
-      <%= f.select :location, options_for_select(locations.map{|l| [ l.send("name_#{I18n.locale}"), l.id]}, selected: params[:search][:location]), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.location')}} %>
+      <%= f.select :location, options_for_select(locations.map{|l| [ l.send("name_#{I18n.locale}"), l.id]}, selected: params[:search].present? ? params[:search][:location] : nil), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.location')}} %>
     </div>
   </div>
 <% end %>
