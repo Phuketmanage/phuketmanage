@@ -1,11 +1,22 @@
+# == Schema Information
+#
+# Table name: notifications
+#
+#  id         :bigint           not null, primary key
+#  level      :string
+#  text       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  house_id   :bigint           not null
+#
+# Indexes
+#
+#  index_notifications_on_house_id  (house_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#
 class Notification < ApplicationRecord
-  the_schema_is "notifications" do |t|
-    t.string "level"
-    t.string "text"
-    t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house, optional: true
 end

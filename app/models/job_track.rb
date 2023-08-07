@@ -1,12 +1,25 @@
+# == Schema Information
+#
+# Table name: job_tracks
+#
+#  id         :bigint           not null, primary key
+#  visit_time :datetime         not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  job_id     :bigint           not null
+#  user_id    :bigint           not null
+#
+# Indexes
+#
+#  index_job_tracks_on_job_id   (job_id)
+#  index_job_tracks_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (job_id => jobs.id)
+#  fk_rails_...  (user_id => users.id)
+#
 class JobTrack < ApplicationRecord
-  the_schema_is "job_tracks" do |t|
-    t.bigint "job_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "visit_time", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :job
   belongs_to :user
 end

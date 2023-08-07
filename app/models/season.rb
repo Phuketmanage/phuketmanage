@@ -1,14 +1,25 @@
+# == Schema Information
+#
+# Table name: seasons
+#
+#  id         :bigint           not null, primary key
+#  sfd        :integer
+#  sfm        :integer
+#  ssd        :integer
+#  ssm        :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  house_id   :bigint           not null
+#
+# Indexes
+#
+#  index_seasons_on_house_id  (house_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#
 class Season < ApplicationRecord
-  the_schema_is "seasons" do |t|
-    t.integer "ssd"
-    t.integer "ssm"
-    t.integer "sfd"
-    t.integer "sfm"
-    t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
   validates :ssd, :ssm, :sfd, :sfm, presence: true
   validates :ssm, :sfm, numericality: {

@@ -1,13 +1,25 @@
+# == Schema Information
+#
+# Table name: house_photos
+#
+#  id         :bigint           not null, primary key
+#  position   :integer
+#  title_en   :string
+#  title_ru   :string
+#  url        :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  house_id   :bigint           not null
+#
+# Indexes
+#
+#  index_house_photos_on_house_id  (house_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#
 class HousePhoto < ApplicationRecord
-  the_schema_is "house_photos" do |t|
-    t.bigint "house_id", null: false
-    t.string "url"
-    t.string "title_en"
-    t.string "title_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
 
   include RankedModel

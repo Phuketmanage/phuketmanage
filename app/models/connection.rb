@@ -1,13 +1,26 @@
+# == Schema Information
+#
+# Table name: connections
+#
+#  id         :bigint           not null, primary key
+#  last_sync  :datetime
+#  link       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  house_id   :bigint           not null
+#  source_id  :bigint           not null
+#
+# Indexes
+#
+#  index_connections_on_house_id   (house_id)
+#  index_connections_on_source_id  (source_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#  fk_rails_...  (source_id => sources.id)
+#
 class Connection < ApplicationRecord
-  the_schema_is "connections" do |t|
-    t.bigint "house_id", null: false
-    t.bigint "source_id", null: false
-    t.string "link"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "last_sync"
-  end
-
   belongs_to :house
   belongs_to :source
   validates :source_id, :house_id, presence: true

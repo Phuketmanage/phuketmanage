@@ -1,29 +1,42 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :bigint           not null, primary key
+#  balance_closed         :boolean          default(FALSE), not null
+#  code                   :string
+#  comment                :text
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  invitation_accepted_at :datetime
+#  invitation_created_at  :datetime
+#  invitation_limit       :integer
+#  invitation_sent_at     :datetime
+#  invitation_token       :string
+#  invitations_count      :integer          default(0)
+#  invited_by_type        :string
+#  locale                 :string
+#  name                   :string
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  show_comm              :boolean          default(FALSE)
+#  surname                :string
+#  tax_no                 :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  invited_by_id          :bigint
+#
+# Indexes
+#
+#  index_users_on_email                              (email) UNIQUE
+#  index_users_on_invitation_token                   (invitation_token) UNIQUE
+#  index_users_on_invitations_count                  (invitations_count)
+#  index_users_on_invited_by_id                      (invited_by_id)
+#  index_users_on_invited_by_type_and_invited_by_id  (invited_by_type,invited_by_id)
+#  index_users_on_reset_password_token               (reset_password_token) UNIQUE
+#
 class User < ApplicationRecord
-  the_schema_is "users" do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer "invitation_limit"
-    t.string "invited_by_type"
-    t.bigint "invited_by_id"
-    t.integer "invitations_count", default: 0
-    t.string "name"
-    t.string "surname"
-    t.string "locale"
-    t.text "comment"
-    t.string "code"
-    t.string "tax_no"
-    t.boolean "show_comm", default: false
-  end
-
   has_and_belongs_to_many :roles
   has_many :houses, foreign_key: 'owner_id'
   has_many :bookings, foreign_key: 'tenant_id'
@@ -37,32 +50,32 @@ class User < ApplicationRecord
   has_many :todos_created, class_name: 'Todo', foreign_key: 'creator_id'
 
   scope :with_role, ->(role) { includes(:roles).where(roles: { name: role }) }
-  scope :active_owners, ->()  { where('balance_closed = false')}
-  scope :inactive_owners, ->()  { where('balance_closed = true')}
+  scope :active_owners, -> { where('balance_closed = false') }
+  scope :inactive_owners, -> { where('balance_closed = true') }
 
   def role?(role_or_roles)
     names = Array.wrap(role_or_roles).map(&:to_s).map(&:capitalize)
     !!roles.find_by(name: names)
   end
 
-  def active_for_authentication? 
+  def active_for_authentication?
     super && !balance_closed?
-  end 
+  end
 
-  def inactive_message 
-    !balance_closed? ? super : :inactive
+  def inactive_message
+    balance_closed? ? :inactive : super
   end
 
   def unpaid_bookings(booking_id = nil)
-    if !booking_id
-      houses.joins(:bookings) .where.not('bookings.status': [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]])
-                              .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
-                              .order('bookings.start')
+    if booking_id
+      houses.joins(:bookings).where('(status != ? AND status != ? AND status != ?) OR bookings.id = ?',
+                                    Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled], booking_id)
+        .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
+        .order('bookings.start')
     else
-      houses.joins(:bookings) .where('(status != ? AND status != ? AND status != ?) OR bookings.id = ?',
-                                Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled], booking_id)
-                              .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
-                              .order('bookings.start')
+      houses.joins(:bookings).where.not('bookings.status': [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]])
+        .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code')
+        .order('bookings.start')
     end
   end
 

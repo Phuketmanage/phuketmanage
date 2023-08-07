@@ -1,12 +1,23 @@
+# == Schema Information
+#
+# Table name: durations
+#
+#  id         :bigint           not null, primary key
+#  finish     :integer
+#  start      :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  house_id   :bigint           not null
+#
+# Indexes
+#
+#  index_durations_on_house_id  (house_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#
 class Duration < ApplicationRecord
-  the_schema_is "durations" do |t|
-    t.integer "start"
-    t.integer "finish"
-    t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
   validates :start, :finish, numericality: {
     greater_than: 0,
@@ -18,9 +29,9 @@ class Duration < ApplicationRecord
   def not_overlapped
     durations = House.find(house_id).durations
     overlapped = durations.where('start <= ? AND finish >= ?', finish, start)
-    if overlapped.any?
-      errors.add(:base,
-                 "There is at least one duration that overlapped with newly created duration period, need to change start or finish")
-    end
+    return unless overlapped.any?
+
+    errors.add(:base,
+               "There is at least one duration that overlapped with newly created duration period, need to change start or finish")
   end
 end

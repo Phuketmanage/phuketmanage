@@ -1,15 +1,18 @@
+# == Schema Information
+#
+# Table name: transaction_types
+#
+#  id             :bigint           not null, primary key
+#  admin_only     :boolean          default(FALSE)
+#  credit_company :boolean
+#  credit_owner   :boolean
+#  debit_company  :boolean
+#  debit_owner    :boolean
+#  name_en        :string
+#  name_ru        :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
 class TransactionType < ApplicationRecord
-  the_schema_is "transaction_types" do |t|
-    t.string "name_en"
-    t.string "name_ru"
-    t.boolean "debit_company"
-    t.boolean "credit_company"
-    t.boolean "debit_owner"
-    t.boolean "credit_owner"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.boolean "admin_only", default: false
-  end
-
   has_many :transactions, dependent: :nullify, foreign_key: 'type_id'
 end

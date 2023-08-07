@@ -1,14 +1,27 @@
+# == Schema Information
+#
+# Table name: booking_files
+#
+#  id         :bigint           not null, primary key
+#  comment    :text
+#  name       :string
+#  url        :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  booking_id :bigint           not null
+#  user_id    :bigint
+#
+# Indexes
+#
+#  index_booking_files_on_booking_id  (booking_id)
+#  index_booking_files_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (booking_id => bookings.id)
+#  fk_rails_...  (user_id => users.id)
+#
 class BookingFile < ApplicationRecord
-  the_schema_is "booking_files" do |t|
-    t.bigint "booking_id", null: false
-    t.string "url"
-    t.string "name"
-    t.text "comment"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "user_id"
-  end
-
   belongs_to :booking
   belongs_to :user, optional: true
   after_destroy :delete_file_from_s3

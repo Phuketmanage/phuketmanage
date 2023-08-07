@@ -1,13 +1,26 @@
+# == Schema Information
+#
+# Table name: prices
+#
+#  id          :bigint           not null, primary key
+#  amount      :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  duration_id :integer
+#  house_id    :bigint           not null
+#  season_id   :integer
+#
+# Indexes
+#
+#  index_prices_on_duration_id  (duration_id)
+#  index_prices_on_house_id     (house_id)
+#  index_prices_on_season_id    (season_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (house_id => houses.id)
+#
 class Price < ApplicationRecord
-  the_schema_is "prices" do |t|
-    t.bigint "house_id", null: false
-    t.integer "season_id"
-    t.integer "duration_id"
-    t.integer "amount"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
   belongs_to :season
   belongs_to :duration
