@@ -8,7 +8,7 @@ class BookingMailer < ApplicationMailer
     @booking = booking
     I18n.with_locale(:en) do
       mail to: 'rent@phuketmanage.com',
-           subject: "New booking for #{@booking.house.code}: #{booking.start.strftime('%d.%m.%Y')} - #{booking.finish.strftime('%d.%m.%Y')}"
+           subject: "New booking for #{@booking.house.code}: #{booking.start.to_fs(:date)} - #{booking.finish.to_fs(:date)}"
     end
   end
 

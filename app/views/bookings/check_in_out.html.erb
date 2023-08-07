@@ -1,5 +1,4 @@
 <h1>Check in/out - <%= @type %></h1>
-
 <%= form_with(url: bookings_check_in_out_path, local: true, method: :get) do |f| %>
   <div class="form-row">
     <div class="col-lg-2 form-group">
@@ -16,7 +15,6 @@
     </div>
   </div>
 <% end %>
-
 <% date = '' %>
 <% @result.each do |r| %>
   <%#= "#{date} != #{r[:date]}"  %>
@@ -24,51 +22,49 @@
     <% css = 'font-weight-bold' %>
     <% date = r[:date] %>
   <% end %>
-
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <span class="<%= css %>">
       <%=  "#{r[:date]} #{r[:type]} #{r[:house]} (#{r[:status]})" %>
     </span><br />
-      Client: <%=  r[:client] %><br />
-      Our transfer:
-      <% r[:transfers].each do |t| %>
-        <%= t %><br />
-      <% end %>
-      <br />
-      <% booking = Booking.find(r[:booking_id]) %>
-      <% if r[:type] == "IN" %>
-        Period: <%= " #{booking.start.strftime('%d.%m.%Y')} -
-                      #{booking.finish.strftime('%d.%m.%Y')} /
+    Client: <%=  r[:client] %><br />
+    Our transfer:
+    <% r[:transfers].each do |t| %>
+      <%= t %><br />
+    <% end %>
+    <br />
+    <% booking = Booking.find(r[:booking_id]) %>
+    <% if r[:type] == "IN" %>
+      Period: <%= " #{booking.start.to_fs(:date)} -
+                      #{booking.finish.to_fs(:date)} /
                       #{(booking.finish-booking.start).to_i} days" %>
-                      <br />
-        <%# paid = booking.transactions.joins(:balance_outs).sum(:debit) %>
-        <%# nett_in = booking.sale - booking.agent %>
-        <!-- Sale price: <%#= number_to_currency(booking.sale, precision: 0, unit: '') %> -->
-        <!-- Paid: <%#= number_to_currency(paid, precision: 0, unit: '') %>
+      <br />
+      <%# paid = booking.transactions.joins(:balance_outs).sum(:debit) %>
+      <%# nett_in = booking.sale - booking.agent %>
+      <!-- Sale price: <%#= number_to_currency(booking.sale, precision: 0, unit: '') %> -->
+      <!-- Paid: <%#= number_to_currency(paid, precision: 0, unit: '') %>
         Balance: <%#= number_to_currency(nett_in - paid, precision: 0, unit: '') %><br /> -->
-
-      <% end %>
-      Source: <%= booking.source.name if booking.source %><br />
-      <%=  "Comment: #{r[:comment]}" %>
-      <%= link_to "Edit comment", '#', class: 'edit_comment',
+    <% end %>
+    Source: <%= booking.source.name if booking.source %><br />
+    <%=  "Comment: #{r[:comment]}" %>
+    <%= link_to "Edit comment", '#', class: 'edit_comment',
                                       data: { booking_id: r[:booking_id],
                                               type: r[:type]} %>
-      <%= form_with model: booking,
+    <%= form_with model: booking,
                     url: update_booking_comment_gr_path(r[:booking_id]),
                     local: true,
                     class: 'form_edit_comment_gr d-none',
                     data: { booking_id: r[:booking_id],
                             type: r[:type] } do |f| %>
-        <div class="form-group">
-          <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
-        </div>
-        <div class="form-group text-right">
-          <%= f.submit "Save", class: 'btn btn-primary' %>
-          <%= link_to "Cancel", '#',
+      <div class="form-group">
+        <%= f.text_field :comment_gr, class: "form-control", rows: 1 %>
+      </div>
+      <div class="form-group text-right">
+        <%= f.submit "Save", class: 'btn btn-primary' %>
+        <%= link_to "Cancel", '#',
                 class: 'btn btn-secondary cancel_edit_comment',
                 data: { booking_id: r[:booking_id] }
            %>
-        </div>
-      <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>

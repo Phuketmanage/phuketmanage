@@ -51,8 +51,8 @@
     </div>
     <div class="p-2">
       <% date = Time.current %>
-      <strong>Number:</strong> SO-<span id='number'><%= "#{code(@owner)}-#{@date.year}#{@date.strftime('%m')}001" %></span><span id='number_add'></span> <br />
-      <strong>Date:</strong>  <span id='doc_date'><%= @date.strftime('%d.%m.%Y') %></span>
+      <strong>Number:</strong> SO-<span id='number'><%= "#{code(@owner)}-#{@date.year}#{@date.to_fs(:month)}001" %></span><span id='number_add'></span> <br />
+      <strong>Date:</strong>  <span id='doc_date'><%= @date.to_fs(:date) %></span>
     </div>
   </div>
   <div class="d-flex flex-row">

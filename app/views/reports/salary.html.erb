@@ -10,7 +10,6 @@
     <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
   </div>
 <% end %>
-
 <table class='table table-bordered bg-white'>
   <tr align='center'>
     <th>Date</th>
@@ -21,8 +20,8 @@
   <% total = 0 %>
   <% @ts.each do |t| %>
     <tr>
-      <td><%= t.date.strftime('%d.%m.%Y') %></td>
-      <td><%= "#{t.house_code} #{t.booking_start.strftime('%d.%m.%Y')}-#{t.booking_finish.strftime('%d.%m.%Y')}" %></td>
+      <td><%= t.date.to_fs(:date) %></td>
+      <td><%= "#{t.house_code} #{t.booking_start.to_fs(:date)}-#{t.booking_finish.to_fs(:date)}" %></td>
       <td align='right'><%= number_to_currency(t.income, precision: 0, unit: '') %></td>
       <td align='right'><%= number_to_currency(comm = t.income*0.3, precision: 0, unit: '') %> (<%= (comm/t.income*100).round %>%)</td>
       <% total += t.income %>

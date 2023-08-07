@@ -83,7 +83,7 @@ class JobsController < ApplicationController
     jobs = {}
     date_old = ''
     jobs_raw.each do |j|
-      date = j.plan.strftime('%d.%m.%Y')
+      date = j.plan.to_fs(:date)
       if date != date_old
         jobs[date] = []
         # jobs[date]['date'] = date

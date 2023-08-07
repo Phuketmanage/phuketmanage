@@ -22,7 +22,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.strftime('%d.%m.%Y')} - #{bookings(:_1).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     start = "3.07.#{year}".to_date
     finish = "10.07.#{year}".to_date
@@ -35,7 +35,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.strftime('%d.%m.%Y')} - #{bookings(:_1).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     start = "20.07.#{year}".to_date
     finish = "27.07.#{year}".to_date
@@ -48,7 +48,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.strftime('%d.%m.%Y')} - #{bookings(:_1).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     # House not available have confirmed booking
     start = "20.07.#{year}".to_date
@@ -62,7 +62,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.strftime('%d.%m.%Y')} - #{bookings(:_1).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     # House not available have temporary booking
     start = "26.07.#{year}".to_date
@@ -76,7 +76,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_6).start.strftime('%d.%m.%Y')} - #{bookings(:_6).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_6).start.to_fs(:date)} - #{bookings(:_6).finish.to_fs(:date)}\"]"
 
     # House not available have block booking
     start = "27.07.#{year}".to_date
@@ -90,7 +90,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                               client_details: 'Test client' } }
     end
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_7).start.strftime('%d.%m.%Y')} - #{bookings(:_7).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_7).start.to_fs(:date)} - #{bookings(:_7).finish.to_fs(:date)}\"]"
 
     # Can create new booking
     start = "22.07.#{year}"
@@ -148,7 +148,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_4).start.strftime('%d.%m.%Y')} - #{bookings(:_4).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_4).start.to_fs(:date)} - #{bookings(:_4).finish.to_fs(:date)}\"]"
 
     # Change only dates - house available for manager even dtnb = 2
     new_start = "30.06.#{year}".to_date
@@ -185,7 +185,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.strftime('%d.%m.%Y')} - #{bookings(:_2).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.to_fs(:date)} - #{bookings(:_2).finish.to_fs(:date)}\"]"
     assert_equal @booking.reload.house_id, old_house.id
 
     # Change only house - house available = success
@@ -211,7 +211,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.strftime('%d.%m.%Y')} - #{bookings(:_2).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.to_fs(:date)} - #{bookings(:_2).finish.to_fs(:date)}\"]"
 
     # Change dates and house - house is not available because dtnb = 2
     new_start = "25.07.#{year}".to_date
@@ -223,7 +223,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     assert_select 'div.alert li',
-                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.strftime('%d.%m.%Y')} - #{bookings(:_2).finish.strftime('%d.%m.%Y')}\"]"
+                  text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.to_fs(:date)} - #{bookings(:_2).finish.to_fs(:date)}\"]"
 
     # Change dates and house - house is available even dtnb = 2
     new_start = "26.07.#{year}".to_date

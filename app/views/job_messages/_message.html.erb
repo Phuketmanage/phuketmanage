@@ -30,7 +30,7 @@
     <% end %>
     <br />
     <span class="<%= time_color %> d-flex justify-content-end">
-      <%= message.created_at.strftime('%d.%m.%Y %H:%M') %>
+      <%= message.created_at.to_fs(:date_with_time) %>
     </span>
     <% if is_own_message && Time.current - message.created_at <= 10.minutes && !message.is_system %>
       <%= link_to 'Delete', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "d-flex justify-content-end text-warning" %>

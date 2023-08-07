@@ -544,7 +544,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_equal "14,000.00", csv[1][3]
     assert_equal "Balance from previous period", csv[1][6]
     # CSV Last transaction and total balance
-    assert_equal Time.current.strftime('%d.%m.%Y'), csv[12][0]
+    assert_equal Time.current.to_fs(:date), csv[12][0]
     assert_equal "24,000.00", csv[12][1]
     assert_nil csv[12][2]
     assert_equal "221,299.01", csv[12][3]
@@ -580,12 +580,12 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     sign_in users(:admin)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n          /C"
+    assert_select "td.comment", "house rental\n            /C"
     sign_out users(:admin)
     sign_in users(:manager)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n          /C"
+    assert_select "td.comment", "house rental\n            /C"
     sign_out users(:manager)
     sign_in users(:owner_3)
     get transactions_path, params: { from:, to:, commit: 'Full' }

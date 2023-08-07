@@ -29,7 +29,7 @@ class UsersMailer < Devise::Mailer
     @changes = changes
     I18n.with_locale(:en) do
       mail to: @settings["tranfer_supplier_email"],
-           subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
+           subject: "Transfer amended - #{transfer.trsf_type} #{transfer.date.to_fs(:date)}"
     end
   end
 
@@ -38,7 +38,7 @@ class UsersMailer < Devise::Mailer
     @changes = {}
     I18n.with_locale(:en) do
       mail to: @settings["tranfer_supplier_email"],
-           subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.strftime('%d.%m.%Y')}"
+           subject: "Transfer canceled - #{transfer.trsf_type} #{transfer.date.to_fs(:date)}"
     end
   end
 

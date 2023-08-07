@@ -2,7 +2,7 @@
 <p>
   <div><%= t('booking_mailer.send_request_confirmation.details') %></div>
   <div><%= t('booking_mailer.send_request_confirmation.property', house: @booking.house.generated_title(locale)) %></div>
-  <div><%= t('booking_mailer.send_request_confirmation.period', start: @booking.start.strftime('%d.%m.%y'), finish: @booking.finish.strftime('%d.%m.%y')) %></div>
+  <div><%= t('booking_mailer.send_request_confirmation.period', start: @booking.start.to_fs(:date), finish: @booking.finish.to_fs(:date)) %></div>
   <div><%= t('booking_mailer.send_request_confirmation.tenant', user: @booking.client_details) %></div>
   <div><%= t('booking_mailer.send_request_confirmation.comment', comment: @booking.comment) %></div>
   <div><%= t('booking_mailer.send_request_confirmation.price', price: @booking.sale) %></div>

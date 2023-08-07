@@ -1,8 +1,7 @@
 <%= t('booking_mailer.send_request_confirmation.body') %>
-
 <%= t('booking_mailer.send_request_confirmation.details') %>
 <%= t('booking_mailer.send_request_confirmation.property', house: @booking.house.generated_title(locale)) %>
-<%= t('booking_mailer.send_request_confirmation.period', start: @booking.start.strftime('%d.%m.%y'), finish: @booking.finish.strftime('%d.%m.%y')) %>
+<%= t('booking_mailer.send_request_confirmation.period', start: @booking.start.to_fs(:date), finish: @booking.finish.to_fs(:date)) %>
 <%= t('booking_mailer.send_request_confirmation.tenant', user: @booking.client_details) %>
 <%= t('booking_mailer.send_request_confirmation.comment', comment: @booking.comment) %>
 <%= t('booking_mailer.send_request_confirmation.price', price: @booking.sale) %>

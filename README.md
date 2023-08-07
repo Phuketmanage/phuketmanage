@@ -81,6 +81,46 @@ Scope is a noun describing where changes was made.
 
 `!` after the type/scope introduces a breaking changes. Example: `feat(search): add filters`
 
+## Time and dates
+
+### DON’T USE
+
+```ruby
+Time.now
+Date.today
+Date.today.to_time
+Time.parse("2015-07-04 17:05:37")
+Time.strptime(string, "%Y-%m-%dT%H:%M:%S%z")
+```
+
+### DO USE
+
+```ruby
+Time.current
+2.hours.ago
+Time.zone.today
+Date.current
+1.day.from_now
+Time.zone.parse("2015-07-04 17:05:37")
+Time.strptime(string, "%Y-%m-%dT%H:%M:%S%z").in_time_zone
+```
+
+### Application time formats
+
+```ruby
+.to_fs(:date)
+"-> 07.08.2023"
+
+.to_fs(:date_with_time)
+"-> 07.08.2023 21:05:09"
+
+.to_fs(:day_month)
+"-> 07.08"
+
+.to_fs(:month)
+"-> 08"
+```
+
 ## Tests
 
 All closed issues have to be covered by tests except when mentioned that tests are not required.

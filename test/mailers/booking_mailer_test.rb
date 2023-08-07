@@ -8,7 +8,7 @@ class BookingMailerTest < ActionMailer::TestCase
 
   test "created" do
     mail = BookingMailer.created(@booking)
-    assert_equal "New booking for #{@booking.house.code}: #{@booking.start.strftime('%d.%m.%Y')} - #{@booking.finish.strftime('%d.%m.%Y')}",
+    assert_equal "New booking for #{@booking.house.code}: #{@booking.start.to_fs(:date)} - #{@booking.finish.to_fs(:date)}",
                  mail.subject
     assert_equal ["rent@phuketmanage.com"], mail.to
     assert_equal ["info@phuketmanage.com"], mail.from

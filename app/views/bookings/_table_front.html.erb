@@ -17,7 +17,6 @@
         <th><%= t('comment') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% nett_sum = 0 %>
       <% profit_sum = 0 %>
@@ -34,8 +33,8 @@
           <% if !@one_house %>
             <td><%= !@house ? link_to(booking.house.code, bookings_front_path(hid: booking.house.number)) : booking.house.code %></td>
           <% end %>
-          <td><%= booking.start.strftime('%d.%m.%Y') %></td>
-          <td><%= booking.finish.strftime('%d.%m.%Y') %></td>
+          <td><%= booking.start.to_fs(:date) %></td>
+          <td><%= booking.finish.to_fs(:date) %></td>
           <td><%= (booking.finish - booking.start).to_i %></td>
           <td class='text-right'><%= number_to_currency(booking.nett, precision: 0, unit: '') %></td>
           <td class='text-right'><%= number_to_currency(profit, precision: 0, unit: '') %></td>
@@ -43,7 +42,7 @@
             <%= booking.comment_owner %>
             <% if booking.transactions.any? %>
               <%= '|' if booking.comment_owner %>
-              <%= t('added_to_balance') %>: <%= booking.transactions.order(:date).map{|t| "#{t.date.strftime('%d.%m.%Y')}"}.join ', ' %>
+              <%= t('added_to_balance') %>: <%= booking.transactions.order(:date).map{|t| "#{t.date.to_fs(:date)}"}.join ', ' %>
             <% end %>
           </td>
         </tr>

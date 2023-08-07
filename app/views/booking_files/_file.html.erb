@@ -1,7 +1,7 @@
 <li class="list-group-item booking_file" data-booking-file-id=<%= file.id %>>
   <div class="d-flex w-100 justify-content-between">
     <h5 class="mb-1"><%= file.name %></h5>
-    <small><%= file.user.name %> <%= file.created_at.strftime('%d.%m.%Y %H:%M') %></small>
+    <small><%= file.user.name %> <%= file.created_at.to_fs(:date_with_time) %></small>
   </div>
   <% if !file.comment.empty? %>
     <p><%= file.comment %></p>

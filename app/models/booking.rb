@@ -100,7 +100,7 @@ class Booking < ApplicationRecord
         line = {}
         line[:booking_id] = b.id
         line[:type] = 'IN'
-        line[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+        line[:date] = b.check_in.present? ? b.check_in.to_fs(:date) : b.start.to_fs(:date)
         line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :IN)
         transfers.each do |t|
@@ -119,7 +119,7 @@ class Booking < ApplicationRecord
         line = {}
         line[:booking_id] = b.id
         line[:type] = 'OUT'
-        line[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+        line[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
         line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :OUT)
         transfers.each do |t|
@@ -140,7 +140,7 @@ class Booking < ApplicationRecord
       #   line_in[:booking_id] = b.id
       #   line_in[:type] = 'IN'
       #   line_in[:status] = b.status
-      #   line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+      #   line_in[:date] = b.check_in.present? ? b.check_in.to_fs(:date) : b.start.to_fs(:date)
       #   line_in[:house] = b.house.code
       #   line_in[:client] = b.client_details
       #   line_in[:source] = b.source.name if b.source
@@ -160,7 +160,7 @@ class Booking < ApplicationRecord
       # line_out[:booking_id] = b.id
       # line_out[:type] = 'OUT'
       # line_out[:status] = b.status
-      # line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+      # line_out[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
       # line_out[:house] = b.house.code
       # line_out[:client] = b.client_details
       # line_out[:source] = b.source.name if b.source
@@ -233,7 +233,7 @@ class Booking < ApplicationRecord
         # 14.07.2022: show brief booking details in tooltip
         source = b.source.name if b.source.present?
         booking[:details] =
-          "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')} #{b.client_details} #{source}"
+          "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)} #{b.client_details} #{source}"
         # Get jobs for bookings
         jt_fm = JobType.find_by(name: 'For management').id
         # jobs = b.jobs

@@ -47,7 +47,7 @@ class Search
     end
     if overlapped.any?
       result[:result] = false
-      result[:overlapped] = overlapped.map { |b| "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}" }
+      result[:overlapped] = overlapped.map { |b| "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}" }
     end
 
     result[:result] = false if duration_shorter_than_minimal?(house_id)

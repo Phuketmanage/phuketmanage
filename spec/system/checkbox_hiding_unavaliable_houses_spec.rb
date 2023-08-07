@@ -13,8 +13,8 @@ describe 'Checkbox hiding unavaliable houses' do
   let!(:booking) do
     create(:booking, :pending, house:, start: Date.current, finish: Date.current+ 1.year)
   end
-  let(:period_from) { 5.days.from_now.strftime("%Y-%m-%d") }
-  let(:period_to) { 10.days.from_now.strftime("%Y-%m-%d") }
+  let(:period_from) { 5.days.from_now.to_date.to_fs }
+  let(:period_to) { 10.days.from_now.to_date.to_fs }
   let(:search_path) { "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search" }
 
   it "hides checkbox for unauthorized user" do

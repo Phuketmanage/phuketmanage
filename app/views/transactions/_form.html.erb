@@ -42,7 +42,7 @@
     <div class="col-md-2 money_fields" id='booking_id'>
       <%= form.label :booking_id %>
       <%= form.select :booking_id,
-            @bookings.map {|b| ["#{b.code} #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]},
+            @bookings.map {|b| ["#{b.code} #{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}", b.id]},
                       { include_blank: 'Select booking' }, class: "form-control" %>
     </div>
     <div class="col-md-2 money_fields", id='de_ow', style='display:none;'>
