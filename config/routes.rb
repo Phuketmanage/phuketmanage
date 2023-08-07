@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  scope "(:locale)", locale: /en|ru/, defaults: {locale: nil} do
+  scope "(:locale)", locale: /en|ru/, defaults: { locale: nil } do
+    root to: 'pages#index', as: :locale_root
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
@@ -44,7 +45,6 @@ Rails.application.routes.draw do
     get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
     get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
-
     resources :houses do
       resources :prices, only: [:index]
       get 'photos', to: 'house_photos#index', as: 'photos'
@@ -68,8 +68,6 @@ Rails.application.routes.draw do
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :bookings
     resources :booking_files, only: %i[create update destroy]
-
-    get '/:locale', to: 'pages#index'
     get '/about', to: 'pages#about', as: 'page_about'
     devise_for :users
     resources :users, except: :create
