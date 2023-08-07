@@ -8,6 +8,8 @@ describe 'Checkbox hiding unavaliable houses' do
   let(:accounting) { create(:user, :accounting) }
   let(:owner) { create(:user, :owner) }
   let(:house) { create(:house, :with_seasons, owner:) }
+  let!(:type) { create(:house_type, :villa) }
+  let!(:location) { create(:location) }
   let!(:booking) do
     create(:booking, :pending, house:, start: DateTime.now, finish: DateTime.now + 1.year)
   end

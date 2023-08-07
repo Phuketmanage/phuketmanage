@@ -38,6 +38,11 @@ en:
     close: Close
     dates: Choose preferred dates
     duration_shorter_than_minimal: This house minimum rental period is %{min_house_period} nights. Please modify your rental period to increase it.
+    house_type: House type
+    bdr: Bedrooms
+    location: Location
+    date_not_set: Dates not set
+    both_dates: Missing checkin or checkout date
   houses:
     description: Description
     beds: Sleeping arrangements

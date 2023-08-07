@@ -1,9 +1,13 @@
 class SearchController < ApplicationController
   # @route GET (/:locale)/search (search)
   def index
-    @search = Search.new(period: params['search']['period'], dtnb: @settings['dtnb'])
+    @search = Search.new(period: params['search']['period'], type: params['search']['type'],
+                         bdr: params['search']['bdr'], location: params['search']['location'], dtnb: @settings['dtnb'])
     @min_date = @search.min_date
     @houses = []
+    @locations = Location.all
+    @bdrs = House.select(:rooms).distinct.pluck(:rooms).sort
+    @types = HouseType.all
     render :index and return unless @search.valid?
 
     # Management can see prices even for occupied houses
@@ -18,6 +22,6 @@ class SearchController < ApplicationController
   private
 
   def search_params
-    params.require(:search).permit(:stage, :rs, :rf)
+    params.require(:search).permit(:stage, :period, :type, :bdr, :location)
   end
 end

@@ -9,12 +9,14 @@ class PagesController < ApplicationController
     @search = Search.new
     @houses = House.where(unavailable: false).order('random()')
     @min_date = @search.min_date
+    @locations = Location.all
+    @bdrs = House.select(:rooms).distinct.pluck(:rooms).sort
+    @types = HouseType.all
   end
 
   # @route GET (/:locale)/about (page_about)
   def about; end
 
   # @route GET /test (test)
-  def test
-  end
+  def test; end
 end

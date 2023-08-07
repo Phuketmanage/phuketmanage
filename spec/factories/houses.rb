@@ -9,23 +9,24 @@ FactoryBot.define do
     rooms { Random.rand(1..4) }
     bathrooms { Random.rand(1..3) }
     address { Faker::Address.full_address }
-    owner { build :user, :owner }
-    type { build :house_type }
+    owner { build(:user, :owner) }
+    type { build(:house_type) }
     project { Faker::Address.city }
     unavailable { false }
     after(:create) do |house|
-      create_list :duration, 1, house: house
+      create_list(:duration, 1, house:)
     end
+
     trait :with_seasons do
       after(:create) do |house|
-        create(:season, ssd: 15, ssm: 4, sfd: 1, sfm: 11, house: house)
-        create(:season, ssd: 1, ssm: 11, sfd: 1, sfm: 12, house: house)
-        create(:season, ssd: 1, ssm: 12, sfd: 15, sfm: 12, house: house)
-        create(:season, ssd: 15, ssm: 12, sfd: 15, sfm: 1, house: house)
-        create(:season, ssd: 15, ssm: 1, sfd: 1, sfm: 3, house: house)
-        create(:season, ssd: 1, ssm: 3, sfd: 15, sfm: 4, house: house)
+        create(:season, ssd: 15, ssm: 4, sfd: 1, sfm: 11, house:)
+        create(:season, ssd: 1, ssm: 11, sfd: 1, sfm: 12, house:)
+        create(:season, ssd: 1, ssm: 12, sfd: 15, sfm: 12, house:)
+        create(:season, ssd: 15, ssm: 12, sfd: 15, sfm: 1, house:)
+        create(:season, ssd: 15, ssm: 1, sfd: 1, sfm: 3, house:)
+        create(:season, ssd: 1, ssm: 3, sfd: 15, sfm: 4, house:)
         # Creating prices for every season
-        house.seasons.map{|season| create(:price, house: house, season: season, duration: house.durations.first) }
+        house.seasons.map { |season| create(:price, house:, season:, duration: house.durations.first) }
       end
     end
   end
