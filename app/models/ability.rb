@@ -31,7 +31,7 @@ class Ability
     if user.role? 'Accounting'
       can :reimbersment, :document
       can :statement, :document
-      can %i[index], House
+      can %i[index edit], House
       can %i[index new create update_invoice_ref], Transaction
       can %i[index show canceled timeline timeline_data], Booking
       can [:edit, :update], Transaction do |t|
