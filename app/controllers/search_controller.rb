@@ -6,7 +6,7 @@ class SearchController < ApplicationController
     @min_date = @search.min_date
     @houses = []
     @locations = Location.all
-    @bdrs = House.all.count.positive? ? House.all.pluck(:rooms).sort.uniq : [0]
+    @bdrs = House.select(:rooms).distinct.pluck(:rooms).sort
     @types = HouseType.all
     render :index and return unless @search.valid?
 

@@ -10,7 +10,7 @@ class PagesController < ApplicationController
     @houses = House.where(unavailable: false).order('random()')
     @min_date = @search.min_date
     @locations = Location.all
-    @bdrs = House.all.count.positive? ? House.all.pluck(:rooms).sort.uniq : [0]
+    @bdrs = House.select(:rooms).distinct.pluck(:rooms).sort
     @types = HouseType.all
   end
 

@@ -17,7 +17,7 @@ class BookingsController < ApplicationController
     except_status = Booking.statuses[:canceled]
     bookings = h.bookings.where(' finish >= :today AND
                                   status != :status',
-                                today: today,
+                                today:,
                                 status: except_status)
       .order(:start).all
     bookings.each do |b|
@@ -31,7 +31,7 @@ class BookingsController < ApplicationController
     end
     cal.publish
 
-    send_data cal.to_ical, type: 'text/calendar', disposition: 'inline', filename: filename
+    send_data cal.to_ical, type: 'text/calendar', disposition: 'inline', filename:
     # render :text => cal.to_ical
   end
 
@@ -41,12 +41,12 @@ class BookingsController < ApplicationController
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
     @hid = params[:hid]
-    params[:view_as_owner].present? ? @view_as_owner = true : @view_as_owner = false
+    @view_as_owner = params[:view_as_owner].present? ? true : false
     @houses = set_houses
     @bookings = Booking.active.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
-    if @hid.present?
-      @bookings = @bookings.where(house_id: @hid)
-    end
+    return unless @hid.present?
+
+    @bookings = @bookings.where(house_id: @hid)
   end
 
   # @route GET /bookings/canceled (bookings_canceled)
@@ -56,10 +56,9 @@ class BookingsController < ApplicationController
     @hid = params[:hid]
     @houses = set_houses
     @bookings = Booking.canceled.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
-    if @hid.present?
-      @bookings = @bookings.where(house_id: @hid)
-    end
+    return unless @hid.present?
 
+    @bookings = @bookings.where(house_id: @hid)
   end
 
   # @route GET /owner/bookings (bookings_front)
@@ -70,9 +69,7 @@ class BookingsController < ApplicationController
     @houses = set_houses
     house_ids = current_user.houses.ids
     @bookings = Booking.for_owner.where(finish: @from.., start: ..@to, house_id: house_ids, allotment: false).all
-    if @hid.present?
-      @bookings = @bookings.where(house_id: @hid)
-    end
+    @bookings = @bookings.where(house_id: @hid) if @hid.present?
     @one_house = true if current_user.houses.ids.count == 1
   end
 
@@ -99,7 +96,7 @@ class BookingsController < ApplicationController
       @to = params[:to].to_date
     end
     # @houses = House.where.not(balance_closed: true, hide_in_timeline: true)
-      # .order(:unavailable, :house_group_id, :code).all
+    # .order(:unavailable, :house_group_id, :code).all
     @houses = House.for_timeline
     @houses_for_select = @houses
     if params[:house_number].present?
@@ -119,12 +116,12 @@ class BookingsController < ApplicationController
   def timeline_data
     # puts params[:period].nil?
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
-    render json: { timeline: timeline }
+    render json: { timeline: }
   end
 
   # @route GET /bookings/check_in_out (bookings_check_in_out)
   def check_in_out
-    @type = params[:commit].present? ? params[:commit] : 'All'
+    @type = (params[:commit].presence || 'All')
     @result = Booking.check_in_out params[:from], params[:to], @type
   end
 
@@ -160,17 +157,16 @@ class BookingsController < ApplicationController
       acl: 'public-read',
       content_type_starts_with: ""
     )
-    unless @booking.block?
-      @booking_original = @booking.dup
-      prices = search.get_prices [@booking.house]
-      @booking_original.calc prices
-    end
+    return if @booking.block?
+
+    @booking_original = @booking.dup
+    prices = search.get_prices [@booking.house]
+    @booking_original.calc prices
   end
 
   # @route POST /bookings (bookings)
   def create
-    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
-                        dtnb: 0)
+    search = Search.new(period: search_params, dtnb: 0)
     answer = search.is_house_available? @booking.house_id
     unless answer[:result]
       @booking.errors.add(:base,
@@ -191,7 +187,7 @@ class BookingsController < ApplicationController
     respond_to do |format|
       if @booking.save
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid: hid), notice: 'Booking was successfully created.' }
+        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
@@ -204,11 +200,9 @@ class BookingsController < ApplicationController
 
   # @route POST /booking/new (booking_new)
   def create_front
-    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
-                        dtnb: @settings['dtnb'])
+    search = Search.new(period: search_params, dtnb: @settings['dtnb'])
     house = House.find_by(number: params[:booking][:hid])
     answer = search.is_house_available? house.id
-    # byebug
     prices = search.get_prices [house]
     client_details =  "#{params[:booking][:name]} #{params[:booking][:surname]} " +
                       "#{params[:booking][:adult]}+#{params[:booking][:children]}, " +
@@ -217,8 +211,8 @@ class BookingsController < ApplicationController
     @booking = house.bookings.new(start: params[:booking][:start],
                                   finish: params[:booking][:finish],
                                   # house_id: house.id,
-                                  client_details: client_details,
-                                  comment: comment,
+                                  client_details:,
+                                  comment:,
                                   status: 'pending')
     @booking.calc prices
     @booking.number = "#{(('A'..'Z').to_a + ('0'..'9').to_a).sample(7).join}"
@@ -244,8 +238,7 @@ class BookingsController < ApplicationController
   # @route PATCH /bookings/:id (booking)
   # @route PUT /bookings/:id (booking)
   def update
-    search = Search.new(period: "#{params[:booking][:start]} to #{params[:booking][:finish]}",
-                        dtnb: 0) # dtnb: @settings['dtnb'])
+    search = Search.new(period: search_params, dtnb: 0)
     house_id = params[:booking][:house_id]
     answer = search.is_house_available? house_id, @booking.id
     unless answer[:result]
@@ -277,7 +270,7 @@ class BookingsController < ApplicationController
         end
         @booking.toggle_status
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid: hid), notice: 'Booking was successfully updated.' }
+        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.order(:code).map { |h| [h.code, h.id] }
@@ -339,7 +332,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  def set_period params
+  def set_period(params)
     from = params[:from]
     to = params[:to]
     error = false
@@ -357,6 +350,10 @@ class BookingsController < ApplicationController
       error = 'Both dates should be selected'
     end
     [from, to, error]
+  end
+
+  def search_params
+    "#{params[:booking][:start]} to #{params[:booking][:finish]}"
   end
 
   # Use callbacks to share common setup or constraints between actions.
