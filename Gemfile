@@ -33,7 +33,6 @@ gem 'jquery-rails'
 gem "jsbundling-rails", "~> 1.1"
 gem 'momentjs-rails'
 gem 'rails-i18n', '~> 7.0.0'
-gem 'scout_apm'
 gem 'stimulus-rails'
 gem "terser", "~> 1.1"
 gem 'the_schema_is'
@@ -42,6 +41,7 @@ gem 'twilio-ruby'
 gem 'easy_translate'
 gem "ranked-model", "~> 0.4.8"
 gem "requestjs-rails", "~> 0.0.10"
+gem 'newrelic_rpm'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
