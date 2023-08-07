@@ -47,6 +47,9 @@ jobs:
     - name: Chusaku
       run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
 
+    - name: Brakeman
+      run: bundle exec brakeman
+
     - name: Setup test database
       env:
         RAILS_ENV: test
@@ -63,11 +66,6 @@ jobs:
 
     - name: Run rspec
       run: bundle exec rspec
-
-    - name: Brakeman
-      uses: devmasx/brakeman-linter-action@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Store test results
       uses: actions/upload-artifact@v2
