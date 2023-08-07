@@ -1,0 +1,109 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "732aef98b4c2bf22b42db0ddd2b78bc7fcb0170eaefedd76e77d83d0f5603802",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/booking_files_controller.rb",
+      "line": 10,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.new(params[:booking_file][:file])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BookingFilesController",
+        "method": "create"
+      },
+      "user_input": "params[:booking_file][:file]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "79ca6516de0cff7dd177e94f61da773f04f2359245daa4e9a75ddca3f1294ac3",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/houses/show.html.erb",
+      "line": 37,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Photo\", House.new(house_params).photo_link, :target => \"_blank\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "HousesController",
+          "method": "create",
+          "line": 67,
+          "file": "app/controllers/houses_controller.rb",
+          "rendered": {
+            "name": "houses/show",
+            "file": "app/views/houses/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "houses/show"
+      },
+      "user_input": "House.new(house_params).photo_link",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "845b3a312341645354bee980522fe48620d0a240366db139d060fffb39703be5",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/transaction_files_controller.rb",
+      "line": 46,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "open(S3_CLIENT.get_object(:response_target => File.basename(params[\"key\"]), :bucket => ENV.fetch(\"S3_BUCKET\", nil), :key => params[\"key\"]).body)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransactionFilesController",
+        "method": "download"
+      },
+      "user_input": "params[\"key\"]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "faeabae440a577d6845ed7ffa861bde5dc9b9fd82a6c84156cde3db6a100f03e",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/transaction_files_controller.rb",
+      "line": 48,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(open(S3_CLIENT.get_object(:response_target => File.basename(params[\"key\"]), :bucket => ENV.fetch(\"S3_BUCKET\", nil), :key => params[\"key\"]).body))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransactionFilesController",
+        "method": "download"
+      },
+      "user_input": "params[\"key\"]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2023-08-07 12:48:09 +0300",
+  "brakeman_version": "6.0.1"
+}

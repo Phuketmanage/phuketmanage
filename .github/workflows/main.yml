@@ -48,7 +48,7 @@ jobs:
       run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
 
     - name: Brakeman
-      run: bundle exec brakeman
+      run: bundle exec brakeman -q
 
     - name: Setup test database
       env:
