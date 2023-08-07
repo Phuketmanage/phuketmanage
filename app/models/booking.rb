@@ -1,34 +1,4 @@
 class Booking < ApplicationRecord
-  the_schema_is "bookings" do |t|
-    t.date "start"
-    t.date "finish"
-    t.bigint "house_id", null: false
-    t.bigint "tenant_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "status"
-    t.string "number"
-    t.string "ical_UID"
-    t.integer "source_id"
-    t.text "comment"
-    t.integer "sale"
-    t.integer "agent"
-    t.integer "comm"
-    t.integer "nett"
-    t.boolean "synced", default: false
-    t.boolean "allotment"
-    t.boolean "transfer_in", default: false
-    t.boolean "transfer_out", default: false
-    t.string "client_details"
-    t.text "comment_gr"
-    t.boolean "no_check_in", default: false
-    t.boolean "no_check_out", default: false
-    t.date "check_in"
-    t.date "check_out"
-    t.string "comment_owner"
-    t.boolean "ignore_warnings", default: false
-  end
-
   attr_accessor :manual_price
 
   enum status: {
@@ -53,22 +23,25 @@ class Booking < ApplicationRecord
   # after_update :toggle_status
 
   scope :active, -> { where.not(status: [:canceled]) }
-  scope :for_owner, -> { where.not(status: [:canceled, :temporary]) }
+  scope :for_owner, -> { where.not(status: %i[canceled temporary]) }
   scope :real, -> { where.not(status: %i[canceled block]) }
-  scope :unpaid, -> { where.not( status: [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]] )
-                      .joins(:house)
-                      .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id').order('bookings.start') }
+  scope :unpaid, lambda {
+                   where.not(status: [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]])
+                     .joins(:house)
+                     .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id').order('bookings.start')
+                 }
 
   def toggle_status
-    if ['block', 'canceled'].exclude?(status)
-      update(status: 'pending') if transactions.count == 0
-      update(status: 'confirmed') if !fully_paid? && transactions.count >= 1
-      update(status: 'paid') if fully_paid?
-    end
+    return unless %w[block canceled].exclude?(status)
+
+    update(status: 'pending') if transactions.count == 0
+    update(status: 'confirmed') if !fully_paid? && transactions.count >= 1
+    update(status: 'paid') if fully_paid?
   end
 
   def fully_paid?
-    return if status == ['block', 'canceled']
+    return if status == %w[block canceled]
+
     income = transactions.joins(:balance_outs).sum(:debit)
     comm = transactions.joins(:balance_outs).sum(:credit)
     to_owner = income - comm
@@ -94,6 +67,7 @@ class Booking < ApplicationRecord
     # byebug
     bookings.each do |b|
       next if type == 'Block' && b.status != 'block'
+
       if  (type == 'All' || type != 'Check out') &&
           ((!b.check_in && b.start >= from && b.start <= to) ||
           (b.check_in && b.check_in >= from && b.check_in <= to))
@@ -113,25 +87,25 @@ class Booking < ApplicationRecord
         line[:comment] = b.comment_gr
         result << line
       end
-      if  (type == 'All' || type != 'Check in') &&
-          ((!b.check_out.present? && b.finish >= from && b.finish <= to) ||
-          (b.check_out.present? && b.check_out >= from && b.check_out <= to))
-        line = {}
-        line[:booking_id] = b.id
-        line[:type] = 'OUT'
-        line[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
-        line[:transfers] = []
-        transfers = b.transfers.where(trsf_type: :OUT)
-        transfers.each do |t|
-          line_out[:transfers] << "#{t.time} #{t.remarks}"
-        end
-        line[:status] = b.status
-        line[:house] = b.house.code
-        line[:client] = b.client_details
-        line[:source] = b.source.name if b.source
-        line[:comment] = b.comment_gr
-        result << line
+      next unless (type == 'All' || type != 'Check in') &&
+                  ((!b.check_out.present? && b.finish >= from && b.finish <= to) ||
+                  (b.check_out.present? && b.check_out >= from && b.check_out <= to))
+
+      line = {}
+      line[:booking_id] = b.id
+      line[:type] = 'OUT'
+      line[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
+      line[:transfers] = []
+      transfers = b.transfers.where(trsf_type: :OUT)
+      transfers.each do |t|
+        line_out[:transfers] << "#{t.time} #{t.remarks}"
       end
+      line[:status] = b.status
+      line[:house] = b.house.code
+      line[:client] = b.client_details
+      line[:source] = b.source.name if b.source
+      line[:comment] = b.comment_gr
+      result << line
 
       # unless  b.no_check_in ||
       #         (!b.check_in.present? && b.start < from) ||
@@ -369,9 +343,9 @@ class Booking < ApplicationRecord
 
   private
 
-    def price_chain
-      if !block? && (nett != sale - agent - comm)
-        errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
-      end
-    end
+  def price_chain
+    return unless !block? && (nett != sale - agent - comm)
+
+    errors.add(:base, "Check Prices: Sale - Agent - Comm is not equal to Nett")
+  end
 end

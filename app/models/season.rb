@@ -1,14 +1,4 @@
 class Season < ApplicationRecord
-  the_schema_is "seasons" do |t|
-    t.integer "ssd"
-    t.integer "ssm"
-    t.integer "sfd"
-    t.integer "sfm"
-    t.bigint "house_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
   validates :ssd, :ssm, :sfd, :sfm, presence: true
   validates :ssm, :sfm, numericality: {

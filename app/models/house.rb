@@ -1,56 +1,6 @@
 # frozen_string_literal: true
 
 class House < ApplicationRecord
-  the_schema_is "houses" do |t|
-    t.string "title_en"
-    t.string "title_ru"
-    t.text "description_en"
-    t.text "description_ru"
-    t.bigint "owner_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "type_id", null: false
-    t.string "code"
-    t.integer "size"
-    t.integer "plot_size"
-    t.integer "rooms"
-    t.integer "bathrooms"
-    t.boolean "pool"
-    t.string "pool_size"
-    t.boolean "communal_pool"
-    t.boolean "parking"
-    t.integer "parking_size"
-    t.boolean "unavailable", default: false
-    t.string "number", limit: 10
-    t.string "secret"
-    t.boolean "rental", default: false
-    t.boolean "maintenance", default: false
-    t.boolean "outsource_cleaning", default: false
-    t.boolean "outsource_linen", default: false
-    t.string "address"
-    t.string "google_map"
-    t.string "image"
-    t.integer "capacity"
-    t.boolean "seaview", default: false
-    t.integer "kingBed"
-    t.integer "queenBed"
-    t.integer "singleBed"
-    t.text "priceInclude_en"
-    t.text "priceInclude_ru"
-    t.text "cancellationPolicy_en"
-    t.text "cancellationPolicy_ru"
-    t.text "rules_en"
-    t.text "rules_ru"
-    t.text "other_ru"
-    t.text "other_en"
-    t.text "details"
-    t.bigint "house_group_id"
-    t.integer "water_meters", default: 1
-    t.boolean "water_reading", default: false
-    t.boolean "balance_closed", default: false, null: false
-    t.boolean "hide_in_timeline", default: false, null: false
-  end
-
   belongs_to :owner, class_name: "User"
   belongs_to :type, class_name: 'HouseType'
   belongs_to :house_group, optional: true

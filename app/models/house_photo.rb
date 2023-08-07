@@ -1,13 +1,4 @@
 class HousePhoto < ApplicationRecord
-  the_schema_is "house_photos" do |t|
-    t.bigint "house_id", null: false
-    t.string "url"
-    t.string "title_en"
-    t.string "title_ru"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   belongs_to :house
 
   include RankedModel

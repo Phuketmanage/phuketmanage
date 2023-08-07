@@ -87,7 +87,6 @@ GEM
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.6.0)
       aws-eventstream (~> 1, >= 1.0.2)
-    backports (3.24.1)
     barnes (0.0.9)
       multi_json (~> 1)
       statsd-ruby (~> 1.1)
@@ -212,7 +211,6 @@ GEM
       net-smtp
     marcel (1.0.2)
     matrix (0.4.2)
-    memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.4)
@@ -391,11 +389,6 @@ GEM
       railties (>= 6.0.0)
     terser (1.1.17)
       execjs (>= 0.3.0, < 3)
-    the_schema_is (0.0.5)
-      activesupport
-      backports (>= 3.16.0)
-      memoist
-      rubocop (>= 1.0.0)
     thor (1.2.2)
     thread (0.2.2)
     thread_safe (0.3.6)
@@ -488,7 +481,6 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   stimulus-rails
   terser (~> 1.1)
-  the_schema_is
   timecop
   turbo-rails (~> 1.4.0)
   twilio-ruby

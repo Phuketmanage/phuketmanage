@@ -35,7 +35,6 @@ gem 'momentjs-rails'
 gem 'rails-i18n', '~> 7.0.0'
 gem 'stimulus-rails'
 gem "terser", "~> 1.1"
-gem 'the_schema_is'
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
 gem 'easy_translate'
