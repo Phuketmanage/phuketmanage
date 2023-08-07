@@ -58,7 +58,6 @@ class HousePhotosController < ApplicationController
     else
       @photo = HousePhoto.find(params[:id])
       S3_BUCKET.object(@photo.key).delete
-      byebug
       S3_BUCKET.object(@photo.thumb_key).delete
       @photo.destroy
       respond_to do |format|
