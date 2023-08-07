@@ -16,9 +16,8 @@
       <% else %>
         <p><%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %></p>
       <% end %>
-
       <% if h.locations.any? %>
-        <div><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
+        <div><%= t('houses.location') %>: <%= h.locations.map{ |l| l.name }.join(', ') %></div>
       <% end %>
       <% if h.project %>
         <div><%= t('houses.project') %>: <%= h.project %></div>

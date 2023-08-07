@@ -46,7 +46,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :success
     assert_match "Villa 3 BDR Phuket", response.body
-    get root_path(locale: :ru)
+    get locale_root_path( locale: :ru)
     assert_response :success
     assert_match "Вилла 3 СП Пхукет", response.body
   end

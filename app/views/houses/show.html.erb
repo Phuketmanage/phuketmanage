@@ -58,7 +58,7 @@
   </div>
 </div>
 <% if @house.locations.any? %>
-  <div><%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
+  <div><%= t('houses.location') %>: <%= @house.locations.map{ |l| l.name }.join(', ') %></div>
 <% end %>
 <% if @house.project %>
   <div><%= t('houses.project') %>: <%= @house.project %></div>
@@ -114,8 +114,8 @@
 <hr />
 <h6><%= t('houses.location') %></h6>
 <%  @house.locations.each do |l| %>
-<%= l.send("name_#{I18n.locale}") %>
-<p><%= simple_format l.send("descr_#{I18n.locale}") %></p>
+<%= l.name %>
+<p><%= simple_format l.descr %></p>
 <% end %>
 
 <% if @prices && @prices != 'unavailable' %>
@@ -134,7 +134,7 @@
         <%= form_with(model: @booking, url: '/booking/new', data: { remote: true }) do |f| %>
           <div class="modal-body">
             <p>
-              <%= t('houses.location') %>: <%= @house.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %><br />
+              <%= t('houses.location') %>: <%= @house.locations.map{ |l| l.name }.join(', ') %><br />
               <%= t('houses.project') %>: <%= @house.project %><br />
               <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
             </p>

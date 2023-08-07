@@ -14,6 +14,6 @@ class AdminController < ApplicationController
   private
 
   def set_en_locale
-    I18n.locale = "en"
+    I18n.locale = :en
   end
 end
