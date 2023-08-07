@@ -10,7 +10,7 @@ describe 'Hotkeys' do
 
   describe 'Transaction index page', js: true do
     let(:start_page) { transactions_path }
-    let(:desired_page) { new_transaction_path(locale: :en) }
+    let(:desired_page) { new_transaction_path }
     let(:keys) { [:shift, 'N'] }
 
     context 'when pressed Shift+N' do

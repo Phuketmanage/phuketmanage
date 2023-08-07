@@ -473,27 +473,27 @@ class UserAccessTest < ActionDispatch::IntegrationTest
 
   test 'documents' do
     trsc = Transaction.where(comment_en: 'rental').first.id
-    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
+    get tmp_reimbersment_path, params: { trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
     sign_in users(:admin)
-    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
+    get tmp_reimbersment_path, params: { trsc_id: trsc }
     assert_response :success
 
     sign_in users(:accounting)
-    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
+    get tmp_reimbersment_path, params: { trsc_id: trsc }
     assert_response :success
 
     sign_in users(:manager)
-    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
+    get tmp_reimbersment_path, params: { trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
 
     sign_in users(:owner)
-    get tmp_reimbersment_path, params: { locale: 'en', trsc_id: trsc }
+    get tmp_reimbersment_path, params: { trsc_id: trsc }
     assert_redirected_to root_path
     follow_redirect!
     assert_select 'div.alert', 'You are not authorized to access this page.'
