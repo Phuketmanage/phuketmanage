@@ -33,7 +33,7 @@ class Ability
       can :statement, :document
       can %i[index], House
       can %i[index new create update_invoice_ref], Transaction
-      can %i[index canceled timeline timeline_data], Booking
+      can %i[index show canceled timeline timeline_data], Booking
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.today - 30.days).beginning_of_month
       end
