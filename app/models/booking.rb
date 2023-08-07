@@ -78,13 +78,13 @@ class Booking < ApplicationRecord
   def self.check_in_out(from = nil, to = nil, type = nil)
     result = []
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       to = Booking.maximum(:finish)
     elsif from.present? && !to.present?
       from = from.to_date
       to = Booking.maximum(:finish)
     elsif !from.present? && to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       to = to.to_date
     elsif from.present? && to.present?
       from = from.to_date
@@ -100,7 +100,7 @@ class Booking < ApplicationRecord
         line = {}
         line[:booking_id] = b.id
         line[:type] = 'IN'
-        line[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+        line[:date] = b.check_in.present? ? b.check_in.to_fs(:date) : b.start.to_fs(:date)
         line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :IN)
         transfers.each do |t|
@@ -119,7 +119,7 @@ class Booking < ApplicationRecord
         line = {}
         line[:booking_id] = b.id
         line[:type] = 'OUT'
-        line[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+        line[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
         line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :OUT)
         transfers.each do |t|
@@ -140,7 +140,7 @@ class Booking < ApplicationRecord
       #   line_in[:booking_id] = b.id
       #   line_in[:type] = 'IN'
       #   line_in[:status] = b.status
-      #   line_in[:date] = b.check_in.present? ? b.check_in.strftime('%d.%m.%Y') : b.start.strftime('%d.%m.%Y')
+      #   line_in[:date] = b.check_in.present? ? b.check_in.to_fs(:date) : b.start.to_fs(:date)
       #   line_in[:house] = b.house.code
       #   line_in[:client] = b.client_details
       #   line_in[:source] = b.source.name if b.source
@@ -160,7 +160,7 @@ class Booking < ApplicationRecord
       # line_out[:booking_id] = b.id
       # line_out[:type] = 'OUT'
       # line_out[:status] = b.status
-      # line_out[:date] = b.check_out.present? ? b.check_out.strftime('%d.%m.%Y') : b.finish.strftime('%d.%m.%Y')
+      # line_out[:date] = b.check_out.present? ? b.check_out.to_fs(:date) : b.finish.to_fs(:date)
       # line_out[:house] = b.house.code
       # line_out[:client] = b.client_details
       # line_out[:source] = b.source.name if b.source
@@ -177,34 +177,25 @@ class Booking < ApplicationRecord
 
   def self.timeline_data(from = nil, to = nil, period = nil, house_number = nil)
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       if period.nil? && Booking.count == 0
         period = 45
-        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i - 1).days
+        to = Date.current + (period.to_i - 1).days
       elsif period.nil? && Booking.count > 0
-        to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+        to = Booking.maximum(:finish).to_date
       else
-        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i - 1).days
+        to = Date.current + (period.to_i - 1).days
       end
     elsif from.present? && !to.present?
       from = from.to_date
       to = Booking.maximum(:finish)
     elsif !from.present? && to.present?
-      # from = Time.zone.now.in_time_zone('Bangkok').to_date
       from = Booking.minimum(:start)
       to = to.to_date
     elsif from.present? && to.present?
       from = from.to_date
       to = to.to_date
     end
-
-    # today = Time.zone.now.in_time_zone('Bangkok').to_date
-    # if period.nil?
-    #   last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-    # else
-    #   last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
-    # end
-    # days = (last_date - today).to_i+1
     days = (to - from).to_i + 1
     timeline = {}
     # timeline[:start] = today
@@ -242,7 +233,7 @@ class Booking < ApplicationRecord
         # 14.07.2022: show brief booking details in tooltip
         source = b.source.name if b.source.present?
         booking[:details] =
-          "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')} #{b.client_details} #{source}"
+          "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)} #{b.client_details} #{source}"
         # Get jobs for bookings
         jt_fm = JobType.find_by(name: 'For management').id
         # jobs = b.jobs
@@ -326,7 +317,7 @@ class Booking < ApplicationRecord
             next if c.source.name == 'Tripadvisor' &&
                     (e.summary.strip == 'Not available' ||
                     e.description.nil?)
-            next if e.dtend < Time.zone.now
+            next if e.dtend < Time.current
 
             # #Airbnb, Homeaway: Check if booking was synced before
             # if  c.source.name == 'Airbnb' ||
@@ -371,7 +362,7 @@ class Booking < ApplicationRecord
           response.string
           # => <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html DIR=\"LTR\">\n<head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"><meta name=\"viewport\" content=\"initial-scale=1\">...
         end
-        c.update(last_sync: Time.zone.now)
+        c.update(last_sync: Time.current)
       end
     end
   end

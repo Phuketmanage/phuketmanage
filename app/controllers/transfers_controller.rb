@@ -7,11 +7,11 @@ class TransfersController < ApplicationController
   # @route GET (/:locale)/transfers (transfers)
   def index
     if !params[:from].present? && !params[:to].present?
-      today = Time.now.in_time_zone('Bangkok').to_date
+      today = Date.current
       @transfers = Transfer.where('date >= ?', today).order(:date).all
     elsif params[:from].present? && !params[:to].present?
       from = params[:from].to_date
-      today = Time.now.in_time_zone('Bangkok').to_date
+      today = Date.current
       @transfers = Transfer.where('date >= ? AND date <= ?', from, today).order(:date).all
     elsif params[:from].present? && params[:to].present?
       from = params[:from].to_date
@@ -25,7 +25,7 @@ class TransfersController < ApplicationController
 
   # @route GET /transfers/supplier (transfers_supplier)
   def index_supplier
-    today = Time.now.in_time_zone('Bangkok').to_date
+    today = Date.current
     @transfers = Transfer.where('date >= ?', today).order(:date)
   end
 
@@ -62,7 +62,7 @@ class TransfersController < ApplicationController
     respond_to do |format|
       if @transfer.save
         if @transfer.booking_id.nil?
-          today = Time.now.in_time_zone('Bangkok').to_date
+          today = Date.current
           @transfers = Transfer.where('date >= ?', today).order(:date)
         else
           @transfers = @transfer.booking.transfers
@@ -119,7 +119,7 @@ class TransfersController < ApplicationController
     if params[:request_from] == 'bookings'
       @transfers = @transfer.booking.transfers.order(:date)
     else
-      today = Time.now.in_time_zone('Bangkok').to_date
+      today = Date.current
       @transfers = Transfer.where('date >= ?', today).order(:date)
     end
     respond_to do |format|
@@ -156,7 +156,7 @@ class TransfersController < ApplicationController
         if params[:request_from] == 'bookings'
           @transfers = @transfer.booking.transfers
         else
-          today = Time.now.in_time_zone('Bangkok').to_date
+          today = Date.current
           @transfers = Transfer.where('date >= ?', today).order(:date)
         end
         TransfersMailer.canceled(@transfer).deliver_now
@@ -191,7 +191,7 @@ class TransfersController < ApplicationController
       if params[:request_from] == 'bookings'
         @transfers = @transfer.booking.transfers
       else
-        today = Time.now.in_time_zone('Bangkok').to_date
+        today = Date.current
         @transfers = Transfer.where('date >= ?', today).order(:date)
       end
       format.js

@@ -9,7 +9,7 @@ class TransfersMailerTest < ActionMailer::TestCase
 
   test "created" do
     mail = TransfersMailer.created(@transfer)
-    assert_equal "New transfer - #{@transfer.trsf_type} #{@transfer.date.strftime('%d.%m.%Y')}", mail.subject
+    assert_equal "New transfer - #{@transfer.trsf_type} #{@transfer.date.to_fs(:date)}", mail.subject
     assert_equal [@settings["tranfer_supplier_email"]], mail.to
     assert_equal ["info@phuketmanage.com"], mail.from
     assert_match "Transfer details:", mail.body.encoded
@@ -17,7 +17,7 @@ class TransfersMailerTest < ActionMailer::TestCase
 
   test "amended" do
     mail = TransfersMailer.amended(@transfer, @changes)
-    assert_equal "Transfer amended - #{@transfer.trsf_type} #{@transfer.date.strftime('%d.%m.%Y')}", mail.subject
+    assert_equal "Transfer amended - #{@transfer.trsf_type} #{@transfer.date.to_fs(:date)}", mail.subject
     assert_equal [@settings["tranfer_supplier_email"]], mail.to
     assert_equal ["info@phuketmanage.com"], mail.from
     assert_match "Transfer details:", mail.body.encoded
@@ -25,7 +25,7 @@ class TransfersMailerTest < ActionMailer::TestCase
 
   test "cancedled" do
     mail = TransfersMailer.canceled(@transfer)
-    assert_equal "Transfer canceled - #{@transfer.trsf_type} #{@transfer.date.strftime('%d.%m.%Y')}", mail.subject
+    assert_equal "Transfer canceled - #{@transfer.trsf_type} #{@transfer.date.to_fs(:date)}", mail.subject
     assert_equal [@settings["tranfer_supplier_email"]], mail.to
     assert_equal ["info@phuketmanage.com"], mail.from
     assert_match "Transfer details:", mail.body.encoded

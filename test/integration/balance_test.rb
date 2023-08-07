@@ -16,7 +16,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Rental')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         booking_id: @booking.id,
         de_ow: 100_000,
@@ -51,8 +51,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '18,691.59' # Invoice
@@ -61,7 +61,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Maintenance')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         house_id: @house.id,
         de_co: 15_000,
@@ -94,8 +94,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '14,018.69' # Invoice
@@ -104,7 +104,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Laundry')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         house_id: @house.id,
         de_co: 300,
@@ -137,8 +137,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '280.37' # Invoice
@@ -147,7 +147,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Top up')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         house_id: @house.id,
         de_ow: 50_000,
@@ -181,8 +181,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 # Invoice
@@ -192,7 +192,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           de_ow: 5500,
@@ -227,8 +227,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", ''
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 # Invoice
@@ -238,7 +238,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current.to_date,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 500,
@@ -275,8 +275,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '500.00'
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '1,588.79' # Invoice
@@ -286,7 +286,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 7500,
@@ -322,8 +322,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '7,500.00'
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row td.iv_price_bvat_cell", '1,401.87' # Invoice
@@ -333,7 +333,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 3500,
@@ -365,8 +365,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '3,500.00'
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 # Invoice
@@ -377,7 +377,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           booking_id: @booking_2.id,
           de_ow: 30_000,
@@ -413,8 +413,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 # Invoice
@@ -456,7 +456,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row", count: 0
     assert_select "tr#trsc_#{t.id}_row", count: 0
     from = '2019-08-01'
-    to = Time.zone.now.to_date
+    to = Date.current
     get transactions_path, params: { from:, to:, owner_id: @owner.id, commit: 'Acc' }
     assert_response :success
     assert_select "tr.for_acc_row", count: 1
@@ -464,8 +464,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", '10,000.00'
     get transactions_docs_path, params: {
       type: 'invoice',
-      from: Time.zone.now.to_date.beginning_of_month,
-      to: Time.zone.now.to_date.end_of_month,
+      from: Date.current.beginning_of_month,
+      to: Date.current.end_of_month,
       view_user_id: @owner.id
     }
     assert_select "tr#trsc_#{t.id}_iv_row", count: 0 # Invoice
@@ -481,7 +481,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 28.07.2022 Company view for owner was removed
 
     from = '2019-09-01'
-    to = Time.zone.now.to_date
+    to = Date.current
     # For specific owner: Check company view de totals = owner IV amount in acc view = Total in IV
     get transactions_path, params: { from:, to:, owner_id: @owner.id, commit: 'Full' }
     de_co_sum = @owner.transactions.joins(:balances).sum('balances.debit')
@@ -544,7 +544,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_equal "14,000.00", csv[1][3]
     assert_equal "Balance from previous period", csv[1][6]
     # CSV Last transaction and total balance
-    assert_equal Time.zone.now.strftime('%d.%m.%Y'), csv[12][0]
+    assert_equal Time.current.to_fs(:date), csv[12][0]
     assert_equal "24,000.00", csv[12][1]
     assert_nil csv[12][2]
     assert_equal "221,299.01", csv[12][3]
@@ -580,12 +580,12 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     sign_in users(:admin)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n          /C"
+    assert_select "td.comment", "house rental\n            /C"
     sign_out users(:admin)
     sign_in users(:manager)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n          /C"
+    assert_select "td.comment", "house rental\n            /C"
     sign_out users(:manager)
     sign_in users(:owner_3)
     get transactions_path, params: { from:, to:, commit: 'Full' }
@@ -626,7 +626,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   test 'Show and hide comm' do
     # if show_comm set to false Owner can not see comm
     from = '2019-09-01'
-    to = Time.zone.now.to_date
+    to = Date.current
     sign_in users(:owner)
     get balance_front_path, params: { from:, to: }
     assert_select "td.cr_ow_net_cell", count: 0
@@ -640,7 +640,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Top up')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         house_id: @house.id,
         de_ow: 150_000,
@@ -668,7 +668,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 20_000,
@@ -719,7 +719,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
 
   test 'should show files in company view' do
     from = '2019-08-01'
-    to = Time.zone.now.to_date
+    to = Date.current
     sign_in users(:admin)
     get transactions_path, params: { from:, to: }
     assert_response :success
@@ -734,7 +734,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           cr_co: 35_000,
           comment_en: 'Salary'
@@ -744,7 +744,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record catch comment_en
     get transaction_warnings_path, params: {
                                      type: 'text',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id: "",
                                      field: 'transaction_comment_en',
                                      text: "salary"
@@ -756,7 +756,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record pass comment_en
     get transaction_warnings_path,  params: {
                                       type: 'text',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id: "",
                                       field: 'transaction_comment_en',
                                       text: "Different text"
@@ -768,7 +768,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record catch cr_co
     get transaction_warnings_path, params: {
                                      type: 'number',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id: "",
                                      field: 'transaction_cr_co',
                                      text: "35000"
@@ -780,7 +780,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record pass cr_co
     get transaction_warnings_path,  params: {
                                       type: 'number',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id: "",
                                       field: 'transaction_cr_co',
                                       text: "5000"
@@ -795,7 +795,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 500,
@@ -810,7 +810,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record catch for comment_en
     get transaction_warnings_path, params: {
                                      type: 'text',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_comment_en',
                                      text: "door"
@@ -821,7 +821,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record pass for comment_en
     get transaction_warnings_path,  params: {
                                       type: 'text',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_comment_en',
                                       text: "door 1"
@@ -832,7 +832,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record catch for comment_ru
     get transaction_warnings_path, params: {
                                      type: 'text',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_comment_ru',
                                      text: "Дверь"
@@ -843,7 +843,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record pass for comment_ru
     get transaction_warnings_path,  params: {
                                       type: 'text',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_comment_ru',
                                       text: "Дверь 1"
@@ -855,7 +855,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transaction_warnings_path, params: {
                                      type: 'number',
                                      is_sum: 'true',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_de_co',
                                      text: "1700"
@@ -867,7 +867,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transaction_warnings_path,  params: {
                                       type: 'number',
                                       is_sum: 'true',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_de_co',
                                       text: "170"
@@ -880,7 +880,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     type = TransactionType.find_by(name_en: 'Rental')
     post transactions_path, params: {
       transaction: {
-        date: Time.zone.now.to_date,
+        date: Date.current,
         type_id: type.id,
         booking_id: @booking.id,
         de_ow: 100_000,
@@ -894,7 +894,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental de_ow catch
     get transaction_warnings_path, params: {
                                      type: 'number',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_de_ow',
                                      text: "100000"
@@ -905,7 +905,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental de_ow pass
     get transaction_warnings_path,  params: {
                                       type: 'number',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_de_ow',
                                       text: "1000"
@@ -916,7 +916,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental de_co catch
     get transaction_warnings_path, params: {
                                      type: 'number',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_de_co',
                                      text: "20000"
@@ -927,7 +927,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental de_co pass
     get transaction_warnings_path,  params: {
                                       type: 'number',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_de_co',
                                       text: "2000"
@@ -941,7 +941,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           house_id: @house.id,
           cr_ow: 3500,
@@ -952,7 +952,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental cr_ow catch
     get transaction_warnings_path, params: {
                                      type: 'number',
-                                     date: Time.zone.now.to_date,
+                                     date: Date.current,
                                      user_id:,
                                      field: 'transaction_cr_ow',
                                      text: "3500"
@@ -963,7 +963,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # 2nd record rental cr_ow pass
     get transaction_warnings_path,  params: {
                                       type: 'number',
-                                      date: Time.zone.now.to_date,
+                                      date: Date.current,
                                       user_id:,
                                       field: 'transaction_cr_ow',
                                       text: "350"
@@ -976,7 +976,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   test 'acc view for company' do
     sign_in users(:admin)
     from = '2019-08-1'
-    to = Time.zone.now.to_date
+    to = Date.current
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
     # warning = JSON.parse(@response.body)
@@ -987,7 +987,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           cr_co: 13_000,
           comment_en: 'Tiling wall',
@@ -1004,7 +1004,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           cr_co: 1800,
           comment_en: 'Gas'
@@ -1020,7 +1020,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           cr_co: 18_000,
           comment_en: 'Salary Tech'
@@ -1079,8 +1079,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
 
   test "should change booking status" do
     # Create booking
-    month = Time.zone.now.month + 1
-    year = Time.zone.now.year
+    month = Date.current.month + 1
+    year = Date.current.year
     start = "10.#{month}.#{year}"
     finish = "25.#{month}.#{year}"
     house = houses(:villa_1)
@@ -1098,7 +1098,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference 'Transaction.count', 1 do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           booking_id: b.id,
           de_ow: 50_000,
@@ -1115,7 +1115,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference 'Transaction.count', 1 do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           booking_id: b.id,
           de_ow: 50_000,
@@ -1153,7 +1153,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.now.to_date,
+          date: Date.current,
           type_id: type.id,
           user_id: owner.id,
           de_co: 15_000,
@@ -1163,18 +1163,18 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
 
     # Show all
-    get transactions_path, params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, commit: 'Full' }
+    get transactions_path, params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 7
     # Show only for villa_1
     get transactions_path,
-        params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, house_id: house.id,
+        params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, house_id: house.id,
                   commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 6
     # Show only for villa_1
     get transactions_path,
-        params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, house_id: 'unlinked',
+        params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, house_id: 'unlinked',
                   commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 1
@@ -1182,18 +1182,18 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # Should be same for owner
     sign_in users(:owner)
     # Show all
-    get transactions_path, params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, commit: 'Full' }
+    get transactions_path, params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 7
     # Show only for villa_1
     get transactions_path,
-        params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, house_id: house.id,
+        params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, house_id: house.id,
                   commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 6
     # Show only for villa_1
     get transactions_path,
-        params: { from: '2019-08-01', to: Time.zone.now.to_date, owner_id: owner.id, house_id: 'unlinked',
+        params: { from: '2019-08-01', to: Date.current, owner_id: owner.id, house_id: 'unlinked',
                   commit: 'Full' }
     assert_response :success
     assert_select 'tr.trsc_row', 1

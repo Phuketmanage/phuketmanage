@@ -8,84 +8,78 @@
         </button>
       </div>
       <%= form_with(model: job, id: "new_job") do |form| %>
-      <div class="modal-body">
-        <%= render 'shared/error_messages', object: form.object %>
-
-        <div style='display:none' id='job_details'></div>
-
-        <div class="form-row job_type">
-          <div class="col form-group">
-            <%= form.label :job_type_id %>
-            <%= form.select :job_type_id,
+        <div class="modal-body">
+          <%= render 'shared/error_messages', object: form.object %>
+          <div style='display:none' id='job_details'></div>
+          <div class="form-row job_type">
+            <div class="col form-group">
+              <%= form.label :job_type_id %>
+              <%= form.select :job_type_id,
                   JobType.all.map {|t| [t.name, t.id]}, {}, class: "form-control" %>
+            </div>
           </div>
-        </div>
-        <!-- Need to be deleted afetr  migrate to employee style -->
-        <div class="form-row job_user">
-          <div class="col form-group">
-            <%= form.label :user_id %>
-            <%= form.select :user_id,
+          <!-- Need to be deleted afetr  migrate to employee style -->
+          <div class="form-row job_user">
+            <div class="col form-group">
+              <%= form.label :user_id %>
+              <%= form.select :user_id,
                   User.with_role('Maid').map {|u| [u.name, u.id]},
                   { prompt: 'Select employee' },
                   class: "form-control" %>
+            </div>
           </div>
-        </div>
-        <div class="form-row job_employee">
-          <div class="col form-group">
-            <%= form.label :employee_id %>
-            <%= form.select :employee_id, {}, { prompt: 'Select employee' },
+          <div class="form-row job_employee">
+            <div class="col form-group">
+              <%= form.label :employee_id %>
+              <%= form.select :employee_id, {}, { prompt: 'Select employee' },
                   class: "form-control" %>
+            </div>
           </div>
-        </div>
-        <div class="form-row job_booking">
-          <div class="col form-group">
-            <%= form.label :booking_id %>
-            <%= form.select :booking_id,
-                  Booking.where.not(status: Booking.statuses['canceled']).all.order(:start).map {|b| ["#{b.house.code}: #{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}", b.id]}, { prompt: 'Select booking' }, { class: "form-control" } %>
+          <div class="form-row job_booking">
+            <div class="col form-group">
+              <%= form.label :booking_id %>
+              <%= form.select :booking_id,
+                  Booking.where.not(status: Booking.statuses['canceled']).all.order(:start).map {|b| ["#{b.house.code}: #{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}", b.id]}, { prompt: 'Select booking' }, { class: "form-control" } %>
+            </div>
           </div>
-        </div>
-        <div class="form-row job_house">
-          <div class="col form-group">
-            <%= form.label :house_id %>
-            <%= form.select :house_id,
+          <div class="form-row job_house">
+            <div class="col form-group">
+              <%= form.label :house_id %>
+              <%= form.select :house_id,
                   House.order(:code).all.map {|h| [h.code, h.id]},
                   { prompt: 'Select house' }, class: "form-control" %>
-          </div>
-        </div>
-
-        <div class="form-row job_plan">
-          <div class="col form-group">
-            <%= form.label :plan %>
-            <%= form.date_field :plan, class: "form-control" %>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="col form-group">
-            <%= form.label :time %>
-            <%= form.text_field :time, class: "form-control" %>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="col form-group">
-            <%= form.label :job %>
-            <%= form.text_field :job, class: "form-control" %>
-          </div>
-        </div>
-
-        <div class="form-check mb-2">
-          <%= form.check_box :paid_by_tenant,
-            { class: 'form-check-input', id: 'paid_by_tenant_check_box' } %>
-          <%= form.label 'Paid by tenant',
-            { class: 'form-check-label', for: 'paid_by_tenant_check_box' } %>
             </div>
-      </div>
-      <%= hidden_field_tag 'cell_id' %>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <%= form.submit 'Save',  class: "btn btn-primary"  %>
-      </div>
+          </div>
+          <div class="form-row job_plan">
+            <div class="col form-group">
+              <%= form.label :plan %>
+              <%= form.date_field :plan, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col form-group">
+              <%= form.label :time %>
+              <%= form.text_field :time, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col form-group">
+              <%= form.label :job %>
+              <%= form.text_field :job, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-check mb-2">
+            <%= form.check_box :paid_by_tenant,
+            { class: 'form-check-input', id: 'paid_by_tenant_check_box' } %>
+            <%= form.label 'Paid by tenant',
+            { class: 'form-check-label', for: 'paid_by_tenant_check_box' } %>
+          </div>
+        </div>
+        <%= hidden_field_tag 'cell_id' %>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= form.submit 'Save',  class: "btn btn-primary"  %>
+        </div>
       <% end %>
     </div>
   </div>

@@ -9,7 +9,7 @@ class SearchTest < ActionDispatch::IntegrationTest
   # end
 
   test 'available houses' do
-    year = Time.zone.now.year + 1
+    year = Date.current.year + 1
     # Start > Finish
     rs = "1.10.#{year}".to_date
     rf = "31.07.#{year}".to_date
@@ -33,7 +33,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select 'div.house', count: 0
 
     # At least 2 days in advance
-    rs = Time.now.in_time_zone('Bangkok').to_date + 1.day
+    rs = Date.current + 1.day
     rf = rs + 5.days
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }

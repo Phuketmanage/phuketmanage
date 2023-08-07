@@ -4,7 +4,7 @@
     <%= form.hidden_field :code, value: @usd, id: 'document_usd' %>
     <div class="field">
       <%= form.label :date %>
-      <%= form.date_field :date, max: Time.zone.now.in_time_zone('Bangkok').to_date, id: 'document_date' %>
+      <%= form.date_field :date, max: Date.current, id: 'document_date' %>
     </div>
     <div class="field">
       <%= form.label :run_number %>
@@ -66,10 +66,10 @@
       Tax ID: 0835550008605
     </div>
     <div class="p-2">
-      <% date = Time.zone.now.in_time_zone('Bangkok') %>
+      <% date = Time.current %>
 
-      <strong>Number:</strong> RB-<span id='number'><%= "#{code(@t.user)}-#{@date.year}#{@date.strftime('%m')}001" %></span><span id='number_add'></span><br />
-      <strong>Date:</strong> <span id='doc_date'><%= @t.date.strftime('%d.%m.%Y') %></span>
+      <strong>Number:</strong> RB-<span id='number'><%= "#{code(@t.user)}-#{@date.year}#{@date.to_fs(:month)}001" %></span><span id='number_add'></span><br />
+      <strong>Date:</strong> <span id='doc_date'><%= @t.date.to_fs(:date) %></span>
     </div>
   </div>
   <div class="d-flex flex-row">
@@ -137,4 +137,3 @@
   </div>
 
 </div>
-

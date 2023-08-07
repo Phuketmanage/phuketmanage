@@ -13,7 +13,7 @@ class BookingsController < ApplicationController
     filename = "listing-#{hid}.ics"
     cal.prodid = '-//Phuketmanage.com//Hosting Calendar//EN'
     cal.version = '2.0'
-    today = Time.zone.now.in_time_zone('Bangkok').to_date
+    today = Date.current
     except_status = Booking.statuses[:canceled]
     bookings = h.bookings.where(' finish >= :today AND
                                   status != :status',
@@ -76,14 +76,14 @@ class BookingsController < ApplicationController
   # @route GET /bookings/timeline (bookings_timeline)
   def timeline
     if !params[:from].present? && !params[:to].present?
-      @from = Time.zone.now.in_time_zone('Bangkok').to_date
+      @from = Date.current
       if params[:period].nil? && Booking.count == 0
         params[:period] = 45
-        @to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i - 1).days
+        @to = Date.current + (params[:period].to_i - 1).days
       elsif params[:period].nil? && Booking.count > 0
-        @to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+        @to = Booking.maximum(:finish).to_date
       else
-        @to = Time.zone.now.in_time_zone('Bangkok').to_date + (params[:period].to_i - 1).days
+        @to = Date.current + (params[:period].to_i - 1).days
       end
     elsif params[:from].present? && !params[:to].present?
       @from = params[:from].to_date
@@ -337,14 +337,14 @@ class BookingsController < ApplicationController
     to = params[:to]
     error = false
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       if current_user.role?('Owner')
         house_ids = current_user.houses.ids
         bookings = Booking.for_owner.where(finish: @from.., house_id: house_ids, allotment: false)
       else
         bookings = Booking.active.where(finish: @from..)
       end
-      to = bookings.maximum(:finish).in_time_zone('Bangkok').to_date if bookings.any?
+      to = bookings.maximum(:finish).to_date if bookings.any?
       to = from if !to.present? || to < from
     elsif !from.present? || !to.present?
       error = 'Both dates should be selected'

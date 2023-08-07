@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  date: <%= Date.today+2.days %>
+  date: <%= Date.current+2.days %>
   trsf_type: sent
   from: MyString
   time: MyString
@@ -13,7 +13,7 @@ one:
   number: _1
 
 two:
-  date: <%= Date.today+5.days %>
+  date: <%= Date.current+5.days %>
   trsf_type: confirmed
   from: MyString
   time: MyString

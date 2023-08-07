@@ -18,110 +18,107 @@
         <th width="95px">To owner</th>
       </tr>
     </thead>
-
     <tbody>
       <% bookings.each do |booking| %>
         <% income = booking.transactions.joins(:balance_outs).sum(:debit) %>
         <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
         <% to_owner = income - comm %>
-
-        <% if !booking.ignore_warnings && (booking.start < Time.zone.now.in_time_zone('Bangkok').to_date && to_owner < booking.nett && booking.status != 'canceled') %>
+        <% if !booking.ignore_warnings && (booking.start < Date.current && to_owner < booking.nett && booking.status != 'canceled') %>
           <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Problem with payment to owner">
-        <% elsif !booking.ignore_warnings && to_owner > booking.nett %>
-          <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Overpayment to owner">
-        <% elsif booking.status == 'paid' %>
-          <tr class="bg-light table-success" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Overpayment to owner">
-        <% else %>
-          <tr class="bg-light <%= 'text-muted' if booking.status == 'canceled' %>" id="<%= booking.number %>">
-        <% end %>
-          <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
-          <td>
-            <nobr>
-              <%= booking.start.strftime('%d.%m.%Y') %> -
-              <%= booking.finish.strftime('%d.%m.%Y') %>
-              (<%= (booking.finish-booking.start).to_i %>d)
-            </nobr>
-          </td>
-          <td>
-            <small>
-              <%= booking.source.name if booking.source %>
-            <small>
-          </td>
-
-          <td class="<%= booking.status %>_text"><%= booking.status %></td>
-          <td><%= number_to_currency(booking.sale, precision: 2, unit: '') %></td>
-          <td><%= number_to_currency(booking.agent, precision: 2, unit: '') %></td>
-          <td>
-            <% if booking.agent > 0 %>
-              <%= number_to_currency(booking.sale - booking.agent, precision: 2, unit: '') %><br />
-              <small>
-                (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 2, unit: '') %>)
-              </small>
-            <% end %>
-          </td>
-          <td class="comm">
-            <nobr>
-              <%= number_to_currency(booking.comm, precision: 2, unit: '') %> (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
-            </nobr>
-          </td>
-          <td><%= number_to_currency(booking.nett, precision: 2, unit: '') %></td>
-          <td><%= number_to_currency(to_owner, precision: 2, unit: '') %></td>
-        </tr>
-        <tr class="<%= 'text-muted' if booking.status == 'canceled' %>">
-          <td colspan="10">
-            <%= booking.client_details %>
-            <% if booking.comment || booking.comment_owner || booking.comment_gr %>
-              <div><%= "Comment inner: #{booking.comment}" if booking.comment.present? %></div>
-              <div><%= "Comment owner: #{booking.comment_owner}" if booking.comment_owner.present? %></div>
-              <div><%= "Comment gr: #{booking.comment_gr}" if booking.comment_gr.present? %></div>
-            <% end %>
-            <% if booking.transactions.any? %>
-              Payment history:
-              <div>
-                <% tr = 0 %>
-                <% tc = 0 %>
-                <% tp = 0 %>
-                <% booking.transactions.order(date: :asc).each do |t| %>
-                  <%# received = BalanceOut.where(transaction_id: t.id).first.debit %>
-                  <% received = t.balance_outs.sum(:debit) %>
-                  <% tr += received %>
-                  <%# comm = BalanceOut.where(transaction_id: t.id).first.credit %>
-                  <% comm = t.balance_outs.sum(:credit) %>
-                  <% tc += comm %>
-                  <% to_owner = received - comm %>
-                  <% tp += to_owner %>
-                  <%= t.date.strftime('%d.%m.%Y') %> -
-                  Received <%= number_to_currency(received, precision: 2, unit: '') %>,
-                  Comm: <%= number_to_currency(comm, precision: 2, unit: '') %>,
-                  To owner <%= number_to_currency(to_owner, precision: 2, unit: '') %>
-                  <%= t.hidden? ? '/ Hidden' : '1' %>
-                  <%= t.ref_no.present? ? "/ Ref No.: #{t.ref_no}" : '' %>
-                  <%= link_to 'Show', edit_transaction_path(t), target: '_blank' %><br />
-                <% end %>
-                <% if booking.transactions.count > 1  %>
-                  TOTAL Received: <%= number_to_currency(tr, precision: 2, unit: '') %>,
-                  Comm: <%= number_to_currency(tc, precision: 2, unit: '') %>,
-                  To owner: <%= number_to_currency(tp, precision: 2, unit: '') %><br />
-                <% end %>
-            <% end %>
-            <%= "Booking number: #{booking.number}" %> |
-            <%= "Created: #{booking.created_at.strftime('%d.%m.%Y')}" %>
-            <% if booking.allotment? %>
-              <span class="badge badge-info">Allotment</span>
-            <% end %>
-            <div>
-              <% if !booking.number.nil? %>
-                <%= link_to 'Edit', edit_booking_path(booking) %>
+          <% elsif !booking.ignore_warnings && to_owner > booking.nett %>
+            <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Overpayment to owner">
+            <% elsif booking.status == 'paid' %>
+              <tr class="bg-light table-success" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Overpayment to owner">
               <% else %>
-                <%= link_to 'View', booking_path(booking) %>
-              <% end %>
-              <% if current_user.role?('Admin') %>
-                | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
-              <% end %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+                <tr class="bg-light <%= 'text-muted' if booking.status == 'canceled' %>" id="<%= booking.number %>">
+                <% end %>
+                <td><%= !@house ? link_to(booking.house.code, house_bookings_path(booking.house.number)) : booking.house.code %></td>
+                <td>
+                  <nobr>
+                    <%= booking.start.to_fs(:date) %> -
+                    <%= booking.finish.to_fs(:date) %>
+                    (<%= (booking.finish-booking.start).to_i %>d)
+                  </nobr>
+                </td>
+                <td>
+                  <small>
+                    <%= booking.source.name if booking.source %>
+                    <small>
+                    </td>
+                    <td class="<%= booking.status %>_text"><%= booking.status %></td>
+                    <td><%= number_to_currency(booking.sale, precision: 2, unit: '') %></td>
+                    <td><%= number_to_currency(booking.agent, precision: 2, unit: '') %></td>
+                    <td>
+                      <% if booking.agent > 0 %>
+                        <%= number_to_currency(booking.sale - booking.agent, precision: 2, unit: '') %><br />
+                        <small>
+                          (50% <%= number_to_currency((booking.sale - booking.agent)/2, precision: 2, unit: '') %>)
+                        </small>
+                      <% end %>
+                    </td>
+                    <td class="comm">
+                      <nobr>
+                        <%= number_to_currency(booking.comm, precision: 2, unit: '') %> (<%= "#{((booking.agent + booking.comm).to_f/booking.sale*100).round(2)}%" if booking.sale > 0 %>)
+                      </nobr>
+                    </td>
+                    <td><%= number_to_currency(booking.nett, precision: 2, unit: '') %></td>
+                    <td><%= number_to_currency(to_owner, precision: 2, unit: '') %></td>
+                  </tr>
+                  <tr class="<%= 'text-muted' if booking.status == 'canceled' %>">
+                    <td colspan="10">
+                      <%= booking.client_details %>
+                      <% if booking.comment || booking.comment_owner || booking.comment_gr %>
+                        <div><%= "Comment inner: #{booking.comment}" if booking.comment.present? %></div>
+                        <div><%= "Comment owner: #{booking.comment_owner}" if booking.comment_owner.present? %></div>
+                        <div><%= "Comment gr: #{booking.comment_gr}" if booking.comment_gr.present? %></div>
+                      <% end %>
+                      <% if booking.transactions.any? %>
+                        Payment history:
+                        <div>
+                          <% tr = 0 %>
+                          <% tc = 0 %>
+                          <% tp = 0 %>
+                          <% booking.transactions.order(date: :asc).each do |t| %>
+                            <%# received = BalanceOut.where(transaction_id: t.id).first.debit %>
+                            <% received = t.balance_outs.sum(:debit) %>
+                            <% tr += received %>
+                            <%# comm = BalanceOut.where(transaction_id: t.id).first.credit %>
+                            <% comm = t.balance_outs.sum(:credit) %>
+                            <% tc += comm %>
+                            <% to_owner = received - comm %>
+                            <% tp += to_owner %>
+                            <%= t.date.to_fs(:date) %> -
+                            Received <%= number_to_currency(received, precision: 2, unit: '') %>,
+                            Comm: <%= number_to_currency(comm, precision: 2, unit: '') %>,
+                            To owner <%= number_to_currency(to_owner, precision: 2, unit: '') %>
+                            <%= t.hidden? ? '/ Hidden' : '1' %>
+                            <%= t.ref_no.present? ? "/ Ref No.: #{t.ref_no}" : '' %>
+                            <%= link_to 'Show', edit_transaction_path(t), target: '_blank' %><br />
+                          <% end %>
+                          <% if booking.transactions.count > 1  %>
+                            TOTAL Received: <%= number_to_currency(tr, precision: 2, unit: '') %>,
+                            Comm: <%= number_to_currency(tc, precision: 2, unit: '') %>,
+                            To owner: <%= number_to_currency(tp, precision: 2, unit: '') %><br />
+                          <% end %>
+                        <% end %>
+                        <%= "Booking number: #{booking.number}" %> |
+                        <%= "Created: #{booking.created_at.to_fs(:date)}" %>
+                        <% if booking.allotment? %>
+                          <span class="badge badge-info">Allotment</span>
+                        <% end %>
+                        <div>
+                          <% if !booking.number.nil? %>
+                            <%= link_to 'Edit', edit_booking_path(booking) %>
+                          <% else %>
+                            <%= link_to 'View', booking_path(booking) %>
+                          <% end %>
+                          <% if current_user.role?('Admin') %>
+                            | <%= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' } %>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>

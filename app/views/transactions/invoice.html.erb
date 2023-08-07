@@ -23,8 +23,8 @@
       <% end %>
       <% code = @owner.code if @owner.code.present? %>
       <% date = @to.to_date %>
-      <strong>Number:</strong> IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
-      <strong>Date:</strong>  <%= @to.to_date.strftime('%d.%m.%Y') %>
+      <strong>Number:</strong> IV-<%= "#{code}-#{date.year}#{date.to_fs(:month)}" %>001<br />
+      <strong>Date:</strong>  <%= @to.to_date.to_fs(:date) %>
     </div>
   </div>
   <div class="p-2">
@@ -60,7 +60,7 @@
         <% vat_sum += vat %>
         <tr id="trsc_<%= t.id %>_iv_row">
           <td>
-            <%= t.date.strftime('%d.%m.%Y') %>
+            <%= t.date.to_fs(:date) %>
             <%= t.comment_en %>
           </td>
           <td class="iv_price_bvat_cell text-right">

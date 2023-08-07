@@ -1,45 +1,44 @@
 <h1>Water Usages <%= " #{House.find(params[:house_id]).code}" if params[:house_id].present? %></h1>
-
 <% if params[:house_id].present? %>
   <div class="row">
-  <div class="col-md-3">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Days</th>
-        <th>Meter_1</th>
-        <th>Delta_1</th>
-        <th>Per_day_1</th>
-        <th>Meter_2</th>
-        <th>Delta_2</th>
-        <th>Per_day_2</th>
-        <th>Comment</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <% @water_usage.each_with_index do |wu, ind| %>
-    <% last = true if ind == @water_usage.size-1 %>
-    <tbody>
-      <tr>
-        <td><%= wu.date.strftime('%d.%m.%Y') %></td>
-        <td><%= days = (wu.date - @water_usage[ind+1].date).to_i if !last %></td>
-        <td><%= wu.amount %></td>
-        <td><%= delta_1 = (wu.amount - @water_usage[ind+1].amount) if !last %></td>
-        <td><%= (delta_1 / days.to_f).round(1) if !last %></td>
-        <td><%= wu.amount_2 if wu.amount_2? %></td>
-        <td><%= wu.amount_2 - @water_usage[ind+1].amount_2 if !last && wu.amount_2.present? %></td>
-        <td><%= (delta_2 / days.to_f).round(1) if !last  && wu.amount_2.present? %></td>
-        <td><%= wu.comment %></td>
-        <td>
-          <%= link_to "Edit", edit_water_usage_path(wu.id) %>
-          <%= link_to 'Destroy', water_usage_path(wu.id), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      </tr>
-    </tbody>
-  <% end %>
-  </table>
-  </div>
+    <div class="col-md-3">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Days</th>
+            <th>Meter_1</th>
+            <th>Delta_1</th>
+            <th>Per_day_1</th>
+            <th>Meter_2</th>
+            <th>Delta_2</th>
+            <th>Per_day_2</th>
+            <th>Comment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <% @water_usage.each_with_index do |wu, ind| %>
+          <% last = true if ind == @water_usage.size-1 %>
+          <tbody>
+            <tr>
+              <td><%= wu.date.to_fs(:date) %></td>
+              <td><%= days = (wu.date - @water_usage[ind+1].date).to_i if !last %></td>
+              <td><%= wu.amount %></td>
+              <td><%= delta_1 = (wu.amount - @water_usage[ind+1].amount) if !last %></td>
+              <td><%= (delta_1 / days.to_f).round(1) if !last %></td>
+              <td><%= wu.amount_2 if wu.amount_2? %></td>
+              <td><%= wu.amount_2 - @water_usage[ind+1].amount_2 if !last && wu.amount_2.present? %></td>
+              <td><%= (delta_2 / days.to_f).round(1) if !last  && wu.amount_2.present? %></td>
+              <td><%= wu.comment %></td>
+              <td>
+                <%= link_to "Edit", edit_water_usage_path(wu.id) %>
+                <%= link_to 'Destroy', water_usage_path(wu.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+              </td>
+            </tr>
+          </tbody>
+        <% end %>
+      </table>
+    </div>
   </div>
 <% else %>
   <% @house_groups.each do |hg| %>
@@ -49,7 +48,7 @@
         <%= form_with model: @water_usage do |f| %>
           <strong><%= h.code %></strong>,
           <%= h.water_usages.any? ?
-            "#{h.water_usages.last.date.strftime('%d.%m.%Y')} - #{h.water_usages.last.amount}" : '-' %>
+            "#{h.water_usages.last.date.to_fs(:date)} - #{h.water_usages.last.amount}" : '-' %>
           <%= h.water_usages.any? && h.water_meters.present? && h.water_meters == 2 ? "/ #{h.water_usages.last.amount_2}" : '' %>
           <%= link_to 'History', water_usages_path(house_id: h.id) if current_user.role?(['Admin', 'Manager']) %>
           <span class='status badge' data-hid="<%= h.id %>"></span>
@@ -66,7 +65,7 @@
             <% end %>
             <div class="col-2">
               <%= f.hidden_field :house_id, value: h.id %>
-              <%= f.hidden_field :date, value: Time.zone.now.to_date %>
+              <%= f.hidden_field :date, value: Date.current %>
               <%= f.submit 'Save', class: 'btn btn-primary' %>
             </div>
           </div>

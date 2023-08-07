@@ -16,7 +16,7 @@
             <div class="col-6">
               <div class="form-group">
               <%= form.date_field :date, {
-                min: Date.today.in_time_zone('Bangkok').to_date,
+                min: Date.current,
                 class: "form-control", required: true} %>
               </div>
             </div>

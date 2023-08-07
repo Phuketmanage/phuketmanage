@@ -47,7 +47,7 @@ class Search
     end
     if overlapped.any?
       result[:result] = false
-      result[:overlapped] = overlapped.map { |b| "#{b.start.strftime('%d.%m.%Y')} - #{b.finish.strftime('%d.%m.%Y')}" }
+      result[:overlapped] = overlapped.map { |b| "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}" }
     end
 
     result[:result] = false if duration_shorter_than_minimal?(house_id)
@@ -88,8 +88,8 @@ class Search
       seasons.each_with_index do |s, index|
         trans_season_modifier = 0
         trans_season_modifier = -1 if s.ssm > s.sfm
-        ss = Time.parse("#{s.ssd}.#{s.ssm}.#{year + trans_season_modifier}").to_date
-        sf = Time.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
+        ss = Time.zone.parse("#{s.ssd}.#{s.ssm}.#{year + trans_season_modifier}").to_date
+        sf = Time.zone.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
         year += 1 if index == seasons.size - 1
         next unless overlapping? ss, sf, rs, rf
 

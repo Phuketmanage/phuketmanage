@@ -12,7 +12,7 @@
             <small><%= link_to 'Dismiss', notification_path(n.id), method: :delete, remote: true %></small>
           </div>
           <div class="text-right">
-              <small><%= n.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M:%S') %></small>
+            <small><%= n.created_at.to_fs(:date_with_time) %></small>
           </div>
         </div>
       <% end %>
@@ -23,7 +23,7 @@
         <div class='shadow-sm mb-2 p-2 border rounded bg-white notification pending_booking' data-id='<%= b.id %>' >
           <div>
             <b><%= b.house.generated_title(:en) %></b>
-            <div>Rental period: <%= b.start.strftime("%d.%m.%Y") + "-" + b.finish.strftime("%d.%m.%Y") %></div>
+            <div>Rental period: <%= b.start.to_fs(:date) + "-" + b.finish.to_fs(:date) %></div>
             <div>Tenant: <%= b.client_details %></div>
             <div>Comment: <%= b.comment_gr %></div>
             <div>Price: <%= b.sale %></div>
@@ -32,10 +32,10 @@
             <small><%= link_to 'Review Booking', edit_booking_path(b.id) %></small>
           </div>
           <div class="text-right">
-              <small><%= b.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M:%S') %></small>
+            <small><%= b.created_at.to_fs(:date_with_time) %></small>
           </div>
         </div>
       <% end %>
     </div>
-</div>
+  </div>
 <% end %>

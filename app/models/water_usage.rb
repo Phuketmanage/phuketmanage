@@ -43,7 +43,7 @@ class WaterUsage < ApplicationRecord
     unless last.nil?
       days = (date - last.date).to_i
       if amount.present? && last.amount.present? && (amount - last.amount).to_f / days > 1
-        text = "Water overusage: #{amount}(#{date.in_time_zone('Bangkok').strftime('%d.%m')}) - #{last.amount}(#{last.date.in_time_zone('Bangkok').strftime('%d.%m')}) = #{amount - last.amount} in #{(date - last.date).to_i} days"
+        text = "Water overusage: #{amount}(#{date.to_fs(:day_month)}) - #{last.amount}(#{last.date.to_fs(:day_month)}) = #{amount - last.amount} in #{(date - last.date).to_i} days"
         Notification.create!(
           house_id: house_id,
           text: text
@@ -51,7 +51,7 @@ class WaterUsage < ApplicationRecord
         send_sms(message: "#{House.find(house_id).code}: #{text}")
       end
       if amount_2.present? && last.amount_2.present? && (amount_2 - last.amount_2).to_f / days > 1
-        text = "Water overusage: #{amount_2}(#{date.in_time_zone('Bangkok').strftime('%d.%m')}) - #{last.amount_2}(#{last.date.in_time_zone('Bangkok').strftime('%d.%m')}) = #{amount_2 - last.amount_2} in #{(date - last.date).to_i} days"
+        text = "Water overusage: #{amount_2}(#{date.to_fs(:day_month)}) - #{last.amount_2}(#{last.date.to_fs(:day_month)}) = #{amount_2 - last.amount_2} in #{(date - last.date).to_i} days"
         Notification.create!(
           house_id: house_id,
           text: text

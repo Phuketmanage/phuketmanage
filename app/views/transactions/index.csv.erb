@@ -1,9 +1,10 @@
-<% I18n.with_locale(locale) do  %>
-  <% headers = [t('date_text'), t('debit'), t('credit'), t('balance'), t('type'), t('house'), t('comment')]
+<%- export = CSV.generate do |csv| -%>
+  <% I18n.with_locale(locale) do  %>
+    <% headers = [t('date_text'), t('debit'), t('credit'), t('balance'), t('type'), t('house'), t('comment')]
   if @owner && @owner.show_comm?
     headers.insert(3, t('comm'))
   end %>
-  <%
+    <%
   de_ow_sum = 0
   cr_ow_sum = 0
   de_co_sum = 0
@@ -11,11 +12,11 @@
   cr_ow_prev_sum = 0
   balance_sum = 0
   %>
-  <%# Headers %>
-<%= CSV.generate_line headers -%>
-  <%# Before transactions %>
-  <% if @transactions_before.any? %>
-    <%
+    <%# Headers %>
+    <%- csv.add_row(headers) -%>
+    <%# Before transactions %>
+    <% if @transactions_before.any? %>
+      <%
         de_ow_prev_sum = @transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.debit')
         cr_ow_prev_sum = @transactions_before.where(for_acc: false).joins(:balance_outs).sum('balance_outs.credit')
         balance_sum += de_ow_prev_sum - cr_ow_prev_sum
@@ -26,11 +27,11 @@
           body.insert(3, '')
         end
         %>
-<%= CSV.generate_line(body).html_safe -%>
-  <% end %>
-  <%# Main transactions %>
-  <%  @transactions.each do |t| %>
-    <% next if t.for_acc
+      <%- csv.add_row(body) -%>
+    <% end %>
+    <%# Main transactions %>
+    <%  @transactions.each do |t| %>
+      <% next if t.for_acc
     de_ow = t.balance_outs.sum(:debit)
     cr_ow = t.balance_outs.sum(:credit)
     de_co = t.balances.sum(:debit)
@@ -39,7 +40,7 @@
     de_co_sum += de_co if de_co > 0
     balance_sum += de_ow - cr_ow
     muted_style = ""
-    date = t.date.strftime('%d.%m.%Y')
+    date = t.date.to_fs(:date)
     debit = number_to_currency(de_ow - cr_ow, precision: 2, unit: '') if de_ow > 0
     credit = if @owner && @owner.show_comm?
       number_to_currency(cr_ow-de_co, precision: 2, unit: '') if (cr_ow-de_co) > 0
@@ -55,6 +56,8 @@
     if @owner && @owner.show_comm?
       body.insert(3, comm)
     end%>
-<%= CSV.generate_line(body).html_safe -%>
+      <%- csv.add_row(body) -%>
+    <% end %>
   <% end %>
-<% end %>
+<%- end -%>
+<%= export.lstrip.html_safe -%>

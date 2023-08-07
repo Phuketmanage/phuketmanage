@@ -23,8 +23,8 @@
       <% end %>
       <% code = @owner.code if @owner.code.present? %>
       <% date = @to.to_date %>
-      <strong>Number:</strong> RE-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001<br />
-      <strong>Date:</strong>  <%= @to.to_date.strftime('%d.%m.%Y') %>
+      <strong>Number:</strong> RE-<%= "#{code}-#{date.year}#{date.to_fs(:month)}" %>001<br />
+      <strong>Date:</strong>  <%= @to.to_date.to_fs(:date) %>
     </div>
   </div>
   <div class="p-2">
@@ -59,7 +59,7 @@
       <% end %>
       <tr>
         <td>
-          IV-<%= "#{code}-#{date.year}#{date.strftime('%m')}" %>001
+          IV-<%= "#{code}-#{date.year}#{date.to_fs(:month)}" %>001
         </td>
         <td class="iv_price_bvat_cell text-right">
           <%= number_to_currency(de_co_bvat_sum.round(2), precision: 2, unit: '') %>

@@ -51,8 +51,8 @@ private
     to = params[:to]
     error = false
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
-      to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
+      from = Date.current.beginning_of_month
+      to = Date.current.end_of_month
     elsif !from.present? || !to.present?
       error = 'Both dates should be selected'
     end

@@ -16,13 +16,13 @@ RSpec.configure do |config|
   #
   # @example
   #   describe '#some_method', freeze: '24.12.2014 23:00' do
-  #   describe MyClass, freeze: Time.today.beginning_of_week + 2.days do
+  #   describe MyClass, freeze: Date.current.beginning_of_week + 2.days do
   #
   # @example Freeze at current time
   #   context 'freeze to now', freeze: true do
   config.around(:each, freeze: ->(value) { value.present? }) do |example|
     # Default is current time rounded to seconds
-    time = extract_travel_time(example.metadata[:freeze]) || Time.zone.now.change(usec: 0)
+    time = extract_travel_time(example.metadata[:freeze]) || Time.current.change(usec: 0)
     raise "Only travel or freeze:#{example.location}" if example.metadata[:travel]
 
     Timecop.freeze(time) { example.run }
@@ -31,7 +31,7 @@ RSpec.configure do |config|
   # Around filter, that makes a time travel for context/describe to some moment.
   #
   # @example
-  #   describe MyClass, travel: Time.now.beginning_of_week(:wednesday) do
+  #   describe MyClass, travel: Time.current.beginning_of_week(:wednesday) do
   #   context 'travel', travel: '2014-03-09 [sunday]' do
   #
   # @example Use lambda if need to use let values in time calculation

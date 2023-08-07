@@ -31,8 +31,8 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   test "should create booking" do
     assert_difference('Booking.count', 1) do
       post bookings_path, params: { booking: {
-        start: "10.09.#{Time.zone.now.year + 1}".to_date,
-        finish: "20.09.#{Time.zone.now.year + 1}".to_date,
+        start: "10.09.#{Date.current.year + 1}".to_date,
+        finish: "20.09.#{Date.current.year + 1}".to_date,
         house_id: houses(:villa_1).id,
         status: 'confirmed',
         client_details: 'Test client'

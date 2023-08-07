@@ -22,10 +22,10 @@ describe 'Search' do
   let!(:house_four) do
     create(:house, :with_seasons, owner: owner_two, type: villa, rooms: 4, locations: [location_one])
   end
-  let(:booking_period_from) { 5.days.from_now.strftime("%Y-%m-%d") }
-  let(:booking_period_to) { 14.days.from_now.strftime("%Y-%m-%d") }
-  let(:period_from) { 10.days.from_now.strftime("%Y-%m-%d") }
-  let(:period_to) { 20.days.from_now.strftime("%Y-%m-%d") }
+  let(:booking_period_from) { 5.days.from_now.to_date.to_fs }
+  let(:booking_period_to) { 14.days.from_now.to_date.to_fs }
+  let(:period_from) { 10.days.from_now.to_date.to_fs }
+  let(:period_to) { 20.days.from_now.to_date.to_fs }
   let!(:booking) do
     create(:booking, house: house_two, start: booking_period_from, finish: booking_period_to, status: "pending")
   end
@@ -71,6 +71,7 @@ describe 'Search' do
     it { is_expected.to have_content house_one.code.to_s }
     it { is_expected.to have_content house_four.code.to_s }
   end
+
   context 'when pass all parameters' do
     before do
       visit "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}&search%5Bbdr%5D%5B%5D=3"

@@ -74,12 +74,12 @@ class Season < ApplicationRecord
   def not_less_then_days
     nss = (ssm.to_i + (ssd.to_f / 30)).round(2)
     nsf = (sfm.to_i + (sfd.to_f / 30)).round(2)
-    year = Time.zone.now.year
+    year = Date.current.year
     year_plus = 0
     year_plus += 1 if nss > nsf
     ss = Time.zone.parse("#{ssd}.#{ssm}.#{year}").to_date
     sf = Time.zone.parse("#{sfd}.#{sfm}.#{year + year_plus}").to_date
-    Time.zone.now.year
+    Date.current.year
     # byebug
     errors.add(:base, "Season duration can not be less then 15 days") if (sf - ss).to_i < 14
   end

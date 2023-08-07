@@ -83,7 +83,7 @@ class JobsController < ApplicationController
     jobs = {}
     date_old = ''
     jobs_raw.each do |j|
-      date = j.plan.strftime('%d.%m.%Y')
+      date = j.plan.to_fs(:date)
       if date != date_old
         jobs[date] = []
         # jobs[date]['date'] = date
@@ -110,9 +110,9 @@ class JobsController < ApplicationController
     )
     trace = @job.job_tracks.where(user_id: current_user.id)
     if trace.any?
-      trace.update(visit_time: Time.zone.now)
+      trace.update(visit_time: Time.current)
     else
-      @job.job_tracks.create!(user_id: current_user.id, visit_time: Time.zone.now)
+      @job.job_tracks.create!(user_id: current_user.id, visit_time: Time.current)
     end
   end
 
@@ -161,7 +161,7 @@ class JobsController < ApplicationController
   def update
     if params[:done].present?
       @job_status_toggled = true
-      @job.closed = Time.zone.now if params[:done] == 'true'
+      @job.closed = Time.current if params[:done] == 'true'
       @job.closed = nil if params[:done] == 'false'
       @job.save
       return
