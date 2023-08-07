@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: house_types
+#
+#  id         :bigint           not null, primary key
+#  comm       :integer
+#  name_en    :string
+#  name_ru    :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 FactoryBot.define do
   factory :house_type do
     name_en { "House" }
