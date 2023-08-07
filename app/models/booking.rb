@@ -78,13 +78,13 @@ class Booking < ApplicationRecord
   def self.check_in_out(from = nil, to = nil, type = nil)
     result = []
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       to = Booking.maximum(:finish)
     elsif from.present? && !to.present?
       from = from.to_date
       to = Booking.maximum(:finish)
     elsif !from.present? && to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       to = to.to_date
     elsif from.present? && to.present?
       from = from.to_date
@@ -177,34 +177,25 @@ class Booking < ApplicationRecord
 
   def self.timeline_data(from = nil, to = nil, period = nil, house_number = nil)
     if !from.present? && !to.present?
-      from = Time.zone.now.in_time_zone('Bangkok').to_date
+      from = Date.current
       if period.nil? && Booking.count == 0
         period = 45
-        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i - 1).days
+        to = Date.current + (period.to_i - 1).days
       elsif period.nil? && Booking.count > 0
-        to = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
+        to = Booking.maximum(:finish).to_date
       else
-        to = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i - 1).days
+        to = Date.current + (period.to_i - 1).days
       end
     elsif from.present? && !to.present?
       from = from.to_date
       to = Booking.maximum(:finish)
     elsif !from.present? && to.present?
-      # from = Time.zone.now.in_time_zone('Bangkok').to_date
       from = Booking.minimum(:start)
       to = to.to_date
     elsif from.present? && to.present?
       from = from.to_date
       to = to.to_date
     end
-
-    # today = Time.zone.now.in_time_zone('Bangkok').to_date
-    # if period.nil?
-    #   last_date = Booking.maximum(:finish).in_time_zone('Bangkok').to_date
-    # else
-    #   last_date = Time.zone.now.in_time_zone('Bangkok').to_date + (period.to_i-1).days
-    # end
-    # days = (last_date - today).to_i+1
     days = (to - from).to_i + 1
     timeline = {}
     # timeline[:start] = today
@@ -326,7 +317,7 @@ class Booking < ApplicationRecord
             next if c.source.name == 'Tripadvisor' &&
                     (e.summary.strip == 'Not available' ||
                     e.description.nil?)
-            next if e.dtend < Time.zone.now
+            next if e.dtend < Time.current
 
             # #Airbnb, Homeaway: Check if booking was synced before
             # if  c.source.name == 'Airbnb' ||
@@ -371,7 +362,7 @@ class Booking < ApplicationRecord
           response.string
           # => <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html DIR=\"LTR\">\n<head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"><meta name=\"viewport\" content=\"initial-scale=1\">...
         end
-        c.update(last_sync: Time.zone.now)
+        c.update(last_sync: Time.current)
       end
     end
   end

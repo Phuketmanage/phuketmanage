@@ -17,7 +17,7 @@ class DocumentsController < ApplicationController
                 address: '' }
       end
     elsif params[:owner_id].present?
-      @date = Time.zone.now.in_time_zone('Bangkok')
+      @date = Time.current
       @owner = User.find(params[:owner_id])
       @to = { name: "#{@owner.name} #{@owner.surname}",
               address: '' }

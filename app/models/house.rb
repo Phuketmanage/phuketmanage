@@ -78,7 +78,7 @@ class House < ApplicationRecord
   scope :for_timeline, -> { active.where(hide_in_timeline: false).order(:unavailable, :house_group_id, :code) }
 
   def occupied_days(dtnb = 0)
-    starting_date = Time.zone.now.in_time_zone('Bangkok').to_date
+    starting_date = Date.current
     bookings = self.bookings.active.where(finish: starting_date..).pluck(:start, :finish)
 
     return [] if bookings.blank?

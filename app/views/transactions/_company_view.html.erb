@@ -95,10 +95,10 @@
         </td>
         <!-- #10 Actions -->
         <td>
-          <% if current_user.role?(['Accounting', 'Manager']) && t.date >= (Date.today-1.month).beginning_of_month %>
+          <% if current_user.role?(['Accounting', 'Manager']) && t.date >= (Date.current-1.month).beginning_of_month %>
             <%= link_to 'Edit', edit_transaction_path(t) %>
           <% end %>
-          <% if current_user.role?(['Accounting', 'Manager']) && t.created_at > Date.today-1.day %>
+          <% if current_user.role?(['Accounting', 'Manager']) && t.created_at > Date.current-1.day %>
             <%= link_to 'Destroy', t, method: :delete, data: { confirm: 'Are you sure?' } %>
           <% end %>
           <% if current_user.role?('Admin') %>
@@ -188,4 +188,3 @@
 </div>
 
 <%= hidden_field_tag 'files_host', S3_HOST %>
-

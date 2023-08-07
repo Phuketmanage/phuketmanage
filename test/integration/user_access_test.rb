@@ -390,7 +390,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.today - 2.days,
+          date: Time.current - 2.days,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -425,7 +425,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.today,
+          date: Time.current,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,
@@ -451,7 +451,7 @@ class UserAccessTest < ActionDispatch::IntegrationTest
     assert_difference('Transaction.count', 1) do
       post transactions_path, params: {
         transaction: {
-          date: Time.zone.today,
+          date: Time.current,
           type_id: type.id,
           house_id: house.id,
           cr_ow: 3500,

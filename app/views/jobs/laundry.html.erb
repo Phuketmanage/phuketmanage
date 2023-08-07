@@ -1,6 +1,6 @@
 <h1>Laundry </h1>
 <h5>
-Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strftime('%d.%m.%Y') %>
+Today/วันนี้ <%= Time.current.to_date.strftime('%d.%m.%Y') %>
 </h5>
 <div class='mt-2'>
 <%= form_with(url: laundry_path, local: true, method: :get) do |f| %>
@@ -116,5 +116,3 @@ Today/วันนี้ <%= Time.zone.now.in_time_zone('Bangkok').to_date.strft
     </div>
   </div>
 <% end %>
-
-

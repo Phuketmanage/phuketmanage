@@ -66,7 +66,7 @@
             <% end %>
             <div class="col-2">
               <%= f.hidden_field :house_id, value: h.id %>
-              <%= f.hidden_field :date, value: Time.zone.now.to_date %>
+              <%= f.hidden_field :date, value: Date.current %>
               <%= f.submit 'Save', class: 'btn btn-primary' %>
             </div>
           </div>

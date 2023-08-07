@@ -10,7 +10,7 @@ class BookingFilesController < ApplicationController
     file = File.new(params[:booking_file][:file])
     content_type = params[:booking_file][:file].content_type
     extention = File.extname(file)
-    new_name = "#{Time.zone.now.to_i}#{extention}"
+    new_name = "#{Time.current.to_i}#{extention}"
     obj = S3_BUCKET.object("bookings/#{booking.number}/#{new_name}")
     obj.upload_file(file, acl: 'public-read', content_type: content_type)
     @file = booking.files.new(booking_file_params)

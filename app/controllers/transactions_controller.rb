@@ -14,8 +14,8 @@ class TransactionsController < ApplicationController
     session[:from] = params[:from]
     session[:to] = params[:to]
     if !@from.present? && !@to.present?
-      @from = Time.zone.now.in_time_zone('Bangkok').beginning_of_month.to_date
-      @to = Time.zone.now.in_time_zone('Bangkok').end_of_month.to_date
+      @from = Date.current.beginning_of_month
+      @to = Date.current.end_of_month
     elsif !@from.present? || !@to.present?
       @error = 'Both dates should be selected'
     end
@@ -93,7 +93,7 @@ class TransactionsController < ApplicationController
           end
           @one_house = true
           @one_house = false if @owner.houses.count > 1
-          today = Time.zone.now.in_time_zone('Bangkok')
+          today = Time.current
           future_booking_ids = @owner.houses.joins(:bookings).where('bookings.start >?', today).pluck('bookings.id')
           future_booking_de = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.debit')
           future_booking_cr = Booking.where(id: future_booking_ids).joins(transactions: :balance_outs).sum('balance_outs.credit')
@@ -153,7 +153,7 @@ class TransactionsController < ApplicationController
     else
       @transaction = Transaction.new
     end
-    now = Time.zone.now.in_time_zone('Bangkok')
+    now = Time.current
     @s3_direct_post = S3_BUCKET.presigned_post(
       key: "transactions/${filename}",
       success_action_status: '201',

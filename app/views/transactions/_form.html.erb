@@ -6,7 +6,7 @@
       <% if current_user.role? ['Admin'] %>
         <%= form.date_field :date, class: 'form-control' %>
       <% else %>
-        <%= form.date_field :date, min: (Date.today-30.days).beginning_of_month, max: Date.today, class: 'form-control' %>
+        <%= form.date_field :date, min: (Date.current-30.days).beginning_of_month, max: Date.current, class: 'form-control' %>
       <% end %>
     </div>
     <div class="col-md-2">

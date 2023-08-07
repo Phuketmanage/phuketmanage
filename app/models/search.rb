@@ -88,8 +88,8 @@ class Search
       seasons.each_with_index do |s, index|
         trans_season_modifier = 0
         trans_season_modifier = -1 if s.ssm > s.sfm
-        ss = Time.parse("#{s.ssd}.#{s.ssm}.#{year + trans_season_modifier}").to_date
-        sf = Time.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
+        ss = Time.zone.parse("#{s.ssd}.#{s.ssm}.#{year + trans_season_modifier}").to_date
+        sf = Time.zone.parse("#{s.sfd}.#{s.sfm}.#{year}").to_date
         year += 1 if index == seasons.size - 1
         next unless overlapping? ss, sf, rs, rf
 

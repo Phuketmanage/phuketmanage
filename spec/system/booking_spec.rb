@@ -7,7 +7,7 @@ require 'rails_helper'
 describe 'Booking' do
   subject { page }
 
-  let(:current_date) { Time.zone.today }
+  let(:current_date) { Date.current }
   let(:date_start) { current_date }
   let(:date_finish) { current_date + 10.days }
 

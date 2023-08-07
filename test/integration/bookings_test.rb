@@ -9,7 +9,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create new booking' do
-    year = Time.zone.now.year + 1
+    year = Date.current.year + 1
     # House not available
     start = "7.07.#{year}".to_date
     finish = "14.07.#{year}".to_date
@@ -126,7 +126,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   test 'Guest search and create booking' do
-    year = Time.zone.now.year + 1
+    year = Date.current.year + 1
     rs = "15.11.#{year}".to_date
     rf = "25.11.#{year}".to_date
     period = "#{rs} to #{rf}"
@@ -139,7 +139,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update booking' do
-    year = Time.zone.now.year + 1
+    year = Date.current.year + 1
     # Change only dates - house not available
     new_start = "29.06.#{year}".to_date
     put booking_path(@booking.id), params: { booking: { start: new_start,

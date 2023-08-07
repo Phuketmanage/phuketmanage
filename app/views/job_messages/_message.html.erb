@@ -14,27 +14,26 @@
   <% color = 'bg-transparent text-black-50' %>
   <% time_color = 'text-black-50' %>
 <% end %>
-
 <div class="d-flex <%= align %>" data-message-id="<%= message.id %>" >
   <div class="shadow-sm mb-2 p-2 border rounded <%= color %>" style="width: 70%">
-  <% if message.sender != current_user %>
-    <strong><%= message.sender.name %></strong><br />
-  <% end %>
-  <% if message.file %>
-    <% if File.extname(message.url) == ".pdf" %>
-      <iframe src="https://docs.google.com/viewer?url=http:<%= message.url %>&embedded=true" frameborder="0" height="400px" width="100%"></iframe>
-    <% else %>
-      <a href="http:<%= message.url %>" data-link-to-image><img src="<%= message.url %>" width="100%"></a>
+    <% if message.sender != current_user %>
+      <strong><%= message.sender.name %></strong><br />
     <% end %>
-  <% else %>
-    <%= message.message %>
-  <% end %>
-  <br />
-  <span class="<%= time_color %> d-flex justify-content-end">
-    <%= message.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %>
-  </span>
-  <% if is_own_message && Time.zone.now - message.created_at <= 10.minutes && !message.is_system %>
-    <%= link_to 'Delete', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "d-flex justify-content-end text-warning" %>
-  <% end %>
+    <% if message.file %>
+      <% if File.extname(message.url) == ".pdf" %>
+        <iframe src="https://docs.google.com/viewer?url=http:<%= message.url %>&embedded=true" frameborder="0" height="400px" width="100%"></iframe>
+      <% else %>
+        <a href="http:<%= message.url %>" data-link-to-image><img src="<%= message.url %>" width="100%"></a>
+      <% end %>
+    <% else %>
+      <%= message.message %>
+    <% end %>
+    <br />
+    <span class="<%= time_color %> d-flex justify-content-end">
+      <%= message.created_at.strftime('%d.%m.%Y %H:%M') %>
+    </span>
+    <% if is_own_message && Time.current - message.created_at <= 10.minutes && !message.is_system %>
+      <%= link_to 'Delete', job_message_path(id: message.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "d-flex justify-content-end text-warning" %>
+    <% end %>
   </div>
 </div>

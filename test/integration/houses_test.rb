@@ -78,7 +78,7 @@ class HousesTest < ActionDispatch::IntegrationTest
 
   test 'minimal duration for selected house search' do
     # The duration period is less than house min booking period
-    year = Time.zone.now.year + 1
+    year = Date.current.year + 1
     rs = "22.07.#{year}".to_date
     rf = "27.07.#{year}".to_date
     period = "#{rs} to #{rf}"

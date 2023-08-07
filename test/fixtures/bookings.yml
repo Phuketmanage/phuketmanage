@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 _1:
-  start: 10.07.<%= Time.now.year+1 %>
-  finish: 20.07.<%= Time.now.year+1 %>
+  start: 10.07.<%= Time.current.year+1 %>
+  finish: 20.07.<%= Time.current.year+1 %>
   house: villa_1
   client_details: tenant
   status: confirmed
@@ -17,8 +17,8 @@ _1:
   allotment: false
 
 _2:
-  start: 15.07.<%= Time.now.year+1 %>
-  finish: 25.07.<%= Time.now.year+1 %>
+  start: 15.07.<%= Time.current.year+1 %>
+  finish: 25.07.<%= Time.current.year+1 %>
   house: villa_3
   client_details: tenant
   status: confirmed
@@ -31,8 +31,8 @@ _2:
 
 
 _3:
-  start: 1.08.<%= Time.now.year+1 %>
-  finish: 11.08.<%= Time.now.year+1 %>
+  start: 1.08.<%= Time.current.year+1 %>
+  finish: 11.08.<%= Time.current.year+1 %>
   house: villa_2
   client_details: tenant
   status: confirmed
@@ -44,8 +44,8 @@ _3:
   allotment: false
 
 _4:
-  start: 15.06.<%= Time.now.year+1 %>
-  finish: 29.06.<%= Time.now.year+1 %>
+  start: 15.06.<%= Time.current.year+1 %>
+  finish: 29.06.<%= Time.current.year+1 %>
   house: villa_1
   client_details: tenant
   status: confirmed
@@ -57,8 +57,8 @@ _4:
   allotment: false
 
 _5:
-  start: 17.07.<%= Time.now.year+1 %>
-  finish: 24.08.<%= Time.now.year+1 %>
+  start: 17.07.<%= Time.current.year+1 %>
+  finish: 24.08.<%= Time.current.year+1 %>
   house: villa_2
   client_details: tenant
   status: canceled
@@ -70,8 +70,8 @@ _5:
   allotment: false
 
 _6:
-  start: 05.08.<%= Time.now.year+1 %>
-  finish: 16.08.<%= Time.now.year+1 %>
+  start: 05.08.<%= Time.current.year+1 %>
+  finish: 16.08.<%= Time.current.year+1 %>
   house: villa_1
   client_details: tenant
   status: temporary
@@ -83,8 +83,8 @@ _6:
   allotment: false
 
 _7:
-  start: 03.08.<%= Time.now.year+1 %>
-  finish: 11.08.<%= Time.now.year+1 %>
+  start: 03.08.<%= Time.current.year+1 %>
+  finish: 11.08.<%= Time.current.year+1 %>
   house: villa_3
   client_details: tenant
   status: block

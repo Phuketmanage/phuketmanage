@@ -1,24 +1,24 @@
 <li class="list-group-item booking_file" data-booking-file-id=<%= file.id %>>
   <div class="d-flex w-100 justify-content-between">
     <h5 class="mb-1"><%= file.name %></h5>
-    <small><%= file.user.name %> <%= file.created_at.in_time_zone('Bangkok').strftime('%d.%m.%Y %H:%M') %></small>
+    <small><%= file.user.name %> <%= file.created_at.strftime('%d.%m.%Y %H:%M') %></small>
   </div>
   <% if !file.comment.empty? %>
     <p><%= file.comment %></p>
   <% end %>
   <div class='text-right'>
-      <% file_type = File.extname(file.url) %>
-      <% if file_type == '.pdf' %>
-        <% file_type = 'pdf' %>
-      <% else %>
-        <% file_type = 'image' %>
-      <% end %>
-      <%= link_to 'View', "#",  data: {
+    <% file_type = File.extname(file.url) %>
+    <% if file_type == '.pdf' %>
+      <% file_type = 'pdf' %>
+    <% else %>
+      <% file_type = 'image' %>
+    <% end %>
+    <%= link_to 'View', "#",  data: {
                                   link_to_file: file.full_url,
                                   file_type: file_type }  %> |
-      <%= link_to 'Print', "#", data: {
+    <%= link_to 'Print', "#", data: {
                                   print: file.full_url,
                                   type: file_type} %> |
-      <%= link_to 'Delete', booking_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
+    <%= link_to 'Delete', booking_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
   </div>
 </li>

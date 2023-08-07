@@ -35,10 +35,10 @@ class Ability
       can %i[index new create update_invoice_ref], Transaction
       can %i[index show canceled timeline timeline_data], Booking
       can [:edit, :update], Transaction do |t|
-        t.date >= (Date.today - 30.days).beginning_of_month
+        t.date >= (Date.current - 30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
-        t.date > Date.today - 1.day
+        t.date > Date.current - 1.day
       end
       can :read, :translation
       can :manage, Job
@@ -69,10 +69,10 @@ class Ability
       can :index, [Admin]
       can %i[index new create update_invoice_ref docs], Transaction
       can [:edit, :update], Transaction do |t|
-        t.date >= (Date.today - 30.days).beginning_of_month
+        t.date >= (Date.current - 30.days).beginning_of_month
       end
       can [:destroy], Transaction do |t|
-        t.date > Date.today - 1.day
+        t.date > Date.current - 1.day
       end
       can :manage, TransactionFile
       can :read, :translation
