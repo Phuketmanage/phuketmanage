@@ -1,4 +1,4 @@
-taxesRole.create!(
+Role.create!(
   [
     { name: "Admin" },
     { name: "Manager" },
