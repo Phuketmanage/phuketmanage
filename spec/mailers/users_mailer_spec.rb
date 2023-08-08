@@ -5,7 +5,7 @@ RSpec.describe UsersMailer, type: :mailer do
 
   describe "Reset password instructions" do
     let(:token) { user.send(:set_reset_password_token) }
-    let(:mail) { described_class.reset_password_instructions(user, token).deliver_now }
+    let(:mail) { described_class.reset_password_instructions(user, token).deliver_later }
     let(:recovery_path) { "http://localhost:3000/users/password/edit?reset_password_token=#{token}" }
 
     it 'renders the subject' do
