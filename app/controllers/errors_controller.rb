@@ -14,7 +14,7 @@ class ErrorsController < ApplicationController
   end
 
   def internal_server_error
-    respond_to do |_format|
+    respond_to do |format|
       format.html { render status: :internal_server_error }
       format.any { head :internal_server_error, content_type: 'text/plain' }
     end
