@@ -121,6 +121,16 @@ Time.strptime(string, "%Y-%m-%dT%H:%M:%S%z").in_time_zone
 "-> 08"
 ```
 
+## Active Job
+
+In development jobs processing backend starts automatically when you start your server with `bin/dev` command. You can access admin panel at `/admin/activejob`. Default role for access is Admin.
+
+Currently we have one default queue, but you can set priority to job 0-10, smaller number is higher priority.
+
+Cron jobs can be set up in `good_job.rb` initializer.
+
+Current backed: [https://github.com/bensheldon/good_job](Good Job)
+
 ## Tests
 
 All closed issues have to be covered by tests except when mentioned that tests are not required.
