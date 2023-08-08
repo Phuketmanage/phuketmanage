@@ -46,7 +46,7 @@ common: &default_settings
       # This should not be used when forwarding is enabled.
       enabled: false
   rules:
-    ignore_url_regexes: ["^/good_job"]
+    ignore_url_regexes: ["^/admin/activejob"]
 
 # Environment-specific settings are in this section.
 # RAILS_ENV or RACK_ENV (as appropriate) is used to determine the environment.
