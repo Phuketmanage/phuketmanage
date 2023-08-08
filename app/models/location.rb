@@ -11,5 +11,8 @@
 #  updated_at :datetime         not null
 #
 class Location < ApplicationRecord
+  include Translatable
   has_and_belongs_to_many :houses
+
+  translates :name, :descr
 end

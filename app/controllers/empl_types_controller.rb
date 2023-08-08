@@ -4,23 +4,23 @@ class EmplTypesController < ApplicationController
   layout 'admin'
   before_action :set_empl_type, only: %i[show edit update destroy]
 
-  # @route GET /empl_types (empl_types)
+  # @route GET (/:locale)/empl_types {locale: nil} (empl_types)
   def index
     @empl_types = EmplType.all
   end
 
-  # @route GET /empl_types/:id (empl_type)
+  # @route GET (/:locale)/empl_types/:id {locale: nil} (empl_type)
   def show; end
 
-  # @route GET /empl_types/new (new_empl_type)
+  # @route GET (/:locale)/empl_types/new {locale: nil} (new_empl_type)
   def new
     @empl_type = EmplType.new
   end
 
-  # @route GET /empl_types/:id/edit (edit_empl_type)
+  # @route GET (/:locale)/empl_types/:id/edit {locale: nil} (edit_empl_type)
   def edit; end
 
-  # @route POST /empl_types (empl_types)
+  # @route POST (/:locale)/empl_types {locale: nil} (empl_types)
   def create
     @empl_type = EmplType.new(empl_type_params)
 
@@ -35,8 +35,8 @@ class EmplTypesController < ApplicationController
     end
   end
 
-  # @route PATCH /empl_types/:id (empl_type)
-  # @route PUT /empl_types/:id (empl_type)
+  # @route PATCH (/:locale)/empl_types/:id {locale: nil} (empl_type)
+  # @route PUT (/:locale)/empl_types/:id {locale: nil} (empl_type)
   def update
     respond_to do |format|
       if @empl_type.update(empl_type_params)
@@ -49,7 +49,7 @@ class EmplTypesController < ApplicationController
     end
   end
 
-  # @route DELETE /empl_types/:id (empl_type)
+  # @route DELETE (/:locale)/empl_types/:id {locale: nil} (empl_type)
   def destroy
     @empl_type.destroy
     respond_to do |format|

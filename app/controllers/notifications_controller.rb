@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
 
   def index; end
 
-  # @route DELETE /notifications/:id (notification)
+  # @route DELETE (/:locale)/notifications/:id {locale: nil} (notification)
   def destroy
     @notification = Notification.find(params[:id])
     @notification.destroy

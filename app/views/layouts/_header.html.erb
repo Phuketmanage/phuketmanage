@@ -1,7 +1,6 @@
-
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-  <%= link_to image_tag_s3("logo.png", { width: 30, class: "d-inline-block align-top"}), root_path, id: "logo_image", class: "navbar-brand  mb-0 h1" %>
-  <%= link_to "Phuket Manage", root_path, id: "logo_text", class: "navbar-brand  mb-0 h1" %>
+  <%= link_to image_tag_s3("logo.png", { width: 30, class: "d-inline-block align-top"}), locale_root_path( locale: params[:locale] || nil ), id: "logo_image", class: "navbar-brand  mb-0 h1" %>
+  <%= link_to "Phuket Manage", locale_root_path( locale: params[:locale] || nil ), id: "logo_text", class: "navbar-brand  mb-0 h1" %>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -12,13 +11,11 @@
           <%= link_to 'Dashboard', dashboard_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
@@ -29,31 +26,26 @@
           <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Owner']) %>
         <li class="nav-item">
           <%= link_to t('bookings'), bookings_front_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
         <li class="nav-item">
           <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Houses', houses_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
         <li class="nav-item">
           <%= link_to 'Bookings', bookings_path, class: "nav-link" %>
         </li>
       <% end %>
-      
       <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
           <%= link_to 'Balance', transactions_path, class: "nav-link" %>
@@ -69,44 +61,36 @@
           <%= link_to 'Water', water_usages_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Manager']) %>
         <li class="nav-item">
           <%= link_to 'Sources', sources_path, class: "nav-link" %>
         </li>
       <% end %>
-
-
       <% if signed_in? && current_user.role?(['Owner']) %>
         <li class="nav-item">
           <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'Users', users_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'Trsc types', transaction_types_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'House groups', house_groups_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? && current_user.role?(['Admin']) %>
         <li class="nav-item">
           <%= link_to 'Settings', settings_path, class: "nav-link" %>
         </li>
       <% end %>
-
       <% if signed_in? %>
         <li class="nav-item">
           <%= link_to t('menu.log_out'), destroy_user_session_path, { method: :delete, class: "nav-link" } %>
@@ -121,9 +105,9 @@
       <% end %>
       <li class="nav-item">
         <% if I18n.locale == :en %>
-          <a href="/ru" class="nav-link"><%= flag_icon(:ru) %> <%= t('menu.ru') %></a>
+          <%= link_to flag_icon(:ru) + " " + t('menu.ru'), { locale: :ru }, class: 'nav-link' %>
         <% else %>
-          <a href="/en" class="nav-link"><%= flag_icon(:us) %> <%= t('menu.en') %></a>
+          <%= link_to flag_icon(:us) + " " + t('menu.en'), { locale: :en }, class: 'nav-link' %>
         <% end %>
       </li>
     </ul>
@@ -147,7 +131,4 @@
       </div>
     <% end %>
   </div>
-
-
 </nav>
-

@@ -16,9 +16,8 @@
       <% else %>
         <p><%= "#{number_to_currency(h.prices.minimum(:amount), precision: 0, unit: '')} - #{number_to_currency(h.prices.maximum(:amount), precision: 0, unit: '')} THB/#{t('search.per_day')}" %></p>
       <% end %>
-
       <% if h.locations.any? %>
-        <div><%= t('houses.location') %>: <%= h.locations.map{|l| l.send("name_#{I18n.locale}")}.join(', ') %></div>
+        <div><%= t('houses.location') %>: <%= h.locations.map{ |l| l.name }.join(', ') %></div>
       <% end %>
       <% if h.project %>
         <div><%= t('houses.project') %>: <%= h.project %></div>
@@ -43,9 +42,9 @@
       <div class='row'>
         <div class="col">
       <% if from_search == true %>
-        <%= link_to t('houses.view'), show_house_path(h.number, params: {period: search.period}), class: "btn btn-primary", target: "_blank" %>
+        <%= link_to t('houses.view'), house_path(h.number, params: {period: search.period}), class: "btn btn-primary", target: "_blank" %>
       <% else %>
-        <%= link_to t('houses.view'), show_house_path(h.number), class: "btn btn-primary", target: "_blank" %>
+        <%= link_to t('houses.view'), house_path(h.number), class: "btn btn-primary", target: "_blank" %>
       <% end %>
         </div>
         <div class="d-flex mt-auto mr-3 text-uppercase font-weight-light text-muted small link-light" >

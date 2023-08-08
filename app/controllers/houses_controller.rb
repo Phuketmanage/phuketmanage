@@ -7,36 +7,36 @@ class HousesController < ApplicationController
   before_action :search, only: :show
   layout 'admin', except: :show
 
-  # @route GET /houses (houses)
+  # @route GET (/:locale)/houses {locale: nil} (houses)
   def index
     @houses_for_rent = House.for_rent
     @houses_not_for_rent = House.not_for_rent
   end
 
-  # @route GET /houses/export (export_houses)
+  # @route GET (/:locale)/houses/export {locale: nil} (export_houses)
   def export
     @houses_for_rent = House.for_rent
     @houses_not_for_rent = House.not_for_rent
     render layout: 'application', locals: { print: true }
   end
 
-  # @route GET /houses/inactive (houses_inactive)
+  # @route GET (/:locale)/houses/inactive {locale: nil} (houses_inactive)
   def inactive
     @inactive_houses = House.inactive
   end
 
-  # @route GET (/:locale)/test_upload (test_upload)
+  # @route GET (/:locale)/test_upload {locale: nil} (test_upload)
   def test_upload
     @house = House.new
   end
 
-  # @route GET (/:locale)/houses/:id (show_house)
+  # @route GET (/:locale)/houses/:id {locale: nil} (house)
   def show
     @occupied_days = @house.occupied_days(@settings['dtnb'])
     @min_date = @search.min_date
   end
 
-  # @route GET /houses/new (new_house)
+  # @route GET (/:locale)/houses/new {locale: nil} (new_house)
   def new
     @house = House.new
     @owners = User.with_role('Owner')
@@ -47,7 +47,7 @@ class HousesController < ApplicationController
     @job_types = JobType.all
   end
 
-  # @route GET /houses/:id/edit (edit_house)
+  # @route GET (/:locale)/houses/:id/edit {locale: nil} (edit_house)
   def edit
     @owners = User.with_role('Owner')
     @types = HouseType.all
@@ -56,7 +56,7 @@ class HousesController < ApplicationController
     @connection = @house.connections.new
   end
 
-  # @route POST /houses (houses)
+  # @route POST (/:locale)/houses {locale: nil} (houses)
   def create
     options = params[:options] || nil
     @house = House.new(house_params)
@@ -77,8 +77,8 @@ class HousesController < ApplicationController
     end
   end
 
-  # @route PATCH /houses/:id (house)
-  # @route PUT /houses/:id (house)
+  # @route PATCH (/:locale)/houses/:id {locale: nil} (house)
+  # @route PUT (/:locale)/houses/:id {locale: nil} (house)
   def update
     respond_to do |format|
       if @house.update(house_params)
@@ -95,7 +95,7 @@ class HousesController < ApplicationController
     end
   end
 
-  # @route DELETE /houses/:id (house)
+  # @route DELETE (/:locale)/houses/:id {locale: nil} (house)
   def destroy
     @house.destroy
     respond_to do |format|

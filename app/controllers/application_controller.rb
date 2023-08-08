@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
-  include HttpAcceptLanguage::AutoLocale
+  include Localizable
 
-  before_action :set_locale
   before_action :set_settings
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -15,21 +14,6 @@ class ApplicationController < ActionController::Base
     @settings = Setting.all.map { |s| [s.var, s.value] }.to_h
   end
 
-  def default_url_options
-    { locale: I18n.locale }
-  end
-
-  def set_locale
-    I18n.locale = if current_user && current_user.locale
-      current_user.locale
-    elsif params.key?(:locale)
-      I18n.available_locales.map(&:to_s).include?(params[:locale]) ? params[:locale] : I18n.default_locale
-    else
-      # I18n.locale = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
-      http_accept_language.compatible_language_from(I18n.available_locales)
-    end
-  end
-
   rescue_from ActiveRecord::RecordNotFound do
     render '/errors/not_found', status: :not_found
   end
@@ -37,7 +21,6 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_inviter!
-    # byebug
     unless user_signed_in? && current_user.role?(:admin)
       redirect_to root_path, alert: 'You are not authorized to access this page.' and return
     end

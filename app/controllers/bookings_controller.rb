@@ -5,7 +5,7 @@ class BookingsController < ApplicationController
                                        update_comment_gr destroy]
   layout 'admin'
 
-  # @route GET (/:locale)/calendar/ical/:hid (calendar)
+  # @route GET (/:locale)/calendar/ical/:hid {locale: nil} (calendar)
   def ical
     cal = Icalendar::Calendar.new
     hid = params[:hid]
@@ -35,8 +35,8 @@ class BookingsController < ApplicationController
     # render :text => cal.to_ical
   end
 
-  # @route GET /bookings (bookings)
-  # @route GET (/:locale)/houses/:hid/bookings (house_bookings)
+  # @route GET (/:locale)/bookings {locale: nil} (bookings)
+  # @route GET (/:locale)/houses/:hid/bookings {locale: nil} (house_bookings)
   def index
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
@@ -49,7 +49,7 @@ class BookingsController < ApplicationController
     @bookings = @bookings.where(house_id: @hid)
   end
 
-  # @route GET /bookings/canceled (bookings_canceled)
+  # @route GET (/:locale)/bookings/canceled {locale: nil} (bookings_canceled)
   def canceled
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
@@ -61,7 +61,7 @@ class BookingsController < ApplicationController
     @bookings = @bookings.where(house_id: @hid)
   end
 
-  # @route GET /owner/bookings (bookings_front)
+  # @route GET (/:locale)/owner/bookings {locale: nil} (bookings_front)
   def index_front
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
@@ -73,7 +73,7 @@ class BookingsController < ApplicationController
     @one_house = true if current_user.houses.ids.count == 1
   end
 
-  # @route GET /bookings/timeline (bookings_timeline)
+  # @route GET (/:locale)/bookings/timeline {locale: nil} (bookings_timeline)
   def timeline
     if !params[:from].present? && !params[:to].present?
       @from = Date.current
@@ -112,27 +112,27 @@ class BookingsController < ApplicationController
     @job = Job.new
   end
 
-  # @route GET /bookings/timeline_data (bookings_timeline_data)
+  # @route GET (/:locale)/bookings/timeline_data {locale: nil} (bookings_timeline_data)
   def timeline_data
     # puts params[:period].nil?
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
     render json: { timeline: }
   end
 
-  # @route GET /bookings/check_in_out (bookings_check_in_out)
+  # @route GET (/:locale)/bookings/check_in_out {locale: nil} (bookings_check_in_out)
   def check_in_out
     @type = (params[:commit].presence || 'All')
     @result = Booking.check_in_out params[:from], params[:to], @type
   end
 
-  # @route GET /bookings/:id (booking)
+  # @route GET (/:locale)/bookings/:id {locale: nil} (booking)
   def show
     # booking = Booking.find(params[:id])
     render json: { booking: @booking }
   end
 
-  # @route GET /bookings/new (new_booking)
-  # @route GET (/:locale)/houses/:hid/bookings/new (new_house_booking)
+  # @route GET (/:locale)/bookings/new {locale: nil} (new_booking)
+  # @route GET (/:locale)/houses/:hid/bookings/new {locale: nil} (new_house_booking)
   def new
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map { |h| [h.code, h.id] }
@@ -140,7 +140,7 @@ class BookingsController < ApplicationController
     @tenants = User.with_role('Tenant')
   end
 
-  # @route GET /bookings/:id/edit (edit_booking)
+  # @route GET (/:locale)/bookings/:id/edit {locale: nil} (edit_booking)
   def edit
     @houses = House.all.order(:code).map { |h| [h.code, h.id] }
     @tenants = User.with_role('Tenant')
@@ -164,7 +164,7 @@ class BookingsController < ApplicationController
     @booking_original.calc prices
   end
 
-  # @route POST /bookings (bookings)
+  # @route POST (/:locale)/bookings {locale: nil} (bookings)
   def create
     search = Search.new(period: search_params, dtnb: 0)
     answer = search.is_house_available? @booking.house_id
@@ -198,7 +198,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  # @route POST /booking/new (booking_new)
+  # @route POST (/:locale)/booking/new {locale: nil} (booking_new)
   def create_front
     search = Search.new(period: search_params, dtnb: @settings['dtnb'])
     house = House.find_by(number: params[:booking][:hid])
@@ -222,7 +222,7 @@ class BookingsController < ApplicationController
     BookingMailer.send_request_confirmation(@booking, params[:booking][:email], I18n.locale).deliver_now
   end
 
-  # @route GET /bookings/sync (booking_sync)
+  # @route GET (/:locale)/bookings/sync {locale: nil} (booking_sync)
   def sync
     if params[:hid].present?
       house = House.find_by(number: params[:hid])
@@ -235,8 +235,8 @@ class BookingsController < ApplicationController
     end
   end
 
-  # @route PATCH /bookings/:id (booking)
-  # @route PUT /bookings/:id (booking)
+  # @route PATCH (/:locale)/bookings/:id {locale: nil} (booking)
+  # @route PUT (/:locale)/bookings/:id {locale: nil} (booking)
   def update
     search = Search.new(period: search_params, dtnb: 0)
     house_id = params[:booking][:house_id]
@@ -289,14 +289,14 @@ class BookingsController < ApplicationController
     end
   end
 
-  # @route PATCH /bookings/:id/update_comment_gr (update_booking_comment_gr)
+  # @route PATCH (/:locale)/bookings/:id/update_comment_gr {locale: nil} (update_booking_comment_gr)
   def update_comment_gr
     @booking.update(booking_params)
     @result = Booking.check_in_out
     redirect_to bookings_check_in_out_path
   end
 
-  # @route DELETE /bookings/:id (booking)
+  # @route DELETE (/:locale)/bookings/:id {locale: nil} (booking)
   def destroy
     @booking.destroy
     respond_to do |format|
@@ -310,7 +310,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  # @route GET /bookings/get_price (bookings_get_price)
+  # @route GET (/:locale)/bookings/get_price {locale: nil} (bookings_get_price)
   def get_price
     booking = Booking.new
     search = Search.new(rs: params[:start],

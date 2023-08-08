@@ -3,23 +3,23 @@ class SettingsController < ApplicationController
 
   before_action :set_setting, only: %i[show edit update destroy]
   layout 'admin'
-  # @route GET (/:locale)/settings (settings)
+  # @route GET (/:locale)/settings {locale: nil} (settings)
   def index
     @settings = Setting.all
   end
 
-  # @route GET (/:locale)/settings/:id (setting)
+  # @route GET (/:locale)/settings/:id {locale: nil} (setting)
   def show; end
 
-  # @route GET (/:locale)/settings/new (new_setting)
+  # @route GET (/:locale)/settings/new {locale: nil} (new_setting)
   def new
     @setting = Setting.new
   end
 
-  # @route GET (/:locale)/settings/:id/edit (edit_setting)
+  # @route GET (/:locale)/settings/:id/edit {locale: nil} (edit_setting)
   def edit; end
 
-  # @route POST (/:locale)/settings (settings)
+  # @route POST (/:locale)/settings {locale: nil} (settings)
   def create
     @setting = Setting.new(setting_params)
 
@@ -34,8 +34,8 @@ class SettingsController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/settings/:id (setting)
-  # @route PUT (/:locale)/settings/:id (setting)
+  # @route PATCH (/:locale)/settings/:id {locale: nil} (setting)
+  # @route PUT (/:locale)/settings/:id {locale: nil} (setting)
   def update
     respond_to do |format|
       if @setting.update(setting_params)
@@ -48,7 +48,7 @@ class SettingsController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/settings/:id (setting)
+  # @route DELETE (/:locale)/settings/:id {locale: nil} (setting)
   def destroy
     @setting.destroy
     respond_to do |format|

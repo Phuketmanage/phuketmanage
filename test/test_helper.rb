@@ -36,13 +36,3 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
-
-module ActionDispatch
-  module Integration
-    class Session
-      def default_url_options
-        { locale: I18n.locale }
-      end
-    end
-  end
-end

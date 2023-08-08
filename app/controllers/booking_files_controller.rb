@@ -3,7 +3,7 @@ class BookingFilesController < ApplicationController
 
   before_action :set_booking_file, only: %i[update destroy]
 
-  # @route POST /booking_files (booking_files)
+  # @route POST (/:locale)/booking_files {locale: nil} (booking_files)
   def create
     booking_number = params[:booking_number]
     booking = Booking.find_by(number: booking_number)
@@ -22,11 +22,11 @@ class BookingFilesController < ApplicationController
     end
   end
 
-  # @route PATCH /booking_files/:id (booking_file)
-  # @route PUT /booking_files/:id (booking_file)
+  # @route PATCH (/:locale)/booking_files/:id {locale: nil} (booking_file)
+  # @route PUT (/:locale)/booking_files/:id {locale: nil} (booking_file)
   def update; end
 
-  # @route DELETE /booking_files/:id (booking_file)
+  # @route DELETE (/:locale)/booking_files/:id {locale: nil} (booking_file)
   def destroy
     @file.destroy
   end

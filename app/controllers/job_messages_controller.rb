@@ -1,7 +1,7 @@
 class JobMessagesController < ApplicationController
   load_and_authorize_resource
 
-  # @route POST /job_messages (job_messages)
+  # @route POST (/:locale)/job_messages {locale: nil} (job_messages)
   def create
     job = Job.find(params['job_id'])
     @message = job.job_messages.new(job_message_params)
@@ -14,7 +14,7 @@ class JobMessagesController < ApplicationController
     end
   end
 
-  # @route DELETE /job_message (job_message)
+  # @route DELETE (/:locale)/job_message {locale: nil} (job_message)
   def destroy
     @message = JobMessage.find(params['id'])
     S3_BUCKET.object(@message.message).delete

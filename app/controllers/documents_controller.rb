@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
   authorize_resource :class => false
-  # @route GET /documents/statement (tmp_statement)
+  # @route GET (/:locale)/documents/statement {locale: nil} (tmp_statement)
   def statement
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
 
@@ -25,7 +25,7 @@ class DocumentsController < ApplicationController
     end
   end
 
-  # @route GET /documents/reimbersment (tmp_reimbersment)
+  # @route GET (/:locale)/documents/reimbersment {locale: nil} (tmp_reimbersment)
   def reimbersment
     @t = Transaction.find(params[:trsc_id])
     @date = @t.date
