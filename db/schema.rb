@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_08_134534) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "balance_outs", force: :cascade do |t|
