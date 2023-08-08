@@ -15,6 +15,8 @@ gem 'sassc-rails' # Use SCSS for stylesheets
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'webrick', require: false
+gem 'newrelic_rpm'
+gem 'good_job'
 
 # App
 gem 'barnes'
@@ -40,7 +42,6 @@ gem 'twilio-ruby'
 gem 'easy_translate'
 gem "ranked-model", "~> 0.4.8"
 gem "requestjs-rails", "~> 0.0.10"
-gem 'newrelic_rpm'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

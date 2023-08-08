@@ -69,7 +69,7 @@ class TransfersController < ApplicationController
         end
         format.js
         format.json { render json: { transfer: @transfer }, status: :created }
-        TransfersMailer.created(@transfer).deliver_now
+        TransfersMailer.created(@transfer).deliver_later
       else
         @transfers = Transfer.all
         @transfer = Transfer.new
@@ -126,7 +126,7 @@ class TransfersController < ApplicationController
       if @transfer.update(transfer_params)
         if changes.any?
           @transfer.update(status: "amended")
-          TransfersMailer.amended(@transfer, changes).deliver_now
+          TransfersMailer.amended(@transfer, changes).deliver_later
         end
         # redirect_to admin_transfers_path, notice: 'Ammendment request was successfully sent.'
         format.js
@@ -159,7 +159,7 @@ class TransfersController < ApplicationController
           today = Date.current
           @transfers = Transfer.where('date >= ?', today).order(:date)
         end
-        TransfersMailer.canceled(@transfer).deliver_now
+        TransfersMailer.canceled(@transfer).deliver_later
         format.js
       else
         render "Was not able to change transfer and send ammendment request."

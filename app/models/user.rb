@@ -92,4 +92,10 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :recoverable, # :registerable,
          :rememberable # , :validatable, :invitable, ,
+
+  private
+
+  def send_devise_notification(notification, *)
+    devise_mailer.send(notification, self, *).deliver_later(priority: 0)
+  end
 end

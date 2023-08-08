@@ -218,8 +218,8 @@ class BookingsController < ApplicationController
     @booking.number = "#{(('A'..'Z').to_a + ('0'..'9').to_a).sample(7).join}"
     @booking.ical_UID = "#{SecureRandom.hex(16)}@phuketmanage.com"
     @booking.save
-    BookingMailer.created(@booking).deliver_now
-    BookingMailer.send_request_confirmation(@booking, params[:booking][:email], I18n.locale).deliver_now
+    BookingMailer.created(@booking).deliver_later
+    BookingMailer.send_request_confirmation(@booking, params[:booking][:email], I18n.locale).deliver_later
   end
 
   # @route GET (/:locale)/bookings/sync {locale: nil} (booking_sync)

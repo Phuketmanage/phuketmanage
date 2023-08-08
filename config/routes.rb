@@ -97,6 +97,11 @@ Rails.application.routes.draw do
   end
   root to: 'pages#index'
 
+  # Good job admin dashboard
+  authenticate :user, ->(user) { user.role?('Admin') } do
+    mount GoodJob::Engine => '/admin/activejob'
+  end
+
   # Errors
   match "/422", to: "errors#unprocessable_content", via: :all
   match "/500", to: "errors#internal_server_error", via: :all
