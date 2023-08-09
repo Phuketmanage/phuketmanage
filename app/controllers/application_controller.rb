@@ -18,6 +18,12 @@ class ApplicationController < ActionController::Base
     render '/errors/not_found', status: :not_found
   end
 
+  def append_info_to_payload(payload)
+    super
+    payload[:host] = request.host
+    payload[:x_forwarded_for] = request.env['HTTP_X_FORWARDED_FOR']
+  end
+
   protected
 
   def authenticate_inviter!
