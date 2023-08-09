@@ -9,7 +9,7 @@ task deploy: :environment do
     puts "Starting Heroku deployment..."
     sh "git push heroku"
     puts "Commit new deploy to New Relic..."
-    sh "newrelic entity deployment create --guid 'NDA2Nzk2M3xBUE18QVBQTElDQVRJT058NDUzNDE4Mjc2' --version $(git rev-parse --short HEAD) --commit $(git rev-parse --short HEAD) --deploymentType 'BASIC' --profile 'prod_eu_4067963_change_tracking'"
+    sh "bundle exec newrelic deployments -r $(git rev-parse --short HEAD) -e production"
     puts "Completed ✅"
   else
     puts "Deployment canceled ❌"
