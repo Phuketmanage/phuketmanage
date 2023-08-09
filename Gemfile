@@ -12,11 +12,11 @@ gem "pg", "~> 1.3"
 gem "puma", "~> 6"
 gem "rails", "~> 7.0.6"
 gem 'sassc-rails' # Use SCSS for stylesheets
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'webrick', require: false
-gem 'newrelic_rpm'
 gem 'good_job'
+gem 'newrelic_rpm'
+gem 'lograge'
 
 # App
 gem 'barnes'

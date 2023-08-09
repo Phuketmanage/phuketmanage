@@ -216,6 +216,11 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    lograge (0.13.0)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -311,6 +316,8 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (2.8.1)
+    request_store (1.5.1)
+      rack (>= 1.4)
     requestjs-rails (0.0.10)
       rails (>= 6.0.0)
     responders (3.1.0)
@@ -421,6 +428,8 @@ GEM
       nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2023.3)
+      tzinfo (>= 1.0.0)
     unicode-display_width (2.4.2)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -478,6 +487,7 @@ DEPENDENCIES
   jsbundling-rails (~> 1.1)
   letter_opener (~> 1.8)
   listen (>= 3.0.5)
+  lograge
   momentjs-rails
   newrelic_rpm
   pg (~> 1.3)

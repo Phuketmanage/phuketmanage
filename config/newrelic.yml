@@ -21,6 +21,11 @@ common: &default_settings
   distributed_tracing:
     enabled: true
 
+  span_events:
+    enabled: true
+    attributes:
+      enabled: true
+
   # To disable the agent regardless of other settings, uncomment the following:
 
   # agent_enabled: false
