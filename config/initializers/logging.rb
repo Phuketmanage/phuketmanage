@@ -1,8 +1,20 @@
 Rails.application.configure do
+  # SQL logs comments
+  config.active_record.query_log_tags_enabled = true
+  config.active_record.query_log_tags = [
+    :pid,
+    {
+      controller: ->(context) { context[:controller]&.controller_name },
+      action: ->(context) { context[:controller]&.action_name },
+      request_id: ->(context) { context[:controller]&.request&.request_id },
+      job: ->(context) { context[:job]&.class&.name&.underscore },
+      job_id: ->(context) { context[:job]&.job_id }
+    }
+  ]
+
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
   config.log_formatter = NewRelic::Agent::Logging::DecoratingFormatter.new
-
   config.lograge.custom_options = lambda do |event|
     {
       host: event.payload[:host],
