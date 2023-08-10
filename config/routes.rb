@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  scope "(:locale)", locale: /en|ru/, defaults: { locale: nil } do
+  scope "(:locale)", locale: /ru/ do
     root to: 'pages#index', as: :locale_root
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
