@@ -8,7 +8,12 @@ test:
 
 amazon:
   service: S3
-  access_key_id: ""
-  secret_access_key: ""
-  bucket: ""
-  region: ""
+  http_open_timeout: 10
+  http_read_timeout: 10
+  retry_limit: 2
+  access_key_id: <%= ENV['AS_AMAZON_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AS_AMAZON_SECRET_ACCESS_KEY'] %>
+  bucket: <%= ENV['AS_AMAZON_BUCKET'] %>
+  region: <%= ENV['AS_AMAZON_REGION'] %>
+  upload:
+    cache_control: "private, max-age=<%= 1.day.to_i %>"
