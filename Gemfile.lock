@@ -458,7 +458,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
-  aws-sdk-s3 (~> 1.0.0.rc2)
+  aws-sdk-s3
   barnes
   better_errors (~> 2.9.0)
   binding_of_caller

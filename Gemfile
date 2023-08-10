@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 
 # System
-gem 'aws-sdk-s3', '~> 1.0.0.rc2'
+gem "aws-sdk-s3" # TODO: add: 'require: false' when remove old storage system
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
 gem "pg", "~> 1.3"
 gem "puma", "~> 6"
