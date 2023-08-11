@@ -4,24 +4,27 @@ class UploadsTestsController < ApplicationController
   before_action :set_uploads_test, only: %i[ show edit update destroy ]
 
   # GET /uploads_tests or /uploads_tests.json
+  # @route GET /uploads_tests (uploads_tests)
   def index
     @uploads_tests = UploadsTest.all
   end
 
   # GET /uploads_tests/1 or /uploads_tests/1.json
+  # @route GET /uploads_tests/:id (uploads_test)
   def show
   end
 
-  # GET /uploads_tests/new
+  # @route GET /uploads_tests/new (new_uploads_test)
   def new
     @uploads_test = UploadsTest.new
   end
 
-  # GET /uploads_tests/1/edit
+  # @route GET /uploads_tests/:id/edit (edit_uploads_test)
   def edit
   end
 
   # POST /uploads_tests or /uploads_tests.json
+  # @route POST /uploads_tests (uploads_tests)
   def create
     @uploads_test = UploadsTest.new(uploads_test_params)
 
@@ -35,6 +38,8 @@ class UploadsTestsController < ApplicationController
   end
 
   # PATCH/PUT /uploads_tests/1 or /uploads_tests/1.json
+  # @route PATCH /uploads_tests/:id (uploads_test)
+  # @route PUT /uploads_tests/:id (uploads_test)
   def update
     respond_to do |format|
       if @uploads_test.update(uploads_test_params)
@@ -46,6 +51,7 @@ class UploadsTestsController < ApplicationController
   end
 
   # DELETE /uploads_tests/1 or /uploads_tests/1.json
+  # @route DELETE /uploads_tests/:id (uploads_test)
   def destroy
     @uploads_test.destroy
 
