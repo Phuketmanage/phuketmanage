@@ -37,5 +37,9 @@ module Phuketmanage
 
     # Redirect errors to errors controller
     config.exceptions_app = routes
+
+    # Active Storage
+    config.active_storage.variant_processor = :vips
+    config.active_storage.routes_prefix = 'files'
   end
 end
