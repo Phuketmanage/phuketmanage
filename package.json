@@ -4,6 +4,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.1",
     "@hotwired/turbo-rails": "^7.3.0",
+    "@rails/activestorage": "^7.0.7",
     "@rails/request.js": "^0.0.8",
     "bootstrap-icons": "^1.10.5",
     "esbuild": "^0.18.11",
