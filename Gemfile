@@ -17,6 +17,7 @@ gem 'webrick', require: false
 gem 'good_job'
 gem 'newrelic_rpm'
 gem 'lograge'
+gem "image_processing", ">= 1.2"
 
 # App
 gem 'barnes'
