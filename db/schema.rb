@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_10_105640) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_11_134731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -552,6 +552,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_10_105640) do
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_transfers_on_booking_id"
     t.index ["number"], name: "index_transfers_on_number"
+  end
+
+  create_table "uploads_tests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

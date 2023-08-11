@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   # Good job admin dashboard
   authenticate :user, ->(user) { user.role?('Admin') } do
     mount GoodJob::Engine => '/admin/activejob'
+    resources :uploads_tests # TODO: Remove after #353
   end
 
   # Errors

@@ -1,0 +1,18 @@
+<div id="<%= dom_id uploads_test %>">
+  <h3>Entry <%= uploads_test.created_at %></h3>
+  <p>
+    <ul>
+      <% uploads_test.images.each do |file| %>
+        <li>
+          <% if file.representable? %>
+            <%= image_tag file.representation(resize_to_limit: [200, 200]) %>
+          <% else %>
+            <%= link_to rails_blob_path(file, disposition: "attachment") do %>
+              <%= image_tag "placeholder.png", alt: "Download file" %>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </p>
+</div>
