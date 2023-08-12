@@ -1,0 +1,28 @@
+<%= form_with url: house_path(@house.number), method: :get, local: true do |f| %>
+  <% if search.errors.any? %>
+    <%= render 'shared/error_messages', object: search %>
+  <% end %>
+  <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
+    <div class="form-row">
+      <div class="col-md-4 col-lg-12 mb-1">
+        <%= f.text_field :period,
+            autocomplete: 'off',
+            readonly: true,
+            class: 'border pl-2',
+            placeholder: t('search.dates'),
+            data: {
+                    controller: "flatpickr",
+                    flatpickr_locale: I18n.locale,
+                    flatpickr_now: Date.current.iso8601,
+                    flatpickr_min_date: @min_date.iso8601,
+                    flatpickr_disable: @occupied_days.to_json
+                  },
+            value: params['period'] %>
+      </div>
+      <div class="col-md-4 col-lg-12">
+        <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
+      </div>
+    </div>
+  </div>
+
+<% end %>
