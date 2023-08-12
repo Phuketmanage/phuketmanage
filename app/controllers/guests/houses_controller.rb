@@ -1,6 +1,6 @@
 class Guests::HousesController < GuestsController
   before_action :check_search_params, only: :index
-  before_action :set_house, only: :show
+  before_action :set_house, :search, only: :show
 
   def index
     @search = Search.new(period: search_params['period'], type: search_params['type'],
@@ -25,7 +25,30 @@ class Guests::HousesController < GuestsController
   def check_search_params
     return if params[:search].present?
 
-    redirect_to locale_root_path
+    redirect_to guests_locale_root_path
+  end
+
+  def search
+    if params[:period].blank?
+      @search = Search.new
+    else
+      preform_search
+    end
+  end
+
+  def preform_search
+    @search = Search.new(period: params[:period], dtnb: @settings['dtnb'])
+
+    return unless @search.valid?
+
+    answer = @search.is_house_available? @house.id
+    if answer[:result]
+      @houses = [@house]
+      @prices = @search.get_prices @houses
+      @booking = Booking.new
+    else
+      @prices = "unavailable"
+    end
   end
 
   def set_house
