@@ -1,3 +1,3 @@
-class Guests::AboutController < ApplicationController
+class Guests::AboutController < GuestsController
   def index; end
 end

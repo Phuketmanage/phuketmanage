@@ -1,0 +1,57 @@
+<div class="col mb-2" <% if from_search == true && price[:unavailable].present? %> data-reveal-target="item" <% end %> >
+  <div class="card house">
+    <%= image_tag h.preview, class: 'card-img-top', alt: h.generated_title(I18n.locale) if h.preview %>
+    <div class="card-body">
+      <h5 class="card-title house_title">
+        <%= h.generated_title(I18n.locale) %>
+        <% if from_search == true && price[:unavailable].present? %>
+          <span class="badge badge-danger">Unavailable</span>
+        <% end %>
+      </h5>
+
+      <% if from_search == true %>
+        <h5 class="house_price"><%= "#{number_to_currency(price[:total], precision: 0, unit: '฿')}" %>  </h5>
+        <p class="duration"><%= "#{t('search.search_duration')} #{@search.duration}" %></p>
+        <p><%= "#{number_to_currency(price[:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %></p>
+      <% else %>
+        <p><%= "#{number_to_currency(h.prices.pluck(:amount).min, precision: 0, unit: '')} - #{number_to_currency(h.prices.pluck(:amount).max, precision: 0, unit: '')} THB/#{t('search.per_day')}" %></p>
+      <% end %>
+      <% if h.locations.any? %>
+        <div><%= t('houses.location') %>: <%= h.locations.map{ |l| l.name }.join(', ') %></div>
+      <% end %>
+      <% if h.project %>
+        <div><%= t('houses.project') %>: <%= h.project %></div>
+      <% end %>
+      <p>
+        <%= "#{t('houses.capacity', count: h.capacity)}, " if h.capacity %> <%= "#{t('houses.rooms', count: h.rooms)}, " if h.rooms %> <%= t('houses.bathrooms', count: h.bathrooms) if h.bathrooms %>
+        <br />
+          <% amenities = [] %>
+          <% amenities << t('houses.pool') if h.pool%>
+          <% amenities << t('houses.communalPool') if h.communal_pool %>
+          <% amenities << t('houses.ac') if h.option('Air conditioner') %>
+          <% amenities << t('houses.internet') if h.option('Internet') %>
+          <% amenities << t('houses.kitchen') if h.option('Kitchen') %>
+          <%= amenities.join(", ") %>
+      </p>
+      <p class="card-text">
+        <% text = simple_format h.send("description_#{I18n.locale}") %>
+        <%= truncate(text,
+                            length: 140,
+                            separator: ' ', escape: false) %>
+      </p>
+      <div class='row'>
+        <div class="col">
+      <% if from_search == true %>
+        <%= link_to t('houses.view'), house_path(h.number, params: {period: search.period}), class: "btn btn-primary", target: "_blank" %>
+      <% else %>
+        <%= link_to t('houses.view'), house_path(h.number), class: "btn btn-primary", target: "_blank" %>
+      <% end %>
+        </div>
+        <div class="d-flex mt-auto mr-3 text-uppercase font-weight-light text-muted small link-light" >
+          CODE: <%= h.code %>&nbsp;<%= link_to 'Photo', h.photo_link, target: '_blank' if h.photo_link.present? %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+class TransactionFilesController < AdminController
+  load_and_authorize_resource
+
+  # @route GET (/:locale)/transaction_files {locale: nil} (transaction_files)
+  def index
+    if current_user.role?(['Owner'])
+      files = Transaction.find(params[:transaction_id]).files.where(show: true)
+    elsif current_user.role?(%w[Admin Accounting Manager])
+      files = Transaction.find(params[:transaction_id]).files
+    end
+    render json: { files: files }
+  end
+
+  # @route DELETE (/:locale)/transaction_file {locale: nil} (transaction_file)
+  def destroy
+    @file = TransactionFile.find(params['id'])
+    @file.destroy
+  end
+
+  # @route DELETE (/:locale)/transaction_file_tmp {locale: nil} (transaction_file_tmp)
+  def destroy_tmp
+    key = params['key']
+    S3_BUCKET.object(key).delete
+    render json: { key: key }
+  end
+
+  # @route GET (/:locale)/transaction_file_toggle_show {locale: nil} (transaction_file_toggle_show)
+  def toggle_show
+    file = TransactionFile.where(id: params[:id]).first
+    if file.present?
+      file.update(show: params[:status]) if params[:status].present?
+      render json: { id: file.id }
+    else
+      render json: { id: params[:id], success: false }, status: :bad_request
+    end
+  end
+
+  # @route GET (/:locale)/transaction_file_download {locale: nil} (transaction_file_download)
+  def download
+    key = params['key']
+    file = S3_CLIENT.get_object(
+      response_target: File.basename(key),
+      bucket: ENV.fetch('S3_BUCKET', nil),
+      key: key
+    )
+    file = open(file.body)
+    respond_to do |format|
+      format.js { send_file file }
+    end
+
+    # S3_BUCKET.object(key)
+    # url_options = {
+    #   expires_in:                   5.minutes,
+    #   use_ssl:                      true,
+    #   response_content_disposition: "attachment; filename=\"#{File.basename(key)}\""
+    # }
+  end
+end
