@@ -6,10 +6,10 @@
         <li>
           <% if file.representable? %>
             <%= image_tag file.representation(resize_to_limit: [200, 200]) %>
+            <%= link_to 'Download', rails_blob_path(file, disposition: "attachment") %>
           <% else %>
-            <%= link_to rails_blob_path(file, disposition: "attachment") do %>
-              <%= image_tag "placeholder.png", alt: "Download file" %>
-            <% end %>
+            <%= image_tag "placeholder.png", alt: "Download file" %>
+            <%= link_to 'Download', rails_blob_path(file, disposition: "attachment") %>
           <% end %>
         </li>
       <% end %>
