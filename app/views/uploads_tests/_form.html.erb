@@ -1,0 +1,19 @@
+<%= form_with(model: uploads_test, local: true) do |form| %>
+  <% if uploads_test.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(uploads_test.errors.count, "error") %> prohibited this uploads_test from being saved:</h2>
+      <ul>
+        <% uploads_test.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :images, style: "display: block" %>
+    <%= form.file_field :images, multiple: true, direct_upload: true %>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
