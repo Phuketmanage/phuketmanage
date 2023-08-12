@@ -8,9 +8,9 @@ ruby '3.2.2'
 # System
 gem "aws-sdk-s3" # TODO: add: 'require: false' when remove old storage system
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
-gem "pg", "~> 1.3"
+gem "pg", "~> 1.5"
 gem "puma", "~> 6"
-gem "rails", "~> 7.0.6"
+gem "rails", "~> 7.0.7"
 gem 'sassc-rails' # Use SCSS for stylesheets
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'webrick', require: false
