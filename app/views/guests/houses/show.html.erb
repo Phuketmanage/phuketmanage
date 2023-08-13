@@ -36,7 +36,7 @@
     <p class="mb-1 mr-2 text-uppercase font-weight-light text-muted small text-right">
       CODE: <%=@house.code%>&nbsp;<%= link_to 'Photo', @house.photo_link, target: '_blank' if @house.photo_link.present? %>
     </p>
-    <%= render 'search/form_vertical', search: @search, btn_text: t('search.check') %>
+    <%= render 'guests/houses/form_vertical', search: @search, btn_text: t('search.check') %>
     <% if @prices && @prices != 'unavailable' %>
       <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
         <div class="row d-flex align-items-center">

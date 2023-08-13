@@ -70,7 +70,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
     context 'when min_days_before_check_in not set' do
       before do
         booking
-        visit house_path(house.number)
+        visit guests_house_path(house.number)
         find(:css, '.form-control').click
       end
 
@@ -118,7 +118,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
     context 'when 2 min_days_before_check_in are set' do
       before do
         create(:setting, :min_days_before_check_in)
-        visit house_path(house.number)
+        visit guests_house_path(house.number)
         find(:css, '.form-control').click
       end
 
@@ -140,7 +140,7 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       before do
         enable_dtnb
         booking
-        visit house_path(house.number)
+        visit guests_house_path(house.number)
         find(:css, '.form-control').click
       end
 

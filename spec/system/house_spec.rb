@@ -38,14 +38,14 @@ describe 'House' do
       before { sign_in manager }
 
       context "when visiting houses" do
-        before { visit houses_path }
+        before { visit admin_houses_path }
 
         it { is_expected.not_to have_link 'Destroy' }
         it { is_expected.not_to have_link 'Inactive Houses' }
       end
 
       context "when visiting inactive houses" do
-        before { visit houses_inactive_path }
+        before { visit inactive_admin_houses_path }
 
         it { is_expected.to have_content 'You are not authorized to access this page.' }
       end
@@ -55,14 +55,14 @@ describe 'House' do
       before { sign_in admin }
 
       context "when visiting houses" do
-        before { visit houses_path }
+        before { visit admin_houses_path }
 
         it { is_expected.to have_link 'Destroy' }
         it { is_expected.to have_link 'Inactive Houses' }
       end
 
       context "when visiting inactive houses" do
-        before { visit houses_inactive_path }
+        before { visit inactive_admin_houses_path }
 
         it { is_expected.to have_content 'Inactive Houses' }
       end
@@ -72,7 +72,7 @@ describe 'House' do
       before { sign_in admin }
 
       describe '#unavailable' do
-        before { visit houses_path }
+        before { visit admin_houses_path }
 
         context 'when house is for rent' do
           let(:unavailable) { false }
@@ -88,7 +88,7 @@ describe 'House' do
       end
 
       describe '#balance_closed' do
-        before { visit houses_inactive_path }
+        before { visit inactive_admin_houses_path }
 
         context 'when house is inactive' do
           let(:balance_closed) { true }
@@ -101,12 +101,12 @@ describe 'House' do
   describe 'Export' do
     before { sign_in admin }
     it "has export button on houses index" do
-      visit houses_path
+      visit admin_houses_path
       expect(page).to have_link('Export list')
     end
     context 'export page' do
       before do
-        visit export_houses_path
+        visit export_admin_houses_path
       end
       it "there is export page without menu block" do
         expect(page).to have_no_selector('nav')

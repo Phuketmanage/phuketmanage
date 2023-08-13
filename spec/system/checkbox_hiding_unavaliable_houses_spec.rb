@@ -24,12 +24,6 @@ describe 'Checkbox hiding unavaliable houses' do
     expect(page).not_to have_field('checkboxHideUnavailable')
   end
 
-  it "hides checkbox on main page for admin" do
-    sign_in admin
-    visit "/"
-    expect(page).not_to have_field('checkboxHideUnavailable', checked: false)
-  end
-
   it "shows checkbox on search results for admin" do
     sign_in admin
     visit search_path

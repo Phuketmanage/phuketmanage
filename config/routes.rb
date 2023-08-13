@@ -17,7 +17,6 @@ Rails.application.routes.draw do
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
     get 'reports', to: 'reports#index'
-    get 'houses/inactive', to: 'houses#inactive'
     resources :notifications, only: [:destroy]
     resources :water_usages
     get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
@@ -60,6 +59,7 @@ Rails.application.routes.draw do
       resources :prices, only: [:index]
       get 'photos', to: 'house_photos#index', as: 'photos'
       get 'photos/add', to: 'house_photos#add'
+      get 'inactive', to: 'admin_houses#inactive', on: :collection
       get 'export', on: :collection
     end
     put 'house_photos/:id/sort', to: 'house_photos#sort', as: 'house_photos_sort'
