@@ -1,4 +1,4 @@
-<%= form_with url: house_path(@house.number), method: :get, local: true do |f| %>
+<%= form_with url: admin_house_path(@house.number), method: :get, local: true do |f| %>
   <% if search.errors.any? %>
     <%= render 'shared/error_messages', object: search %>
   <% end %>
@@ -24,5 +24,4 @@
       </div>
     </div>
   </div>
-
 <% end %>

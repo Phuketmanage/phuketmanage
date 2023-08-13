@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class HousePhotosControllerTest < ActionDispatch::IntegrationTest
+class PhotosControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
@@ -9,7 +9,7 @@ class HousePhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get house_photos_path(@house.number)
+    get admin_house_photos_path(@house.number)
     assert_response :success
   end
 end

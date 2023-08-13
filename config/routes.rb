@@ -57,8 +57,12 @@ Rails.application.routes.draw do
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
     resources :admin_houses do
       resources :prices, only: [:index]
-      get 'photos', to: 'house_photos#index', as: 'photos'
-      get 'photos/add', to: 'house_photos#add'
+      resources :photos, only: [:index, :new]
+      post 'add_duration', to: 'prices#create_duration'
+      delete 'delete_duration', to: 'prices#destroy_duration'
+      post 'add_season', to: 'prices#create_season'
+      delete 'delete_season', to: 'prices#destroy_season'
+      resources :bookings, only: [:index, :new]
       get 'inactive', to: 'admin_houses#inactive', on: :collection
       get 'export', on: :collection
     end
@@ -84,12 +88,6 @@ Rails.application.routes.draw do
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
-    post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'
-    delete 'houses/:house_id/delete_duration', to: 'prices#destroy_duration', as: 'delete_duration'
-    post 'houses/:house_id/add_season', to: 'prices#create_season', as: 'add_season'
-    delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
-    get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
-    get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'

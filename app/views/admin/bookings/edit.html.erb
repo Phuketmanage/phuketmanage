@@ -1,12 +1,10 @@
 <h1>Editing Booking</h1>
-
 <%= render 'form', booking: @booking %>
-
 <% if !@booking.new_record? %>
   <h3>Files</h3>
   <ul id="booking_files" class='list-group'>
     <% @booking.files.order(:created_at).each do |f| %>
-        <%= render 'booking_files/file', file: f %>
+      <%= render 'booking_files/file', file: f %>
     <% end %>
   </ul>
   <div id="booking_file" class="modal" tabindex="-1" role="dialog">
@@ -57,10 +55,9 @@
                 },
                 class: 'link_new_transfer' %>
   <div id="transfers">
-    <%= render 'transfers/transfers', transfers: @transfers %>
+    <%= render 'admin/transfers/transfers', transfers: @transfers %>
   </div>
   <div id="transfer_form">
-    <%= render 'transfers/form',  transfer: @transfer %>
+    <%= render 'admin/transfers/form',  transfer: @transfer %>
   </div>
 <% end %>
-

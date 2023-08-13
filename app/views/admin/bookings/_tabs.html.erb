@@ -10,10 +10,9 @@
   </li>
   <li>
     <% if @hid %>
-      <%= link_to 'New Booking', new_house_booking_path(@hid), class: "nav-link #{"active" if action_name == "new"}" %>
+      <%= link_to 'New Booking', new_admin_house_booking_path(@hid), class: "nav-link #{"active" if action_name == "new"}" %>
     <% else %>
       <%= link_to 'New Booking', new_booking_path, class: "nav-link #{"active" if action_name == "new"}" %>
     <% end %>
-
   </li>
 </ul>

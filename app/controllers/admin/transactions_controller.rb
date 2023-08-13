@@ -132,9 +132,9 @@ class Admin::TransactionsController < ApplicationController
     @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner.id).order(:date,
                                                                                                               :created_at).all
     if params[:type] == 'invoice'
-      render template: 'transactions/invoice'
+      render template: 'admin/transactions/invoice'
     elsif params[:type] == 'receipt'
-      render template: 'transactions/receipt'
+      render template: 'admin/transactions/receipt'
     end
   end
 

@@ -1,5 +1,5 @@
-<% path = admin_houses_path if action_name == 'new' || 'create' %>
-<% path = admin_house_path(house.number) if action_name == 'edit' %>
+<% path = admin_houses_path if action_name == :new || :create %>
+<% path = admin_house_path(house.number) if action_name == :edit %>
 
 <%= form_with(model: house, url: path, local: true) do |form| %>
   <%= render 'shared/error_messages', object: form.object %>

@@ -5,7 +5,6 @@
     </div>
     <div class="col-6 col-lg-2">
       <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
-
     </div>
     <% if houses.count > 1 %>
       <div class="col-6 col-lg-2">
@@ -18,13 +17,11 @@
       <%= submit_tag 'Show', class: "btn btn-primary btn-block" %>
     </div>
     <div class="col-3 col-lg-2">
-
       <% if @hid.present? %>
-        <%= link_to 'Add', new_house_booking_path(@hid), class: "btn btn-success btn-block" %>
+        <%= link_to 'Add', new_admin_house_booking_path(@hid), class: "btn btn-success btn-block" %>
       <% else %>
         <%= link_to 'Add', new_booking_path, class: "btn btn-success btn-block" %>
       <% end %>
-
     </div>
   </div>
 <% end %>

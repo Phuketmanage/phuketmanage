@@ -20,7 +20,7 @@ class ConnectionsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to edit_house_path(@house.number)
+    assert_redirected_to edit_admin_house_path(@house.number)
   end
 
   test "should destroy connection" do
@@ -29,6 +29,6 @@ class ConnectionsControllerTest < ActionDispatch::IntegrationTest
       delete connection_path(connection, hid: connection.house.id)
     end
 
-    assert_redirected_to edit_house_path(connection.house.number)
+    assert_redirected_to edit_admin_house_path(connection.house.number)
   end
 end

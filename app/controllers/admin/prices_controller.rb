@@ -63,7 +63,7 @@ class Admin::PricesController < ApplicationController
                                          season_id: s.id,
                                          amount: 0)
         end
-        format.html { redirect_to house_prices_path(@house.number), notice: 'Duration was successfully created.' }
+        format.html { redirect_to admin_house_prices_path(@house.number), notice: 'Duration was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
         @houses = House.all.active
@@ -129,7 +129,7 @@ class Admin::PricesController < ApplicationController
                               amount: 0)
       end
     end
-    redirect_to house_prices_path(@house.number)
+    redirect_to admin_house_prices_path(@house.id)
   end
 
   # @route GET (/:locale)/prices/:id/update {locale: nil} (price)
@@ -147,7 +147,7 @@ class Admin::PricesController < ApplicationController
     house = @price.house
     @price.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(house.number), notice: 'Price was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(house.id), notice: 'Price was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -159,7 +159,7 @@ class Admin::PricesController < ApplicationController
     Price.where(duration_id: duration.id).destroy_all
     duration.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(@house.id), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -171,7 +171,7 @@ class Admin::PricesController < ApplicationController
     Price.where(season_id: season.id).destroy_all
     season.destroy
     respond_to do |format|
-      format.html { redirect_to house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(@house.id), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -179,7 +179,7 @@ class Admin::PricesController < ApplicationController
   private
 
   def set_house
-    @house = House.find_by(number: params[:house_id])
+    @house = House.find_by(id: params[:admin_house_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.

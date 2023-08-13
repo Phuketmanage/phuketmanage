@@ -115,7 +115,7 @@
               <% if current_user.role?(['Admin', 'Accounting', 'Manager']) %>
                 <% if t.booking_id.present? %>
                   <% b = Booking.find(t.booking_id) %>
-                  <%= link_to t.send("comment_#{@locale}"), house_bookings_path(t.house_id, params: {from: b.start, to: b.finish}) %>
+                  <%= link_to t.send("comment_#{@locale}"), admin_house_bookings_path(t.house_id, params: {from: b.start, to: b.finish}) %>
                 <% else %>
                   <%= t.send("comment_#{@locale}") %>
                 <% end %>

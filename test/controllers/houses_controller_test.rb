@@ -9,49 +9,49 @@ class HousesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get houses_url
+    get admin_houses_url
     assert_response :success
   end
 
   test "should get new" do
-    get new_house_url
+    get new_admin_house_url
     assert_response :success
   end
 
   test "should create house" do
     type = house_types(:villa)
     assert_difference('House.count') do
-      post houses_url,
+      post admin_houses_url,
            params: { house: { description_en: @house.description_en, description_ru: @house.description_ru,
                               owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru, type_id: type.id } }
     end
 
-    assert_redirected_to houses_url
+    assert_redirected_to admin_houses_url
   end
 
   test "should show house" do
-    get house_url(@house.number)
+    get admin_house_url(@house.number)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_house_url(@house.number)
+    get edit_admin_house_url(@house.number)
     assert_response :success
   end
 
   test "should update house" do
-    patch house_url(@house.number),
+    patch admin_house_url(@house.number),
           params: { house: { description_en: @house.description_en, description_ru: @house.description_ru,
                              owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru } }
-    assert_redirected_to houses_path
+    assert_redirected_to admin_houses_path
   end
 
   test "should destroy house" do
     sign_in users(:admin)
     assert_difference('House.count', -1) do
-      delete house_url(@house.number)
+      delete admin_house_url(@house.number)
     end
 
-    assert_redirected_to houses_url
+    assert_redirected_to admin_houses_url
   end
 end

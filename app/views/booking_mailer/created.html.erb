@@ -1,5 +1,4 @@
 <h1>New booking received</h1>
-
 <p>
-  <%= link_to "Open bookings for #{@booking.house.code}", house_bookings_url(hid: @booking.house.number) %>
+  <%= link_to "Open bookings for #{@booking.house.code}", admin_house_bookings_url(@booking.house.id) %>
 </p>

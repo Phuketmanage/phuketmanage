@@ -1,5 +1,4 @@
 <h1>Prices for <%= "#{@house.code} (#{@house.title_en})" %></h1>
-
 <% r = 1 %>
 <div class="row">
   <div class="col-1">
@@ -7,47 +6,42 @@
   <% @seasons.each do |s| %>
     <div class="col-1 price_col">
       <strong><%= "#{s.ssd}.#{s.ssm} - #{s.sfd}.#{s.sfm}" %></strong>
-      <%= link_to 'Destroy', delete_season_path(@house.number, season_id: s.id), method: :delete, data: { confirm: 'Are you sure?' } %>
-
+      <%= link_to 'Destroy', admin_house_delete_season_path(@house.id, season_id: s.id), method: :delete, data: { confirm: 'Are you sure?' } %>
     </div>
   <% end %>
 </div>
-
 <% @durations.each do |d| %>
   <% r +=1 %>
-    <div class="row">
-      <% c = 1 %>
-      <% if c == 1 %>
-        <div class="col-1 price_col">
-          <strong><%= "#{d.start} - #{d.finish}" %></strong>
-          <%= link_to 'Destroy', delete_duration_path(@house.number, duration_id: d.id), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </div>
-        <% c += 1 %>
-      <% end %>
-      <% @seasons.each do |s| %>
-        <div class="col-1 price_col">
-          <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
-          <%= form_with(model: price, url: "#", method: 'put') do |f| %>
-          <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}", data: {id: price.id} %>
-          <% end %>
-        </div>
+  <div class="row">
+    <% c = 1 %>
+    <% if c == 1 %>
+      <div class="col-1 price_col">
+        <strong><%= "#{d.start} - #{d.finish}" %></strong>
+        <%= link_to 'Destroy', admin_house_delete_duration_path(@house.id, duration_id: d.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
       <% c += 1 %>
-      <% end %>
-    </div>
+    <% end %>
+    <% @seasons.each do |s| %>
+      <div class="col-1 price_col">
+        <% price = @prices.where(duration_id: d.id, season_id: s.id).first %>
+        <%= form_with(model: price, url: "#", method: 'put') do |f| %>
+          <%= f.number_field :amount, class: "form-control price_amount price_#{price.id}", data: {id: price.id} %>
+        <% end %>
+      </div>
+      <% c += 1 %>
+    <% end %>
+  </div>
 <% end %>
-
 <% if @seasons.count > 1 && have_seasons_gap?(@seasons) %>
   <div class="alert alert-danger mt-2">
     Have gap between seasons
   </div>
 <% end %>
-
 Add duration
-<%= form_with(model: @duration, url: add_duration_path(@house.number), local: true) do |f| %>
+<%= form_with(model: @duration, url: admin_house_add_duration_path(@house.number), local: true) do |f| %>
   <% if @duration.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-
   <div class="row">
     <div class="col-2">
       <%= f.number_field :start,  class: "form-control",
@@ -63,11 +57,10 @@ Add duration
   </div>
 <% end %>
 Add season
-<%= form_with(model: @season, url: add_season_path(@house.number), local: true) do |f| %>
+<%= form_with(model: @season, url: admin_house_add_season_path(@house.number), local: true) do |f| %>
   <% if @season.errors.any? %>
     <%= render 'shared/error_messages', object: f.object %>
   <% end %>
-
   <div class="row">
     <div class="col-2">
       <%= f.number_field :ssd,  class: "form-control",
@@ -85,7 +78,6 @@ Add season
       <%= f.number_field :sfm, class: "form-control",
                                   placeholder: "Finish month" %>
     </div>
-
     <div class="col-2">
       <%= f.submit class: 'btn btn-primary' %>
     </div>

@@ -34,7 +34,7 @@ class Admin::SeasonsController < ApplicationController
 
     respond_to do |format|
       if @season.save
-        format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully created.' }
+        format.html { redirect_to admin_house_seasons_path(@house), notice: 'Season was successfully created.' }
         format.json { render :show, status: :created, location: @season }
       else
         @houses = House.all
@@ -50,7 +50,7 @@ class Admin::SeasonsController < ApplicationController
     @house = @season.house
     respond_to do |format|
       if @season.update(season_params)
-        format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully updated.' }
+        format.html { redirect_to admin_house_seasons_path(@house), notice: 'Season was successfully updated.' }
         format.json { render :show, status: :ok, location: @season }
       else
         format.html { render :edit }
@@ -65,7 +65,7 @@ class Admin::SeasonsController < ApplicationController
     @house = @season.house
     @season.destroy
     respond_to do |format|
-      format.html { redirect_to house_seasons_path(@house), notice: 'Season was successfully destroyed.' }
+      format.html { redirect_to admin_house_seasons_path(@house), notice: 'Season was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

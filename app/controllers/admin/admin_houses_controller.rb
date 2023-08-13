@@ -63,7 +63,7 @@ class Admin::AdminHousesController < ApplicationController
     @house.secret = SecureRandom.hex(16)
     respond_to do |format|
       if @house.save
-        format.html { redirect_to houses_path, notice: "House #{@house.code} was successfully created." }
+        format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully created." }
         format.json { render :show, status: :created, location: @house }
       else
         @owners = User.with_role('Owner')
@@ -82,7 +82,7 @@ class Admin::AdminHousesController < ApplicationController
   def update
     respond_to do |format|
       if @house.update(house_params)
-        format.html { redirect_to houses_path, notice: "House #{@house.code} was successfully updated." }
+        format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully updated." }
         format.json { render :show, status: :ok, location: @house }
       else
         @owners = User.with_role('Owner')
@@ -99,7 +99,7 @@ class Admin::AdminHousesController < ApplicationController
   def destroy
     @house.destroy
     respond_to do |format|
-      format.html { redirect_to houses_url, notice: 'House was successfully destroyed.' }
+      format.html { redirect_to admin_houses_url, notice: 'House was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

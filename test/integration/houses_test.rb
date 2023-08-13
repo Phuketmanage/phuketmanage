@@ -13,7 +13,7 @@ class HousesTest < ActionDispatch::IntegrationTest
   test "should generate name on method call" do
     sign_in users(:admin)
     assert_difference('House.count') do
-      post houses_url params: { house: {
+      post admin_houses_url params: { house: {
         description_en: "New house",
         description_ru: "Новый дом",
         owner_id: @house.owner_id,
@@ -34,7 +34,7 @@ class HousesTest < ActionDispatch::IntegrationTest
       } }
     end
     new_house = House.last
-    assert_redirected_to houses_url
+    assert_redirected_to admin_houses_url
     follow_redirect!
     assert_select 'div.alert li', text: "House NH1 was successfully created."
     assert_equal("Villa 2 BDR Patong", new_house.generated_title(:en))
@@ -46,7 +46,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :success
     assert_match "Villa 3 BDR Phuket", response.body
-    get locale_root_path( locale: :ru)
+    get guests_locale_root_path( locale: :ru)
     assert_response :success
     assert_match "Вилла 3 СП Пхукет", response.body
   end
@@ -54,7 +54,7 @@ class HousesTest < ActionDispatch::IntegrationTest
   test "should show beds when exist" do
     sign_in users(:admin)
     assert_difference('House.count') do
-      post houses_url params: { house: {
+      post admin_houses_url params: { house: {
         description_en: "New house",
         description_ru: "Новый дом",
         owner_id: @house.owner_id,
@@ -68,10 +68,10 @@ class HousesTest < ActionDispatch::IntegrationTest
     end
     follow_redirect!
     sign_out users(:admin)
-    get house_path(House.first.number)
+    get admin_house_path(House.first.number)
     assert_response :success
     assert_no_match "Sleeping arrangements", response.body
-    get house_path(id: House.last.number)
+    get admin_house_path(id: House.last.number)
     assert_response :success
     assert_match "Sleeping arrangements", response.body
   end
@@ -84,11 +84,11 @@ class HousesTest < ActionDispatch::IntegrationTest
     period = "#{rs} to #{rf}"
     house = houses(:villa_1)
 
-    get house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
+    get guests_house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
     assert_select 'div.alert li',
                   text: 'This house minimum rental period is 6 nights. Please modify your rental period to increase it.'
     # ru
-    get house_path(id: house.number, locale: :ru, params: { period:, commit: "Check price" })
+    get guests_house_path(id: house.number, locale: :ru, params: { period:, commit: "Check price" })
     assert_select 'div.alert li',
                   text: 'Минимальный срок аренды для выбранного объекта 6 ночей. Пожалуйста выберете другие даты чтобы увеличить срок аренды.'
 
@@ -97,7 +97,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     rf = "28.07.#{year}".to_date
     period = "#{rs} to #{rf}"
 
-    get house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
+    get guests_house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
     assert_select 'div.alert li', count: 0
   end
 end
