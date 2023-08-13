@@ -5,6 +5,6 @@ class Guests::IndexController < GuestsController
     @houses = House.includes(:type, :prices, :locations).where(unavailable: false).order('random()').load
     @locations = Location.all
     @bdrs = @houses.pluck(:rooms).compact.uniq.sort
-    @types = @houses.map(&:type).uniq
+    @types = HouseType.all
   end
 end
