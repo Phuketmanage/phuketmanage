@@ -4,23 +4,23 @@ class Admin::TransactionTypesController < ApplicationController
   before_action :set_transaction_type, only: %i[show edit update destroy]
   layout 'admin'
 
-  # @route GET (/:locale)/transaction_types {locale: nil} (transaction_types)
+  # @route GET /transaction_types (transaction_types)
   def index
     @transaction_types = TransactionType.all.order(:name_en)
   end
 
-  # @route GET (/:locale)/transaction_types/:id {locale: nil} (transaction_type)
+  # @route GET /transaction_types/:id (transaction_type)
   def show; end
 
-  # @route GET (/:locale)/transaction_types/new {locale: nil} (new_transaction_type)
+  # @route GET /transaction_types/new (new_transaction_type)
   def new
     @transaction_type = TransactionType.new
   end
 
-  # @route GET (/:locale)/transaction_types/:id/edit {locale: nil} (edit_transaction_type)
+  # @route GET /transaction_types/:id/edit (edit_transaction_type)
   def edit; end
 
-  # @route POST (/:locale)/transaction_types {locale: nil} (transaction_types)
+  # @route POST /transaction_types (transaction_types)
   def create
     @transaction_type = TransactionType.new(transaction_type_params)
 
@@ -35,8 +35,8 @@ class Admin::TransactionTypesController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/transaction_types/:id {locale: nil} (transaction_type)
-  # @route PUT (/:locale)/transaction_types/:id {locale: nil} (transaction_type)
+  # @route PATCH /transaction_types/:id (transaction_type)
+  # @route PUT /transaction_types/:id (transaction_type)
   def update
     respond_to do |format|
       if @transaction_type.update(transaction_type_params)
@@ -49,7 +49,7 @@ class Admin::TransactionTypesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/transaction_types/:id {locale: nil} (transaction_type)
+  # @route DELETE /transaction_types/:id (transaction_type)
   def destroy
     @transaction_type.destroy
     respond_to do |format|

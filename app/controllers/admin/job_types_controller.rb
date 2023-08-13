@@ -4,22 +4,22 @@ class Admin::JobTypesController < ApplicationController
   before_action :set_job_type, only: %i[show edit update destroy]
   layout 'admin'
 
-  # @route GET (/:locale)/job_types {locale: nil} (job_types)
+  # @route GET /job_types (job_types)
   def index
     @job_types = JobType.all
   end
 
   def show; end
 
-  # @route GET (/:locale)/job_types/new {locale: nil} (new_job_type)
+  # @route GET /job_types/new (new_job_type)
   def new
     @job_type = JobType.new
   end
 
-  # @route GET (/:locale)/job_types/:id/edit {locale: nil} (edit_job_type)
+  # @route GET /job_types/:id/edit (edit_job_type)
   def edit; end
 
-  # @route POST (/:locale)/job_types {locale: nil} (job_types)
+  # @route POST /job_types (job_types)
   def create
     @job_type = JobType.new(job_type_params)
 
@@ -34,8 +34,8 @@ class Admin::JobTypesController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/job_types/:id {locale: nil} (job_type)
-  # @route PUT (/:locale)/job_types/:id {locale: nil} (job_type)
+  # @route PATCH /job_types/:id (job_type)
+  # @route PUT /job_types/:id (job_type)
   def update
     respond_to do |format|
       if @job_type.update(job_type_params)
@@ -48,7 +48,7 @@ class Admin::JobTypesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/job_types/:id {locale: nil} (job_type)
+  # @route DELETE /job_types/:id (job_type)
   def destroy
     @job_type.destroy
     respond_to do |format|

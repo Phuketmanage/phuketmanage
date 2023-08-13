@@ -5,23 +5,23 @@ class Admin::HouseGroupsController < ApplicationController
 
   layout 'admin'
 
-  # @route GET (/:locale)/house_groups {locale: nil} (house_groups)
+  # @route GET /house_groups (house_groups)
   def index
     @house_groups = HouseGroup.all
   end
 
-  # @route GET (/:locale)/house_groups/:id {locale: nil} (house_group)
+  # @route GET /house_groups/:id (house_group)
   def show; end
 
-  # @route GET (/:locale)/house_groups/new {locale: nil} (new_house_group)
+  # @route GET /house_groups/new (new_house_group)
   def new
     @house_group = HouseGroup.new
   end
 
-  # @route GET (/:locale)/house_groups/:id/edit {locale: nil} (edit_house_group)
+  # @route GET /house_groups/:id/edit (edit_house_group)
   def edit; end
 
-  # @route POST (/:locale)/house_groups {locale: nil} (house_groups)
+  # @route POST /house_groups (house_groups)
   def create
     @house_group = HouseGroup.new(house_group_params)
 
@@ -36,8 +36,8 @@ class Admin::HouseGroupsController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/house_groups/:id {locale: nil} (house_group)
-  # @route PUT (/:locale)/house_groups/:id {locale: nil} (house_group)
+  # @route PATCH /house_groups/:id (house_group)
+  # @route PUT /house_groups/:id (house_group)
   def update
     respond_to do |format|
       if @house_group.update(house_group_params)
@@ -50,7 +50,7 @@ class Admin::HouseGroupsController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/house_groups/:id {locale: nil} (house_group)
+  # @route DELETE /house_groups/:id (house_group)
   def destroy
     @house_group.destroy
     respond_to do |format|

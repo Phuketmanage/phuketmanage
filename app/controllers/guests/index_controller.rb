@@ -1,4 +1,6 @@
 class Guests::IndexController < GuestsController
+  # @route GET / (root)
+  # @route GET /(:locale) {locale: nil} (guests_locale_root)
   def index
     @search = Search.new
     @min_date = @search.min_date

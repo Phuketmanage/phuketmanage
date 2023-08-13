@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
   load_and_authorize_resource
   layout 'admin'
-  # @route GET (/:locale)/users {locale: nil} (users)
+  # @route GET /users (users)
   def index
     if params['role']
       @users = User.with_role(params['role']).order(:name)
@@ -12,12 +12,12 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/users/inactive {locale: nil} (users_inactive)
+  # @route GET /users/inactive (users_inactive)
   def inactive
     @users = User.inactive_owners.order(:name)
   end
 
-  # @route GET (/:locale)/users/new {locale: nil} (new_user)
+  # @route GET /users/new (new_user)
   def new
     @user = User.new
     @roles = if current_user.role? :admin
@@ -27,7 +27,7 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/users/:id/edit {locale: nil} (edit_user)
+  # @route GET /users/:id/edit (edit_user)
   def edit
     @user = User.find(params[:id])
     @roles = if current_user.role? :admin
@@ -37,7 +37,7 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/create_user {locale: nil} (create_user)
+  # @route POST /create_user (create_user)
   def create
     @user = User.new(user_params)
     if @user.save
@@ -53,8 +53,8 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/users/:id {locale: nil} (user)
-  # @route PUT (/:locale)/users/:id {locale: nil} (user)
+  # @route PATCH /users/:id (user)
+  # @route PUT /users/:id (user)
   def update
     @user = User.find(params[:id])
     params[:user].delete(:password) if params[:user][:password].blank?
@@ -71,7 +71,7 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/users/:id {locale: nil} (user)
+  # @route DELETE /users/:id (user)
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
@@ -80,14 +80,14 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/users/:id/password_reset_request {locale: nil} (password_reset_request)
+  # @route GET /users/:id/password_reset_request (password_reset_request)
   def password_reset_request
     user = User.find(params[:id])
     user.send_reset_password_instructions
     redirect_to users_path
   end
 
-  # @route GET (/:locale)/users/get_houses {locale: nil} (users_get_houses)
+  # @route GET /users/get_houses (users_get_houses)
   def get_houses
     @owner_id = params[:owner_id]
     @houses = if @owner_id

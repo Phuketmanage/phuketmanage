@@ -1,5 +1,5 @@
 class Admin::SearchController < ApplicationController
-  # @route GET (/:locale)/search {locale: nil} (search)
+  # @route GET /search (search)
   def index
     @search = Search.new(period: params['search']['period'], type: params['search']['type'],
                          bdr: params['search']['bdr'], location: params['search']['location'], dtnb: @settings['dtnb'])

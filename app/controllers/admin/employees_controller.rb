@@ -4,15 +4,15 @@ class Admin::EmployeesController < ApplicationController
   layout 'admin'
   before_action :set_employee, only: %i[show edit update destroy]
 
-  # @route GET (/:locale)/employees {locale: nil} (employees)
+  # @route GET /employees (employees)
   def index
     @employees = Employee.all
   end
 
-  # @route GET (/:locale)/employees/:id {locale: nil} (employee)
+  # @route GET /employees/:id (employee)
   def show; end
 
-  # @route GET (/:locale)/employees/list_for_job {locale: nil} (employees_list_for_job)
+  # @route GET /employees/list_for_job (employees_list_for_job)
   def list_for_job
     empls = Employee.joins(:houses, :job_types).where(
       'houses.id = ? AND job_types.id = ?',
@@ -22,15 +22,15 @@ class Admin::EmployeesController < ApplicationController
     render json: empls.map { |e| { id: e.id, name: e.name, type: e.type.name } }
   end
 
-  # @route GET (/:locale)/employees/new {locale: nil} (new_employee)
+  # @route GET /employees/new (new_employee)
   def new
     @employee = Employee.new
   end
 
-  # @route GET (/:locale)/employees/:id/edit {locale: nil} (edit_employee)
+  # @route GET /employees/:id/edit (edit_employee)
   def edit; end
 
-  # @route POST (/:locale)/employees {locale: nil} (employees)
+  # @route POST /employees (employees)
   def create
     @employee = Employee.new(employee_params)
 
@@ -45,8 +45,8 @@ class Admin::EmployeesController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/employees/:id {locale: nil} (employee)
-  # @route PUT (/:locale)/employees/:id {locale: nil} (employee)
+  # @route PATCH /employees/:id (employee)
+  # @route PUT /employees/:id (employee)
   def update
     respond_to do |format|
       if @employee.update(employee_params)
@@ -59,7 +59,7 @@ class Admin::EmployeesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/employees/:id {locale: nil} (employee)
+  # @route DELETE /employees/:id (employee)
   def destroy
     @employee.destroy
     respond_to do |format|

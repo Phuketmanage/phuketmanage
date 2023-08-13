@@ -6,8 +6,8 @@ class Admin::TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[show edit update destroy]
   layout 'admin'
 
-  # @route GET (/:locale)/transactions {locale: nil} (transactions)
-  # @route GET (/:locale)/balance {locale: nil} (balance_front)
+  # @route GET /transactions (transactions)
+  # @route GET /balance (balance_front)
   def index
     @from = params[:from]
     @to = params[:to]
@@ -122,7 +122,7 @@ class Admin::TransactionsController < ApplicationController
 
   def show; end
 
-  # @route GET (/:locale)/transactions_docs {locale: nil} (transactions_docs)
+  # @route GET /transactions_docs (transactions_docs)
   def docs
     @from = params[:from]
     @to = params[:to]
@@ -138,7 +138,7 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/transactions/new {locale: nil} (new_transaction)
+  # @route GET /transactions/new (new_transaction)
   def new
     if params[:tid].present?
       tid = params[:tid]
@@ -174,7 +174,7 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/transactions/:id/edit {locale: nil} (edit_transaction)
+  # @route GET /transactions/:id/edit (edit_transaction)
   def edit
     @de_ow = @transaction.balance_outs.sum(:debit)
     @cr_ow = @transaction.balance_outs.sum(:credit)
@@ -193,7 +193,7 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/transactions {locale: nil} (transactions)
+  # @route POST /transactions (transactions)
   def create
     @transaction = Transaction.new(transaction_params)
     @transaction.set_owner_and_house
@@ -264,8 +264,8 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/transactions/:id {locale: nil} (transaction)
-  # @route PUT (/:locale)/transactions/:id {locale: nil} (transaction)
+  # @route PATCH /transactions/:id (transaction)
+  # @route PUT /transactions/:id (transaction)
   def update
     respond_to do |format|
       state_before = @transaction
@@ -342,7 +342,7 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/transactions/update_invoice_ref {locale: nil} (update_invoice_ref)
+  # @route POST /transactions/update_invoice_ref (update_invoice_ref)
   def update_invoice_ref
     error = 'Need to select Owner' unless session[:owner_id].present?
     if session[:from].to_date.month != session[:to].to_date.month
@@ -375,7 +375,7 @@ class Admin::TransactionsController < ApplicationController
                 notice: 'Ref no was successfully updated.'
   end
 
-  # @route DELETE (/:locale)/transactions/:id {locale: nil} (transaction)
+  # @route DELETE /transactions/:id (transaction)
   def destroy
     @transaction.destroy
     @transaction.booking.toggle_status if !@transaction.booking.nil?
@@ -394,7 +394,7 @@ class Admin::TransactionsController < ApplicationController
     end
   end
 
-  # @route GET (/:locale)/transaction_warnings {locale: nil} (transaction_warnings)
+  # @route GET /transaction_warnings (transaction_warnings)
   def warnings
     warning = ""
     type = params[:type]
@@ -451,7 +451,7 @@ class Admin::TransactionsController < ApplicationController
     render json: { field: field, warning: warning }
   end
 
-  # @route GET (/:locale)/transaction_raw_for_acc {locale: nil} (transaction_raw_for_acc)
+  # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
   def raw_for_acc
     @from = params[:from]
     @to = params[:to]

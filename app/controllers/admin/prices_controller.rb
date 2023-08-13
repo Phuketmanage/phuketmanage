@@ -10,7 +10,7 @@ class Admin::PricesController < ApplicationController
                                      copy_table]
   before_action :set_price, only: %i[show edit update destroy]
 
-  # @route GET (/:locale)/houses/:house_id/prices {locale: nil} (house_prices)
+  # @route GET /admin_houses/:admin_house_id/prices (admin_house_prices)
   def index
     @houses = House.all.for_rent
     # @house = House.find(params[:house_id])
@@ -51,7 +51,7 @@ class Admin::PricesController < ApplicationController
   #   end
   # end
 
-  # @route POST (/:locale)/houses/:house_id/add_duration {locale: nil} (add_duration)
+  # @route POST /admin_houses/:admin_house_id/add_duration (admin_house_add_duration)
   def create_duration
     # @house = House.find(params[:id])
     @seasons = @house.seasons
@@ -76,7 +76,7 @@ class Admin::PricesController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/houses/:house_id/add_season {locale: nil} (add_season)
+  # @route POST /admin_houses/:admin_house_id/add_season (admin_house_add_season)
   def create_season
     # @house = House.find(params[:id])
     @durations = @house.durations
@@ -101,7 +101,7 @@ class Admin::PricesController < ApplicationController
     end
   end
 
-  # @route POST (/:locale)/prices/:house_id/copy_table {locale: nil} (copy_table)
+  # @route POST /prices/:house_id/copy_table (copy_table)
   def copy_table
     # @house = House.find(params[:id])
     copy_from_number = params[:copy_from_number]
@@ -132,7 +132,7 @@ class Admin::PricesController < ApplicationController
     redirect_to admin_house_prices_path(@house.id)
   end
 
-  # @route GET (/:locale)/prices/:id/update {locale: nil} (price)
+  # @route GET /prices/:id/update (price)
   def update
     price = Price.find(params[:id])
     if price.update(price_params)
@@ -152,7 +152,7 @@ class Admin::PricesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/houses/:house_id/delete_duration {locale: nil} (delete_duration)
+  # @route DELETE /admin_houses/:admin_house_id/delete_duration (admin_house_delete_duration)
   def destroy_duration
     # house = House.find(params[:id])
     duration = Duration.find(params[:duration_id])
@@ -164,7 +164,7 @@ class Admin::PricesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/houses/:house_id/delete_season {locale: nil} (delete_season)
+  # @route DELETE /admin_houses/:admin_house_id/delete_season (admin_house_delete_season)
   def destroy_season
     # house = House.find(params[:id])
     season = Season.find(params[:season_id])

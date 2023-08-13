@@ -4,22 +4,22 @@ class Admin::SourcesController < ApplicationController
 
   before_action :set_source, only: %i[show edit update destroy]
 
-  # @route GET (/:locale)/sources {locale: nil} (sources)
+  # @route GET /sources (sources)
   def index
     @sources = Source.all
   end
 
   def show; end
 
-  # @route GET (/:locale)/sources/new {locale: nil} (new_source)
+  # @route GET /sources/new (new_source)
   def new
     @source = Source.new
   end
 
-  # @route GET (/:locale)/sources/:id/edit {locale: nil} (edit_source)
+  # @route GET /sources/:id/edit (edit_source)
   def edit; end
 
-  # @route POST (/:locale)/sources {locale: nil} (sources)
+  # @route POST /sources (sources)
   def create
     @source = Source.new(source_params)
 
@@ -34,8 +34,8 @@ class Admin::SourcesController < ApplicationController
     end
   end
 
-  # @route PATCH (/:locale)/sources/:id {locale: nil} (source)
-  # @route PUT (/:locale)/sources/:id {locale: nil} (source)
+  # @route PATCH /sources/:id (source)
+  # @route PUT /sources/:id (source)
   def update
     respond_to do |format|
       if @source.update(source_params)
@@ -48,7 +48,7 @@ class Admin::SourcesController < ApplicationController
     end
   end
 
-  # @route DELETE (/:locale)/sources/:id {locale: nil} (source)
+  # @route DELETE /sources/:id (source)
   def destroy
     Booking.where(source_id: @source.id).update_all(source_id: nil)
     @source.destroy
