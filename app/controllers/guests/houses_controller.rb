@@ -56,6 +56,6 @@ class Guests::HousesController < GuestsController
   end
 
   def search_params
-    params.require(:search).permit(:stage, :period, :type, :bdr, :location)
+    params.require(:search).permit(:period, type: [], bdr: [], location: [])
   end
 end
