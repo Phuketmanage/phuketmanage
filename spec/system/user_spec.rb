@@ -6,7 +6,7 @@ describe 'User' do
   let(:admin) { create(:user, :admin) }
   let(:owner_closed) { create(:user, :owner, balance_closed: true) }
   it 'should sign in' do
-    visit "/en/users/sign_in"
+    visit "/users/sign_in"
     fill_in 'Email', with: admin.email
     fill_in 'Password', with: 'qweasd'
     click_button 'Log in'
@@ -15,13 +15,13 @@ describe 'User' do
 
   it 'signs out' do
     sign_in admin
-    visit '/en'
+    visit '/'
     click_link 'Log out'
     expect(page).to have_content 'Signed out successfully.'
   end
 
   it 'does not sign in when balance closed' do
-    visit "/en/users/sign_in"
+    visit "/users/sign_in"
     fill_in 'Email', with: owner_closed.email
     fill_in 'Password', with: 'qweasd'
     click_button 'Log in'

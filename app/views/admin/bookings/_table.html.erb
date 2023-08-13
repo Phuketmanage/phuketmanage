@@ -32,7 +32,7 @@
               <% else %>
                 <tr class="bg-light <%= 'text-muted' if booking.status == 'canceled' %>" id="<%= booking.number %>">
                 <% end %>
-                <td><%= !@house ? link_to(booking.house.id, admin_house_bookings_path(booking.house.number)) : booking.house.code %></td>
+                <td><%= !@house ? link_to(booking.house.code, admin_house_bookings_path(booking.house.number)) : booking.house.code %></td>
                 <td>
                   <nobr>
                     <%= booking.start.to_fs(:date) %> -
