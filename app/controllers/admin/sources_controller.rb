@@ -1,4 +1,4 @@
-class SourcesController < AdminController
+class Admin::SourcesController < ApplicationController
   load_and_authorize_resource
   layout 'admin'
 

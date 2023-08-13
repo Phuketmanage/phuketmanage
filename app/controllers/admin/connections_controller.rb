@@ -1,4 +1,4 @@
-class ConnectionsController < AdminController
+class Admin::ConnectionsController < ApplicationController
   load_and_authorize_resource
 
   # before_action :set_house, only: :create

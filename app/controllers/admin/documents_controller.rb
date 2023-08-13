@@ -1,4 +1,4 @@
-class DocumentsController < AdminController
+class Admin::DocumentsController < ApplicationController
   authorize_resource :class => false
   # @route GET (/:locale)/documents/statement {locale: nil} (tmp_statement)
   def statement

@@ -1,4 +1,4 @@
-class HousePhotosController < AdminController
+class Admin::HousePhotosController < ApplicationController
   load_and_authorize_resource id_param: :number
 
   before_action :get_house, only: %i[index add]

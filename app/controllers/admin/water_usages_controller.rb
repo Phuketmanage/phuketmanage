@@ -1,4 +1,4 @@
-class WaterUsagesController < AdminController
+class Admin::WaterUsagesController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_water_usage, only: %i[show edit update destroy]

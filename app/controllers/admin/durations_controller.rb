@@ -1,4 +1,4 @@
-class DurationsController < AdminController
+class Admin::DurationsController < ApplicationController
   load_and_authorize_resource :house
   # load_and_authorize_resource :duration, through: :house, shallow: true
 

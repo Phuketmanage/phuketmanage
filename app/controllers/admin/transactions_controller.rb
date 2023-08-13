@@ -1,6 +1,6 @@
 require 'csv'
 
-class TransactionsController < AdminController
+class Admin::TransactionsController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_transaction, only: %i[show edit update destroy]

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  root to: 'guests/index#index'
+
+  devise_for :users
+
   # Guests controllers
   scope "(:locale)", module: 'guests', as: 'guests', locale: /en|ru/, defaults: { locale: nil } do
     root to: 'index#index', as: :locale_root
@@ -6,13 +10,13 @@ Rails.application.routes.draw do
     get :about, to: 'about#index'
   end
 
+  get 'dashboard', to: 'admin#index', as: 'dashboard'
   # Admin controllers
   scope module: 'admin' do
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
     get 'reports', to: 'reports#index'
-    get 'unlock', to: 'dev#unlock' if Rails.env.development?
     get 'houses/inactive', to: 'houses#inactive'
     resources :notifications, only: [:destroy]
     resources :water_usages
@@ -52,7 +56,7 @@ Rails.application.routes.draw do
     get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
     get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
-    resources :houses do
+    resources :admin_houses do
       resources :prices, only: [:index]
       get 'photos', to: 'house_photos#index', as: 'photos'
       get 'photos/add', to: 'house_photos#add'
@@ -87,7 +91,6 @@ Rails.application.routes.draw do
     get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
     get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
-    get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
     get 'search', to: 'search#index'
@@ -98,11 +101,10 @@ Rails.application.routes.draw do
     get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
     resources :transfers
     get 'translate', to: "translations#show"
+    get 'calendar/ical/:hid', to: 'bookings#ical', as: 'calendar'
   end
-  get 'calendar/ical/:hid', to: 'bookings#ical', as: 'calendar'
 
-  root to: 'guests/index#index'
-  devise_for :users
+  get 'unlock', to: 'dev#unlock' if Rails.env.development?
 
   # Good job admin dashboard
   authenticate :user, ->(user) { user.role?('Admin') } do

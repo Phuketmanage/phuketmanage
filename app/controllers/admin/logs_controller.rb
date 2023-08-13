@@ -1,4 +1,4 @@
-class LogsController < AdminController
+class Admin::LogsController < ApplicationController
   load_and_authorize_resource
   layout 'admin'
 

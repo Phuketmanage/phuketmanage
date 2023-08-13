@@ -1,4 +1,4 @@
-class UsersController < AdminController
+class Admin::UsersController < ApplicationController
   load_and_authorize_resource
   layout 'admin'
   # @route GET (/:locale)/users {locale: nil} (users)

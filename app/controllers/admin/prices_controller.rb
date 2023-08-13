@@ -1,4 +1,4 @@
-class PricesController < AdminController
+class Admin::PricesController < ApplicationController
   include SeasonsHelper
   include Loggable
   load_and_authorize_resource :house, id_param: :number

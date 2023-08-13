@@ -1,4 +1,4 @@
-class TransactionFilesController < AdminController
+class Admin::TransactionFilesController < ApplicationController
   load_and_authorize_resource
 
   # @route GET (/:locale)/transaction_files {locale: nil} (transaction_files)

@@ -1,4 +1,4 @@
-class TransactionTypesController < AdminController
+class Admin::TransactionTypesController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_transaction_type, only: %i[show edit update destroy]

@@ -12,11 +12,11 @@
     <div class="text-right">
       <%= link_to 'Balance', transactions_path( owner_id: house.owner.id, house_id: house.id, commit: "Full") %> |
       <%= link_to 'Bookings', house_bookings_path(house.id) %> |
-      <%= link_to 'Details', edit_house_path(house.number) %> |
-      <%= link_to 'Prices', house_prices_path(house.number) %> |
-      <%= link_to 'Photos', house_photos_path(house.number) %> |
+      <%= link_to 'Details', edit_admin_house_path(house.number) %> |
+      <%= link_to 'Prices', admin_house_prices_path(house.number) %> |
+      <%= link_to 'Photos', admin_house_photos_path(house.number) %> |
       <% if current_user.role?('Admin') %>
-        <%= link_to 'Destroy', house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Destroy', admin_house_path(house.number), method: :delete, data: { confirm: 'Are you sure?' } %>
       <% end %>
     </div>
   </div>

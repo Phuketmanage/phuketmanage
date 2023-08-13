@@ -1,4 +1,4 @@
-class LocationsController < AdminController
+class Admin::LocationsController < ApplicationController
   load_and_authorize_resource id_param: :number
 
   before_action :set_location, only: %i[show edit update destroy]

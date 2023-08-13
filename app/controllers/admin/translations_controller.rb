@@ -1,4 +1,4 @@
-class TranslationsController < AdminController
+class Admin::TranslationsController < ApplicationController
 
   authorize_resource class: false
   # @route GET (/:locale)/translate {locale: nil} (translate)

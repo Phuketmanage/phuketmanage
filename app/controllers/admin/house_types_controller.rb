@@ -1,4 +1,4 @@
-class HouseTypesController < AdminController
+class Admin::HouseTypesController < ApplicationController
   load_and_authorize_resource
   before_action :set_house_type, only: %i[show edit update destroy]
   layout 'admin'

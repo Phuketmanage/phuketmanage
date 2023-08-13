@@ -1,4 +1,4 @@
-class JobMessagesController < AdminController
+class Admin::JobMessagesController < ApplicationController
   load_and_authorize_resource
 
   # @route POST (/:locale)/job_messages {locale: nil} (job_messages)

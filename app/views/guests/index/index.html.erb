@@ -2,5 +2,5 @@
 <%= render 'guests/houses/form', search: @search, bdrs: @bdrs, locations: @locations, types: @types %>
 <p><small><%= t('search.period_limits') %></small></p>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-  <%= render partial: 'houses/preview', collection: @houses, as: :h, locals: { from_search: false } %>
+  <%= render partial: 'guests/houses/preview', collection: @houses, as: :h, locals: { from_search: false } %>
 </div>
