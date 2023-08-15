@@ -10,9 +10,10 @@ Rails.application.routes.draw do
     get :about, to: 'about#index'
   end
 
-  get 'dashboard', to: 'admin#index', as: 'dashboard'
+
   # Admin controllers
   scope module: 'admin' do
+    get 'dashboard', to: 'dashboard#index', as: 'dashboard'
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
