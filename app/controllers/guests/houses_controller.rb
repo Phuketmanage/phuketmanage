@@ -2,7 +2,7 @@ class Guests::HousesController < GuestsController
   before_action :check_search_params, only: :index
   before_action :set_house, only: :show
 
-  # @route GET (/:locale)/houses {locale: nil} (guests_houses)
+  # @route GET (/:locale)/houses (guests_houses)
   def index
     @search = Search.new(period: search_params['period'], type: search_params['type'],
                          bdr: search_params['bdr'], location: search_params['location'], dtnb: @settings['dtnb'])
@@ -16,7 +16,7 @@ class Guests::HousesController < GuestsController
     @prices = @search.get_prices @houses
   end
 
-  # @route GET (/:locale)/houses/:id {locale: nil} (guests_house)
+  # @route GET (/:locale)/houses/:id (guests_house)
   def show
     search
     @occupied_days = @house.occupied_days(@settings['dtnb'])
