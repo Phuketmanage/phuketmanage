@@ -68,40 +68,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "953ec079bd957edf628a3b460bd945d110a584d48aa102850c1de0964ddfa1ec",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/admin/admin_houses/show.html.erb",
-      "line": 37,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(\"Photo\", House.new(house_params).photo_link, :target => \"_blank\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Admin::AdminHousesController",
-          "method": "create",
-          "line": 66,
-          "file": "app/controllers/admin/admin_houses_controller.rb",
-          "rendered": {
-            "name": "admin/admin_houses/show",
-            "file": "app/views/admin/admin_houses/show.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "admin/admin_houses/show"
-      },
-      "user_input": "House.new(house_params).photo_link",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "a1d2845b99b888b81b2092d4d6b242894ede685f0e2dfed80867d7a5eb6b3862",
@@ -146,8 +112,42 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "d53a34f48717e41bd6972e0b0b3317f7fcf9f45f1f1aadc4557e2c5fb191e43a",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/admin/admin_houses/show.html.erb",
+      "line": 37,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Photo\", House.new(admin_house_params).photo_link, :target => \"_blank\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::AdminHousesController",
+          "method": "create",
+          "line": 66,
+          "file": "app/controllers/admin/admin_houses_controller.rb",
+          "rendered": {
+            "name": "admin/admin_houses/show",
+            "file": "app/views/admin/admin_houses/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/admin_houses/show"
+      },
+      "user_input": "House.new(admin_house_params).photo_link",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
     }
   ],
-  "updated": "2023-08-13 17:01:45 +0300",
+  "updated": "2023-08-15 15:09:22 +0300",
   "brakeman_version": "6.0.1"
 }
