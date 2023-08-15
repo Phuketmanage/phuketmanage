@@ -22,7 +22,7 @@ class HousesControllerTest < ActionDispatch::IntegrationTest
     type = house_types(:villa)
     assert_difference('House.count') do
       post admin_houses_url,
-           params: { house: { description_en: @house.description_en, description_ru: @house.description_ru,
+           params: { admin_house: { description_en: @house.description_en, description_ru: @house.description_ru,
                               owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru, type_id: type.id } }
     end
 
@@ -41,7 +41,7 @@ class HousesControllerTest < ActionDispatch::IntegrationTest
 
   test "should update house" do
     patch admin_house_url(@house.number),
-          params: { house: { description_en: @house.description_en, description_ru: @house.description_ru,
+          params: { admin_house: { description_en: @house.description_en, description_ru: @house.description_ru,
                              owner_id: @house.owner_id, title_en: @house.title_en, title_ru: @house.title_ru } }
     assert_redirected_to admin_houses_path
   end

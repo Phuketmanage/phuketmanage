@@ -13,7 +13,7 @@ class HousesTest < ActionDispatch::IntegrationTest
   test "should generate name on method call" do
     sign_in users(:admin)
     assert_difference('House.count') do
-      post admin_houses_url params: { house: {
+      post admin_houses_url params: { admin_house: {
         description_en: "New house",
         description_ru: "Новый дом",
         owner_id: @house.owner_id,
@@ -54,7 +54,7 @@ class HousesTest < ActionDispatch::IntegrationTest
   test "should show beds when exist" do
     sign_in users(:admin)
     assert_difference('House.count') do
-      post admin_houses_url params: { house: {
+      post admin_houses_url params: { admin_house: {
         description_en: "New house",
         description_ru: "Новый дом",
         owner_id: @house.owner_id,

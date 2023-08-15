@@ -1,7 +1,7 @@
 # rubocop:disable RSpec/Metrics/ClassLength
 
 class Admin::AdminHousesController < ApplicationController
-  load_and_authorize_resource :house, id_param: :number
+  load_and_authorize_resource class: House, id_param: :number
 
   before_action :set_house, only: %i[show edit update destroy]
   before_action :search, only: :show
@@ -58,7 +58,7 @@ class Admin::AdminHousesController < ApplicationController
   # @route POST /admin_houses (admin_houses)
   def create
     options = params[:options] || nil
-    @house = House.new(house_params)
+    @house = House.new(admin_house_params)
     @house.secret = SecureRandom.hex(16)
     respond_to do |format|
       if @house.save
@@ -80,7 +80,7 @@ class Admin::AdminHousesController < ApplicationController
   # @route PUT /admin_houses/:id (admin_house)
   def update
     respond_to do |format|
-      if @house.update(house_params)
+      if @house.update(admin_house_params)
         format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully updated." }
         format.json { render :show, status: :ok, location: @house }
       else
@@ -133,8 +133,8 @@ class Admin::AdminHousesController < ApplicationController
     end
   end
 
-  def house_params
-    params.require(:house).permit(
+  def admin_house_params
+    params.require(:admin_house).permit(
       :code,
       :description_en,
       :description_ru,
