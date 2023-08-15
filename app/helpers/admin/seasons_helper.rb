@@ -1,4 +1,4 @@
-module SeasonsHelper
+module Admin::SeasonsHelper
   def have_seasons_gap?(seasons)
     result = false
     seasons.each_with_index do |s, index|

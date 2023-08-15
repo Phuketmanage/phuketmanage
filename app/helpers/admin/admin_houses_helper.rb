@@ -1,4 +1,4 @@
-module HousesHelper
+module Admin::AdminHousesHelper
   def link_to_google_map(address, google_map)
     return "-" if address.blank?
 

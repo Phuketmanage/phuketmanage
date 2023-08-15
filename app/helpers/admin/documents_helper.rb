@@ -1,4 +1,4 @@
-module DocumentsHelper
+module Admin::DocumentsHelper
   def code(owner)
     houses = owner.houses
     if houses.count > 1 || owner.code.present?
