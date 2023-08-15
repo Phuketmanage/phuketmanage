@@ -68,10 +68,10 @@ class HousesTest < ActionDispatch::IntegrationTest
     end
     follow_redirect!
     sign_out users(:admin)
-    get admin_house_path(House.first.number)
+    get guests_house_path(id: House.first.number)
     assert_response :success
     assert_no_match "Sleeping arrangements", response.body
-    get admin_house_path(id: House.last.number)
+    get guests_house_path(id: House.last.number)
     assert_response :success
     assert_match "Sleeping arrangements", response.body
   end
@@ -84,7 +84,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     period = "#{rs} to #{rf}"
     house = houses(:villa_1)
 
-    get guests_house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
+    get guests_house_path(id: house.number, params: { period:, commit: "Check price" })
     assert_select 'div.alert li',
                   text: 'This house minimum rental period is 6 nights. Please modify your rental period to increase it.'
     # ru
@@ -97,7 +97,7 @@ class HousesTest < ActionDispatch::IntegrationTest
     rf = "28.07.#{year}".to_date
     period = "#{rs} to #{rf}"
 
-    get guests_house_path(id: house.number, locale: :en, params: { period:, commit: "Check price" })
+    get guests_house_path(id: house.number, locale: nil, params: { period:, commit: "Check price" })
     assert_select 'div.alert li', count: 0
   end
 end
