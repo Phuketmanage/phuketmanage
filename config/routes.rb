@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Guests controllers
-  scope "(:locale)", module: 'guests', as: 'guests', locale: /en|ru/, defaults: { locale: nil } do
+  scope "(:locale)", module: 'guests', as: 'guests', locale: /ru/ do
     root to: 'index#index', as: :locale_root
     resources :houses, only: %i[show index]
     get :about, to: 'about#index'

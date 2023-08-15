@@ -29,7 +29,6 @@ gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
 gem 'flag-icons-rails'
 gem 'font_awesome5_rails'
-gem 'http_accept_language'
 gem 'icalendar', '~> 2.7', '>= 2.7.1'
 gem 'jbuilder' # Build JSON APIs with ease.
 gem 'jquery-rails'

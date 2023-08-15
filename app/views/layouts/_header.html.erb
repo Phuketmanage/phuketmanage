@@ -107,7 +107,7 @@
         <% if I18n.locale == :en %>
           <%= link_to flag_icon(:ru) + " " + t('menu.ru'), { locale: :ru }, class: 'nav-link' %>
         <% else %>
-          <%= link_to flag_icon(:us) + " " + t('menu.en'), { locale: :en }, class: 'nav-link' %>
+          <%= link_to flag_icon(:us) + " " + t('menu.en'), { locale: nil }, class: 'nav-link' %>
         <% end %>
       </li>
     </ul>
