@@ -309,6 +309,7 @@ $(document).on "ready", ->
           $("label[for=show_file_#{data['id']}").after(text)
           $("span#file_status_change_#{data['id']}").fadeOut('slow')
         error: (data) ->
+          submitButton.prop('disabled', false)
           console.log 'Can not update show status'
           text = $('<span></span>', {text: 'Error', id: "file_status_change_#{data['id']}", class: 'badge badge-danger'})
           $("label[for=show_file_#{data['id']}").after(text)
