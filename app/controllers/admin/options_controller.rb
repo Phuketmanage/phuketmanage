@@ -3,8 +3,6 @@ class Admin::OptionsController < AdminController
 
   before_action :set_option, only: %i[show edit update destroy]
 
-  layout 'admin'
-
   # @route GET /options (options)
   def index
     @options = Option.order(:zindex).all

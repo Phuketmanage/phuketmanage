@@ -3,8 +3,6 @@ class Admin::WaterUsagesController < AdminController
 
   before_action :set_water_usage, only: %i[show edit update destroy]
 
-  layout 'admin'
-
   # @route GET /water_usages (water_usages)
   def index
     if params[:house_id].present?
@@ -50,7 +48,9 @@ class Admin::WaterUsagesController < AdminController
     respond_to do |format|
       if @water_usage.update(water_usage_params)
         format.html do
- redirect_to water_usages_path(house_id: @water_usage.house_id), notice: 'Water usage was successfully updated.' end
+          redirect_to water_usages_path(house_id: @water_usage.house_id),
+                      notice: 'Water usage was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @water_usage }
       else
         format.html { render :edit }

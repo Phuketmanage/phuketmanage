@@ -5,7 +5,6 @@ class Admin::AdminHousesController < AdminController
 
   before_action :set_house, only: %i[show edit update destroy]
   before_action :search, only: :show
-  layout 'admin', except: :show
 
   # @route GET /admin_houses (admin_houses)
   def index

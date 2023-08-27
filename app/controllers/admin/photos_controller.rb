@@ -3,7 +3,6 @@ class Admin::PhotosController < AdminController
 
   before_action :get_house, only: %i[index add]
   before_action :get_photo, only: [:update]
-  layout 'admin'
 
   # @route GET /admin_houses/:admin_house_id/photos (admin_house_photos)
   def index

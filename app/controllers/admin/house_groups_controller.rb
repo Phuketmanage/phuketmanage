@@ -3,8 +3,6 @@ class Admin::HouseGroupsController < AdminController
 
   before_action :set_house_group, only: %i[show edit update destroy]
 
-  layout 'admin'
-
   # @route GET /house_groups (house_groups)
   def index
     @house_groups = HouseGroup.all

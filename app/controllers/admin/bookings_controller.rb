@@ -3,7 +3,6 @@ class Admin::BookingsController < AdminController
 
   before_action :set_booking, only: %i[show edit update
                                        update_comment_gr destroy]
-  layout 'admin'
 
   # @route GET /calendar/ical/:hid (calendar)
   def ical

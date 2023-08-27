@@ -1,6 +1,8 @@
 class AdminController < ApplicationController
   before_action :set_locale
 
+  layout 'admin'
+
   private
 
   def set_locale

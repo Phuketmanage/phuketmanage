@@ -3,8 +3,6 @@ class Admin::LocationsController < AdminController
 
   before_action :set_location, only: %i[show edit update destroy]
 
-  layout 'admin'
-
   # @route GET /locations (locations)
   def index
     @locations = Location.all.order(:name_en)

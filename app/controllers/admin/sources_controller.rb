@@ -1,6 +1,5 @@
 class Admin::SourcesController < AdminController
   load_and_authorize_resource
-  layout 'admin'
 
   before_action :set_source, only: %i[show edit update destroy]
 

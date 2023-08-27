@@ -4,7 +4,6 @@ class Admin::TransactionsController < AdminController
   load_and_authorize_resource
 
   before_action :set_transaction, only: %i[show edit update destroy]
-  layout 'admin'
 
   # @route GET /transactions (transactions)
   # @route GET /balance (balance_front)

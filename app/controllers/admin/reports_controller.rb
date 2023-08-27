@@ -1,6 +1,5 @@
 class Admin::ReportsController < AdminController
   load_and_authorize_resource :class => false
-  layout 'admin'
 
   # @route GET /reports (reports)
   def index

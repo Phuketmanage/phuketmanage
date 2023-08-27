@@ -1,6 +1,5 @@
 class Admin::LogsController < AdminController
   load_and_authorize_resource
-  layout 'admin'
 
   # @route GET /logs (logs)
   def index

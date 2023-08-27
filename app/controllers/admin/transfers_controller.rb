@@ -1,7 +1,6 @@
 class Admin::TransfersController < AdminController
   load_and_authorize_resource
 
-  layout 'admin', except: %i[index_supplier confirmed canceled]
   before_action :set_transfer, only: %i[show update destroy cancel]
 
   # @route GET /transfers (transfers)

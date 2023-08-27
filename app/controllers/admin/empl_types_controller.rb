@@ -1,7 +1,6 @@
 class Admin::EmplTypesController < AdminController
   load_and_authorize_resource
 
-  layout 'admin'
   before_action :set_empl_type, only: %i[show edit update destroy]
 
   # @route GET /empl_types (empl_types)

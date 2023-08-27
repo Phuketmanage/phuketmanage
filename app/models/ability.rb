@@ -13,20 +13,20 @@ class Ability
     if user.role? :owner
       can :index, [Transaction]
       can :index_front, [Booking]
-      can :index, [Admin]
+      can :index, :dashboard
       can :index, TransactionFile, show: true
     end
     if user.role? 'Transfer'
       can :read, Transfer
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Maid'
       can %i[laundry update_laundry], Job
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Gardener'
       can %i[index create update], WaterUsage
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Accounting'
       can :reimbersment, :document
@@ -44,14 +44,14 @@ class Ability
       can :read, :translation
       can :manage, Job
       can [:destroy], Job, creator: user
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Guest relation'
       can :manage, Job
       can [:destroy], Job, creator: user
       can :index, Transfer
       can %i[timeline timeline_data check_in_out update_comment_gr], Booking
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? :manager
       can %i[index show], User, roles: { name: %w[Owner Tenant] }
@@ -67,7 +67,7 @@ class Ability
       can %i[index new show create edit update laundry update_laundry], Job
       can [:destroy], Job
       can :manage, JobMessage, sender: user
-      can :index, [Admin]
+      can :index, :dashboard
       can %i[index new create update_invoice_ref docs], Transaction
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.current - 30.days).beginning_of_month

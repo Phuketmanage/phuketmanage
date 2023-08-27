@@ -1,5 +1,5 @@
 class Admin::DashboardController < AdminController
-  load_and_authorize_resource class: %i[notification booking]
+  authorize_resource class: false
   # @route GET /dashboard (dashboard)
   def index
     redirect_to water_usages_path if current_user.role?('Gardener')

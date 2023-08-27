@@ -1,0 +1,127 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+  <%= link_to image_tag_s3("logo.png", { width: 30, class: "d-inline-block align-top"}), guests_locale_root_path( locale: params[:locale] || nil ), id: "logo_image", class: "navbar-brand  mb-0 h1" %>
+  <%= link_to "Phuket Manage", guests_locale_root_path( locale: params[:locale] || nil ), id: "logo_text", class: "navbar-brand  mb-0 h1" %>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to t('menu.dashboard'), dashboard_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
+        <li class="nav-item">
+          <%= link_to 'Jobs', jobs_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
+        <li class="nav-item">
+          <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Guest relation']) %>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Owner']) %>
+        <li class="nav-item">
+          <%= link_to t('bookings'), bookings_front_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
+        <li class="nav-item">
+          <%= link_to 'Houses', admin_houses_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
+        <li class="nav-item">
+          <%= link_to 'Bookings', bookings_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Balance', transactions_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Reports', reports_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin', 'Gardener', 'Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Water', water_usages_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Manager']) %>
+        <li class="nav-item">
+          <%= link_to 'Sources', sources_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Owner']) %>
+        <li class="nav-item">
+          <%= link_to t('balance'), balance_front_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin']) %>
+        <li class="nav-item">
+          <%= link_to 'Users', users_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin']) %>
+        <li class="nav-item">
+          <%= link_to 'Trsc types', transaction_types_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin']) %>
+        <li class="nav-item">
+          <%= link_to 'House groups', house_groups_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? && current_user.role?(['Admin']) %>
+        <li class="nav-item">
+          <%= link_to 'Settings', settings_path, class: "nav-link" %>
+        </li>
+      <% end %>
+      <% if signed_in? %>
+        <li class="nav-item">
+          <%= link_to t('menu.log_out'), destroy_user_session_path, { method: :delete, class: "nav-link" } %>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to t('menu.about'), guests_about_path, { class: "nav-link" } %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('menu.log_in'), new_user_session_path, { class: "nav-link" } %>
+        </li>
+      <% end %>
+    </ul>
+    <% if signed_in? && current_user.role?(['owner']) %>
+      <div class="d-none d-lg-block">
+        <%= t('app.tagline') %> |
+        <%= link_to t('app.reservation_phone'),
+          "tel:#{t('app.reservation_phone')}" %> |
+        <%= mail_to t('app.reservation_email') %>
+      </div>
+    <% elsif signed_in? %>
+      <span class="navbar-text">
+        <%= current_user.name %>
+      </span>
+    <% else %>
+      <div class="d-none d-lg-block">
+        <%= t('app.tagline') %> |
+        <%= link_to t('app.reservation_phone'),
+          "tel:#{t('app.phone')}" %> |
+        <%= mail_to t('app.email') %>
+      </div>
+    <% end %>
+  </div>
+</nav>

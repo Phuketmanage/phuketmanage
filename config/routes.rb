@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root to: 'guests/index#index'
 
-  devise_for :users
+  scope "(:locale)" do
+    devise_for :users, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
+  end
 
   # Guests controllers
   scope "(:locale)", module: 'guests', as: 'guests', locale: /ru/ do
