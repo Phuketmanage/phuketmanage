@@ -12,4 +12,12 @@ module ApplicationHelper
       "#{page_title} | #{full_title}"
     end
   end
+
+  def root_locale
+    if I18n.locale == :en
+      nil
+    else
+      I18n.locale
+    end
+  end
 end
