@@ -1,10 +1,13 @@
 class AdminController < ApplicationController
-  before_action :set_en_locale
-  # @route GET /dashboard (dashboard)
+  before_action :set_locale
 
   private
 
-  def set_en_locale
-    I18n.locale = :en
+  def set_locale
+    I18n.locale = if current_user && current_user.locale
+      current_user.locale
+    else
+      I18n.default_locale
+    end
   end
 end

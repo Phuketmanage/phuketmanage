@@ -1,4 +1,4 @@
-class Admin::SettingsController < ApplicationController
+class Admin::SettingsController < AdminController
   load_and_authorize_resource
 
   before_action :set_setting, only: %i[show edit update destroy]

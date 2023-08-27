@@ -1,4 +1,4 @@
-class Admin::SearchController < ApplicationController
+class Admin::SearchController < AdminController
   # @route GET /search (search)
   def index
     @search = Search.new(period: params['search']['period'], type: params['search']['type'],

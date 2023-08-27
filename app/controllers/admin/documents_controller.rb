@@ -1,4 +1,4 @@
-class Admin::DocumentsController < ApplicationController
+class Admin::DocumentsController < AdminController
   authorize_resource :class => false
   # @route GET /documents/statement (tmp_statement)
   def statement

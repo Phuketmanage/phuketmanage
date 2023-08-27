@@ -1,6 +1,6 @@
 require 'csv'
 
-class Admin::TransactionsController < ApplicationController
+class Admin::TransactionsController < AdminController
   load_and_authorize_resource
 
   before_action :set_transaction, only: %i[show edit update destroy]
@@ -69,13 +69,11 @@ class Admin::TransactionsController < ApplicationController
       elsif !@owner_id.nil? || current_user.role?(['Owner'])
         if current_user.role?(['Owner'])
           @owner = current_user
-          @locale = @owner.locale || 'en'
         # Owner view for management
         elsif current_user.role?(%w[Admin Manager Accounting])
           session[:owner_id] = @owner_id
           session[:house_id] = @house_id
           @owner = User.find(@owner_id)
-          @locale = 'en'
         end
         @houses = @owner.houses.active.select(:id, :code)
         session[:commit] = params[:commit]

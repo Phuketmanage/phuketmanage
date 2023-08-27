@@ -1,4 +1,4 @@
-class Admin::BookingFilesController < ApplicationController
+class Admin::BookingFilesController < AdminController
   load_and_authorize_resource
 
   before_action :set_booking_file, only: %i[update destroy]

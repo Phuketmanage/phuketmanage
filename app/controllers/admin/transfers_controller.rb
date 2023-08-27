@@ -1,4 +1,4 @@
-class Admin::TransfersController < ApplicationController
+class Admin::TransfersController < AdminController
   load_and_authorize_resource
 
   layout 'admin', except: %i[index_supplier confirmed canceled]

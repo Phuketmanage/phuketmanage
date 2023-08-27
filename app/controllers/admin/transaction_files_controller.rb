@@ -1,4 +1,4 @@
-class Admin::TransactionFilesController < ApplicationController
+class Admin::TransactionFilesController < AdminController
   load_and_authorize_resource
 
   # @route GET /transaction_files (transaction_files)

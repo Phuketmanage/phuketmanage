@@ -1,6 +1,6 @@
 # rubocop:disable RSpec/Metrics/ClassLength
 
-class Admin::AdminHousesController < ApplicationController
+class Admin::AdminHousesController < AdminController
   load_and_authorize_resource class: House, id_param: :number
 
   before_action :set_house, only: %i[show edit update destroy]

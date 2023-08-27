@@ -1,4 +1,4 @@
-class Admin::DashboardController < ApplicationController
+class Admin::DashboardController < AdminController
   load_and_authorize_resource class: %i[notification booking]
   # @route GET /dashboard (dashboard)
   def index

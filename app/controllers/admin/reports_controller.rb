@@ -1,4 +1,4 @@
-class Admin::ReportsController < ApplicationController
+class Admin::ReportsController < AdminController
   load_and_authorize_resource :class => false
   layout 'admin'
 

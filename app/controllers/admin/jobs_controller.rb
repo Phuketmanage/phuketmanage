@@ -1,4 +1,4 @@
-class Admin::JobsController < ApplicationController
+class Admin::JobsController < AdminController
   load_and_authorize_resource
 
   before_action :set_job, only: %i[show edit update update_laundry destroy]

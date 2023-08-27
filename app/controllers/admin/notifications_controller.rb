@@ -1,4 +1,4 @@
-class Admin::NotificationsController < ApplicationController
+class Admin::NotificationsController < AdminController
   load_and_authorize_resource
 
   def index; end

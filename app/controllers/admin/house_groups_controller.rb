@@ -1,4 +1,4 @@
-class Admin::HouseGroupsController < ApplicationController
+class Admin::HouseGroupsController < AdminController
   load_and_authorize_resource id_param: :number
 
   before_action :set_house_group, only: %i[show edit update destroy]

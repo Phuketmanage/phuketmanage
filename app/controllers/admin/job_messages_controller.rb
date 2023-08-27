@@ -1,4 +1,4 @@
-class Admin::JobMessagesController < ApplicationController
+class Admin::JobMessagesController < AdminController
   load_and_authorize_resource
 
   # @route POST /job_messages (job_messages)

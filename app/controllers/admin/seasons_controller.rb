@@ -1,4 +1,4 @@
-class Admin::SeasonsController < ApplicationController
+class Admin::SeasonsController < AdminController
   load_and_authorize_resource :house
   # load_and_authorize_resource :price, through: :house, shallow: true
 

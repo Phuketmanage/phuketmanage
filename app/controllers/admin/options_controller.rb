@@ -1,4 +1,4 @@
-class Admin::OptionsController < ApplicationController
+class Admin::OptionsController < AdminController
   load_and_authorize_resource id_param: :number
 
   before_action :set_option, only: %i[show edit update destroy]
