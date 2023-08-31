@@ -1,5 +1,6 @@
 <div data-controller="reveal" data-reveal-hidden-class="d-none" >
-  <h1><%= t('search.results') %></h1>
+  <h1><%= t('search.admin.header') %></h1>
+  <h5><%= t('search.admin.description') %></h5>
   <%= render 'form', search: @search, bdrs: @bdrs, locations: @locations, types: @types %>
   <p><small><%= t('search.period_limits') %></small></p>
   <div class="form-check">

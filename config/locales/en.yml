@@ -13,6 +13,9 @@ en:
     search: Search
     about: About
   search:
+    admin:
+      header: Admin search
+      description: This is company internal search page, the results on this page will include unavailable houses
     title: Property for rent in Phuket
     rs: Check in
     search: Search
