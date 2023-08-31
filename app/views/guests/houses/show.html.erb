@@ -45,7 +45,7 @@
             <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
           </div>
           <div class="col-md-4 col-lg-12">
-            <%= link_to t('search.book'), search_path(params: {period: @search.period, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+            <%= link_to t('search.book'), guests_houses_path(params: {period: @search.period, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
           </div>
         </div>
       </div>

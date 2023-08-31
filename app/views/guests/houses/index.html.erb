@@ -2,14 +2,6 @@
   <h1><%= t('search.results') %></h1>
   <%= render 'form', search: @search, bdrs: @bdrs, locations: @locations, types: @types %>
   <p><small><%= t('search.period_limits') %></small></p>
-  <% if current_user && current_user.role?(['Admin', 'Accounting', 'Manager']) %>
-    <div class="form-check">
-      <input class="form-check-input form-check-input-xl" type="checkbox" value="" id="checkboxHideUnavailable" data-action="click->reveal#toggle">
-      <label class="form-check-label" for="checkboxHideUnavailable" >
-        Hide unavailable
-      </label>
-    </div>
-  <% end %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-2">
     <% @houses.each do |h| %>
       <% next if @prices[h.id].nil?  %>
