@@ -1,15 +1,15 @@
 class Admin::SearchController < AdminController
   authorize_resource class: false
+  before_action :perform_search
 
   # @route GET /search (search)
   def index
-    @search = Search.new(period: params.dig('search', 'period'), type: params.dig('search', 'type'),
-                         bdr: params.dig('search', 'bdr'), location: params.dig('search', 'location'), dtnb: @settings['dtnb'])
     @min_date = @search.min_date
     @houses = []
     @locations = Location.all
     @bdrs = House.where.not(rooms: nil).select(:rooms).distinct.pluck(:rooms).sort
     @types = HouseType.all
+    render :index and return unless params[:search].present? && @search.valid?
 
     # Management can see prices even for occupied houses
     management = false
@@ -21,6 +21,15 @@ class Admin::SearchController < AdminController
   end
 
   private
+
+  def perform_search
+    @search = if params[:search].blank?
+      Search.new
+    else
+      Search.new(period: params.dig('search', 'period'), type: params.dig('search', 'type'),
+                 bdr: params.dig('search', 'bdr'), location: params.dig('search', 'location'), dtnb: @settings['dtnb'])
+    end
+  end
 
   def search_params
     params.require(:search).permit(:stage, :period, :type, :bdr, :location)

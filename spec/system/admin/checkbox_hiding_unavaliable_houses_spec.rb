@@ -37,7 +37,7 @@ describe 'Checkbox hiding unavaliable houses' do
   end
 
   it "shows checkbox for accounting" do
-    sign_in manager
+    sign_in accounting
     visit search_path
     expect(page).to have_field('checkboxHideUnavailable')
   end
