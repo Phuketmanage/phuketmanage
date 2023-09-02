@@ -10,6 +10,7 @@
     "esbuild": "^0.18.11",
     "flatpickr": "^4.6.13",
     "sortablejs": "^1.15.0",
+    "stimulus-clipboard": "^4.0.1",
     "stimulus-flatpickr": "^3.0.0-0",
     "stimulus-hotkeys": "^2.3.0",
     "stimulus-reveal-controller": "^4.1.0",

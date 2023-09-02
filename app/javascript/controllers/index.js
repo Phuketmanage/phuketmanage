@@ -7,14 +7,17 @@ import { application } from "./application"
 import BookingController from "./booking_controller"
 application.register("booking", BookingController)
 
+import ClipboardController from "./clipboard_controller"
+application.register("clipboard", ClipboardController)
+
 import FlatpickrController from "./flatpickr_controller"
 application.register("flatpickr", FlatpickrController)
 
 import HotkeysActionsController from "./hotkeys_actions_controller"
 application.register("hotkeys-actions", HotkeysActionsController)
 
+import SortableController from "./sortable_controller"
+application.register("sortable", SortableController)
+
 import TranslateController from "./translate_controller"
 application.register("translate", TranslateController)
-
-import SortableController from "./sortable_controller.js"
-application.register('sortable', SortableController)
