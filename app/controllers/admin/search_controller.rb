@@ -30,8 +30,4 @@ class Admin::SearchController < AdminController
                  bdr: params.dig('search', 'bdr'), location: params.dig('search', 'location'), dtnb: @settings['dtnb'])
     end
   end
-
-  def search_params
-    params.require(:search).permit(:stage, :period, :type, :bdr, :location)
-  end
 end
