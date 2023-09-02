@@ -23,9 +23,9 @@
       <% end %>
       <li class="nav-item">
         <% if I18n.locale == :en %>
-          <%= link_to flag_icon(:ru) + " " + 'Ru', { locale: :ru }, class: 'nav-link', data: {turbo: false} %>
+          <%= link_to flag_icon(:ru) + " " + 'Ru', { locale: :ru, params: redirected_locale_params }, class: 'nav-link', data: {turbo: false} %>
         <% else %>
-          <%= link_to flag_icon(:us) + " " + 'En', { locale: nil }, class: 'nav-link', data: {turbo: false} %>
+          <%= link_to flag_icon(:us) + " " + 'En', { locale: nil, params: redirected_locale_params }, class: 'nav-link', data: {turbo: false} %>
         <% end %>
       </li>
     </ul>
