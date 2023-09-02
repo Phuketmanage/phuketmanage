@@ -105,22 +105,22 @@
       <% end %>
     </ul>
     <% if signed_in? && current_user.role?(['owner']) %>
-      <div class="d-none d-lg-block">
+      <div class="d-none d-lg-block text-light">
         <%= t('app.tagline') %> |
         <%= link_to t('app.reservation_phone'),
-          "tel:#{t('app.reservation_phone')}" %> |
-        <%= mail_to t('app.reservation_email') %>
+          "tel:#{t('app.reservation_phone')}", class: "text-light" %> |
+        <%= mail_to t('app.reservation_email'), class: "text-light" %>
       </div>
     <% elsif signed_in? %>
       <span class="navbar-text">
         <%= current_user.name %>
       </span>
     <% else %>
-      <div class="d-none d-lg-block">
+      <div class="d-none d-lg-block text-light">
         <%= t('app.tagline') %> |
         <%= link_to t('app.reservation_phone'),
-          "tel:#{t('app.phone')}" %> |
-        <%= mail_to t('app.email') %>
+          "tel:#{t('app.phone')}", class: "text-light" %> |
+        <%= mail_to t('app.email'), class: "text-light" %>
       </div>
     <% end %>
     <div class="navbar-nav nav-item">
