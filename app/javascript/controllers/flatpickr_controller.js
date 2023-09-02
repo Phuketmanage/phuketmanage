@@ -22,6 +22,7 @@ export default class extends Flatpickr {
       dateFormat: "Y-m-d",
       locale: {
         ...this.locale,
+        rangeSeparator: ' - ',
         firstDayOfWeek: 1,
       },
       mode: 'range',

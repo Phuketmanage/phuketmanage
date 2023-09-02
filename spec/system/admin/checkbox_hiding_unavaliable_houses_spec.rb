@@ -15,7 +15,7 @@ describe 'Checkbox hiding unavaliable houses' do
   end
   let(:period_from) { 5.days.from_now.to_date.to_fs }
   let(:period_to) { 10.days.from_now.to_date.to_fs }
-  let(:search_path) { "/search?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search" }
+  let(:search_path) { "/search?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search" }
 
   it "hides checkbox for unauthorized user" do
     visit "/"

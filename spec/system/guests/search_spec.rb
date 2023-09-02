@@ -32,7 +32,7 @@ describe 'Search' do
 
   context 'when pass only date' do
     before do
-      visit "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search"
+      visit "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search"
     end
 
     it { is_expected.to have_selector('.house', count: 3) }
@@ -44,7 +44,7 @@ describe 'Search' do
 
   context 'when pass with type' do
     before do
-      visit "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Searchs&search%5Btype%5D%5B%5D=#{villa.id}"
+      visit "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Searchs&search%5Btype%5D%5B%5D=#{villa.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -54,7 +54,7 @@ describe 'Search' do
 
   context 'when pass with location' do
     before do
-      visit "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}"
+      visit "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -64,7 +64,7 @@ describe 'Search' do
 
   context 'when pass with type and location' do
     before do
-      visit "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}"
+      visit "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}"
     end
 
     it { is_expected.to have_selector('.house', count: 2) }
@@ -74,7 +74,7 @@ describe 'Search' do
 
   context 'when pass all parameters' do
     before do
-      visit "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}&search%5Bbdr%5D%5B%5D=3"
+      visit "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search&search%5Blocation%5D%5B%5D=#{location_one.id}&search%5Btype%5D%5B%5D=#{villa.id}&search%5Bbdr%5D%5B%5D=3"
     end
 
     it { is_expected.to have_selector('.house', count: 1) }

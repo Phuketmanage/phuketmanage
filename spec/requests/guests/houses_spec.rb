@@ -21,7 +21,7 @@ RSpec.describe "Guests::Houses", freeze: '2023-02-01' do
 
     context "with search params" do
       before do
-        get "/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search"
+        get "/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search"
       end
 
       it "returns http success" do
@@ -31,7 +31,7 @@ RSpec.describe "Guests::Houses", freeze: '2023-02-01' do
 
     context "with locale and search params" do
       before do
-        get "/ru/houses?search%5Bperiod%5D=#{period_from}+to+#{period_to}&commit=Search"
+        get "/ru/houses?search%5Bperiod%5D=#{period_from}+-+#{period_to}&commit=Search"
       end
 
       it "returns http success" do
