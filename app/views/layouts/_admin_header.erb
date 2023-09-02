@@ -15,12 +15,12 @@
     <ul class="navbar-nav mr-auto">
       <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to t('menu.search'), search_path, class: "nav-link #{active_link(search_path)}" %>
+          <%= link_to t('menu.dashboard'), dashboard_path, class: "nav-link #{active_link(dashboard_path)}" %>
         </li>
       <% end %>
       <% if signed_in? && current_user.role?(['Accounting', 'Admin', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to t('menu.dashboard'), dashboard_path, class: "nav-link #{active_link(dashboard_path)}" %>
+          <%= link_to t('menu.search'), search_path, class: "nav-link #{active_link(search_path)}" %>
         </li>
       <% end %>
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager', 'Accounting']) %>
