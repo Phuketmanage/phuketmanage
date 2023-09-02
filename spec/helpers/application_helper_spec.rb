@@ -22,4 +22,26 @@ RSpec.describe ApplicationHelper do
       end
     end
   end
+
+  describe '#active_link' do
+    context 'when the link path matches the current page' do
+      it 'returns the string "active"' do
+        allow(helper).to receive(:current_page?).with('/your_link_path').and_return(true)
+
+        result = helper.active_link('/your_link_path')
+
+        expect(result).to eq('active')
+      end
+    end
+
+    context 'when the link path does not match the current page' do
+      it 'does not return the string "active"' do
+        allow(helper).to receive(:current_page?).with('/your_link_path').and_return(false)
+
+        result = helper.active_link('/your_link_path')
+
+        expect(result).to be_nil
+      end
+    end
+  end
 end

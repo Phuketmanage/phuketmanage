@@ -20,4 +20,8 @@ module ApplicationHelper
       I18n.locale
     end
   end
+
+  def active_link(link_path)
+    "active" if current_page?(link_path)
+  end
 end

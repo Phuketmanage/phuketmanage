@@ -6,6 +6,9 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <%= link_to t('menu.about'), guests_about_path, { class: "nav-link" } %>
+      </li>
       <% if signed_in? %>
         <li class="nav-item">
           <%= link_to t('menu.dashboard'), dashboard_path, { class: "nav-link text-primary" } %>
@@ -14,9 +17,6 @@
           <%= link_to t('menu.log_out'), destroy_user_session_path, { method: :delete, class: "nav-link" } %>
         </li>
       <% else %>
-        <li class="nav-item">
-          <%= link_to t('menu.about'), guests_about_path, { class: "nav-link" } %>
-        </li>
         <li class="nav-item">
           <%= link_to t('menu.log_in'), new_user_session_path, { class: "nav-link" } %>
         </li>
