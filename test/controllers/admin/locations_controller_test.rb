@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class LocationsControllerTest < ActionDispatch::IntegrationTest
+class Admin::LocationsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

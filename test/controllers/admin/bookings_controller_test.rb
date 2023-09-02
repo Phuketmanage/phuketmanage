@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BookingsControllerTest < ActionDispatch::IntegrationTest
+class Admin::BookingsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

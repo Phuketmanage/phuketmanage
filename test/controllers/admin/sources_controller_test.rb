@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SourcesControllerTest < ActionDispatch::IntegrationTest
+class Admin::SourcesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

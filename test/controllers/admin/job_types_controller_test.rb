@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class JobTypesControllerTest < ActionDispatch::IntegrationTest
+class Admin::JobTypesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ConnectionsControllerTest < ActionDispatch::IntegrationTest
+class Admin::ConnectionsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

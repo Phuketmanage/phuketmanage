@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class LogsControllerTest < ActionDispatch::IntegrationTest
+class Admin::SearchControllerTest < ActionDispatch::IntegrationTest
   # test "should get index" do
-  #   get logs_index_url
+  #   get search_path
   #   assert_response :success
   # end
 end

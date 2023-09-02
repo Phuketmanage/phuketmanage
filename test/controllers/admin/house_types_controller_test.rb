@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class HouseTypesControllerTest < ActionDispatch::IntegrationTest
+class Admin::HouseTypesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

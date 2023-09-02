@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PricesControllerTest < ActionDispatch::IntegrationTest
+class Admin::PricesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

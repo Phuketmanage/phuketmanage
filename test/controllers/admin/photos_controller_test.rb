@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PhotosControllerTest < ActionDispatch::IntegrationTest
+class Admin::PhotosControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

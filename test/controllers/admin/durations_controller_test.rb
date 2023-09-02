@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DurationsControllerTest < ActionDispatch::IntegrationTest
+class Admin::DurationsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

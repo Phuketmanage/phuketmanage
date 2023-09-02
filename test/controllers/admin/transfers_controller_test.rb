@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TransfersControllerTest < ActionDispatch::IntegrationTest
+class Admin::TransfersControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

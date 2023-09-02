@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SeasonsControllerTest < ActionDispatch::IntegrationTest
+class Admin::SeasonsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

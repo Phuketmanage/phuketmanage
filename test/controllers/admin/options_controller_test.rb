@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class OptionsControllerTest < ActionDispatch::IntegrationTest
+class Admin::OptionsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do

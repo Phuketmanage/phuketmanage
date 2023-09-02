@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class WaterUsagesControllerTest < ActionDispatch::IntegrationTest
+class Admin::WaterUsagesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
