@@ -8,4 +8,8 @@ module Admin::AdminHousesHelper
       address
     end
   end
+
+  def generated_link_to_guests_house(house)
+    guests_house_url(id: house.number, params: params.permit(:period))
+  end
 end

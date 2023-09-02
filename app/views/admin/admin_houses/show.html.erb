@@ -1,7 +1,17 @@
 <% provide(:title, @house.generated_title(I18n.locale)) %>
 <p id="notice"><%= notice %></p>
 
-<h1><%= @house.generated_title(I18n.locale) %></h1>
+<div class="form-row row-cols-1 row-cols-md-2">
+  <div class="d-flex align-items-center">
+    <h1><%= @house.generated_title(I18n.locale) %></h1>
+    <div class="col">
+      <div class="d-flex" data-controller="clipboard" data-clipboard-success-content-value="Copied!">
+        <input hidden type="text" value="<%= generated_link_to_guests_house(@house) %>" data-clipboard-target="source" />
+        <button class="col-8 btn btn-outline-info btn-sm" type="button" data-action="clipboard#copy" data-clipboard-target="button">Copy link to guests house</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-lg-8 mb-2">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">

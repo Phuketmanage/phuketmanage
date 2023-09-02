@@ -1,9 +1,11 @@
 # rubocop:disable RSpec/Metrics/ClassLength
 
 class Admin::AdminHousesController < AdminController
-  load_and_authorize_resource class: House, id_param: :number
-
+  include Admin::AdminHousesHelper
   before_action :set_house, only: %i[show edit update destroy]
+  before_action :check_authorization, only: :show
+
+  load_and_authorize_resource class: House, id_param: :number
   before_action :search, only: :show
 
   # @route GET /admin_houses (admin_houses)
@@ -130,6 +132,12 @@ class Admin::AdminHousesController < AdminController
     else
       @prices = "unavailable"
     end
+  end
+
+  def check_authorization
+    return if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
+
+    redirect_to generated_link_to_guests_house(@house)
   end
 
   def admin_house_params
