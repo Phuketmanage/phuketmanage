@@ -1,4 +1,6 @@
 class Admin::SearchController < AdminController
+  include Admin::SearchHelper
+  before_action :check_authorization
   authorize_resource class: false
   before_action :perform_search
 
@@ -11,9 +13,9 @@ class Admin::SearchController < AdminController
     @types = HouseType.all
     render :index and return unless params[:search].present? && @search.valid?
 
-    # Management can see prices even for occupied houses
-    management = false
-    management = true if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
+    # This controller is accesed by managment, so Management can see prices even for occupied houses
+    # management = true if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
+    management = true
     get_houses = @search.get_available_houses(management)
     @houses = get_houses[:available]
     @unavailable_houses = get_houses[:unavailable_ids]
@@ -29,5 +31,11 @@ class Admin::SearchController < AdminController
       Search.new(period: params.dig('search', 'period'), type: params.dig('search', 'type'),
                  bdr: params.dig('search', 'bdr'), location: params.dig('search', 'location'), dtnb: @settings['dtnb'])
     end
+  end
+
+  def check_authorization
+    return if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
+
+    redirect_to generated_link_to_guests_search
   end
 end
