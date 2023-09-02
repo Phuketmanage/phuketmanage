@@ -4,13 +4,13 @@ require 'test_helper'
 class SearchTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  test 'without authorization admin search is unavailable' do
+  test 'without authorization admin search is redirected to guests search' do
     year = Date.current.year + 1
     rs = "1.10.#{year}".to_date
     rf = "31.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
-    assert_redirected_to root_url
+    assert_redirected_to guests_houses_url(search: { period: })
   end
 
   test 'available houses' do
