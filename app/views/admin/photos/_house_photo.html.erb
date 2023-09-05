@@ -1,6 +1,7 @@
-<li data-sortable-id="<%= house_photo.id %>" data-sortable-update-url="<%=  house_photos_sort_path(house_photo.id) %>"> 
+<li data-sortable-id="<%= house_photo.id %>" data-sortable-update-url="<%= sort_admin_house_photo_path(house.number, house_photo.id) %>">
   <%= form_with(model: house_photo,
-                url: house_photo_update_path(house_photo),
+                url: admin_house_photo_path(house.number, house_photo),
+                method: :patch,
                 id: "form_edit_photo_id_#{house_photo.id}") do |f| %>
     <div class="row photo_row mb-3" id="photo_id_<%= house_photo.id %>">
       <div class="col-md-2 photo_thumb">
@@ -12,8 +13,8 @@
       </div>
       <div class="col-md-2 photo_actions text-right">
         <%#= f.submit 'Update', class: 'btn btn-primary btn-sm btn-block' %>
-        <%= f.submit 'Use as default', class: 'btn btn-primary btn-sm btn-block mt-md-1', tabindex: "-1" %>
-        <%= link_to 'Delete', house_photo_delete_path(house_photo), remote: true, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block mt-md-1', role: 'button', tabindex: "-1" %>
+        <%= f.submit 'Use as default', class: 'btn btn-primary btn-sm btn-block mt-md-1', tabindex: "-1", method: :patch %>
+        <%= link_to 'Delete', admin_house_photo_path(house.number, house_photo), remote: true, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block mt-md-1', role: 'button', tabindex: "-1" %>
       </div>
     </div>
     <div class="text-right">

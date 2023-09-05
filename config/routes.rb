@@ -60,7 +60,10 @@ Rails.application.routes.draw do
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
     resources :admin_houses do
       resources :prices, only: [:index]
-      resources :photos, only: [:index, :new]
+      resources :photos, only: [:index, :new, :destroy, :update] do
+        put 'sort', on: :member
+        delete 'delete_all', on: :collection
+      end
       post 'add_duration', to: 'prices#create_duration'
       delete 'delete_duration', to: 'prices#destroy_duration'
       post 'add_season', to: 'prices#create_season'
@@ -69,10 +72,6 @@ Rails.application.routes.draw do
       get 'inactive', to: 'admin_houses#inactive', on: :collection
       get 'export', on: :collection
     end
-    put 'house_photos/:id/sort', to: 'house_photos#sort', as: 'house_photos_sort'
-    delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
-    delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
-    patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
     get 'bookings/get_price', to: 'bookings#get_price'
     post 'booking/new', to: 'bookings#create_front'
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'

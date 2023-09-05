@@ -37,7 +37,7 @@ $(document).on "ready", ->
         files = data.files
 
         $.ajax
-          url: "/houses/#{hid}/photos/add",
+          url: "/admin_houses/#{hid}/photos/new",
           type: "get",
           dataType: "json",
           data: {
@@ -47,7 +47,7 @@ $(document).on "ready", ->
             if data.status != 'duplicate'
               authenticity_token = $("input[name='authenticity_token']").val()
               preview = "
-                          <form class='update_photo' action='/house_photos/#{data.id}' accept-charset='UTF-8' data-remote='true' method='post' id='form_edit_photo_id_#{data.id}'>
+                          <form class='update_photo' action='/admin_houses/#{hid}/photos/#{data.id}' accept-charset='UTF-8' data-remote='true' method='post' id='form_edit_photo_id_#{data.id}'>
                             <input name='utf8' type='hidden' value='✓'>
                             <input type='hidden' name='_method' value='patch'>
                             <input type='hidden' name='authenticity_token' value='#{authenticity_token}'>
@@ -59,7 +59,7 @@ $(document).on "ready", ->
                               </div>
                               <div class='col-md-2 photo_actions text-right'>
                                 <input type='submit' name='commit' value='Use as default' class='btn btn-primary btn-sm btn-block mt-md-1'>
-                                <a data-confirm='Are you sure?' class='btn btn-danger btn-sm btn-block mt-md-1' role='button' data-remote='true' rel='nofollow' data-method='delete' href='/house_photos/#{data.id}'>Delete</a>
+                                <a data-confirm='Are you sure?' class='btn btn-danger btn-sm btn-block mt-md-1' role='button' data-remote='true' rel='nofollow' data-method='delete' href='/admin_houses/#{hid}/photos/#{data.id}'>Delete</a>
                               </div>
                             </div>
                           </form>"
@@ -96,7 +96,6 @@ $(document).on "ready", ->
         # // extract key and generate URL from response
         key   = $(data.jqXHR.responseXML).find("Key").text();
         url   = '//' + $('#photoupload').data('host') + '/' + key;
-
         regex = /(^.*[\/])thumb_(.*)$/i
         url_parts = regex.exec(url)
         file_name = url_parts[2]
@@ -105,7 +104,6 @@ $(document).on "ready", ->
         console.log $('#house_preview_img').length
         if $('#house_preview_img').length  == 0
           url   = '//' + $('#photoupload').data('host') + '/' + key;
-          console.log url
           $('#house_preview').append("<img src='#{url}' class='img-fluid' id='house_preview_img'>")
 
         $("div.photo_thumb[data-file-name='#{file_name}']").append("<img src='#{url}' class='img-fluid'>")

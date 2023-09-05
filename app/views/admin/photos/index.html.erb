@@ -6,7 +6,7 @@
       <div id='house_preview'><%= image_tag @house.preview, class: 'img-fluid', id: 'house_preview_img' if @house.preview.present? %></div>
       <div class="actions mt-2 text-right">
         <%#= form.submit 'Save House', class: 'btn btn-primary' %>
-        <%= link_to 'Delete all photos', house_photo_delete_all_path(@house.number), remote: false, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block', role: 'button' %>
+        <%= link_to 'Delete all photos', delete_all_admin_house_photos_path(@house.number), remote: false, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm btn-block', role: 'button' %>
         <%= link_to 'Back', admin_houses_path, class: 'btn btn-secondary btn-block' %>
       </div>
     </div>
@@ -25,7 +25,7 @@
       <% end %>
       <div id='photo_previews' class='mt-2'>
         <ul data-controller="sortable">
-          <%= render(partial: "house_photo", collection: @photos) %>
+          <%= render(partial: "house_photo", collection: @photos, locals: {house: @house}) %>
         </ul>
       </div>
     </div>
