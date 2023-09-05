@@ -4,8 +4,7 @@ class Guests::HousesController < GuestsController
 
   # @route GET (/:locale)/houses (guests_houses)
   def index
-    @search = Search.new(period: search_params['period'], type: search_params['type'],
-                         bdr: search_params['bdr'], location: search_params['location'], dtnb: @settings['dtnb'])
+    @search = Search.new(search_params)
     @houses = []
     @locations = Location.all
     @bdrs = House.where.not(rooms: nil).select(:rooms).distinct.pluck(:rooms).sort
@@ -35,11 +34,11 @@ class Guests::HousesController < GuestsController
     if params[:period].blank?
       @search = Search.new
     else
-      preform_search
+      perform_search
     end
   end
 
-  def preform_search
+  def perform_search
     @search = Search.new(period: params[:period], dtnb: @settings['dtnb'])
 
     return unless @search.valid?
@@ -59,6 +58,6 @@ class Guests::HousesController < GuestsController
   end
 
   def search_params
-    params.require(:search).permit(:period, type: [], bdr: [], location: [])
+    params.require(:search).permit(:period, type: [], bdr: [], location: []).merge(dtnb: @settings['dtnb'])
   end
 end

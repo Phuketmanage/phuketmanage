@@ -14,11 +14,11 @@ RSpec.describe ApplicationHelper do
 
     context 'when I18n.locale is not :en' do
       before do
-        allow(I18n).to receive(:locale).and_return(:fr)
+        allow(I18n).to receive(:locale).and_return(:ru)
       end
 
       it 'returns the current locale' do
-        expect(helper.root_locale).to eq(:fr)
+        expect(helper.root_locale).to eq(:ru)
       end
     end
   end

@@ -28,8 +28,7 @@ class Admin::SearchController < AdminController
     @search = if params[:search].blank?
       Search.new
     else
-      Search.new(period: params.dig('search', 'period'), type: params.dig('search', 'type'),
-                 bdr: params.dig('search', 'bdr'), location: params.dig('search', 'location'), dtnb: @settings['dtnb'])
+      Search.new(search_params)
     end
   end
 
@@ -37,5 +36,9 @@ class Admin::SearchController < AdminController
     return if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
 
     redirect_to generated_link_to_guests_search
+  end
+
+  def search_params
+    params.require(:search).permit(:period, type: [], bdr: [], location: []).merge(dtnb: @settings['dtnb'])
   end
 end

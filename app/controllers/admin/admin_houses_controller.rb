@@ -115,11 +115,11 @@ class Admin::AdminHousesController < AdminController
     if params[:period].blank?
       @search = Search.new
     else
-      preform_search
+      perform_search
     end
   end
 
-  def preform_search
+  def perform_search
     @search = Search.new(period: params[:period], dtnb: @settings['dtnb'])
 
     return unless @search.valid?

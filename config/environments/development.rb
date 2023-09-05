@@ -40,6 +40,11 @@ Rails.application.configure do
   host_options = { host: '127.0.0.1', protocol: 'http', port: 3000 }
   Rails.application.routes.default_url_options = host_options
 
+  config.hosts = [
+    "127.0.0.1",
+    "phuketmanage.test"
+  ]
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
 
