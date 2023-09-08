@@ -65,16 +65,14 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'BookingFile'
-  # has_many :statements
   validates :start, :finish, :house_id, :status, :client_details, presence: true
   validate :price_chain, unless: :allotment?
-  # after_update :toggle_status
 
   scope :active, -> { where.not(status: [:canceled]) }
-  scope :for_owner, -> { where.not(status: %i[canceled temporary]) }
+  scope :for_owner, -> { where.not(status: %i[canceled temporary]).order(:start) }
   scope :real, -> { where.not(status: %i[canceled block]) }
   scope :unpaid, lambda {
-                   where.not(status: [Booking.statuses[:paid], Booking.statuses[:block], Booking.statuses[:canceled]])
+                   where.not(status: %i[paid block canceled])
                      .joins(:house)
                      .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id').order('bookings.start')
                  }

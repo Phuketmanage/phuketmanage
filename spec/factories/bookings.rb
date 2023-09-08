@@ -55,6 +55,9 @@ FactoryBot.define do
     agent { (sale * [0, 0.1].sample).to_i }
     comm { (sale * 0.02).to_i - agent }
     nett { sale - agent - comm }
+    house
+    start { Date.current }
+    finish { start + 14.days }
     allotment { false }
     trait :pending do
       status { "pending" }
