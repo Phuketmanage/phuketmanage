@@ -1,0 +1,5 @@
+<div class="inactive_houses">
+  <h1>Inactive Houses</h1>
+  <%= link_to 'Active Houses', admin_houses_path, class: 'btn btn-primary mb-2' %>
+  <%= render 'table', houses: @inactive_houses %>
+</div>

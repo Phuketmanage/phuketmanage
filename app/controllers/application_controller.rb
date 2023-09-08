@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  include Localizable
-
   before_action :set_settings
 
   rescue_from CanCan::AccessDenied do |exception|

@@ -73,12 +73,25 @@ body {
 * Navbar
 */
 
-/* .navbar {
-  margin-bottom: 1rem;
-  background-color: #DCE6EE;
+.navbar-admin {
+  background-color: #7952b3
 }
 
-.navbar-brand {
+.navbar-admin + [role="main"] {
+  padding-top: 76px; /* Space for fixed navbar */
+}
+
+.navbar-admin .navbar-text {
+  font-weight: 500;
+  color: rgba(255,255,255,0.85)
+}
+
+.navbar-admin .nav-link {
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+
+/* .navbar-brand {
   padding-top: .75rem;
   padding-bottom: .75rem;
   font-size: 1rem;

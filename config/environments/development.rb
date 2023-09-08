@@ -37,8 +37,13 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Host settings
-  host_options = { protocol: 'http', port: 3000, only_path: true }
+  host_options = { host: '127.0.0.1', protocol: 'http', port: 3000 }
   Rails.application.routes.default_url_options = host_options
+
+  config.hosts = [
+    "127.0.0.1",
+    "phuketmanage.test"
+  ]
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true

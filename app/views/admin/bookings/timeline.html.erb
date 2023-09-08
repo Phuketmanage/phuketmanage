@@ -1,0 +1,161 @@
+<% if current_user.role? ['Admin', 'Manager'] %>
+  <%= link_to 'New Booking', new_booking_path %> |
+  <%= link_to 'Bookings (list view)', bookings_path %> |
+<% end %>
+<% if params[:period].present? %>
+  <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %> |
+<% else %>
+  <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %> |
+<% end %>
+<%= link_to 'Show all houses', "#", id: 'show_all_houses' %>
+<%= form_with class: 'form-inline' do |f| %>
+  <div class="form-check form-check-inline">
+    <%= f.check_box :full_view, { class: 'form-check-input',
+                            id: 'full_view_check_box' } %>
+    <%= f.label 'Full view', {     class: 'form-check-label',
+                            for: 'full_view_check_box' } %>
+    </div>
+    <div class='mr-2'>Hide house group:</div>
+    <% HouseGroup.order(:name).all.each do |g| %>
+      <div class="form-check form-check-inline">
+        <%= f.check_box g.name, { class: 'form-check-input',
+                              id: "group_#{g.id}_check_box",
+                              data: {
+                                group_id: g.id
+                              }} %>
+        <%= f.label g.name, {     class: 'form-check-label',
+                              for: "group_#{g.id}_check_box" } %>
+        </div>
+      <% end %>
+      <%= hidden_field_tag 'period', params[:period], id: 'period' if params[:period].present? %>
+      <%= hidden_field_tag 'hidden_houses', nil, id: 'hidden_houses' %>
+    <% end %>
+    <div class="timeline" id="timeline">
+      <div class="timeline_top_container">
+        <% @days.times do |i| %>
+          <% date = @today+i.days %>
+          <% day = date.day %>
+          <% month_end = date.end_of_month.day %>
+          <% if (i == 0 && day > 1) || day == 1 %>
+            <div class='month_date'> <!-- Open month -->
+              <div class='month'><%= date.strftime('%B') %></div>
+            <% end %>
+            <div class="date date_compact<%= ' sunday' if date.sunday? %>">
+              <%= day %>
+            </div>
+            <% if day == month_end || i+1 == @days %>
+            </div>
+ <!-- Close month -->
+          <% end %>
+        <% end %>
+      </div>
+      <div class="timeline_left_container">
+        <% @houses.each do |h| %>
+          <div  class="house_code house_code_compact <%= 'text-muted' if h.unavailable? %>"
+            data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
+            <%= link_to h.code, '#',  class: 'hide_house',
+                                  data: {house_id: h.id},
+                                  style: 'display: block;' %>
+          </div>
+        <% end %>
+      </div>
+      <div class="timeline_container">
+        <% @houses.each_with_index do |h, y| %>
+          <div class="house_line" data-house-id='<%= h.id %>' data-house-group-id='<%= h.house_group.present? ? h.house_group.id : '' %>'>
+            <% @days.times do |x| %>
+              <% date = @today+x.days %>
+              <div  class="cell cell_compact<%= ' sunday' if date.sunday? %>"
+                id=<%= "x#{x+1}y#{y+1}" %>
+                data-house-id=<%= h.id %>
+                data-date=<%= date %>>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class='mt-2'>
+      <%= form_with(url: bookings_timeline_path, local: true, method: :get, id: 'timeline_form') do |f| %>
+        <div class="form-row">
+          <div class="col-lg-2 form-group">
+            <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+          </div>
+          <div class="col-lg-2 form-group">
+            <%= date_field_tag :to, {}, value: @to, class: "form-control" %>
+          </div>
+          <div class="col-lg-2 form-group">
+            <% options = @houses_for_select.map{ |h| [h.code, h.number]} %>
+            <%= f.select :house_number, options,
+        { include_blank: 'All', selected: params[:house_number] },
+        class: 'selectpicker form-control', data: { 'live-search': 'true' } %>
+          </div>
+          <div class="col-lg-6 form-group">
+            <%= f.submit 'Update timeline', class: 'btn btn-primary' %>
+            <%= link_to 'Get job order', '#', class: 'btn btn-primary', id: 'get_job_oder'  %>
+            <%= link_to 'Drop filter', bookings_timeline_path(period: 45), class: 'btn btn-secondary'  %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class='mt-2'>
+      Jobs:
+      <% JobType.order(:name).each do |jt| %>
+        <div style="background-color:<%= jt.color %>;display:inline-block;" class='rounded text-white p-1'><%= jt.name %></div>
+      <% end %>
+    </div>
+    <div class='mt-2'>
+      Booking statuses:
+      <div style="display:inline-block; width: 100px; text-align: center;" class='rounded text-white p-1 temporary'>Temporary</div>
+      <div style="display:inline-block; width: 100px; text-align: center;" class='rounded text-white p-1 pending'>Pending</div>
+      <div style="display:inline-block; width: 100px; text-align: center;" class='rounded text-white p-1 confirmed'>Confirmed</div>
+      <div style="display:inline-block; width: 100px; text-align: center;" class='rounded text-white p-1 paid'>Paid</div>
+      <div style="display:inline-block; width: 100px; text-align: center;" class='rounded text-white p-1 block'>Block</div>
+    </div>
+    <div class="dropdown new_job">
+      <div class="dropdown-menu new_job">
+        <div class="dropdown_menu_for_booking">
+          <h6 class="dropdown-header">New job for Booking</h6>
+          <% @job_types_for_bookings.each do |jt| %>
+            <%= link_to "#{jt.name}", "#", class: "dropdown-item for_booking",
+          data: {
+            job_type_id: jt.id,
+            # user_id: User.with_role('Maid').first.id,
+            toggle: "modal",
+            target: "#new_job_modal"} %>
+          <% end %>
+          <div class="dropdown-divider"></div>
+        </div>
+        <h6 class="dropdown-header">New job for House</h6>
+        <% @job_types_for_houses.each do |jt| %>
+          <%= link_to "#{jt.name}", "#", class: "dropdown-item for_house",
+        data: {
+          job_type_id: jt.id,
+          # user_id: User.with_role('Maid').first.id,
+          toggle: "modal",
+          target: "#new_job_modal"} %>
+        <% end %>
+      </div>
+    </div>
+    <div class="dropdown destroy_job">
+      <div class="dropdown-menu destroy_job">
+        <%= link_to 'Cancel job', '#', id: 'cancel_job', class: "dropdown-item for_job" %>
+      </div>
+    </div>
+    <%= render 'admin/jobs/form_modal', job: @job %>
+    <div class="modal fade" id="ModalJobOrder" tabindex="-1" role="dialog" aria-labelledby="ModalJobOrderTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalJobOrderTitle">Job order</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>

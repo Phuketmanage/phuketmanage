@@ -1,12 +1,25 @@
 Rails.application.routes.draw do
-  scope "(:locale)", locale: /en|ru/, defaults: { locale: nil } do
-    root to: 'pages#index', as: :locale_root
+  root to: 'guests/index#index'
+
+  scope "(:locale)" do
+    devise_for :users, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
+  end
+
+  # Guests controllers
+  scope "(:locale)", module: 'guests', as: 'guests', locale: /ru/ do
+    root to: 'index#index', as: :locale_root
+    resources :houses, only: %i[show index]
+    get :about, to: 'about#index'
+  end
+
+
+  # Admin controllers
+  scope module: 'admin' do
+    get 'dashboard', to: 'dashboard#index', as: 'dashboard'
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
     get 'reports', to: 'reports#index'
-    get 'unlock', to: 'dev#unlock' if Rails.env.development?
-    get 'houses/inactive', to: 'houses#inactive'
     resources :notifications, only: [:destroy]
     resources :water_usages
     get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
@@ -45,16 +58,20 @@ Rails.application.routes.draw do
     get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
     get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
-    resources :houses do
+    resources :admin_houses do
       resources :prices, only: [:index]
-      get 'photos', to: 'house_photos#index', as: 'photos'
-      get 'photos/add', to: 'house_photos#add'
+      resources :photos, only: [:index, :new, :destroy, :update] do
+        put 'sort', on: :member
+        delete 'delete_all', on: :collection
+      end
+      post 'add_duration', to: 'prices#create_duration'
+      delete 'delete_duration', to: 'prices#destroy_duration'
+      post 'add_season', to: 'prices#create_season'
+      delete 'delete_season', to: 'prices#destroy_season'
+      resources :bookings, only: [:index, :new]
+      get 'inactive', to: 'admin_houses#inactive', on: :collection
       get 'export', on: :collection
     end
-    put 'house_photos/:id/sort', to: 'house_photos#sort', as: 'house_photos_sort'
-    delete 'house_photos/:id', to: 'house_photos#delete', as: 'house_photo_delete'
-    delete 'houses/:hid/delete_photos', to: 'house_photos#delete', as: 'house_photo_delete_all'
-    patch 'house_photos/:id', to: 'house_photos#update', as: 'house_photo_update'
     get 'bookings/get_price', to: 'bookings#get_price'
     post 'booking/new', to: 'bookings#create_front'
     get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
@@ -68,24 +85,14 @@ Rails.application.routes.draw do
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :bookings
     resources :booking_files, only: %i[create update destroy]
-    get '/about', to: 'pages#about', as: 'page_about'
-    devise_for :users
     resources :users, except: :create
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
-    post 'houses/:house_id/add_duration', to: 'prices#create_duration', as: 'add_duration'
-    delete 'houses/:house_id/delete_duration', to: 'prices#destroy_duration', as: 'delete_duration'
-    post 'houses/:house_id/add_season', to: 'prices#create_season', as: 'add_season'
-    delete 'houses/:house_id/delete_season', to: 'prices#destroy_season', as: 'delete_season'
-    get 'houses/:hid/bookings', to: 'bookings#index', as: 'house_bookings'
-    get 'houses/:hid/bookings/new', to: 'bookings#new', as: 'new_house_booking'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
-    get 'dashboard', to: 'admin#index', as: 'dashboard'
     get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
-    get 'calendar/ical/:hid', to: 'bookings#ical', as: 'calendar'
     get 'search', to: 'search#index'
     resources :settings
     resources :house_types
@@ -94,8 +101,10 @@ Rails.application.routes.draw do
     get '/transfers/:id/cancel', to: 'transfers#cancel', as: 'cancel_transfer'
     resources :transfers
     get 'translate', to: "translations#show"
+    get 'calendar/ical/:hid', to: 'bookings#ical', as: 'calendar'
   end
-  root to: 'pages#index'
+
+  get 'unlock', to: 'dev#unlock' if Rails.env.development?
 
   # Good job admin dashboard
   authenticate :user, ->(user) { user.role?('Admin') } do

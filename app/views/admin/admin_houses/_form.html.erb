@@ -1,0 +1,360 @@
+<% path = admin_houses_path if action_name == :new || :create %>
+<% path = admin_house_path(house.number) if action_name == :edit %>
+
+<%= form_with(scope: :admin_house, model: house, url: path, local: true) do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
+
+  <div class="row form-group">
+    <div class="col-md-2 mb-2">
+      <%= form.select :owner_id,
+            @owners.order(:name, :surname).all.map {|o| ["#{o.name} #{o.surname}", o.id]},
+                      { prompt: 'Select owner' }, { class: "form-control"  } %>
+    </div>
+    <div class="col-md-2 mb-2">
+      <%= form.select :type_id,
+            @types.order(:name_en).all.map {|t| [t.name_en, t.id]},
+                      { prompt: 'Select type' }, { class: "form-control"  } %>
+    </div>
+    <div class="col-md-2">
+      <%= form.text_field :code, class: 'form-control', placeholder: 'Code' %>
+    </div>
+    <div class="col-md-2 mb-2">
+      <%= form.select :house_group_id,
+            HouseGroup.order(:name).all.map {|g| [g.name, g.id]},
+                      { include_blank: 'No group' }, { class: "form-control"  } %>
+    </div>
+
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Details inner</strong>
+      <%= form.text_area :details, class: 'form-control', rows: 6 %>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Location</strong>
+    <hr>
+    <%= form.label 'Project' %>
+    <%= form.text_field :project, class: 'form-control' %>
+    <%= form.collection_check_boxes :location_ids, Location.order(:name_en).all, :id, :name_en do |l| %>
+        <div class="form-check form-check-inline">
+          <%= l.check_box(class: "form-check-input") %>
+          <%= l.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>English</strong>
+    <hr>
+    <div class="row">
+      <div class="col form-group">
+        <%= form.label :description_en %>
+        <%= form.text_area :description_en, class: 'form-control', rows: 6 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Русский</strong>
+    <hr>
+    <div class="row">
+      <div class="col form-group">
+        <%= form.label 'Описание' %>
+        <%= form.text_area :description_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Links</strong>
+    <hr>
+    <div class="form-group">
+      <%= form.label :google_map %>
+      <%= form.text_field :google_map, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= form.label :photo %>
+      <%= form.text_field :photo_link, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :iCal, 'iCal' %>
+      <%= text_field_tag 'iCal', "#{request.base_url}/calendar/ical/#{@house.number}", {class: 'form-control', disabled: true} %>
+    </div>
+  </div>
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>General details</strong>
+    <hr>
+    <div class="form-group">
+      <%= form.label :address %>
+      <%= form.text_field :address, class: 'form-control' %>
+    </div>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <%= form.label :capacity %>
+        <%= form.number_field :capacity, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :rooms %>
+        <%= form.number_field :rooms, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :bathrooms %>
+        <%= form.number_field :bathrooms, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :kingBed, 'King beds' %>
+        <%= form.number_field :kingBed, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :queenBed, 'Queen beds' %>
+        <%= form.number_field :queenBed, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :singleBed, 'Single beds' %>
+        <%= form.number_field :singleBed, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 form-group">
+        <%= form.label :size, 'House size, sq.m.' %>
+        <%= form.number_field :size, class: 'form-control' %>
+      </div>
+      <div class="col-md-3 form-group">
+        <%= form.label :plot_size, 'Plot size, sq.m.' %>
+        <%= form.number_field :plot_size, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :pool, { class: 'form-check-input',
+                                  id: 'pool_check_box' } %>
+          <%= form.label :pool, {     class: 'form-check-label',
+                                  for: 'pool_check_box' } %>
+        </div>
+      </div>
+      <div class="col-md-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :communal_pool, { class: 'form-check-input',
+                                  id: 'communal_pool_check_box' } %>
+          <%= form.label :communal_pool, {     class: 'form-check-label',
+                                  for: 'communal_pool_check_box' } %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <%= form.label 'Pool size, sq m' %>
+        <%= form.number_field :pool_size, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <div class="form-check">
+          <%= form.check_box :parking, { class: 'form-check-input',
+                                  id: 'parking_check_box' } %>
+          <%= form.label :parking, {     class: 'form-check-label',
+                                  for: 'parking_check_box' } %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <%= form.label 'Parking size, how many cars' %>
+        <%= form.number_field :parking_size, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-1 form-group">
+        <div class="form-check">
+          <%= form.check_box :seaview, { class: 'form-check-input',
+                                  id: 'seaview_check_box' } %>
+          <%= form.label :seaview, {     class: 'form-check-label',
+                                  for: 'seaview_check_box' } %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Options</strong>
+    <hr>
+    <%= form.collection_check_boxes :option_ids, Option.order(:zindex).all, :id, :title_en do |o| %>
+        <div class="form-check form-check-inline">
+          <%= o.check_box(class: "form-check-input") %>
+          <%= o.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Price include/exclude</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :priceInclude_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :priceInclude_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Booking policy</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :cancellationPolicy_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :cancellationPolicy_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Rules</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :rules_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :rules_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Other</strong>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= form.label 'English' %>
+        <%= form.text_area :other_en, class: 'form-control', rows: 6  %>
+      </div>
+      <div class="col-md form-group">
+        <%= form.label 'Русский' %>
+        <%= form.text_area :other_ru, class: 'form-control', rows: 6  %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Employees:</strong>
+    <%= form.collection_check_boxes :employee_ids, Employee.all, :id, :type_with_name do |e| %>
+        <div class="form-check form-check-inline">
+          <%= e.check_box(class: "form-check-input") %>
+          <%= e.label(class: "form-check-label" ) %>
+        </div>
+    <% end %>
+    <hr />
+
+    <strong>Service provided</strong><br />
+    <div class="form-check form-check-inline">
+      <%= form.check_box :rental, { class: 'form-check-input',
+                              id: 'rental_check_box' } %>
+      <%= form.label :rental, {     class: 'form-check-label',
+                              for: 'rental_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :maintenance, { class: 'form-check-input',
+                              id: 'maintenance_check_box' } %>
+      <%= form.label :maintenance, {     class: 'form-check-label',
+                              for: 'maintenance_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :outsource_cleaning, { class: 'form-check-input',
+                              id: 'outsource_cleaning_check_box' } %>
+      <%= form.label :outsource_cleaning, {     class: 'form-check-label',
+                              for: 'outsource_cleaning_check_box' } %>
+    </div>
+    <div class="form-check form-check-inline">
+      <%= form.check_box :outsource_linen, { class: 'form-check-input',
+                              id: 'outsource_linen_check_box' } %>
+      <%= form.label :outsource_linen, {     class: 'form-check-label',
+                              for: 'outsource_linen_check_box' } %>
+    </div>
+    <div class="form-check mb-2">
+      <%= form.check_box :water_reading, { class: 'form-check-input',
+                              id: 'water_reading_check_box' } %>
+      <%= form.label 'Water meter reading', {     class: 'form-check-label',
+                              for: 'water_reading_check_box' } %>
+    </div>
+    <hr />
+
+    <b>Other</b>
+    <div class="form-check mb-2">
+      <%= form.check_box :unavailable, { class: 'form-check-input',
+                              id: 'unavailable_check_box' } %>
+      <%= form.label 'Not for rent', {     class: 'form-check-label',
+                              for: 'unavailable_check_box' } %>
+    </div>
+    <div class="form-check mb-2">
+      <%= form.check_box :balance_closed, { class: 'form-check-input',
+                              id: 'balance_closed_check_box' } %>
+      <%= form.label 'Balance is closed', { class: 'form-check-label',
+                                            for: 'balance_closed_check_box' } %>
+    </div>
+    <div class="form-check mb-2">
+      <%= form.check_box :hide_in_timeline, { class: 'form-check-input',
+                              id: 'hide_in_timeline_check_box' } %>
+      <%= form.label 'Hide in timeline', { class: 'form-check-label',
+                                            for: 'hide_in_timeline_check_box' } %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :water_meters, 'Water meters qty' %>
+      <%= form.number_field :water_meters, min: 1, max: 2, class: 'form-control' %>
+    </div>
+
+  </div>
+
+  <div class="actions mb-2">
+    <%= form.submit 'Save House', class: 'btn btn-primary' %>
+    <%= link_to 'Back', admin_houses_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>
+
+<div class="shadow-sm mb-2 p-2 bg-white border rounded">
+  <strong>Connections</strong>
+  <hr>
+  <% if 1==0 %>
+    <% @connections.each do |c| %>
+      <p>
+        <%= "#{c.source.name}: #{c.link}" %>
+        <%= link_to 'Destroy', connection_path(c.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </p>
+    <% end %>
+    <%= form_with(model: connection, url: connections_path(hid: house.number), local: true) do |form| %>
+      <% if connection.errors.any? %>
+        <%= render 'shared/error_messages', object: form.object %>
+      <% end %>
+      <div class="row">
+        <div class="col-md-2 ">
+          <%= form.select :source_id,
+                @sources.all.map {|s| [s.name, s.id]},
+                          { prompt: 'Select source' }, { class: "form-control",  } %>
+        </div>
+
+        <div class="col-md-8 form-group">
+          <%= form.text_field :link,  placeholder: "Link",
+                                      class: 'form-control' %>
+        </div>
+        <div class="col-md-2 actions">
+          <%= form.submit 'Save Connection', class: 'btn btn-primary' %>
+        </div>
+
+      </div>
+    <% end %>
+  <% end %>
+</div>

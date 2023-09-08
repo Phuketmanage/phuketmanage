@@ -1,3 +1,5 @@
+require 'simplecov'
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -13,7 +15,6 @@ require 'capybara/rspec'
 require 'webmock/rspec'
 WebMock.enable!
 WebMock.disable_net_connect!(allow_localhost: true)
-require 'simplecov'
 SimpleCov.command_name 'Rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

@@ -25,7 +25,7 @@ class PagesTest < ActionDispatch::IntegrationTest
     sign_in users(:owner)
     get root_path
     assert_response :success
-    assert_no_match "Dashboard", response.body
+    assert_match "Dashboard", response.body
     sign_out users(:owner)
   end
 end

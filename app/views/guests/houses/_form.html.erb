@@ -1,0 +1,32 @@
+<%= form_with model: search, url: guests_houses_path, method: 'get', local: true do |f| %>
+  <% if search.errors.any? %>
+    <%= render 'shared/error_messages', object: f.object %>
+  <% end %>
+  <div class="form-row d-flex align-items-center p-2 shadow-sm border rounded bg-white">
+    <div class="col-md-4 mb-2 mb-md-0">
+      <%= f.text_field :period,
+          class: 'border pl-2 fp-input',
+          readonly: true,
+          autocomplete: 'off',
+          placeholder: t('search.dates'),
+          data: {
+                  controller: "flatpickr",
+                  flatpickr_locale: I18n.locale,
+                  flatpickr_min_date: @search.min_date.iso8601,
+                  flatpickr_now: Date.current.iso8601,
+                  } %>
+    </div>
+    <div class="col-md-2 mb-2 mb-md-0">
+      <%= f.select :type, options_for_select(types.map{|t| [ t.send("name_#{I18n.locale}"), t.id]}, selected: params[:search].present? ? params[:search][:type] : nil), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.house_type')}} %>
+    </div>
+    <div class="col-md-2 mb-2 mb-md-0">
+      <%= f.select :bdr, bdrs, {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.bdr')}} %>
+    </div>
+    <div class="col-md-2 mb-2 mb-md-0">
+      <%= f.select :location, options_for_select(locations.map{|l| [ l.name, l.id]}, selected: params[:search].present? ? params[:search][:location] : nil), {}, {class: "selectpicker form-control bg-white", multiple: true, data: {"none-Selected-Text": t('search.location')}} %>
+    </div>
+    <div class="col-md-2">
+      <%= f.submit defined?(btn_text) ? btn_text : t('search.search'), class: "btn btn-primary btn-block"%>
+    </div>
+  </div>
+<% end %>

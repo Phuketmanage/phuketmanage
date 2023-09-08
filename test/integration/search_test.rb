@@ -1,14 +1,20 @@
 require 'test_helper'
 
+# Admin search spec
 class SearchTest < ActionDispatch::IntegrationTest
-  # include Devise::Test::IntegrationHelpers
+  include Devise::Test::IntegrationHelpers
 
-  # setup do
-
-  #   # b1 = bookings(:one)
-  # end
+  test 'without authorization admin search is redirected to guests search' do
+    year = Date.current.year + 1
+    rs = "1.10.#{year}".to_date
+    rf = "31.07.#{year}".to_date
+    period = "#{rs} to #{rf}"
+    get search_path params: { search: { period: } }
+    assert_redirected_to guests_houses_url(search: { period: })
+  end
 
   test 'available houses' do
+    sign_in users(:admin)
     year = Date.current.year + 1
     # Start > Finish
     rs = "1.10.#{year}".to_date
@@ -67,9 +73,11 @@ class SearchTest < ActionDispatch::IntegrationTest
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
     assert_select 'p.duration', 'Total nights: 7'
-    assert_select 'div.house', count: 1
+    assert_select 'div.house', count: 3
     assert_select 'h5.house_title', 'Villa 3 BDR'
     assert_select 'h5.house_price', '฿26,600'
+    assert_select 'span.badge', {text: 'Unavailable', count: 2}
+
 
     # True only if days between bookngs set to 2
     rs = "21.07.#{year}".to_date
@@ -77,15 +85,17 @@ class SearchTest < ActionDispatch::IntegrationTest
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
     assert_select 'p.duration', 'Total nights: 9'
-    assert_select 'div.house', count: 1
+    assert_select 'div.house', count: 3
     assert_select 'h5.house_title', 'Villa 3 BDR'
+    assert_select 'span.badge', {text: 'Unavailable', count: 2}
 
     # True only if days between bookngs set to 2
     rs = "21.07.#{year}".to_date
     rf = "31.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
-    assert_select 'div.house', count: 0
+    assert_select 'div.house', count: 3
+    assert_select 'span.badge', {text: 'Unavailable', count: 3}
 
     # True only if days between bookngs set to 2
     rs = "22.07.#{year}".to_date
@@ -93,16 +103,18 @@ class SearchTest < ActionDispatch::IntegrationTest
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
     assert_select 'p.duration', 'Total nights: 9'
-    assert_select 'div.house', count: 1
+    assert_select 'div.house', count: 3
     assert_select 'h5.house_title', 'Villa 3 BDR'
+    assert_select 'span.badge', {text: 'Unavailable', count: 2}
 
     rs = "20.07.#{year}".to_date
     rf = "25.07.#{year}".to_date
     period = "#{rs} to #{rf}"
     get search_path params: { search: { period: } }
     assert_select 'p.duration', 'Total nights: 5'
-    assert_select 'div.house', count: 1
+    assert_select 'div.house', count: 2
     assert_select 'h5.house_title', 'Villa 3 BDR'
+    assert_select 'span.badge', {text: 'Unavailable', count: 1}
 
     # Price calculations
     rs = "15.11.#{year}".to_date

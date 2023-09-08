@@ -1,0 +1,230 @@
+<% provide(:title, @house.generated_title(I18n.locale)) %>
+<p id="notice"><%= notice %></p>
+
+<h1><%= @house.generated_title(I18n.locale) %></h1>
+<div class="row">
+  <div class="col-lg-8 mb-2">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <% @house.photos.count.times do |i| %>
+          <li data-target="#carouselExampleControls" data-slide-to="<%= i %>" class="<%= 'active' if i == 0 %>"></li>
+        <% end %>
+      </ol>
+      <div class="carousel-inner">
+        <% i = 0 %>
+        <% @house.photos.rank(:position).each do |photo| %>
+          <% i += 1 %>
+          <div class="carousel-item <%= 'active' if i == 1 %>">
+            <img src="<%= photo.original %>" class="d-block w-100" alt="<%= photo.send("title_#{I18n.locale}") %>">
+            <div class="carousel-caption d-none d-md-block">
+              <p><%= photo.send("title_#{I18n.locale}") %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <p class="mb-1 mr-2 text-uppercase font-weight-light text-muted small text-right">
+      CODE: <%=@house.code%>&nbsp;<%= link_to 'Photo', @house.photo_link, target: '_blank' if @house.photo_link.present? %>
+    </p>
+    <%= render 'guests/houses/form_vertical', search: @search, btn_text: t('search.check') %>
+    <% if @prices && @prices != 'unavailable' %>
+      <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
+        <div class="row d-flex align-items-center">
+          <div class="col-md-8 col-lg-12 mb-1 text-center">
+            <span class='h4'><%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %></span>
+            <%= "#{number_to_currency(@prices[@house.id][:per_day], precision: 0, unit: '฿')} / #{t('search.per_day')}" %>
+          </div>
+          <div class="col-md-4 col-lg-12">
+            <%= link_to t('search.book'), guests_houses_path(params: {period: @search.period, hid: @house.number, stage: 2}), class: 'btn btn-success btn-block', data: {toggle: "modal", target: "#makeBooking"} %>
+          </div>
+        </div>
+      </div>
+    <% elsif @prices == 'unavailable' %>
+      <div class='shadow-sm mb-2 p-2 border rounded bg-white'>
+        <%= t('search.unavailable') %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>
+<% if @house.locations.any? %>
+  <div><%= t('houses.location') %>: <%= @house.locations.map{ |l| l.name }.join(', ') %></div>
+<% end %>
+<% if @house.project %>
+  <div><%= t('houses.project') %>: <%= @house.project %></div>
+<% end %>
+<p>
+  <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
+<br />
+  <%= @house.pool ? "#{t('houses.pool')}, " : '' %>
+  <%= @house.communal_pool ? "#{t('houses.communalPool')}, " : '' %>
+  <%= @house.option('Air conditioner') ? "#{t('houses.ac')}, " : '' %>
+  <%= @house.option('Internet') ? "#{t('houses.internet')}, " : '' %>
+  <%= @house.option('Kitchen') ? t('houses.kitchen') : '' %>
+
+</p>
+<p>
+  <%= simple_format @house.send("description_#{I18n.locale}") %>
+</p>
+<hr />
+<h6><%= t('houses.amenities') %></h6>
+<p>
+  <% @house.options.each do |o| %>
+  - <%= o.send("title_#{I18n.locale}") %><br />
+  <% end %>
+</p>
+
+<% if @house.kingBed || @house.queenBed || @house.singleBed %>
+  <hr />
+  <h6><%= t('houses.beds') %></h6>
+  <p>
+    <%= "#{t('houses.kingBed')} - #{@house.kingBed}" if @house.kingBed %>&emsp;
+    <%= "#{t('houses.queenBed')} - #{@house.queenBed}" if @house.queenBed %>&emsp;
+    <%= "#{t('houses.singleBed')} - #{@house.singleBed}" if @house.singleBed %>
+  </p>
+<% end %>
+
+<hr />
+<h6><%= t('houses.included') %></h6>
+<p><%= simple_format @house.send("priceInclude_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.policy') %></h6>
+<p><%= simple_format @house.send("cancellationPolicy_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.rules') %></h6>
+<p><%= simple_format @house.send("rules_#{I18n.locale}") %></p>
+
+<hr />
+<h6><%= t('houses.other') %></h6>
+<p><%= simple_format @house.send("other_#{I18n.locale}") %></p>
+
+
+<hr />
+<h6><%= t('houses.location') %></h6>
+<%  @house.locations.each do |l| %>
+<%= l.name %>
+<p><%= simple_format l.descr %></p>
+<% end %>
+
+<% if @prices && @prices != 'unavailable' %>
+  <!-- Modal -->
+  <div class="modal fade" id="makeBooking" tabindex="-1" role="dialog" aria-labelledby="makeBookingLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="makeBookingLabel">
+            <%= @house.generated_title(I18n.locale) %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_with(model: @booking, url: '/booking/new', data: { remote: true }) do |f| %>
+          <div class="modal-body">
+            <p>
+              <%= t('houses.location') %>: <%= @house.locations.map{ |l| l.name }.join(', ') %><br />
+              <%= t('houses.project') %>: <%= @house.project %><br />
+              <%= t('houses.capacity', count: @house.capacity) %>, <%= t('houses.rooms', count: @house.rooms) %>, <%= t('houses.bathrooms', count: @house.bathrooms) %>
+            </p>
+            <div class="row">
+              <div class="col-8 h5">
+              <%= l(@search.period.split.first.to_date, format: '%d %b %Y' ) %> -
+              <%= l(@search.period.split.last.to_date, format: '%d %b %Y') %>
+              </div>
+              <div class="col-4 text-right h5">
+                <%= "#{number_to_currency(@prices[@house.id][:total], precision: 0, unit: '฿')}" %>
+              </div>
+            </div>
+            <hr />
+              <div class="form-row">
+                <div class="col-4">
+                  <%= f.label :name, t('client.name') %>
+                  <%= f.text_field :name, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-4">
+                  <%= f.label :surname, t('client.surname') %>
+                  <%= f.text_field :surname, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-2">
+                  <%= f.label :adult, t('client.adult') %>
+                  <%= f.text_field :adult, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-2">
+                  <%= f.label :children, t('client.children') %>
+                  <%= f.text_field :children, required: true, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-6">
+                  <%= f.label :phone, t('client.phone') %>
+                  <%= f.text_field :phone, required: true, class: 'form-control' %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :email, t('client.email') %>
+                  <%= f.text_field :email, required: true, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-6">
+                  <%= f.label t('client.flight_no') %>
+                  <%= f.text_field :flight_no, class: 'form-control' %>
+                </div>
+                <div class="col-6">
+                  <%= f.label :flight_time, t('client.flight_time') %>
+                  <%= f.text_field :flight_time, class: 'form-control' %>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <%= f.label :comment, t('client.comment') %>
+                  <%= f.text_area :comment, class: 'form-control' %>
+                </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <%= f.hidden_field :start, value: @search.period.split.first %>
+            <%= f.hidden_field :finish, value: @search.period.split.last %>
+            <%= f.hidden_field :hid, value: @house.number %>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
+            <%= f.submit t('search.send'), class: "btn btn-primary"%>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="BookingDone" tabindex="-1" role="dialog" aria-labelledby="BookingDoneLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="BookingDoneLabel">
+            <%= t('search.done') %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body">
+            <span class="h5"><%= t('search.booking_no') %>: </span><span class="h5" id="booking_number"></span>
+            <div class="h6"><%= t('search.message_done')%></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('search.close')%></button>
+          </div>
+      </div>
+    </div>
+  </div>
+<% end %>

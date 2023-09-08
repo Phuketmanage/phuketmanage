@@ -1,0 +1,157 @@
+<%= form_with(model: transaction, local: true, data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host }) do |form| %>
+  <%= render 'shared/error_messages', object: form.object %>
+  <div class="form-row">
+    <div class="col-md-2">
+      <%= form.label :date %>
+      <% if current_user.role? ['Admin'] %>
+        <%= form.date_field :date, class: 'form-control' %>
+      <% else %>
+        <%= form.date_field :date, min: (Date.current-30.days).beginning_of_month, max: Date.current, class: 'form-control' %>
+      <% end %>
+    </div>
+    <div class="col-md-2">
+      <%= form.label :type_id %>
+      <% if current_user.role? ['Admin'] %>
+        <%= form.select :type_id,
+              TransactionType.order(:name_en).all.map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+      <% else %>
+        <%= form.select :type_id,
+              TransactionType.where(admin_only: false).order(:name_en).map {|t| [t.name_en, t.id]}, { prompt: 'Select transaction type' }, class: "form-control", id: 'trsc_type' %>
+      <% end %>
+    </div>
+    <div class="col-md-2" id='house_id', style='display:none;'>
+      <% if @house.present? %>
+        <% choices_for_select = [[@house.code, @house.id]] %>
+      <% elsif @transaction.user_id.present? %>
+        <% choices_for_select = House.where(owner_id: @transaction.user_id).all.order(:code).map {|h| [h.code, h.id]} %>
+      <% else %>
+        <% choices_for_select = House.where.not(balance_closed: true).all.order(:code).map {|h| [h.code, h.id]} %>
+      <% end %>
+      <%= form.label :house_id %>
+      <%= form.select :house_id, choices_for_select,
+                      { include_blank: 'Select house' }, class: "form-control" %>
+    </div>
+    <div class="col-md-2" id='owner_id', style='display:none;'>
+      <%= form.label 'Owner' %>
+      <%= form.select :user_id,
+            User.with_role(['Owner']).order(:name).map {|u| ["#{u.name} #{u.surname}", u.id]},
+            { include_blank: 'Select owner' }, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-2 money_fields" id='booking_id'>
+      <%= form.label :booking_id %>
+      <%= form.select :booking_id,
+            @bookings.map {|b| ["#{b.code} #{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}", b.id]},
+                      { include_blank: 'Select booking' }, class: "form-control" %>
+    </div>
+    <div class="col-md-2 money_fields", id='de_ow', style='display:none;'>
+      <%= form.label :de_ow, id: 'de_ow_label' %>
+      <%= form.number_field :de_ow, step: 0.01, placeholder: 0,
+        class: "form-control", value: @de_ow %>
+    </div>
+    <div class="col-md-2 money_fields", id='cr_ow', style='display:none;'>
+      <%= form.label :cr_ow, id: 'cr_ow_label' %>
+      <%= form.number_field :cr_ow, step: 0.01, placeholder: 0,
+        class: "form-control", value: @cr_ow %>
+    </div>
+    <div class="col-md-2 money_fields", id='cr_co', style='display:none;'>
+      <%= form.label :cr_co, id: 'cr_co_label' %>
+      <%= form.number_field :cr_co, step: 0.01, placeholder: 0,
+        class: "form-control", value: @cr_co %>
+    </div>
+    <div class="col-md-2 money_fields", id='de_co', style='display:none;'>
+      <%= form.label :de_co, id: 'de_co_label' %>
+      <%= form.number_field :de_co, step: 0.01, placeholder: 0,
+        class: "form-control", value: @de_co %>
+      <a href="#" data-add-comm data-add='20'> +20%</a>
+      <a href="#" data-add-comm data-add='15'> +15%</a>
+      <a href="#" data-add-comm data-add='10'> +10%</a>
+    </div>
+  </div>
+  <div class="form-check money_fields mt-2 mb-1" id='booking_support_div'>
+    <div id='booking_details'></div>
+    <div id='rental_calcs'></div>
+  </div>
+  <div data-controller="translate" data-translate-target="language" >
+    <div class="field" id='comment_en'>
+      <%= form.label :comment_en %>
+      <a href="#" class="text-decoration-none ml-2" data-action="click->translate#en2ru">
+        <i class="bi bi-translate"></i>
+        to Ru
+      </a>
+      <%= form.text_field :comment_en, class: "form-control", data: { "translate-target": "inputEn outputEn" } %>
+    </div>
+    <div class="field" id='comment_ru'>
+      <%= form.label :comment_ru %>
+      <a href="#" class="text-decoration-none ml-2" data-action="click->translate#ru2en">
+        <i class="bi bi-translate"  width="20" height="20"></i>
+        to En
+      </a>
+      <%= form.text_field :comment_ru, class: "form-control", data: { "translate-target": "inputRu outputRu" } %>
+    </div>
+  </div>
+  <div class="field" id='comment_inner'>
+    <%= form.label :comment_inner %>
+    <%= form.text_field :comment_inner, class: "form-control" %>
+  </div>
+  <div class="field" id='ref_no'>
+    <%= form.label :ref_no %>
+    <%= form.text_field :ref_no, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <% if current_user.role? ['Admin', 'Accounting'] %>
+      <div class="form-check">
+        <%= form.check_box :cash, class: 'form-check-input' %>
+        <%= form.label 'Cash', class: "form-check-label" %>
+      </div>
+      <div class="form-check">
+        <%= form.check_box :hidden, class: 'form-check-input' %>
+        <%= form.label :hidden, class: "form-check-label" %>
+      </div>
+      <div class="form-check">
+        <%= form.check_box :for_acc, class: 'form-check-input' %>
+        <%= form.label 'Only for acc', class: "form-check-label" %>
+      </div>
+      <div class="form-check">
+        <%= form.check_box :incomplite, class: 'form-check-input' %>
+        <%= form.label 'Support documents not ready yet', class: "form-check-label" %>
+      </div>
+    <% end %>
+    <div class="actions mt-2">
+      <%= form.submit 'Save', class: "btn btn-primary" %>
+      <%= link_to 'Back', transactions_path(
+                          from: session[:from],
+                          to: session[:to],
+                          view_user_id: session[:view_user_id],
+                          commit: session[:commit]),
+                        class: 'btn btn-secondary',
+                        id: 'transaction_back' %>
+    </div>
+    <div class="mt-2">
+      <label for="fileupload_trsc" class="btn btn-success">
+        Add file
+      </label>
+      <%#= hidden_field_tag 'Content-Type', 'application/pdf' %>
+      <%= file_field_tag :files, id: "fileupload_trsc", multiple: true, style: 'display: none;'%>
+    </div>
+    <div class="progress" style="height:3px;">
+      <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="d-flex flex-wrap" id='transaction_files'>
+      <% transaction.files.order(:created_at).each do |f| %>
+        <%= render 'admin/transaction_files/file', file: f %>
+      <% end %>
+    </div>
+  <% end %>
+  <div id="transaction_file" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

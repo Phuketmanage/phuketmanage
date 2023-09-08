@@ -13,22 +13,24 @@ class Ability
     if user.role? :owner
       can :index, [Transaction]
       can :index_front, [Booking]
-      can :index, [Admin]
+      can :index, :dashboard
       can :index, TransactionFile, show: true
     end
     if user.role? 'Transfer'
       can :read, Transfer
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Maid'
       can %i[laundry update_laundry], Job
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Gardener'
       can %i[index create update], WaterUsage
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? 'Accounting'
+      can :index, :search
+      can :index, :dashboard
       can :reimbersment, :document
       can :statement, :document
       can %i[index edit], House
@@ -44,18 +46,19 @@ class Ability
       can :read, :translation
       can :manage, Job
       can [:destroy], Job, creator: user
-      can :index, [Admin]
     end
     if user.role? 'Guest relation'
       can :manage, Job
       can [:destroy], Job, creator: user
       can :index, Transfer
       can %i[timeline timeline_data check_in_out update_comment_gr], Booking
-      can :index, [Admin]
+      can :index, :dashboard
     end
     if user.role? :manager
+      can :index, :search
+      can :index, :dashboard
       can %i[index show], User, roles: { name: %w[Owner Tenant] }
-      can [:new, :get_houses], User
+      can %i[new get_houses], User
       can %i[create edit update], User, roles: { name: %w[Owner Tenant] }
       cannot :destroy, User
       can :manage, [HouseType, House, Duration, Season, Price,
@@ -67,7 +70,6 @@ class Ability
       can %i[index new show create edit update laundry update_laundry], Job
       can [:destroy], Job
       can :manage, JobMessage, sender: user
-      can :index, [Admin]
       can %i[index new create update_invoice_ref docs], Transaction
       can [:edit, :update], Transaction do |t|
         t.date >= (Date.current - 30.days).beginning_of_month
@@ -79,7 +81,7 @@ class Ability
       can :read, :translation
       # can [ :statement, :reimbersment ], Document
       can %i[index create update], WaterUsage
-      can [:index, :bookings], :report
+      can %i[index bookings], :report
     end
     if user.role? :admin
       can :manage, :all

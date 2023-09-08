@@ -1,0 +1,83 @@
+class Admin::DurationsController < AdminController
+  load_and_authorize_resource :house
+  # load_and_authorize_resource :duration, through: :house, shallow: true
+
+  before_action :set_duration, only: %i[show edit update destroy]
+
+  # GET /durations
+  # GET /durations.json
+  def index
+    @house = House.find(params[:house_id])
+    @durations = @house.durations
+  end
+
+  # GET /durations/1
+  # GET /durations/1.json
+  def show; end
+
+  # GET /durations/new
+  def new
+    @house = House.find(params[:house_id])
+    @duration = Duration.new
+  end
+
+  # GET /durations/1/edit
+  def edit
+    @house = @duration.house
+  end
+
+  # POST /durations
+  # POST /durations.json
+  def create
+    @house = House.find(params[:house_id])
+    @duration = @house.durations.build(duration_params)
+
+    respond_to do |format|
+      if @duration.save
+        format.html { redirect_to house_durations_path(@house), notice: 'Duration was successfully created.' }
+        format.json { render :show, status: :created, location: @duration }
+      else
+        format.html { render :new }
+        format.json { render json: @duration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /durations/1
+  # PATCH/PUT /durations/1.json
+  def update
+    @house = @duration.house
+    respond_to do |format|
+      if @duration.update(duration_params)
+        format.html { redirect_to house_durations_path(@house), notice: 'Duration was successfully updated.' }
+        format.json { render :show, status: :ok, location: @duration }
+      else
+        format.html { render :edit }
+        format.json { render json: @duration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /durations/1
+  # DELETE /durations/1.json
+  def destroy
+    @house = @duration.house
+    @duration.destroy
+    respond_to do |format|
+      format.html { redirect_to house_durations_path(@house), notice: 'Duration was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_duration
+    @duration = Duration.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def duration_params
+    params.require(:duration).permit(:start, :finish, :house_id)
+  end
+end
