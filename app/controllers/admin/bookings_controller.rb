@@ -37,7 +37,7 @@ class Admin::BookingsController < AdminController
   def index
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
-    @hid = params[:hid]
+    @hid = params[:admin_house_id]
     @view_as_owner = params[:view_as_owner].present? ? true : false
     @houses = set_houses
     @bookings = Booking.active.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
@@ -129,7 +129,7 @@ class Admin::BookingsController < AdminController
   def new
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map { |h| [h.code, h.id] }
-    @booking.house = House.find_by(id: params[:hid]) if params[:hid]
+    @booking.house = House.find_by(id: params[:admin_house_id]) if params[:admin_house_id]
     @tenants = User.with_role('Tenant')
   end
 
@@ -179,7 +179,7 @@ class Admin::BookingsController < AdminController
     respond_to do |format|
       if @booking.save
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully created.' }
+        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
@@ -259,7 +259,7 @@ class Admin::BookingsController < AdminController
         end
         @booking.toggle_status
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully updated.' }
+        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.order(:code).map { |h| [h.code, h.id] }
