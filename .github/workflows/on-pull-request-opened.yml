@@ -1,0 +1,22 @@
+name: Set pull request assignee and associate with issues
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add-pull-request-to-project-and-associate-with-issue:
+    name: Set pull request assignee and associate with issues
+    runs-on: ubuntu-latest
+    steps:
+      - uses: danielswensson/auto-assign-owner-action@v1
+        with:
+          github-token: ${{ secrets.GH_ACTIONS_TOKEN }}
+      - uses: tkt-actions/add-issue-links@v1.8.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          branch-prefix: ''
+          resolve: true
+          position: top
+          header: '### Related Issues'
