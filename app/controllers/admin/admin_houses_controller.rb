@@ -64,7 +64,7 @@ class Admin::AdminHousesController < AdminController
     respond_to do |format|
       if @house.save
         format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully created." }
-        format.json { render :show, status: :created, location: @house }
+        format.json { render :show, status: :created, location: admin_house_path(@house.number) }
       else
         @owners = User.with_role('Owner')
         @types = HouseType.all
@@ -83,7 +83,7 @@ class Admin::AdminHousesController < AdminController
     respond_to do |format|
       if @house.update(admin_house_params)
         format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully updated." }
-        format.json { render :show, status: :ok, location: @house }
+        format.json { render :show, status: :ok, location: admin_house_path(@house.number) }
       else
         @owners = User.with_role('Owner')
         @types = HouseType.all
