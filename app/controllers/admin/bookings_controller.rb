@@ -21,7 +21,6 @@ class Admin::BookingsController < AdminController
       .order(:start).all
     bookings.each do |b|
       cal.event do |e|
-        # byebug
         e.dtstart     = Icalendar::Values::Date.new((b.start - 2.days).to_s(:number))
         e.dtend       = Icalendar::Values::Date.new((b.finish + 2.days).to_s(:number))
         e.summary     = "Reserved"
@@ -31,7 +30,6 @@ class Admin::BookingsController < AdminController
     cal.publish
 
     send_data cal.to_ical, type: 'text/calendar', disposition: 'inline', filename:
-    # render :text => cal.to_ical
   end
 
   # @route GET /admin_houses/:admin_house_id/bookings (admin_house_bookings)
@@ -39,7 +37,7 @@ class Admin::BookingsController < AdminController
   def index
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
-    @hid = params[:hid]
+    @hid = params[:admin_house_id]
     @view_as_owner = params[:view_as_owner].present? ? true : false
     @houses = set_houses
     @bookings = Booking.active.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
@@ -67,7 +65,7 @@ class Admin::BookingsController < AdminController
     @hid = params[:hid]
     @houses = set_houses
     house_ids = current_user.houses.ids
-    @bookings = Booking.for_owner.where(finish: @from.., start: ..@to, house_id: house_ids, allotment: false).all
+    @bookings = Booking.for_owner.where(finish: @from.., start: ..@to, house_id: house_ids, allotment: false)
     @bookings = @bookings.where(house_id: @hid) if @hid.present?
     @one_house = true if current_user.houses.ids.count == 1
   end
@@ -94,8 +92,6 @@ class Admin::BookingsController < AdminController
       @from = params[:from].to_date
       @to = params[:to].to_date
     end
-    # @houses = House.where.not(balance_closed: true, hide_in_timeline: true)
-    # .order(:unavailable, :house_group_id, :code).all
     @houses = House.for_timeline
     @houses_for_select = @houses
     if params[:house_number].present?
@@ -113,7 +109,6 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/timeline_data (bookings_timeline_data)
   def timeline_data
-    # puts params[:period].nil?
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
     render json: { timeline: }
   end
@@ -126,7 +121,6 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/:id (booking)
   def show
-    # booking = Booking.find(params[:id])
     render json: { booking: @booking }
   end
 
@@ -135,7 +129,7 @@ class Admin::BookingsController < AdminController
   def new
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map { |h| [h.code, h.id] }
-    @booking.house = House.find_by(id: params[:hid]) if params[:hid]
+    @booking.house = House.find_by(id: params[:admin_house_id]) if params[:admin_house_id]
     @tenants = User.with_role('Tenant')
   end
 
@@ -171,7 +165,6 @@ class Admin::BookingsController < AdminController
       @booking.errors.add(:base,
                           "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
       @houses = House.all.order(:code).map { |h| [h.code, h.id] }
-      # @tenants = User.with_role('Tenant')
       render :new and return
     end
     if @booking.block?
@@ -186,11 +179,10 @@ class Admin::BookingsController < AdminController
     respond_to do |format|
       if @booking.save
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully created.' }
+        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
-        # @tenants = User.with_role('Tenant')
         format.html { render :new }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
@@ -225,7 +217,6 @@ class Admin::BookingsController < AdminController
   def sync
     if params[:hid].present?
       house = House.find_by(number: params[:hid])
-      # bookings = house.bookings.order(:start)
       Booking.sync [house]
       redirect_to house_bookings_path(house.number) and return
     else
@@ -261,15 +252,14 @@ class Admin::BookingsController < AdminController
             @booking.saved_changes.key?(:finish) ||
             @booking.saved_changes.key?(:house_id)
           search = Search.new({ rs: @booking.start,
-                                rf: @booking.finish }) # ,
-          # staff: true })
+                                rf: @booking.finish })
           prices = search.get_prices [@booking.house]
           @booking.calc prices
           @booking.save
         end
         @booking.toggle_status
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to bookings_path(hid:), notice: 'Booking was successfully updated.' }
+        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully updated.' }
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.order(:code).map { |h| [h.code, h.id] }
@@ -354,12 +344,10 @@ class Admin::BookingsController < AdminController
     "#{params[:booking][:start]} to #{params[:booking][:finish]}"
   end
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_booking
     @booking = Booking.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def booking_params
     params.require(:booking).permit(:start,
                                     :finish,
