@@ -31,7 +31,7 @@
         <% profit_sum += profit %>
         <tr class="booking_row" data-booking-no="<%= booking.number %>">
           <% if !@one_house %>
-            <td><%= !@house ? link_to(booking.house.code, bookings_front_path(hid: booking.house.number)) : booking.house.code %></td>
+            <td><%= !@house ? link_to(booking.house.code, bookings_front_path(hid: booking.house.id)) : booking.house.code %></td>
           <% end %>
           <td><%= booking.start.to_fs(:date) %></td>
           <td><%= booking.finish.to_fs(:date) %></td>
