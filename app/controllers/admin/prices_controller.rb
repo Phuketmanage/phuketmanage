@@ -88,7 +88,7 @@ class Admin::PricesController < AdminController
                                 season_id: @season.id,
                                 amount: 0)
         end
-        format.html { redirect_to house_prices_path(@house.number), notice: 'Season was successfully created.' }
+        format.html { redirect_to admin_house_prices_path(@house.number), notice: 'Season was successfully created.' }
         format.json { render :index, status: :created, location: @price }
       else
         @houses = House.all.active
@@ -147,7 +147,7 @@ class Admin::PricesController < AdminController
     house = @price.house
     @price.destroy
     respond_to do |format|
-      format.html { redirect_to admin_house_prices_url(house.id), notice: 'Price was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(house.number), notice: 'Price was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -159,7 +159,7 @@ class Admin::PricesController < AdminController
     Price.where(duration_id: duration.id).destroy_all
     duration.destroy
     respond_to do |format|
-      format.html { redirect_to admin_house_prices_url(@house.id), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -171,7 +171,7 @@ class Admin::PricesController < AdminController
     Price.where(season_id: season.id).destroy_all
     season.destroy
     respond_to do |format|
-      format.html { redirect_to admin_house_prices_url(@house.id), notice: 'Duration was successfully destroyed.' }
+      format.html { redirect_to admin_house_prices_url(@house.number), notice: 'Duration was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
