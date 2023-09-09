@@ -57,7 +57,7 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '>= 3.0.5'
   gem 'web-console', '>= 3.3.0'
-  gem "better_errors", "~> 2.9.0" # Shows better errors description on errors page
+  gem "better_errors", "~> 2" # Shows better errors description on errors page
   gem "binding_of_caller" # For better errors: activates webconsole directly in browser
   gem 'chusaku', require: false # annotations for routes
   gem "letter_opener", "~> 1.8"
