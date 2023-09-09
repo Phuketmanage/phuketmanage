@@ -179,7 +179,7 @@ class Admin::PricesController < AdminController
   private
 
   def set_house
-    @house = House.find_by(id: params[:admin_house_id])
+    @house = House.find_by(number: params[:admin_house_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.
