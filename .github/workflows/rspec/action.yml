@@ -1,0 +1,16 @@
+name: RSpec
+description: Run RSpec test suite
+
+runs:
+  using: "composite"
+  steps:
+    - name: Load DB schema
+      run: bundle exec rails db:schema:load RAILS_ENV=test
+      shell: bash
+
+    - name: rspec
+      run: bundle exec rspec
+      shell: bash
+
+    - run: echo "🟢 Done"
+      shell: bash
