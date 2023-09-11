@@ -4,7 +4,7 @@
   <h3>Files</h3>
   <ul id="booking_files" class='list-group'>
     <% @booking.files.order(:created_at).each do |f| %>
-      <%= render 'booking_files/file', file: f %>
+      <%= render 'admin/booking_files/file', file: f %>
     <% end %>
   </ul>
   <div id="booking_file" class="modal" tabindex="-1" role="dialog">
