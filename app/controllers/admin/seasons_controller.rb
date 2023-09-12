@@ -65,7 +65,7 @@ class Admin::SeasonsController < AdminController
     @house = @season.house
     @season.destroy
     respond_to do |format|
-      format.html { redirect_to admin_house_seasons_path(@house), notice: 'Season was successfully destroyed.' }
+      format.html { redirect_to admin_house_seasons_path(@house.number), notice: 'Season was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

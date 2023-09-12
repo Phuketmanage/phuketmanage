@@ -6,7 +6,7 @@
   <% @seasons.each do |s| %>
     <div class="col-1 price_col">
       <strong><%= "#{s.ssd}.#{s.ssm} - #{s.sfd}.#{s.sfm}" %></strong>
-      <%= link_to 'Destroy', admin_house_delete_season_path(@house.id, season_id: s.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+      <%= link_to 'Destroy', admin_house_delete_season_path(@house.number, season_id: s.id), method: :delete, data: { confirm: 'Are you sure?' } %>
     </div>
   <% end %>
 </div>
@@ -17,7 +17,7 @@
     <% if c == 1 %>
       <div class="col-1 price_col">
         <strong><%= "#{d.start} - #{d.finish}" %></strong>
-        <%= link_to 'Destroy', admin_house_delete_duration_path(@house.id, duration_id: d.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Destroy', admin_house_delete_duration_path(@house.number, duration_id: d.id), method: :delete, data: { confirm: 'Are you sure?' } %>
       </div>
       <% c += 1 %>
     <% end %>
