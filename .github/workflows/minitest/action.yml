@@ -1,0 +1,16 @@
+name: Minitest
+description: Run Minitest test suite
+
+runs:
+  using: "composite"
+  steps:
+    - name: Load DB schema
+      run: bundle exec rails db:schema:load RAILS_ENV=test
+      shell: bash
+
+    - name: minitest
+      run: bundle exec rake test
+      shell: bash
+
+    - run: echo "🟢 Done"
+      shell: bash

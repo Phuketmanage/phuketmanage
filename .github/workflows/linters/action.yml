@@ -1,0 +1,16 @@
+name: Ruby linters
+description: Run Ruby Linters
+
+runs:
+  using: "composite"
+  steps:
+    - name: Chusaku
+      run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
+      shell: bash
+
+    - name: Brakeman
+      run: bundle exec brakeman -q
+      shell: bash
+
+    - run: echo "🟢 Done"
+      shell: bash
