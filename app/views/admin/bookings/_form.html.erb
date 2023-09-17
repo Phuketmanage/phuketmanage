@@ -40,13 +40,13 @@
   <div class="row">
     <div class="col-md-3 form-group">
       <%= form.label :sale %>
-      <%= form.number_field :sale, class: 'form-control calcs', data: { "booking-target": "saleField", "action": "input->booking#updatePercentage" } %>
+      <%= form.number_field :sale, id: :saleInput, class: 'form-control calcs', data: { "booking-target": "saleField", "action": "input->booking#updatePercentage" } %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.sale if !@booking_original.nil? %></small>
     </div>
     <div class="col-md-3 form-group">
       <%= form.label :agent %>
       <span class="ml-1 badge bg-primary text-white" data-booking-target="agentPercentage">0%</span>
-      <%= form.number_field :agent, class: 'form-control calcs', data: { "booking-target": "agentField", "action": "input->booking#updatePercentage"} %>
+      <%= form.number_field :agent, id: :agentInput, class: 'form-control calcs', data: { "booking-target": "agentField", "action": "input->booking#updatePercentage"} %>
     </div>
     <div class="col-md-3 form-group">
       <%= form.label :comm %>
@@ -54,19 +54,23 @@
       <i class="bi bi-lightning-charge text-secondary dropdown-toggle float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <%= link_to "20% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTwentyPercent:prevent" } %>
-        <%= link_to "10% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTenPercent:prevent" } %>
-        <%= link_to "Divide company comm 50/50", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFiftyFifty:prevent" } %>
+        <%= link_to "25% to company, 0% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTwentyFivePercent:prevent" } %>
+        <%= link_to "10% to company, 10% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateTenPercentToCompanyTenPercentToAgent:prevent" } %>
+        <%= link_to "15% to company, 10% to agent", '#', class: "dropdown-item", data: { "action": "click->booking#calculateFifteenPercentToCompanyTenPercentToAgent:prevent" } %>
       </div>
-      <%= form.number_field :comm, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updatePercentage"} %>
+      <%= form.number_field :comm, id: :commInput, class: 'form-control calcs', data: { "booking-target": "commField", "action": "input->booking#updatePercentage"} %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.comm if !@booking_original.nil? %></small><br />
     </div>
     <div class="col-md-3 form-group">
+
       <%= form.label :nett %>
-      <%= form.number_field :nett, class: 'form-control calcs', data: { "booking-target": "nettField"} %>
+
+      <span class="ml-1 badge bg-primary text-white" data-booking-target="nettPercentage">0%</span>
+      <%= form.number_field :nett, id: :nettInput, class: 'form-control calcs', data: { "booking-target": "nettField", "action": "input->booking#updatePercentage" } %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
     </div>
   </div>
-  <div class="row">
+    <div class="row">
     <div class="col form-group">
       <%= form.label 'Comment inner (owner will not see)' %>
       <%= form.text_area :comment, class: 'form-control', rows: 2 %>
