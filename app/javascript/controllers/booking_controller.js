@@ -1,5 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 
+function fetchData() {
+  fetch('/bookings/get_price')
+      .then(response => {
+        if (!response.ok) {
+          console.log(response)
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // возвращает promise с распарсенным JSON
+      })
+      .then(data => {
+        console.log('Данные из файла JSON:', data);
+      })
+      .catch(error => console.error('Произошла ошибка:', error));
+}
+
+// Вызывайте функцию для загрузки данных
+const intervalId = setInterval(fetchData, 5000);
+
 export default class extends Controller {
   static targets = [
     "saleField",
