@@ -31,6 +31,16 @@ describe 'Booking' do
       it { is_expected.not_to have_selector('td', text: booking_canceled.house.code) }
     end
 
+    context "when visiting admin bookings with hid params" do
+      before do
+        visit "/bookings?from=#{current_date}&to=#{current_date + 2.years}&hid=#{booking_pending.house.id}"
+      end
+
+      it { is_expected.to have_text("Bookings (1)") }
+      it { is_expected.to have_selector('td', text: booking_pending.house.code) }
+      it { is_expected.not_to have_selector('td', text: booking_canceled.house.code) }
+    end
+
     context "when visiting canceled bookings" do
       before do
         visit "/bookings/canceled?from=#{current_date}&to=#{current_date + 2.years}"

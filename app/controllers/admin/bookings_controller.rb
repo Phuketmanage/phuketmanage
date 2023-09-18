@@ -44,9 +44,6 @@ class Admin::BookingsController < AdminController
     return unless @hid.present?
 
     @bookings = @bookings.where(house_id: @hid)
-    return if request.fullpath.include?("/admin_houses/#{@hid}/bookings")
-
-    redirect_to admin_house_bookings_path(@hid, from: @from, to: @to)
   end
 
   # @route GET /bookings/canceled (bookings_canceled)
