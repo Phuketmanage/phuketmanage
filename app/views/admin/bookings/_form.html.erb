@@ -64,7 +64,6 @@
     <div class="col-md-3 form-group">
       <%= form.label :nett %>
       <span class="ml-1 badge bg-primary text-white" data-booking-target="nettPercentage">0%</span>
-      <i class="bi bi-percent text-secondary float-right"></i>
       <%= form.number_field :nett, class: 'form-control calcs', data: { "booking-target": "nettField"} %>
       <small class="ml-1 text-secondary">Origial: <%= @booking_original.nett if !@booking_original.nil? %></small>
     </div>
