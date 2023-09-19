@@ -17,6 +17,9 @@ describe 'Booking' do
     let!(:booking_pending) do
       create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
+    let!(:booking_pending2) do
+      create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
+    end
     let!(:booking_canceled) do
       create(:booking, :canceled, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
@@ -26,8 +29,9 @@ describe 'Booking' do
         visit "/bookings?from=#{current_date}&to=#{current_date + 2.years}"
       end
 
-      it { is_expected.to have_text("Bookings (1)") }
+      it { is_expected.to have_text("Bookings (2)") }
       it { is_expected.to have_selector('td', text: booking_pending.house.code) }
+      it { is_expected.to have_selector('td', text: booking_pending2.house.code) }
       it { is_expected.not_to have_selector('td', text: booking_canceled.house.code) }
     end
 
@@ -55,8 +59,10 @@ describe 'Booking' do
       before { visit dashboard_path }
 
       it { is_expected.to have_text("Pending Bookings") }
-      it { is_expected.to have_selector('b', text: booking_pending.house.title_en, count: 1) }
+      it { is_expected.to have_selector('b', text: booking_pending.house.rooms) }
+      it { is_expected.to have_selector('b', text: booking_pending2.house.rooms) }
       it { is_expected.to have_selector("div[data-id='#{booking_pending.id}']", count: 1) }
+      it { is_expected.to have_selector("div[data-id='#{booking_pending2.id}']", count: 1) }
       it { is_expected.not_to have_selector("div[data-id='#{booking_canceled.id}']") }
     end
   end
