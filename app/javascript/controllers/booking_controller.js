@@ -247,7 +247,7 @@ export default class extends Controller {
 
     if (bookingAgentPercentage === 0 && bookingCommissionPercentage === 0){
       bookingNettPercentage = 100
-      nettInput.value = saleInput.value
+      this.nettInput.value = this.saleInput.value
       this.targets.find("nettPercentage").textContent = bookingNettPercentage.toFixed(0) + '%';
     }
   }
