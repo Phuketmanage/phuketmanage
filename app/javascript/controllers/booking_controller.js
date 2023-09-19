@@ -116,6 +116,34 @@ export default class extends Controller {
     this.updatePercentage();
   }
 
+  //20% to company
+  calculateTwentyPercent() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
+    const commValue = saleValue * 0.2;
+    const agentValue = 0;
+    const nettValue = saleValue - commValue - agentValue;
+
+    this.commInput.value = commValue.toFixed(0);
+    this.agentInput.value = agentValue.toFixed(0);
+    this.nettInput.value = nettValue.toFixed(0);
+
+    this.updatePercentage();
+  }
+
+  //25% to company
+  calculateTwentyFivePercent() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
+    const commValue = saleValue * 0.25;
+    const agentValue = 0;
+    const nettValue = saleValue - commValue - agentValue;
+
+    this.commInput.value = commValue.toFixed(0);
+    this.agentInput.value = agentValue.toFixed(0);
+    this.nettInput.value = nettValue.toFixed(0);
+
+    this.updatePercentage();
+  }
+
 
   // Функция для пересчета процентов
   recalculatePercentages() {
