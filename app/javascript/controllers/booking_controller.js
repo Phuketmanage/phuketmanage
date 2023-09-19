@@ -26,6 +26,11 @@ export default class extends Controller {
     this.finishInput.addEventListener('change', () => this.handleFormChange());
     this.houseSelect.addEventListener('change', () => this.handleFormChange());
 
+    this.saleInput.addEventListener('input', () => this.handleSaleChange());
+    this.agentInput.addEventListener('input', () => this.handleAgentChange());
+    this.commInput.addEventListener('input', () => this.handleCommChange());
+    this.nettInput.addEventListener('input', () => this.handleNettChange());
+
 
     this.saleInput.addEventListener('input', (event) => {
       if (this.saleInput.value < 0) {
@@ -88,24 +93,59 @@ export default class extends Controller {
     this.updatePercentage();
   }
 
-  calculateTenPercentToCompanyTenPercentToAgent() {
+  // Обработчик изменения поля sale
+  handleSaleChange() {
     const saleValue = parseInt(this.saleInput.value) || 0;
+    const agentValue = parseInt(this.agentInput.value) || 0;
+    const nettValue = parseInt(this.nettInput.value) || 0;
 
-    const commValue = saleValue * 0.1;
-    const agentValue = saleValue * 0.1;
-    const nettValue = saleValue - commValue - agentValue;
+    const commValue = saleValue - agentValue - nettValue;
 
     this.commInput.value = commValue.toFixed(0);
+
+    this.updatePercentage();
+  }
+
+  // Обработчик изменения поля agent
+  handleAgentChange() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
+    const commValue = parseInt(this.commInput.value) || 0;
+    const nettValue = parseInt(this.nettInput.value) || 0;
+
+    const agentValue = saleValue - commValue - nettValue;
+
     this.agentInput.value = agentValue.toFixed(0);
+
+    this.updatePercentage();
+  }
+
+  // Обработчик изменения поля comm
+  handleCommChange() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
+    const commValue = parseInt(this.commInput.value) || 0;
+    const nettValue = saleValue - parseInt(this.agentInput.value) - commValue;
+
     this.nettInput.value = nettValue.toFixed(0);
 
     this.updatePercentage();
   }
 
-  calculateFifteenPercentToCompanyTenPercentToAgent() {
+  // Обработчик изменения поля nett
+  handleNettChange() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
+    const agentValue = parseInt(this.agentInput.value) || 0;
+    const nettValue = parseInt(this.nettInput.value) || 0;
+    const commValue = saleValue - agentValue - nettValue;
+
+    this.commInput.value = commValue.toFixed(0);
+
+    this.updatePercentage();
+  }
+
+  calculateTenPercentToCompanyTenPercentToAgent() {
     const saleValue = parseInt(this.saleInput.value) || 0;
 
-    const commValue = saleValue * 0.15;
+    const commValue = saleValue * 0.1;
     const agentValue = saleValue * 0.1;
     const nettValue = saleValue - commValue - agentValue;
 
