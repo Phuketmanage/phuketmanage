@@ -96,12 +96,14 @@ export default class extends Controller {
   // Обработчик изменения поля sale
   handleSaleChange() {
     const saleValue = parseInt(this.saleInput.value) || 0;
-    const agentValue = parseInt(this.agentInput.value) || 0;
-    const nettValue = parseInt(this.nettInput.value) || 0;
 
-    const commValue = saleValue - agentValue - nettValue;
+    const commValue = saleValue;
+    const agentValue = 0;
+    const nettValue = 0;
 
     this.commInput.value = commValue.toFixed(0);
+    this.agentInput.value = agentValue.toFixed(0);
+    this.nettInput.value = nettValue.toFixed(0);
 
     this.updatePercentage();
   }
@@ -311,7 +313,7 @@ export default class extends Controller {
     this.timerInterval = setInterval(() => {
       // Calling the function to recalculate percentages
       this.recalculatePercentages();
-    }, 100);
+    }, 1);
   }
 
   stopTimer() {
