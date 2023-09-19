@@ -302,7 +302,6 @@ class Admin::BookingsController < AdminController
   # @route GET /bookings/get_price (bookings_get_price)
   def get_price
     booking = Booking.new
-    binding.irb
     search = Search.new(period: "#{params[:start]} - #{params[:finish]}",
                         dtnb: 0)
     booking.house = House.find(params[:house_id])

@@ -1,23 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-function fetchData() {
-  fetch('/bookings/get_price')
-      .then(response => {
-        if (!response.ok) {
-          console.log(response)
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // возвращает promise с распарсенным JSON
-      })
-      .then(data => {
-        console.log('Данные из файла JSON:', data);
-      })
-      .catch(error => console.error('Произошла ошибка:', error));
-}
-
-// Вызывайте функцию для загрузки данных
-const intervalId = setInterval(fetchData, 5000);
-
 export default class extends Controller {
   static targets = [
     "saleField",
@@ -31,160 +13,133 @@ export default class extends Controller {
   ]
 
   connect() {
-    const saleInput = document.getElementById('saleInput');
-    const agentInput = document.getElementById('agentInput');
-    const nettInput = document.getElementById('nettInput');
-    const commInput = document.getElementById('commInput');
+    this.saleInput = document.querySelector('input[name="booking[sale]"]');
+    this.agentInput = document.querySelector('input[name="booking\\[agent\\]"]');
+    this.nettInput = document.querySelector('input[name="booking\\[nett\\]"]');
+    this.commInput = document.querySelector('input[name="booking\\[comm\\]"]');
+    this.startInput = document.querySelector('input[name="booking[start]"]');
+    this.finishInput = document.querySelector('input[name="booking[finish]"]');
+    this.houseSelect = document.querySelector('select[name="booking[house_id]"]');
 
-    let previousSaleValue = parseInt(saleInput.value) || 0;
-    let previousAgentValue = parseInt(agentInput.value) || 0;
-    let previousCommValue = parseInt(commInput.value) || 0;
+    // Обработчики событий для полей формы
+    this.startInput.addEventListener('change', () => this.handleFormChange());
+    this.finishInput.addEventListener('change', () => this.handleFormChange());
+    this.houseSelect.addEventListener('change', () => this.handleFormChange());
 
-    saleInput.addEventListener('input', (event) => {
-      if (saleInput.value < 0) {
+
+    this.saleInput.addEventListener('input', (event) => {
+      if (this.saleInput.value < 0) {
         event.target.value = 0;
       }
 
-      if (saleInput.value < (parseInt(agentInput.value) + parseInt(commInput.value))) {
-        nettInput.value = saleInput.value
-        agentInput.value = 0;
-        commInput.value = 0;
-        this.targets.find("agentPercentage").textContent = "0%"
-        this.targets.find("commPercentage").textContent = "0%"
-        this.updatePercentage(agentInput, commInput, nettInput)
+      this.targets.find("nettPercentage").textContent = (parseInt(this.nettInput.value) / parseInt(this.saleInput.value)) * 100 + '%';
+
+      if (parseInt(this.saleInput.value) < (parseInt(this.agentInput.value) + parseInt(this.commInput.value))) {
+        this.nettInput.value = this.saleInput.value;
+        this.agentInput.value = 0;
+        this.commInput.value = 0;
+        this.targets.find("agentPercentage").textContent = "0%";
+        this.targets.find("commPercentage").textContent = "0%";
+        this.updatePercentage();
       }
     });
 
-    saleInput.value = 0
+    this.saleInput.value = 0;
 
-    agentInput.addEventListener('input', (event) => {
+    this.agentInput.addEventListener('input', (event) => {
+      if (this.agentInput.value < 0) {
+        event.target.value = 0;
+      }
+
       const newAgentValue = parseInt(event.target.value);
-      let summValue = newAgentValue + parseInt(commInput.value) + parseInt(nettInput.value)
+      let summValue = newAgentValue + parseInt(this.commInput.value) + parseInt(this.nettInput.value);
 
-      if (saleInput.value < summValue) {
-        event.target.value = previousAgentValue;
-        nettInput.value =  parseInt(saleInput.value) - parseInt((commInput.value));
-        this.targets.find("agentPercentage").textContent =  '0%';
-        agentInput.value = 0;
-        this.targets.find("nettPercentage").textContent = Math.round((parseInt(nettInput.value) / parseInt(saleInput.value)) * 100) + '%';
-      }
-      else {
-        event.target.value = newAgentValue
+      if (this.saleInput.value < summValue) {
+        event.target.value = this.previousAgentValue;
+        this.nettInput.value = parseInt(this.saleInput.value) - parseInt((this.commInput.value));
+        this.targets.find("agentPercentage").textContent = '0%';
+        this.agentInput.value = 0;
+        this.targets.find("nettPercentage").textContent = Math.round((parseInt(this.nettInput.value) / parseInt(this.saleInput.value)) * 100) + '%';
+      } else {
+        event.target.value = newAgentValue;
       }
     });
 
-    commInput.addEventListener('input', (event) => {
+    this.commInput.addEventListener('input', (event) => {
+      if (this.commInput.value < 0) {
+        event.target.value = 0;
+      }
+
       const newCommValue = parseInt(event.target.value);
-      let summValue = newCommValue + parseInt(agentInput.value) + parseInt(nettInput.value)
+      let summValue = newCommValue + parseInt(this.agentInput.value) + parseInt(this.nettInput.value);
 
-      if (saleInput.value < summValue) {
-        event.target.value = previousCommValue;
-        nettInput.value =  parseInt(saleInput.value) - parseInt((agentInput.value))
-        this.targets.find("commPercentage").textContent =  '0%';
-        commInput.value = 0;
-        this.targets.find("nettPercentage").textContent = Math.round((parseInt(nettInput.value) / parseInt(saleInput.value)) * 100) + '%';
-      }
-      else {
-        event.target.value = newCommValue
+      if (this.saleInput.value < summValue) {
+        event.target.value = this.previousCommValue;
+        this.nettInput.value = parseInt(this.saleInput.value) - parseInt((this.agentInput.value));
+        this.targets.find("commPercentage").textContent = '0%';
+        this.commInput.value = 0;
+        this.targets.find("nettPercentage").textContent = Math.round((parseInt(this.nettInput.value) / parseInt(this.saleInput.value)) * 100) + '%';
+      } else {
+        event.target.value = newCommValue;
       }
     });
 
-    this.updatePercentage(agentInput, commInput, nettInput)
-    this.targets.find("nettPercentage").textContent = "0%";
+    this.startTimer();
+    this.updatePercentage();
   }
 
-  //15% to company 10% to agent
-  calculateFifteenPercentToCompanyTenPercentToAgent() {
-    const saleValue = parseInt(this.saleFieldTarget.value)
-
-    const commValue = saleValue * 0.15
-    const agentValue= saleValue * 0.1
-    const nettValue = saleValue - commValue - agentValue
-
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = agentValue.toFixed(0)
-    this.nettFieldTarget.value = nettValue.toFixed(0)
-
-    this.updatePercentage()
-  }
- //10% to company 10% to agent
   calculateTenPercentToCompanyTenPercentToAgent() {
-    const saleValue = parseInt(this.saleFieldTarget.value)
+    const saleValue = parseInt(this.saleInput.value) || 0;
 
-    const commValue = saleValue * 0.1
-    const agentValue = saleValue * 0.1
-    const nettValue = saleValue - commValue - agentValue
+    const commValue = saleValue * 0.1;
+    const agentValue = saleValue * 0.1;
+    const nettValue = saleValue - commValue - agentValue;
 
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = agentValue.toFixed(0)
-    this.nettFieldTarget.value = nettValue.toFixed(0)
+    this.commInput.value = commValue.toFixed(0);
+    this.agentInput.value = agentValue.toFixed(0);
+    this.nettInput.value = nettValue.toFixed(0);
 
-    this.updatePercentage()
+    this.updatePercentage();
   }
 
-  //20% to company
-  calculateTwentyPercent() {
-    const saleValue = parseInt(this.saleFieldTarget.value)
+  calculateFifteenPercentToCompanyTenPercentToAgent() {
+    const saleValue = parseInt(this.saleInput.value) || 0;
 
-    const commValue = saleValue * 0.2
-    const agentValue = 0
-    const nettValue = saleValue - commValue - agentValue
+    const commValue = saleValue * 0.15;
+    const agentValue = saleValue * 0.1;
+    const nettValue = saleValue - commValue - agentValue;
 
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = 0
+    this.commInput.value = commValue.toFixed(0);
+    this.agentInput.value = agentValue.toFixed(0);
+    this.nettInput.value = nettValue.toFixed(0);
 
-    this.nettFieldTarget.value = nettValue.toFixed(0)
-
-    this.updatePercentage()
+    this.updatePercentage();
   }
 
-  //10% to company
-  calculateTenPercent() {
-    const saleValue = Number(this.saleFieldTarget.value)
 
-    const commValue = saleValue * 0.1
-    const agentValue= 0
+  // Функция для пересчета процентов
+  recalculatePercentages() {
+    let saleValue = parseInt(this.saleInput.value) || 1;
+    const agentValue = parseInt(this.agentInput.value) || 0;
+    const commValue = parseInt(this.commInput.value) || 0;
+    const nettValue = parseInt(this.nettInput.value) || 0;
 
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = 0
+    const maxNettValue = saleValue - commValue - agentValue;
+    this.nettInput.value = Math.min(nettValue, maxNettValue);
 
-    const nettValue = saleValue - commValue - agentValue
+    if (this.nettInput.value < 0) {
+      this.nettInput.value = 0;
+    }
 
-    this.commFieldTarget.value = commValue.toFixed(0)
+    const bookingAgentPercentage = isNaN(agentValue) ? 0 : Math.min(100, Math.round((agentValue / saleValue) * 100));
+    const bookingCommissionPercentage = isNaN(commValue) ? 0 : Math.min(100, Math.round((commValue / saleValue) * 100));
+    const bookingNettPercentage = isNaN(nettValue) ? 0 : Math.min(100, Math.round((nettValue / saleValue) * 100));
 
-    this.nettFieldTarget.value = nettValue.toFixed(0)
-
-    this.updatePercentage()
+    this.targets.find("agentPercentage").textContent = bookingAgentPercentage.toFixed(0) + '%';
+    this.targets.find("commPercentage").textContent = bookingCommissionPercentage.toFixed(0) + '%';
+    this.targets.find("nettPercentage").textContent = bookingNettPercentage.toFixed(0) + '%';
   }
 
-  //25% to company
-  calculateTwentyFivePercent() {
-    const saleValue = Number(this.saleFieldTarget.value)
-
-    const commValue = saleValue * 0.25
-    const agentValue = 0
-
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = 0
-
-    const nettValue = saleValue - commValue - agentValue
-
-    this.commFieldTarget.value = commValue.toFixed(0)
-
-    this.nettFieldTarget.value = nettValue.toFixed(0)
-
-    this.updatePercentage()
-  }
-
-  calculateFiftyFifty() {
-    const commValue = Number(this.commFieldTarget.value)
-
-    const halfValue = commValue * 0.5
-
-    this.agentFieldTarget.value = halfValue.toFixed(0)
-
-    this.updatePercentage()
-  }
 
   updatePercentage(agentInput, commInput, nettInput) {
     let saleValue = parseInt(this.saleFieldTarget.value) || 0;
@@ -266,6 +221,36 @@ export default class extends Controller {
       bookingNettPercentage = 100
       nettInput.value = saleInput.value
       this.targets.find("nettPercentage").textContent = bookingNettPercentage.toFixed(0) + '%';
+    }
+  }
+
+  handleFormChange() {
+    // Enable/disable the timer based on the selection of values
+    const selectedStartDate = this.startInput.value;
+    const selectedFinishDate = this.finishInput.value;
+    const selectedHouseId = this.houseSelect.value;
+
+    if (selectedStartDate && selectedFinishDate && selectedHouseId) {
+      this.startTimer();
+    } else {
+      this.stopTimer();
+    }
+  }
+
+  startTimer() {
+    this.stopTimer(); // Stop the timer if it is already running
+
+    this.timerInterval = setInterval(() => {
+      // Calling the function to recalculate percentages
+      this.recalculatePercentages();
+    }, 100);
+  }
+
+  stopTimer() {
+    // Stop the timer if it is running
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
     }
   }
 }

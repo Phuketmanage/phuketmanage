@@ -388,7 +388,7 @@ check_price = ()->
         $('#booking_agent').val(0)
         $('#booking_comm').val(data['comm'])
         $('#booking_nett').val(data['nett'])
-        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale'])*100)
+        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale']) * 100)
         $('#comm_percent').text(comm_percent)
       error: (data) ->
         console.log('Was not able to get price for this period')
