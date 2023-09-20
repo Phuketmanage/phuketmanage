@@ -42,6 +42,7 @@ describe 'Booking' do
 
       it { is_expected.to have_text("Bookings (1)") }
       it { is_expected.to have_selector('td', text: booking_pending.house.code) }
+      it { is_expected.not_to have_selector('td', text: booking_pending2.house.code) }
       it { is_expected.not_to have_selector('td', text: booking_canceled.house.code) }
     end
 
