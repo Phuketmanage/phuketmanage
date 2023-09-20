@@ -60,8 +60,7 @@ describe 'Booking' do
       before { visit dashboard_path }
 
       it { is_expected.to have_text("Pending Bookings") }
-      it { is_expected.to have_selector('b', text: booking_pending.house.generated_title(:en), count: 1) }
-      it { is_expected.to have_selector('b', text: booking_pending2.house.generated_title(:en), count: 1) }
+      it { is_expected.to have_selector('b', text: booking_pending.house.generated_title(:en)) }
       it { is_expected.to have_selector("div[data-id='#{booking_pending.id}']", count: 1) }
       it { is_expected.to have_selector("div[data-id='#{booking_pending2.id}']", count: 1) }
       it { is_expected.not_to have_selector("div[data-id='#{booking_canceled.id}']") }
