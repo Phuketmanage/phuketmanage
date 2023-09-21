@@ -307,6 +307,7 @@ class Admin::BookingsController < AdminController
     booking.house = House.find(params[:house_id])
     prices = search.get_prices [booking.house]
     booking.calc prices
+
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
   end
 
