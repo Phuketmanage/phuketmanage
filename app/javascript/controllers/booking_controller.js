@@ -12,7 +12,7 @@ export default class extends Controller {
   ]
 
   updatePercentage() {
-    let saleValue = parseFloat(this.saleFieldTarget.value) || 1;
+    let saleValue = parseFloat(this.saleFieldTarget.value) || 0;
     let agentValue = parseFloat(this.agentFieldTarget.value) || 0;
     let commValue = parseFloat(this.commFieldTarget.value) || 0;
     let nettValue = parseFloat(this.nettFieldTarget.value) || 0;
