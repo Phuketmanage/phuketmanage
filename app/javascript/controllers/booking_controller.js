@@ -22,7 +22,6 @@ export default class extends Controller {
     this.commFieldTarget.value = 0;
     this.nettFieldTarget.value = 0;
 
-    this.startTimer();
     this.updatePercentage();
   }
 
@@ -54,6 +53,8 @@ export default class extends Controller {
     let agentValue = parseFloat(this.agentFieldTarget.value) || 0;
     let commValue = parseFloat(this.commFieldTarget.value) || 0;
     let nettValue = parseFloat(this.nettFieldTarget.value) || 0;
+
+    this.checkingValues();
 
     let totalValue = saleValue;
 
@@ -91,24 +92,6 @@ export default class extends Controller {
     }
 
     this.updatePercentage();
-  }
-
-  startTimer() {
-    this.stopTimer();
-
-    this.timerInterval = setInterval(() => {
-      this.recalculatePercentages();
-      this.checkingValues();
-    }, 1);
-  }
-
-  stopTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-      this.recalculatePercentages();
-      this.updatePercentage();
-    }
   }
 
   calculateTwentyPercent() {

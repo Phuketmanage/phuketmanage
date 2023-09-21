@@ -388,8 +388,18 @@ check_price = ()->
         $('#booking_agent').val(0)
         $('#booking_comm').val(data['comm'])
         $('#booking_nett').val(data['nett'])
-        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale']) * 100)
-        $('#comm_percent').text(comm_percent)
+
+        agent_percent = Math.round((parseInt(data['agent']) || 0) / (parseInt(data['sale']) || 1) * 100)
+        comm_percent = Math.round((parseInt(data['comm']) || 0) / (parseInt(data['sale']) || 1) * 100)
+        nett_percent = Math.round((parseInt(data['nett']) || 0) / (parseInt(data['sale']) || 1) * 100)
+
+        agentPercentageBadge = $('[data-booking-target="agentPercentage"]')
+        commPercentageBadge = $('[data-booking-target="commPercentage"]')
+        nettPercentageBadge = $('[data-booking-target="nettPercentage"]')
+
+        agentPercentageBadge.text(agent_percent + '%')
+        commPercentageBadge.text(comm_percent + '%')
+        nettPercentageBadge.text(nett_percent + '%')
       error: (data) ->
         console.log('Was not able to get price for this period')
   if status == 'block'
