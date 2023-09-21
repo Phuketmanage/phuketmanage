@@ -47,51 +47,51 @@ export default class extends Controller {
   }
 
   calculateTwentyPercent() {
-    const saleValue = Number(this.saleFieldTarget.value)
+    const saleValue = Math.ceil(Number(this.saleFieldTarget.value))
 
     const commValue = Math.ceil(saleValue * 0.2)
 
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = 0
-    this.nettFieldTarget.value = Math.ceil(saleValue - commValue)
+    this.nettFieldTarget.value = saleValue - commValue
 
     this.updatePercentage()
   }
 
   calculateTwentyFivePercent() {
-    const saleValue = Number(this.saleFieldTarget.value)
+    const saleValue = Math.ceil(Number(this.saleFieldTarget.value))
 
     const commValue = Math.ceil(saleValue * 0.25)
 
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = 0
-    this.nettFieldTarget.value = Math.ceil(saleValue - commValue);
+    this.nettFieldTarget.value = saleValue - commValue
 
     this.updatePercentage()
   }
 
   calculateTenPercentToCompanyTenPercentToAgent() {
-    const saleValue = Number(this.saleFieldTarget.value)
+    const saleValue = Math.ceil(Number(this.saleFieldTarget.value))
 
     const commValue = Math.ceil(saleValue * 0.1)
     const agentValue = Math.ceil(saleValue * 0.1)
 
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = agentValue.toFixed(0)
-    this.nettFieldTarget.value = Math.ceil(saleValue - commValue - agentValue)
+    this.nettFieldTarget.value = saleValue - commValue - agentValue
 
     this.updatePercentage()
   }
 
   calculateFifteenPercentToCompanyTenPercentToAgent() {
-    const saleValue = Number(this.saleFieldTarget.value)
+    const saleValue = Math.ceil(Number(this.saleFieldTarget.value))
 
     const commValue = Math.ceil(saleValue * 0.15)
     const agentValue = Math.ceil(saleValue * 0.1)
 
     this.commFieldTarget.value = commValue.toFixed(0)
     this.agentFieldTarget.value = agentValue.toFixed(0)
-    this.nettFieldTarget.value = Math.ceil(saleValue - commValue - agentValue)
+    this.nettFieldTarget.value = saleValue - commValue - agentValue
 
     this.updatePercentage()
   }
