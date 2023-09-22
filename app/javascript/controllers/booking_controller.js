@@ -17,7 +17,8 @@ export default class extends Controller {
     let commValue = parseFloat(this.commFieldTarget.value);
     let nettValue = parseFloat(this.nettFieldTarget.value);
 
-    if (saleValue < 0 || agentValue < 0 || commValue < 0 || nettValue < 0 || saleValue === 0 || isNaN(saleValue)) {
+    if (saleValue < 0 || agentValue < 0 || commValue < 0 || nettValue < 0 || saleValue === 0 ||
+        isNaN(saleValue) || isNaN(agentValue) || isNaN(commValue) || isNaN(nettValue)) {
       this.agentPercentageTarget.textContent = '-';
       this.commPercentageTarget.textContent = '-';
       this.nettPercentageTarget.textContent = '-';
@@ -25,17 +26,6 @@ export default class extends Controller {
       this.commPercentageTarget.classList.add('bg-danger');
       this.nettPercentageTarget.classList.add('bg-danger');
     } else {
-
-      if (isNaN(agentValue) || isNaN(commValue) || isNaN(nettValue)) {
-        this.agentPercentageTarget.textContent = '-';
-        this.commPercentageTarget.textContent = '-';
-        this.nettPercentageTarget.textContent = '-';
-        this.agentPercentageTarget.classList.add('bg-danger');
-        this.commPercentageTarget.classList.add('bg-danger');
-        this.nettPercentageTarget.classList.add('bg-danger');
-        return;
-      }
-
       let bookingAgentPercentage = (agentValue / saleValue) * 100;
       let bookingCommissionPercentage = (commValue / saleValue) * 100;
       let bookingNettPercentage = (nettValue / saleValue) * 100;
