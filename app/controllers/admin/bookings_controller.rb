@@ -37,7 +37,7 @@ class Admin::BookingsController < AdminController
   def index
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
-    @hid = params[:admin_house_id]
+    @hid = params[:admin_house_id] || params[:hid]
     @view_as_owner = params[:view_as_owner].present? ? true : false
     @houses = set_houses
     @bookings = Booking.active.where('finish >= :from AND start <= :to', from: @from, to: @to).order(:start)
