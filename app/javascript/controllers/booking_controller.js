@@ -6,63 +6,93 @@ export default class extends Controller {
     "agentField",
     "commField",
     "nettField",
-    "agentTenPercentLink",
-    "fiftyFiftyLink",
     "agentPercentage",
-    "commPercentage"
+    "commPercentage",
+    "nettPercentage"
   ]
 
-  connect() {
-    this.updatePercentage()
+  updatePercentage() {
+    let saleValue = parseFloat(this.saleFieldTarget.value);
+    let agentValue = parseFloat(this.agentFieldTarget.value);
+    let commValue = parseFloat(this.commFieldTarget.value);
+    let nettValue = parseFloat(this.nettFieldTarget.value);
+
+    if (saleValue < 0 || agentValue < 0 || commValue < 0 || nettValue < 0 || saleValue === 0 ||
+        isNaN(saleValue) || isNaN(agentValue) || isNaN(commValue) || isNaN(nettValue)) {
+      this.agentPercentageTarget.textContent = '-';
+      this.commPercentageTarget.textContent = '-';
+      this.nettPercentageTarget.textContent = '-';
+      this.agentPercentageTarget.classList.add('bg-danger');
+      this.commPercentageTarget.classList.add('bg-danger');
+      this.nettPercentageTarget.classList.add('bg-danger');
+    } else {
+      let bookingAgentPercentage = (agentValue / saleValue) * 100;
+      let bookingCommissionPercentage = (commValue / saleValue) * 100;
+      let bookingNettPercentage = (nettValue / saleValue) * 100;
+
+      this.agentPercentageTarget.textContent = bookingAgentPercentage.toFixed(0) + '%';
+      this.commPercentageTarget.textContent = bookingCommissionPercentage.toFixed(0) + '%';
+      this.nettPercentageTarget.textContent = bookingNettPercentage.toFixed(0) + '%';
+
+      if (parseFloat(this.saleFieldTarget.value) === (agentValue + commValue + nettValue)) {
+        this.agentPercentageTarget.classList.remove('bg-danger');
+        this.commPercentageTarget.classList.remove('bg-danger');
+        this.nettPercentageTarget.classList.remove('bg-danger');
+      } else {
+        this.agentPercentageTarget.classList.add('bg-danger');
+        this.commPercentageTarget.classList.add('bg-danger');
+        this.nettPercentageTarget.classList.add('bg-danger');
+      }
+    }
   }
 
   calculateTwentyPercent() {
-    const saleValue = parseInt(this.saleFieldTarget.value)
+    const saleValue = parseFloat(this.saleFieldTarget.value)
 
     const commValue = saleValue * 0.2
 
-    this.commFieldTarget.value = commValue.toFixed(0)
+    this.commFieldTarget.value = commValue.toFixed(1)
     this.agentFieldTarget.value = 0
+    this.nettFieldTarget.value = (saleValue - commValue).toFixed(1)
 
     this.updatePercentage()
   }
 
-  calculateTenPercent() {
-    const saleValue = Number(this.saleFieldTarget.value)
+  calculateTwentyFivePercent() {
+    const saleValue = parseFloat(this.saleFieldTarget.value)
+
+    const commValue = saleValue * 0.25
+
+    this.commFieldTarget.value = commValue.toFixed(1)
+    this.agentFieldTarget.value = 0
+    this.nettFieldTarget.value = (saleValue - commValue).toFixed(1)
+
+    this.updatePercentage()
+  }
+
+  calculateTenPercentToCompanyTenPercentToAgent() {
+    const saleValue = parseFloat(this.saleFieldTarget.value)
 
     const commValue = saleValue * 0.1
+    const agentValue = saleValue * 0.1
 
-    this.commFieldTarget.value = commValue.toFixed(0)
-    this.agentFieldTarget.value = 0
-
-    this.updatePercentage()
-  }
-
-  calculateFiftyFifty() {
-    const commValue = Number(this.commFieldTarget.value)
-
-    const halfValue = commValue * 0.5
-
-    this.agentFieldTarget.value = halfValue.toFixed(0)
+    this.commFieldTarget.value = commValue.toFixed(1)
+    this.agentFieldTarget.value = agentValue.toFixed(1)
+    this.nettFieldTarget.value = (saleValue - commValue - agentValue).toFixed(1)
 
     this.updatePercentage()
   }
 
-  updatePercentage() {
-    const saleValue = Number(this.saleFieldTarget.value)
-    const agentValue = Number(this.agentFieldTarget.value)
-    const commValue = Number(this.commFieldTarget.value)
+  calculateFifteenPercentToCompanyTenPercentToAgent() {
+    const saleValue = parseFloat(this.saleFieldTarget.value)
 
-    let bookingAgentPercentage = (agentValue / saleValue) * 100
-    if (isNaN(bookingAgentPercentage)) {
-      bookingAgentPercentage = 0
-    }
-    let bookingCommissionPercentage = (commValue / saleValue) * 100
-    if (isNaN(bookingCommissionPercentage)) {
-      bookingCommissionPercentage = 0
-    }
+    const commValue = saleValue * 0.15
+    const agentValue = saleValue * 0.1
 
-    this.agentPercentageTarget.textContent = bookingAgentPercentage.toFixed(0) + '%'
-    this.commPercentageTarget.textContent = bookingCommissionPercentage.toFixed(0) + '%'
+    this.commFieldTarget.value = commValue.toFixed(1)
+    this.agentFieldTarget.value = agentValue.toFixed(1)
+    this.nettFieldTarget.value = (saleValue - commValue - agentValue).toFixed(1)
+
+    this.updatePercentage()
   }
 }
