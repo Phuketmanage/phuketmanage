@@ -10,6 +10,10 @@ describe 'Booking' do
   let(:current_date) { Date.current }
   let(:date_start) { current_date }
   let(:date_finish) { current_date + 10.days }
+  let(:date_finish2) { current_date + 14.days }
+  let(:date_start_format) { date_start.strftime("%d.%m.%Y") }
+  let(:date_finish_format) { date_finish.strftime("%d.%m.%Y") }
+  let(:date_finish_format2) { date_finish2.strftime("%d.%m.%Y") }
 
   context 'when user is admin' do
     login_admin
@@ -18,7 +22,7 @@ describe 'Booking' do
       create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
     let!(:booking_pending2) do
-      create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
+      create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish2)
     end
     let!(:booking_canceled) do
       create(:booking, :canceled, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
@@ -60,7 +64,8 @@ describe 'Booking' do
       before { visit dashboard_path }
 
       it { is_expected.to have_text("Pending Bookings") }
-      it { is_expected.to have_selector('b', text: booking_pending.house.generated_title(:en)) }
+      it { is_expected.to have_selector('div', text: "#{date_start_format}-#{date_finish_format}") }
+      it { is_expected.to have_selector('div', text: "#{date_start_format}-#{date_finish_format2}") }
       it { is_expected.to have_selector("div[data-id='#{booking_pending.id}']", count: 1) }
       it { is_expected.to have_selector("div[data-id='#{booking_pending2.id}']", count: 1) }
       it { is_expected.not_to have_selector("div[data-id='#{booking_canceled.id}']") }
