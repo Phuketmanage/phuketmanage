@@ -106,10 +106,11 @@ Rails.application.routes.draw do
 
   get 'unlock', to: 'dev#unlock' if Rails.env.development?
 
-  # Good job admin dashboard
+  # Admin dashboards
   authenticate :user, ->(user) { user.role?('Admin') } do
     mount GoodJob::Engine => '/admin/activejob'
     resources :uploads_tests # TODO: Remove after #353
+    mount MaintenanceTasks::Engine => "/admin/maintenance_tasks"
   end
 
   # Errors
