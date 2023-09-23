@@ -3,7 +3,7 @@ class Admin::BookingFilesController < AdminController
 
   before_action :set_booking_file, only: %i[update destroy]
 
-  # @route POST /booking_files (booking_files)
+  # @route POST /bookings/:id/booking_files (booking_files)
   def create
     booking_number = params[:booking_number]
     booking = Booking.find_by(number: booking_number)

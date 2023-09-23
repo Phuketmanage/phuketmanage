@@ -46,7 +46,7 @@ class Admin::BookingsController < AdminController
     @bookings = @bookings.where(house_id: @hid)
   end
 
-  # @route GET /bookings/canceled (bookings_canceled)
+  # @route GET /bookings/canceled (canceled_bookings)
   def canceled
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
@@ -70,7 +70,7 @@ class Admin::BookingsController < AdminController
     @one_house = true if current_user.houses.ids.count == 1
   end
 
-  # @route GET /bookings/timeline (bookings_timeline)
+  # @route GET /bookings/timeline (timeline_bookings)
   def timeline
     if !params[:from].present? && !params[:to].present?
       @from = Date.current
@@ -107,13 +107,13 @@ class Admin::BookingsController < AdminController
     @job = Job.new
   end
 
-  # @route GET /bookings/timeline_data (bookings_timeline_data)
+  # @route GET /bookings/timeline_data (timeline_data_bookings)
   def timeline_data
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
     render json: { timeline: }
   end
 
-  # @route GET /bookings/check_in_out (bookings_check_in_out)
+  # @route GET /bookings/check_in_out (check_in_out_bookings)
   def check_in_out
     @type = (params[:commit].presence || 'All')
     @result = Booking.check_in_out params[:from], params[:to], @type
@@ -213,7 +213,7 @@ class Admin::BookingsController < AdminController
     BookingMailer.send_request_confirmation(@booking, params[:booking][:email], I18n.locale).deliver_later
   end
 
-  # @route GET /bookings/sync (booking_sync)
+  # @route GET /bookings/sync (sync_bookings)
   def sync
     if params[:hid].present?
       house = House.find_by(number: params[:hid])
@@ -278,7 +278,7 @@ class Admin::BookingsController < AdminController
     end
   end
 
-  # @route PATCH /bookings/:id/update_comment_gr (update_booking_comment_gr)
+  # @route PATCH /bookings/update_comment_gr (update_comment_gr_bookings)
   def update_comment_gr
     @booking.update(booking_params)
     @result = Booking.check_in_out
@@ -299,7 +299,7 @@ class Admin::BookingsController < AdminController
     end
   end
 
-  # @route GET /bookings/get_price (bookings_get_price)
+  # @route GET /bookings/get_price (get_price_bookings)
   def get_price
     booking = Booking.new
     search = Search.new(period: "#{params[:start]} - #{params[:finish]}",

@@ -3,9 +3,9 @@
   <%= link_to 'Bookings (list view)', bookings_path %> |
 <% end %>
 <% if params[:period].present? %>
-  <%= link_to 'Bookings (timeline full view)', bookings_timeline_path %> |
+  <%= link_to 'Bookings (timeline full view)', timeline_bookings_path %> |
 <% else %>
-  <%= link_to 'Bookings (timeline short view)', bookings_timeline_path(period: 45) %> |
+  <%= link_to 'Bookings (timeline short view)', timeline_bookings_path(period: 45) %> |
 <% end %>
 <%= link_to 'Show all houses', "#", id: 'show_all_houses' %>
 <%= form_with class: 'form-inline' do |f| %>
@@ -75,7 +75,7 @@
       </div>
     </div>
     <div class='mt-2'>
-      <%= form_with(url: bookings_timeline_path, local: true, method: :get, id: 'timeline_form') do |f| %>
+      <%= form_with(url: timeline_bookings_path, local: true, method: :get, id: 'timeline_form') do |f| %>
         <div class="form-row">
           <div class="col-lg-2 form-group">
             <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
@@ -92,7 +92,7 @@
           <div class="col-lg-6 form-group">
             <%= f.submit 'Update timeline', class: 'btn btn-primary' %>
             <%= link_to 'Get job order', '#', class: 'btn btn-primary', id: 'get_job_oder'  %>
-            <%= link_to 'Drop filter', bookings_timeline_path(period: 45), class: 'btn btn-secondary'  %>
+            <%= link_to 'Drop filter', timeline_bookings_path(period: 45), class: 'btn btn-secondary'  %>
           </div>
         </div>
       <% end %>
