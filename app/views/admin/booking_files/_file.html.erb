@@ -1,24 +1,24 @@
-<li class="list-group-item booking_file" data-booking-file-id=<%= file.id %>>
+<li class="list-group-item booking_file" id="<%= dom_id(booking_file) %>">
   <div class="d-flex w-100 justify-content-between">
-    <h5 class="mb-1"><%= file.name %></h5>
-    <small><%= file.user.name %> <%= file.created_at.to_fs(:date_with_time) %></small>
+    <h5 class="mb-1"><%= booking_file.name %></h5>
+    <small><%= booking_file.user.name %> <%= booking_file.created_at.to_fs(:date_with_time) %></small>
   </div>
-  <% if !file.comment.empty? %>
-    <p><%= file.comment %></p>
+  <% if !booking_file.comment.empty? %>
+    <p><%= booking_file.comment %></p>
   <% end %>
   <div class='text-right'>
-    <% file_type = File.extname(file.url) %>
-    <% if file_type == '.pdf' %>
+    <% content_type = booking_file.data.attachment.content_type %>
+    <% if content_type == 'application/pdf' %>
       <% file_type = 'pdf' %>
     <% else %>
       <% file_type = 'image' %>
     <% end %>
     <%= link_to 'View', "#",  data: {
-                                  link_to_file: file.full_url,
+                                  link_to_file: rails_blob_path(booking_file.data),
                                   file_type: file_type }  %> |
     <%= link_to 'Print', "#", data: {
-                                  print: file.full_url,
+                                  print: rails_blob_path(booking_file.data),
                                   type: file_type} %> |
-    <%= link_to 'Delete', booking_file_path(id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true %>
+    <%= link_to 'Delete', booking_file_path(id: booking_file.id), data: { confirm: 'Are you sure?', turbo_method: :delete} %>
   </div>
 </li>

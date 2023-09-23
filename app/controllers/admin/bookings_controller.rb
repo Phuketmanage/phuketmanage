@@ -143,13 +143,7 @@ class Admin::BookingsController < AdminController
     @transfer = @booking.transfers.new
     @select_items = House.order(:code).map { |h| [h.code, h.number] }
     @select_items.push('Airport (International)', 'Airport (Domiestic)')
-    @booking_file = @booking.files.new
-    @s3_direct_post = S3_BUCKET.presigned_post(
-      key: "bookings/#{@booking.number}/${filename}",
-      success_action_status: '201',
-      acl: 'public-read',
-      content_type_starts_with: ""
-    )
+
     return if @booking.block?
 
     @booking_original = @booking.dup
@@ -179,7 +173,9 @@ class Admin::BookingsController < AdminController
     respond_to do |format|
       if @booking.save
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully created.' }
+        format.html do
+          redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully created.'
+        end
         format.json { render :show, status: :created, location: @booking }
       else
         @houses = House.all
@@ -259,7 +255,9 @@ class Admin::BookingsController < AdminController
         end
         @booking.toggle_status
         hid = House.find(@booking.house_id).number
-        format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully updated.' }
+        format.html do
+          redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @booking }
       else
         @houses = House.all.order(:code).map { |h| [h.code, h.id] }

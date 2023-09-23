@@ -1,43 +1,50 @@
 class Admin::BookingFilesController < AdminController
   load_and_authorize_resource
-
-  before_action :set_booking_file, only: %i[update destroy]
+  before_action :set_booking, only: %i[create]
+  before_action :set_booking_file, only: %i[destroy]
 
   # @route POST /bookings/:id/booking_files (booking_files)
   def create
-    booking_number = params[:booking_number]
-    booking = Booking.find_by(number: booking_number)
-    file = File.new(params[:booking_file][:file])
-    content_type = params[:booking_file][:file].content_type
-    extention = File.extname(file)
-    new_name = "#{Time.current.to_i}#{extention}"
-    obj = S3_BUCKET.object("bookings/#{booking.number}/#{new_name}")
-    obj.upload_file(file, acl: 'public-read', content_type: content_type)
-    @file = booking.files.new(booking_file_params)
-    @file.url = obj.key
-    @file.user_id = current_user.id
-    if @file.save
+    @booking_file = @booking.files.new(booking_file_params)
+    @booking_file.user_id = current_user.id
+    if @booking_file.save
+      respond_to_success
     else
-      redirect_to jobs_path
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # @route PATCH /booking_files/:id (booking_file)
-  # @route PUT /booking_files/:id (booking_file)
-  def update; end
-
   # @route DELETE /booking_files/:id (booking_file)
   def destroy
-    @file.destroy
+    @booking_file.destroy
+
+    respond_to_success
   end
 
   private
 
+  def respond_to_success
+    respond_to do |format|
+      format.html { redirect_back fallback_location: }
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
+  end
+
+  def fallback_location
+    bookings_path(@booking_file.booking)
+  end
+
+  def set_booking
+    @booking = Booking.find(params[:id])
+  end
+
   def set_booking_file
-    @file = BookingFile.find(params[:id])
+    @booking_file = BookingFile.find(params[:id])
   end
 
   def booking_file_params
-    params.require(:booking_file).permit(:name, :comment, :user_id)
+    params.require(:booking_file).permit(:name, :comment, :data)
   end
 end
