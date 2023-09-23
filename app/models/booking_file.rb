@@ -21,18 +21,14 @@
 #  fk_rails_...  (booking_id => bookings.id)
 #  fk_rails_...  (user_id => users.id)
 #
+# TODO: remove url field in #353
 class BookingFile < ApplicationRecord
+  include OrderableByTimestamp
+
   belongs_to :booking
   belongs_to :user, optional: true
-  after_destroy :delete_file_from_s3
 
-  def full_url
-    "#{S3_HOST}#{url}"
-  end
+  has_one_attached :data, dependent: :purge_later
 
-  private
-
-  def delete_file_from_s3
-    S3_BUCKET.object(url).delete
-  end
+  validates :data, presence: true
 end

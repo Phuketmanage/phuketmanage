@@ -1,0 +1,11 @@
+en:
+  activerecord:
+    attributes:
+      booking_file:
+        data: File
+    errors:
+      models:
+        booking_file:
+          attributes:
+            data:
+              blank: must be attached
