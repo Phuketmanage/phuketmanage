@@ -59,6 +59,7 @@ FactoryBot.define do
     start { Date.current }
     finish { start + 14.days }
     allotment { false }
+    status { "confirmed" }
     trait :pending do
       status { "pending" }
     end
