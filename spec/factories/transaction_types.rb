@@ -113,5 +113,13 @@ FactoryBot.define do
       name_en { "Other" }
       name_ru { "Другое" }
     end
+    trait :welcome_packs do
+      name_en { "Welcome packs" }
+      name_ru { "Приветственные наборы" }
+    end
+    trait :cleaning do
+      name_en { "Cleaning" }
+      name_ru { "Уборка" }
+    end
   end
 end
