@@ -7,8 +7,4 @@ module TransactionsHelpers
     fill_in 'transaction_de_co', with: option[:de_co]
     click_button 'Save'
   end
-
-  def add_salary_type
-    create(:transaction_type, :salary)
-  end
 end

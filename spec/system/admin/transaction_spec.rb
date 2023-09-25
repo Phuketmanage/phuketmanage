@@ -15,7 +15,7 @@ describe 'Transaction' do
   end
 
   context 'when open index page' do
-    let(:house_two) { create(:house, owner: owner_one) }
+    let!(:house_two) { create(:house, owner: owner_one) }
     let!(:another_trsc) { create(:transaction, house: house_two, user_id: owner_one.id) }
 
     context "when transactions filter" do
@@ -26,62 +26,53 @@ describe 'Transaction' do
                                 house_id: transaction.house_id)
       end
 
-      it { is_expected.not_to have_selector('td', text: another_trsc.house.code) }
-      it { is_expected.to have_selector('td', text: transaction.house.code) }
+      it { is_expected.not_to have_css('td', text: another_trsc.house.code) }
+      it { is_expected.to have_css('td', text: transaction.house.code) }
     end
   end
 
   context 'when new transaction', js: true do
-    before { add_salary_type }
+    before { create(:transaction_type, :salary) }
 
     context 'when cleaning' do
-      let!(:type_one) { create(:transaction_type, :cleaning) }
+      let!(:type_cleaning) { create(:transaction_type, :cleaning) }
       let!(:house_two) { create(:house, owner: create(:user, :owner)) }
 
       before do
-        add_transaction(date: Date.current - 3.day,
-                        type: type_one.name_en,
-                        house_code: house_two.code,
-                        de_co: 1_070)
+        add_transaction(type: type_cleaning.name_en, house_code: house_two.code, de_co: 1_070)
       end
 
-      context 'when not params' do
-        before do
-          visit transactions_path
-        end
+      context 'when manager open balance of company' do
+        before { visit transactions_path }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_one.transactions.first.id}_row") }
-        it { is_expected.to have_selector('td.de_co_cell', text: '1,070.00') }
-        it { is_expected.to have_selector('td.comment', text: type_one.transactions.first.comment_en) }
+        it { is_expected.to have_selector("tr#trsc_#{type_cleaning.transactions.first.id}_row") }
+        it { is_expected.to have_css('td.de_co_cell', text: '1,070.00') }
+        it { is_expected.to have_css('td.comment', text: type_cleaning.transactions.first.comment_en) }
       end
 
-      context 'when with params' do
-        before do
-          visit transactions_path(owner_id: house_two.owner_id)
-        end
+      context 'when manager open balance of owner_one' do
+        before { visit transactions_path(owner_id: house_two.owner_id) }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_one.transactions.first.id}_row") }
-        it { is_expected.to have_selector('td.cr_ow_cell', text: '1,070.00') }
-        it { is_expected.not_to have_selector('td.comment', text: transaction.comment_en) }
+        it { is_expected.to have_selector("tr#trsc_#{type_cleaning.transactions.first.id}_row") }
+        it { is_expected.to have_css('td.cr_ow_cell', text: '1,070.00') }
+        it { is_expected.not_to have_css('td.comment', text: transaction.comment_en) }
       end
     end
 
     context 'when new welcome_packs transaction' do
-      let!(:type_two) { create(:transaction_type, :welcome_packs) }
+      let!(:type_welcome_packs) { create(:transaction_type, :welcome_packs) }
 
       before do
-        add_transaction(type: type_two.name_en, house_code: house_one.code, de_co: 330)
+        add_transaction(type: type_welcome_packs.name_en, house_code: house_one.code, de_co: 330)
         sign_in house_one.owner
       end
 
       context 'when view welcome_packs' do
-        before do
-          visit transactions_path
-        end
+        before { visit transactions_path }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_two.transactions.first.id}_row") }
-        it { is_expected.to have_selector('td.cr_ow_cell', text: '330.00') }
-        it { is_expected.to have_selector('td.comment', text: type_two.transactions.first.comment_en) }
+        it { is_expected.to have_selector("tr#trsc_#{type_welcome_packs.transactions.first.id}_row") }
+        it { is_expected.to have_css('td.cr_ow_cell', text: '330.00') }
+        it { is_expected.to have_css('td.comment', text: type_welcome_packs.transactions.first.comment_en) }
       end
     end
   end
