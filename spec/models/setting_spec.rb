@@ -9,10 +9,13 @@ RSpec.describe Setting do
                             "license": "https://openexchangerates.org/license",
                             "timestamp": 1695650400, "base": "USD","rates": { "AED": 3.673005, "THB": 36.123 } }',
                    headers: { 'Content-Type': 'application/json' })
+      expect(described_class.get_usd_rate).to be_an_instance_of(Integer)
+    end
 
-      usd_rate = described_class.get_usd_rate
-
-      expect(usd_rate).to be_an_instance_of(Integer)
+    it do
+      WebMock.allow_net_connect!
+      rate = ValueObjects::CurrencyExchangeRate.new
+      expect(rate.response_status).to eq(200)
     end
   end
 end

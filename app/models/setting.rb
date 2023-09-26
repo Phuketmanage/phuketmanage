@@ -14,6 +14,6 @@ class Setting < ApplicationRecord
     rate    = ValueObjects::CurrencyExchangeRate.new
     thb     = rate.get_rate
     percent = thb / 100.0
-    (thb - percent).round
+    (thb - percent).to_i
   end
 end
