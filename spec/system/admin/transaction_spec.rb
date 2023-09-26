@@ -37,7 +37,10 @@ describe 'Transaction' do
     context 'when cleaning' do
       let!(:type_cleaning) { create(:transaction_type, :cleaning) }
 
-      before { add_transaction(type: type_cleaning.name_en, house_code: house.code, de_co: 1_070) }
+      before do
+        add_transaction(type: type_cleaning.name_en, house_code: house.code,
+                        de_co: 1_070, comment_en: 'Clean windows', comment_ru: 'Очистка окон')
+      end
 
       context 'when manager open balance of company' do
         before { visit transactions_path }
@@ -70,7 +73,10 @@ describe 'Transaction' do
     context 'when new welcome_packs transaction' do
       let!(:type_welcome_packs) { create(:transaction_type, :welcome_packs) }
 
-      before { add_transaction(type: type_welcome_packs.name_en, house_code: house.code, de_co: 330) }
+      before do
+        add_transaction(type: type_welcome_packs.name_en, house_code: house.code, de_co: 330,
+                        comment_en: 'Some welcome packs', comment_ru: 'Один приветственный набор')
+      end
 
       context 'when manager open balance of company' do
         before { visit transactions_path }
