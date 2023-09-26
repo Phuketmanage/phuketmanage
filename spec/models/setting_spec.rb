@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Setting do
   context 'when call .get_usd_rate' do
+    before { create(:setting, :usd_rate) }
+
     it do
       stub_request(:get, "https://openexchangerates.org/api/latest.json?app_id=#{ENV['YOUR_APP_ID']}")
         .to_return(status: 200,

@@ -14,6 +14,14 @@ class Setting < ApplicationRecord
     rate    = ValueObjects::CurrencyExchangeRate.new
     thb     = rate.get_rate
     percent = thb / 100.0
-    (thb - percent).to_i
+    rate    = (thb - percent).to_i
+    update_usd_rate(rate)
+    rate
+  end
+
+  private
+
+  def self.update_usd_rate(rate)
+    find_by(var: 'usd_rate').update(value: rate)
   end
 end

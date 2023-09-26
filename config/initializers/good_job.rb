@@ -11,6 +11,12 @@ Rails.application.configure do
       class: "ActiveStorageMaintenanceJob", # reference the Job class with a string
       set: { priority: 10 }, # additional ActiveJob properties; can also be a lambda/proc e.g. `-> { { priority: [1,2].sample } }`
       description: "Purges unattached Active Storage blobs." # optional description that appears in Dashboard
+    },
+    exchange_maintenance: {
+      cron: "5 0 * * *",
+      class: "ExchangeRateJob",
+      set: { priority: 10 },
+      description: "Updates the dollar to thb exchange rate."
     }
   }
 end
