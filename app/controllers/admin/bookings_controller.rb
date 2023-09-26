@@ -276,11 +276,11 @@ class Admin::BookingsController < AdminController
     end
   end
 
-  # @route PATCH /bookings/update_comment_gr (update_comment_gr_bookings)
+  # @route PATCH /bookings/:id/update_comment_gr (update_comment_gr_booking)
   def update_comment_gr
     @booking.update(booking_params)
     @result = Booking.check_in_out
-    redirect_to bookings_check_in_out_path
+    redirect_to check_in_out_bookings_path
   end
 
   # @route DELETE /bookings/:id (booking)

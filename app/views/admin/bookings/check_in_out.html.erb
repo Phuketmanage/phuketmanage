@@ -50,7 +50,7 @@
                                       data: { booking_id: r[:booking_id],
                                               type: r[:type]} %>
     <%= form_with model: booking,
-                    url: booking_update_comment_gr_path(r[:booking_id]),
+                    url: update_comment_gr_booking_path(r[:booking_id]),
                     local: true,
                     class: 'form_edit_comment_gr d-none',
                     data: { booking_id: r[:booking_id],

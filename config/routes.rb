@@ -83,10 +83,10 @@ Rails.application.routes.draw do
         get 'timeline_data'
         get 'check_in_out'
         get 'sync'
-        patch 'update_comment_gr'
       end
       member do
         resources :booking_files, only: %i[create destroy], shallow: true
+        patch 'update_comment_gr'
       end
     end
     resources :users, except: :create
