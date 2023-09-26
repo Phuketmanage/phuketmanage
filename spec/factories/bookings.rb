@@ -63,9 +63,6 @@ FactoryBot.define do
     trait :pending do
       status { "pending" }
     end
-    trait :confirmed do
-      status { "confirmed" }
-    end
     trait :canceled do
       status { "canceled" }
     end

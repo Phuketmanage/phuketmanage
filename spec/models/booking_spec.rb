@@ -52,8 +52,8 @@ RSpec.describe Booking do
   describe "Scopes" do
     describe "#active" do
       before do
+        create(:booking)
         create(:booking, :paid)
-        create(:booking, :confirmed)
         create(:booking, :canceled)
       end
 
@@ -65,8 +65,8 @@ RSpec.describe Booking do
 
     describe "#for_owner" do
       before do
+        create(:booking, start: 1.day.from_now)
         create(:booking, :paid, start: 2.days.from_now)
-        create(:booking, :confirmed, start: 1.day.from_now)
         create(:booking, :temporary, start: Date.current)
         create(:booking, :canceled, start: Date.current)
       end
@@ -81,8 +81,8 @@ RSpec.describe Booking do
 
     describe "#real" do
       before do
+        create(:booking)
         create(:booking, :paid)
-        create(:booking, :confirmed)
         create(:booking, :canceled)
         create(:booking, :block)
       end
@@ -94,7 +94,7 @@ RSpec.describe Booking do
     end
 
     describe "#unpaid" do
-      let!(:confirmed_booking) { create(:booking, :confirmed, start: 2.days.from_now) }
+      let!(:confirmed_booking) { create(:booking, start: 2.days.from_now) }
       let!(:pending_booking) { create(:booking, :pending, start: 1.day.from_now) }
 
       before do
