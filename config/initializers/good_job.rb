@@ -15,7 +15,13 @@ Rails.application.configure do
     exchange_maintenance: {
       cron: "5 0 * * *",
       class: "ExchangeRateJob",
-      set: { priority: 10 },
+      set: {
+        priority: 10,
+        max_attempts: 2,
+        backoff: 1.minute,
+        timezone: "Asia/Bangkok", # 08:00 (GMT+7)
+        on_failure: :send_email_to_admin
+      },
       description: "Updates the dollar to thb exchange rate."
     }
   }
