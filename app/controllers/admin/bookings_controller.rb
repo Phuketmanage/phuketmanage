@@ -92,11 +92,11 @@ class Admin::BookingsController < AdminController
       @from = params[:from].to_date
       @to = params[:to].to_date
     end
-    @houses = House.for_timeline.order(:code).map { |h| [h.code, h.id] }
+    @houses = House.for_timeline
     @houses_for_select = @houses
     if params[:house_number].present?
       house = params[:house_number]
-      @houses = House.where(number: house).order(:code).map { |h| [h.code, h.id] }
+      @houses = House.where(number: house).all
     end
 
     @today = @from
@@ -183,7 +183,7 @@ class Admin::BookingsController < AdminController
         format.html { redirect_to admin_house_bookings_path(@booking.house_id), notice: 'Booking was successfully created.' }
         format.json { render :show, status: :created, location: @booking }
       else
-        @houses = House.all.order(:code).map { |h| [h.code, h.id] }
+        @houses = House.all
         format.html { render :new }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end

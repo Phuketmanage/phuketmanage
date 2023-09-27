@@ -129,14 +129,6 @@ describe 'Booking' do
     end
   end
 
-  context 'when user is manager' do
-
-
-    context "adding a booking shorter than the minimum rental period for the house" do
-
-    end
-  end
-
   context 'when user is owner' do
     let(:owner_one) { create(:user, :owner) }
     let(:owner_two) { create(:user, :owner) }
