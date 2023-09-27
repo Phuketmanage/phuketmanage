@@ -9,10 +9,12 @@ describe 'Booking' do
 
   let(:current_date) { Date.current }
   let(:date_start) { current_date }
+  let(:date_shorter) { current_date + 2.days }
   let(:date_finish) { current_date + 10.days }
   let(:date_finish2) { current_date + 14.days }
   let(:date_start_format) { date_start.strftime("%d.%m.%Y") }
   let(:date_finish_format) { date_finish.strftime("%d.%m.%Y") }
+  let(:date_shorter_format) { date_shorter.strftime("%d.%m.%Y") }
   let(:date_finish_format2) { date_finish2.strftime("%d.%m.%Y") }
 
   context 'when user is admin' do
@@ -21,9 +23,11 @@ describe 'Booking' do
     let!(:booking_pending) do
       create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
+
     let!(:booking_pending2) do
       create(:booking, :pending, house: create(:house, :with_seasons), start: date_start, finish: date_finish2)
     end
+
     let!(:booking_canceled) do
       create(:booking, :canceled, house: create(:house, :with_seasons), start: date_start, finish: date_finish)
     end
@@ -69,6 +73,67 @@ describe 'Booking' do
       it { is_expected.to have_selector("div[data-id='#{booking_pending.id}']", count: 1) }
       it { is_expected.to have_selector("div[data-id='#{booking_pending2.id}']", count: 1) }
       it { is_expected.not_to have_selector("div[data-id='#{booking_canceled.id}']") }
+    end
+
+    context "adding a booking shorter than the minimum rental period for the house" do
+      let(:client_name) { "Ivan" }
+      let(:house_id) { House.where(unavailable: false).order(:code).map { |h| h.id }.first }
+      let(:house_code) { House.where(unavailable: false).order(:code).map { |h| h.code }.first }
+
+      before do
+        visit new_booking_path
+
+        fill_in 'booking[start]', with: date_start_format
+        fill_in 'booking[finish]', with: date_shorter_format
+        fill_in 'booking[client_details]', with: client_name
+
+        select(house_code, from: 'booking[house_id]')
+      end
+
+      it 'should correct start date' do
+        expect(page).to have_field('booking[start]', with: date_start_format)
+      end
+
+      it 'should correct finish date' do
+        expect(page).to have_field('booking[finish]', with: date_shorter_format)
+      end
+
+      it 'should correct client details' do
+        expect(page).to have_field('booking[client_details]', with: client_name)
+      end
+
+      it 'should correct house' do
+        expect(page).to have_field('booking[house_id]', with: house_id)
+      end
+
+      it 'should correct save the booking' do
+        booking_pending.destroy!
+
+        initial_booking_count = Booking.count
+
+        click_button "Save booking"
+
+        expect(page).to have_text("Booking was successfully created.")
+
+        expect(Booking.count).to eq(initial_booking_count + 1)
+      end
+
+      it 'not should correct save the booking' do
+        initial_booking_count = Booking.count
+
+        click_button "Save booking"
+
+        expect(page).to have_text("House is not available for this period, overlapped with bookings: [\"#{date_start_format} - #{date_finish_format}\"]")
+        expect(Booking.count).to eq(initial_booking_count)
+      end
+    end
+  end
+
+  context 'when user is manager' do
+
+
+    context "adding a booking shorter than the minimum rental period for the house" do
+
     end
   end
 

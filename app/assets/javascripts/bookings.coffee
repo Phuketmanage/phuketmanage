@@ -388,8 +388,11 @@ check_price = ()->
         $('#booking_agent').val(0)
         $('#booking_comm').val(data['comm'])
         $('#booking_nett').val(data['nett'])
-        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale']) * 100)
-        nett_percent = 100-comm_percent
+        comm_percent = Math.round(parseInt(data['comm'])/parseInt(data['sale']) * 100) || 0
+        if (data['sale'] == 0)
+          nett_percent = 0
+        else
+          nett_percent = 100 - (comm_percent || 0)
         $('span.badge').removeClass('bg-danger')
         $('span[data-booking-target=agentPercentage]').text('0%')
         $('span[data-booking-target=commPercentage]').text(comm_percent+'%')

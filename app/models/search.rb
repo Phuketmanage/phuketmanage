@@ -45,6 +45,7 @@ class Search
         rf_e, rs_e, Booking.statuses[:canceled], house_id, booking_id
       ).all
     end
+
     if overlapped.any?
       result[:result] = false
       result[:overlapped] = overlapped.map { |b| "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}" }
@@ -59,9 +60,11 @@ class Search
     result = {}
     houses.each do |house|
       total = 0
+      next if house.nil?
       durations = house.durations.where(
         'start <= ?  AND finish >= ?', duration, duration
       ).first
+
       next if durations.nil?
 
       seasons = get_seasons house.seasons
@@ -139,7 +142,8 @@ class Search
   end
 
   def duration_shorter_than_minimal?(house_id)
-    !check_house_min_booking_period(house_id)
+    false
+    # !check_house_min_booking_period(house_id)
   end
 
   def check_house_min_booking_period(house_id)
