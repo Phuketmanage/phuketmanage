@@ -45,17 +45,17 @@ describe 'Transaction' do
       context 'when manager open balance of company' do
         before { visit transactions_path }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_cleaning.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.de_co_cell', text: '1,070.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Clean windows') }
       end
 
       context 'when manager open balance of owner' do
         before { visit transactions_path(owner_id: owner.id) }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_cleaning.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '1,070.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Clean windows') }
       end
 
       context 'when the owner opens his balance' do
@@ -64,9 +64,9 @@ describe 'Transaction' do
           visit transactions_path
         end
 
-        it { is_expected.to have_selector("tr#trsc_#{type_cleaning.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '1,070.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Clean windows') }
       end
     end
 
@@ -81,17 +81,17 @@ describe 'Transaction' do
       context 'when manager open balance of company' do
         before { visit transactions_path }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_welcome_packs.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.de_co_cell', text: '330.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Some welcome packs') }
       end
 
       context 'when manager open balance of owner' do
         before { visit transactions_path(owner_id: owner.id) }
 
-        it { is_expected.to have_selector("tr#trsc_#{type_welcome_packs.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '330.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Some welcome packs') }
       end
 
       context 'when view welcome_packs' do
@@ -100,9 +100,9 @@ describe 'Transaction' do
           visit transactions_path
         end
 
-        it { is_expected.to have_selector("tr#trsc_#{type_welcome_packs.transactions.first.id}_row") }
+        it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '330.00') }
-        it { is_expected.to have_css('td.comment', text: Transaction.last.comment_en) }
+        it { is_expected.to have_css('td.comment', text: 'Some welcome packs') }
       end
     end
   end
