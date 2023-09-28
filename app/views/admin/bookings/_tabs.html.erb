@@ -3,7 +3,7 @@
     <%= link_to 'Active', bookings_path(from: @from, to: @to), class: "nav-link #{"active" if action_name == "index" && !@view_as_owner}" %>
   </li>
   <li class="nav-item">
-    <%= link_to 'Canceled', bookings_canceled_path(from: @from, to: @to), class: "nav-link #{"active" if action_name == "canceled"}" %>
+    <%= link_to 'Canceled', canceled_bookings_path(from: @from, to: @to), class: "nav-link #{"active" if action_name == "canceled"}" %>
   </li>
   <li class="nav-item">
     <%= link_to 'Active (owner view)', bookings_path(from: @from, to: @to, view_as_owner: 1), class: "nav-link #{"active" if action_name == "index" && @view_as_owner}" %>

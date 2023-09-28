@@ -83,7 +83,7 @@ describe 'Booking' do
     before do
       create(:booking, :pending, house: house_one, start: date_start, finish: date_finish,
                        sale: 10_000, agent: 0, comm: 2_000, nett: 8_000)
-      create(:booking, :confirmed, house: house_two, start: date_start, finish: date_finish + 2.days,
+      create(:booking, house: house_two, start: date_start, finish: date_finish + 2.days,
                        sale: 12_000, agent: 0, comm: 2_400, nett: 9_600)
       create(:booking, :pending, house: house_three, start: date_start, finish: date_finish,
                        sale: 20_000, agent: 2_000, comm: 2_000, nett: 16_000)

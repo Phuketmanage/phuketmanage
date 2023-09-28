@@ -280,7 +280,7 @@ $(document).on "ready", ->
 
   $('#booking_files').on "click", "a[data-print]", (e) ->
     e.preventDefault()
-    printJS("https:#{$(this).data('print')}", $(this).data('type'))
+    printJS("#{$(this).data('print')}", $(this).data('type'))
 
   # Calculate booking price when dates and house choosen. If status block = set prices to zero
   $('#booking_start').on 'change', (e) ->
@@ -409,5 +409,3 @@ check_price = ()->
     $('#booking_agent').val(0)
     $('#booking_comm').val(0)
     $('#booking_nett').val(0)
-
-

@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/BlockLength
+
 Rails.application.routes.draw do
   root to: 'guests/index#index'
 
@@ -11,7 +13,6 @@ Rails.application.routes.draw do
     resources :houses, only: %i[show index]
     get :about, to: 'about#index'
   end
-
 
   # Admin controllers
   scope module: 'admin' do
@@ -60,7 +61,7 @@ Rails.application.routes.draw do
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
     resources :admin_houses do
       resources :prices, only: [:index]
-      resources :photos, only: [:index, :new, :destroy, :update] do
+      resources :photos, only: %i[index new destroy update] do
         put 'sort', on: :member
         delete 'delete_all', on: :collection
       end
@@ -68,23 +69,26 @@ Rails.application.routes.draw do
       delete 'delete_duration', to: 'prices#destroy_duration'
       post 'add_season', to: 'prices#create_season'
       delete 'delete_season', to: 'prices#destroy_season'
-      resources :bookings, only: [:index, :new]
+      resources :bookings, only: %i[index new]
       get 'inactive', to: 'admin_houses#inactive', on: :collection
       get 'export', on: :collection
     end
-    get 'bookings/get_price', to: 'bookings#get_price'
     post 'booking/new', to: 'bookings#create_front'
-    get 'bookings/sync', to: 'bookings#sync', as: 'booking_sync'
-    get 'bookings/timeline', to: 'bookings#timeline', as: 'bookings_timeline'
-    get 'bookings/timeline_data', to: 'bookings#timeline_data'
-    get 'bookings/check_in_out', to: 'bookings#check_in_out', as: 'bookings_check_in_out'
-    get 'bookings/canceled', to: 'bookings#canceled'
-    # get 'bookings/salary', to: 'bookings#salary_index', as: 'salary_index'
-    # get 'bookings/salary_calc', to: 'bookings#salary_calc', as: 'salary_calc'
-    patch 'bookings/:id/update_comment_gr', to: 'bookings#update_comment_gr', as: 'update_booking_comment_gr'
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
-    resources :bookings
-    resources :booking_files, only: %i[create update destroy]
+    resources :bookings do
+      collection do
+        get 'get_price'
+        get 'canceled'
+        get 'timeline'
+        get 'timeline_data'
+        get 'check_in_out'
+        get 'sync'
+      end
+      member do
+        resources :booking_files, only: %i[create destroy], shallow: true
+        patch 'update_comment_gr'
+      end
+    end
     resources :users, except: :create
     post 'create_user', to: 'users#create', as: 'create_user'
     get 'users/:id/password_reset_request', to: 'users#password_reset_request', as: 'password_reset_request'
@@ -106,10 +110,11 @@ Rails.application.routes.draw do
 
   get 'unlock', to: 'dev#unlock' if Rails.env.development?
 
-  # Good job admin dashboard
+  # Admin dashboards
   authenticate :user, ->(user) { user.role?('Admin') } do
     mount GoodJob::Engine => '/admin/activejob'
     resources :uploads_tests # TODO: Remove after #353
+    mount MaintenanceTasks::Engine => "/admin/maintenance_tasks"
   end
 
   # Errors
@@ -119,3 +124,4 @@ Rails.application.routes.draw do
     req.path.exclude? '/files'
   }
 end
+# rubocop:enable

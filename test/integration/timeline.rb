@@ -8,7 +8,7 @@ class TiemelineTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show correct houses' do
-    get bookings_timeline_path
+    get timeline_bookings_path
     assert_response :success
     # assert_match 'Hidden comment', response.body
     assert_select "div.house_code", 7
@@ -16,7 +16,7 @@ class TiemelineTest < ActionDispatch::IntegrationTest
     # Should not show houses where hide_in_timeline
     villa = houses(:villa_3)
     villa.update(hide_in_timeline: true)
-    get bookings_timeline_path
+    get timeline_bookings_path
     assert_response :success
     assert_select "div.house_code", 6
     assert_select "div.house_code[data-house-id=#{villa.id}]", 0
@@ -24,7 +24,7 @@ class TiemelineTest < ActionDispatch::IntegrationTest
     # Should not show houses where balance_closed
     villa = houses(:villa_6)
     villa.update(balance_closed: true)
-    get bookings_timeline_path
+    get timeline_bookings_path
     assert_response :success
     assert_select "div.house_code", 5
     assert_select "div.house_code[data-house-id=#{villa.id}]", 0

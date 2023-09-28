@@ -1,5 +1,5 @@
 <h1>Check in/out - <%= @type %></h1>
-<%= form_with(url: bookings_check_in_out_path, local: true, method: :get) do |f| %>
+<%= form_with(url: check_in_out_bookings_path, local: true, method: :get) do |f| %>
   <div class="form-row">
     <div class="col-lg-2 form-group">
       <%= date_field_tag :from, {}, value: params[:from], class: "form-control" %>
@@ -50,7 +50,7 @@
                                       data: { booking_id: r[:booking_id],
                                               type: r[:type]} %>
     <%= form_with model: booking,
-                    url: update_booking_comment_gr_path(r[:booking_id]),
+                    url: update_comment_gr_booking_path(r[:booking_id]),
                     local: true,
                     class: 'form_edit_comment_gr d-none',
                     data: { booking_id: r[:booking_id],

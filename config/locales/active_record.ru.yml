@@ -1,0 +1,11 @@
+ru:
+  activerecord:
+    attributes:
+      booking_file:
+        data: Файл
+    errors:
+      models:
+        booking_file:
+          attributes:
+            data:
+              blank: должен быть прикреплен

@@ -1,0 +1,2 @@
+<%= turbo_stream.append "booking_files", partial: "admin/booking_files/file", locals: {booking_file: @booking_file} %>
+<%= turbo_stream.replace "new_booking_file", partial: "admin/booking_files/form", locals: {booking_file: BookingFile.new(booking_id: params[:booking_id])} %>

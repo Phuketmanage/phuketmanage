@@ -30,12 +30,12 @@
       <% end %>
       <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>
         <li class="nav-item">
-          <%= link_to 'Timeline', bookings_timeline_path(period: 45), class: "nav-link #{active_link(bookings_timeline_path)}" %>
+          <%= link_to 'Timeline', timeline_bookings_path(period: 45), class: "nav-link #{active_link(timeline_bookings_path)}" %>
         </li>
       <% end %>
       <% if signed_in? && current_user.role?(['Guest relation']) %>
         <li class="nav-item">
-          <%= link_to 'Bookings', bookings_timeline_path(period: 45), class: "nav-link #{active_link(bookings_timeline_path)}" %>
+          <%= link_to 'Bookings', timeline_bookings_path(period: 45), class: "nav-link #{active_link(timeline_bookings_path)}" %>
         </li>
       <% end %>
       <% if signed_in? && current_user.role?(['Owner']) %>
@@ -45,7 +45,7 @@
       <% end %>
       <% if signed_in? && current_user.role?(['Admin', 'Guest relation', 'Manager']) %>
         <li class="nav-item">
-          <%= link_to 'Check in/out', bookings_check_in_out_path, class: "nav-link #{active_link(bookings_check_in_out_path)}" %>
+          <%= link_to 'Check in/out', check_in_out_bookings_path, class: "nav-link #{active_link(check_in_out_bookings_path)}" %>
         </li>
       <% end %>
       <% if signed_in? && current_user.role?(['Admin', 'Manager', 'Accounting']) %>

@@ -18,6 +18,7 @@ gem 'good_job'
 gem 'newrelic_rpm'
 gem 'lograge'
 gem "image_processing", ">= 1.2"
+gem 'maintenance_tasks' # Database maintenance tasks for Rails
 
 # App
 gem 'barnes'
