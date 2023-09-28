@@ -1,6 +1,6 @@
 class AdminMailer < ApplicationMailer
   def notify_failure(exception)
-    @exception = exception.message
+    @exception = exception
     mail(to: 'info@phuketmanage.com ', subject: 'Task execution error')
   end
 end

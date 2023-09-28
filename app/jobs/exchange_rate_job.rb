@@ -1,7 +1,8 @@
 class ExchangeRateJob < ApplicationJob
   retry_on StandardError, wait: 10.minutes, attempts: 2 do |_job, exception|
-    send_email_to_admin exception
+    send_email_to_admin exception.message
   end
+
   def perform
     Setting.get_usd_rate
   end

@@ -13,7 +13,7 @@ Rails.application.configure do
       description: "Purges unattached Active Storage blobs." # optional description that appears in Dashboard
     },
     exchange_maintenance: {
-      cron: "5 0 * * *",
+      cron: "0 8 * * *",
       class: "ExchangeRateJob",
       set: { priority: 10 },
       description: "Updates the dollar to thb exchange rate."
