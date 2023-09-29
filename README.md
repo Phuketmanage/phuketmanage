@@ -1,3 +1,5 @@
+### [Available tasks list](https://github.com/Phuketmanage/phuketmanage/issues?q=is%3Aopen+is%3Aissue+-label%3Ablocked+-label%3Adraft+no%3Aassignee)
+
 # Phuketmanage
 
 Property management website that allow to manage houses and bookings. It helps with keeping track of all incomes and expenses, providing owners with access to reports, and assists in organizing internal company work for rental, maintenance as well as tenants' check in/out.
@@ -129,7 +131,7 @@ Currently we have one default queue, but you can set priority to job 0-10, small
 
 Cron jobs can be set up in `good_job.rb` initializer.
 
-Current backed: [https://github.com/bensheldon/good_job](Good Job)
+Current backed documentation: [Good Job](https://github.com/bensheldon/good_job)
 
 ## Tests
 
