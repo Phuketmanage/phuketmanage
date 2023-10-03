@@ -1,18 +1,21 @@
 class Admin::EmployeesController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   before_action :set_employee, only: %i[show edit update destroy]
 
   # @route GET /employees (employees)
   def index
+    authorize!
     @employees = Employee.all
   end
 
   # @route GET /employees/:id (employee)
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /employees/list_for_job (employees_list_for_job)
   def list_for_job
+    authorize!
     empls = Employee.joins(:houses, :job_types).where(
       'houses.id = ? AND job_types.id = ?',
       params[:house_id], params[:job_type_id]
@@ -23,14 +26,18 @@ class Admin::EmployeesController < AdminController
 
   # @route GET /employees/new (new_employee)
   def new
+    authorize!
     @employee = Employee.new
   end
 
   # @route GET /employees/:id/edit (edit_employee)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /employees (employees)
   def create
+    authorize!
     @employee = Employee.new(employee_params)
 
     respond_to do |format|
@@ -47,6 +54,7 @@ class Admin::EmployeesController < AdminController
   # @route PATCH /employees/:id (employee)
   # @route PUT /employees/:id (employee)
   def update
+    authorize!
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
@@ -60,6 +68,7 @@ class Admin::EmployeesController < AdminController
 
   # @route DELETE /employees/:id (employee)
   def destroy
+    authorize!
     @employee.destroy
     respond_to do |format|
       format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }

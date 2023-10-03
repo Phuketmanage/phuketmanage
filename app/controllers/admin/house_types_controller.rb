@@ -1,26 +1,32 @@
 class Admin::HouseTypesController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   before_action :set_house_type, only: %i[show edit update destroy]
 
   # @route GET /house_types (house_types)
   def index
+    authorize!
     @house_types = HouseType.all
   end
 
   # @route GET /house_types/:id (house_type)
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /house_types/new (new_house_type)
   def new
+    authorize!
     @house_type = HouseType.new
   end
 
   # @route GET /house_types/:id/edit (edit_house_type)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /house_types (house_types)
   def create
+    authorize!
     @house_type = HouseType.new(house_type_params)
 
     respond_to do |format|
@@ -37,6 +43,7 @@ class Admin::HouseTypesController < AdminController
   # @route PATCH /house_types/:id (house_type)
   # @route PUT /house_types/:id (house_type)
   def update
+    authorize!
     respond_to do |format|
       if @house_type.update(house_type_params)
         format.html { redirect_to @house_type, notice: 'House type was successfully updated.' }
@@ -50,6 +57,7 @@ class Admin::HouseTypesController < AdminController
 
   # @route DELETE /house_types/:id (house_type)
   def destroy
+    authorize!
     @house_type.destroy
     respond_to do |format|
       format.html { redirect_to house_types_url, notice: 'House type was successfully destroyed.' }

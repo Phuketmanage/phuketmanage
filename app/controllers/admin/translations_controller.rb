@@ -1,8 +1,9 @@
 class Admin::TranslationsController < AdminController
+  verify_authorized
 
-  authorize_resource class: false
   # @route GET /translate (translate)
   def show
+    authorize! with: Admin::TranslationPolicy
     translation = translate(params['text'], params['language'])
     render plain: translation
   end

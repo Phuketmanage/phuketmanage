@@ -1,34 +1,38 @@
 class Admin::DurationsController < AdminController
-  load_and_authorize_resource :house
-  # load_and_authorize_resource :duration, through: :house, shallow: true
-
+  verify_authorized
   before_action :set_duration, only: %i[show edit update destroy]
 
   # GET /durations
   # GET /durations.json
   def index
+    authorize!
     @house = House.find(params[:house_id])
     @durations = @house.durations
   end
 
   # GET /durations/1
   # GET /durations/1.json
-  def show; end
+  def show
+    authorize!
+  end
 
   # GET /durations/new
   def new
+    authorize!
     @house = House.find(params[:house_id])
     @duration = Duration.new
   end
 
   # GET /durations/1/edit
   def edit
+    authorize!
     @house = @duration.house
   end
 
   # POST /durations
   # POST /durations.json
   def create
+    authorize!
     @house = House.find(params[:house_id])
     @duration = @house.durations.build(duration_params)
 
@@ -46,6 +50,7 @@ class Admin::DurationsController < AdminController
   # PATCH/PUT /durations/1
   # PATCH/PUT /durations/1.json
   def update
+    authorize!
     @house = @duration.house
     respond_to do |format|
       if @duration.update(duration_params)
@@ -61,6 +66,7 @@ class Admin::DurationsController < AdminController
   # DELETE /durations/1
   # DELETE /durations/1.json
   def destroy
+    authorize!
     @house = @duration.house
     @duration.destroy
     respond_to do |format|

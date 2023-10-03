@@ -1,7 +1,9 @@
 class Admin::DocumentsController < AdminController
-  authorize_resource :class => false
+  verify_authorized
+
   # @route GET /documents/statement (tmp_statement)
   def statement
+    authorize! with: Admin::DocumentsPolicy
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
 
     if params[:trsc_id].present?
@@ -27,6 +29,7 @@ class Admin::DocumentsController < AdminController
 
   # @route GET /documents/reimbersment (tmp_reimbersment)
   def reimbersment
+    authorize! with: Admin::DocumentsPolicy
     @t = Transaction.find(params[:trsc_id])
     @date = @t.date
     @usd = 29
@@ -39,7 +42,11 @@ class Admin::DocumentsController < AdminController
     end
   end
 
-  def invoice; end
+  def invoice
+    authorize! with: Admin::DocumentsPolicy
+  end
 
-  def receipt; end
+  def receipt
+    authorize! with: Admin::DocumentsPolicy
+  end
 end

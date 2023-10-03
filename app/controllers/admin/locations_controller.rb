@@ -1,25 +1,31 @@
 class Admin::LocationsController < AdminController
-  load_and_authorize_resource id_param: :number
-
+  verify_authorized
   before_action :set_location, only: %i[show edit update destroy]
 
   # @route GET /locations (locations)
   def index
+    authorize!
     @locations = Location.all.order(:name_en)
   end
 
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /locations/new (new_location)
   def new
+    authorize!
     @location = Location.new
   end
 
   # @route GET /locations/:id/edit (edit_location)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /locations (locations)
   def create
+    authorize!
     @location = Location.new(location_params)
 
     respond_to do |format|
@@ -36,6 +42,7 @@ class Admin::LocationsController < AdminController
   # @route PATCH /locations/:id (location)
   # @route PUT /locations/:id (location)
   def update
+    authorize!
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to locations_url, notice: 'Location was successfully updated.' }
@@ -49,6 +56,7 @@ class Admin::LocationsController < AdminController
 
   # @route DELETE /locations/:id (location)
   def destroy
+    authorize!
     @location.destroy
     respond_to do |format|
       format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }

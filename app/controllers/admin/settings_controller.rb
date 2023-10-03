@@ -1,26 +1,32 @@
 class Admin::SettingsController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   before_action :set_setting, only: %i[show edit update destroy]
 
   # @route GET /settings (settings)
   def index
+    authorize!
     @settings = Setting.all
   end
 
   # @route GET /settings/:id (setting)
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /settings/new (new_setting)
   def new
+    authorize!
     @setting = Setting.new
   end
 
   # @route GET /settings/:id/edit (edit_setting)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /settings (settings)
   def create
+    authorize!
     @setting = Setting.new(setting_params)
 
     respond_to do |format|
@@ -37,6 +43,7 @@ class Admin::SettingsController < AdminController
   # @route PATCH /settings/:id (setting)
   # @route PUT /settings/:id (setting)
   def update
+    authorize!
     respond_to do |format|
       if @setting.update(setting_params)
         format.html { redirect_to @setting, notice: 'Setting was successfully updated.' }
@@ -50,6 +57,7 @@ class Admin::SettingsController < AdminController
 
   # @route DELETE /settings/:id (setting)
   def destroy
+    authorize!
     @setting.destroy
     respond_to do |format|
       format.html { redirect_to settings_url, notice: 'Setting was successfully destroyed.' }

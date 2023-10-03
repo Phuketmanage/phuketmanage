@@ -1,10 +1,10 @@
 class Admin::TransfersController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   before_action :set_transfer, only: %i[show update destroy cancel]
 
   # @route GET /transfers (transfers)
   def index
+    authorize!
     if !params[:from].present? && !params[:to].present?
       today = Date.current
       @transfers = Transfer.where('date >= ?', today).order(:date).all
@@ -24,17 +24,20 @@ class Admin::TransfersController < AdminController
 
   # @route GET /transfers/supplier (transfers_supplier)
   def index_supplier
+    authorize!
     today = Date.current
     @transfers = Transfer.where('date >= ?', today).order(:date)
   end
 
   # @route GET /transfers/:id (transfer)
   def show
+    authorize!
     render json: @transfer
   end
 
   # @route GET /transfers/new (new_transfer)
   def new
+    authorize!
     @transfer = Transfer.new
     respond_to do |format|
       format.js
@@ -43,6 +46,7 @@ class Admin::TransfersController < AdminController
 
   # @route GET /transfers/:id/edit (edit_transfer)
   def edit
+    authorize!
     @transfer = Transfer.find(params[:id])
     @select_items = House.for_rent.order(:code).map { |h| [h.code, h.number] }
     @select_items.push('Airport (International)', 'Airport (Domiestic)')
@@ -54,6 +58,7 @@ class Admin::TransfersController < AdminController
 
   # @route POST /transfers (transfers)
   def create
+    authorize!
     @transfer = Transfer.new(transfer_params)
     trsf_booking_no = "#{(('A'..'Z').to_a + ('0'..'9').to_a).sample(7).join}"
     @transfer.number = trsf_booking_no
@@ -83,6 +88,7 @@ class Admin::TransfersController < AdminController
 
   # @route GET /transfers/:number/confirmed (supplier_confirm_transfer)
   def confirmed
+    authorize!
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
       @notice = "There is no such transfer with booking no #{params[:number]}"
@@ -101,6 +107,7 @@ class Admin::TransfersController < AdminController
   # @route PATCH /transfers/:id (transfer)
   # @route PUT /transfers/:id (transfer)
   def update
+    authorize!
     # transfer = Transfer.find_by(number: params[:id])
     @transfer.attributes = transfer_params
     changes = @transfer.changes
@@ -150,6 +157,7 @@ class Admin::TransfersController < AdminController
 
   # @route GET /transfers/:id/cancel (cancel_transfer)
   def cancel
+    authorize!
     respond_to do |format|
       if @transfer.update(status: 'canceling')
         if params[:request_from] == 'bookings'
@@ -168,6 +176,7 @@ class Admin::TransfersController < AdminController
 
   # @route GET /transfers/:number/canceled (supplier_cancel_transfer)
   def canceled
+    authorize!
     @transfer = Transfer.find_by(number: params[:number])
     if @transfer.nil?
       @notice = "There is no such transfer with booking no #{params[:number]}"
@@ -185,6 +194,7 @@ class Admin::TransfersController < AdminController
 
   # @route DELETE /transfers/:id (transfer)
   def destroy
+    authorize!
     @transfer.destroy
     respond_to do |format|
       if params[:request_from] == 'bookings'

@@ -1,11 +1,12 @@
 class Admin::PhotosController < AdminController
-  load_and_authorize_resource :house_photo, id_param: :number
-
+  verify_authorized
   before_action :get_house
   before_action :get_photo, only: %i[update sort destroy]
 
+
   # @route GET /admin_houses/:admin_house_id/photos (admin_house_photos)
   def index
+    authorize! with: Admin::PhotoPolicy
     @photos = @house.photos.rank(:position)
     @s3_direct_post = S3_BUCKET.presigned_post(key: "house_photos/#{@house.number}/${filename}",
                                                success_action_status: '201', acl: 'public-read')
@@ -13,12 +14,14 @@ class Admin::PhotosController < AdminController
 
   # @route PUT /admin_houses/:admin_house_id/photos/:id/sort (sort_admin_house_photo)
   def sort
+    authorize! with: Admin::PhotoPolicy
     @photo.update(position_position: params[:position])
     head :ok
   end
 
   # @route GET /admin_houses/:admin_house_id/photos/new (new_admin_house_photo)
   def new
+    authorize! with: Admin::PhotoPolicy
     url = params[:photo_url]
     preview = params[:preview]
     render json: { status: 'duplicate' } and return if HousePhoto.find_by(url:)
@@ -33,6 +36,7 @@ class Admin::PhotosController < AdminController
   # @route PATCH /admin_houses/:admin_house_id/photos/:id (admin_house_photo)
   # @route PUT /admin_houses/:admin_house_id/photos/:id (admin_house_photo)
   def update
+    authorize! with: Admin::PhotoPolicy
     @photo.update(house_photo_params)
     if params[:commit] == "Use as default"
       @photo.house.update(image: @photo.url)
@@ -43,6 +47,7 @@ class Admin::PhotosController < AdminController
 
   # @route DELETE /admin_houses/:admin_house_id/photos/:id (admin_house_photo)
   def destroy
+    authorize! with: Admin::PhotoPolicy
     S3_BUCKET.object(@photo.key).delete
     S3_BUCKET.object(@photo.thumb_key).delete
     @photo.destroy
@@ -53,6 +58,7 @@ class Admin::PhotosController < AdminController
 
   # @route DELETE /admin_houses/:admin_house_id/photos/delete_all (delete_all_admin_house_photos)
   def delete_all
+    authorize! with: Admin::PhotoPolicy
     S3_BUCKET.objects({ prefix: "house_photos/#{@house.number}" }).batch_delete!
     @house.photos.destroy_all
     @house.update(image: nil)

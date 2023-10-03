@@ -1,8 +1,9 @@
 class Admin::UsersController < AdminController
-  load_and_authorize_resource
+  verify_authorized
 
   # @route GET /users (users)
   def index
+    authorize!
     if params['role']
       @users = User.with_role(params['role']).order(:name)
     elsif current_user.role? :admin
@@ -14,11 +15,13 @@ class Admin::UsersController < AdminController
 
   # @route GET /users/inactive (users_inactive)
   def inactive
+    authorize!
     @users = User.inactive_owners.order(:name)
   end
 
   # @route GET /users/new (new_user)
   def new
+    authorize!
     @user = User.new
     @roles = if current_user.role? :admin
       Role.all
@@ -29,6 +32,7 @@ class Admin::UsersController < AdminController
 
   # @route GET /users/:id/edit (edit_user)
   def edit
+    authorize!
     @user = User.find(params[:id])
     @roles = if current_user.role? :admin
       Role.all
@@ -39,6 +43,7 @@ class Admin::UsersController < AdminController
 
   # @route POST /create_user (create_user)
   def create
+    authorize!
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Successfully created User."
@@ -56,6 +61,7 @@ class Admin::UsersController < AdminController
   # @route PATCH /users/:id (user)
   # @route PUT /users/:id (user)
   def update
+    authorize!
     @user = User.find(params[:id])
     params[:user].delete(:password) if params[:user][:password].blank?
     if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
@@ -73,6 +79,7 @@ class Admin::UsersController < AdminController
 
   # @route DELETE /users/:id (user)
   def destroy
+    authorize!
     @user = User.find(params[:id])
     if @user.destroy
       flash[:notice] = "Successfully deleted User."
@@ -82,6 +89,7 @@ class Admin::UsersController < AdminController
 
   # @route GET /users/:id/password_reset_request (password_reset_request)
   def password_reset_request
+    authorize!
     user = User.find(params[:id])
     user.send_reset_password_instructions
     redirect_to users_path
@@ -89,6 +97,7 @@ class Admin::UsersController < AdminController
 
   # @route GET /users/get_houses (users_get_houses)
   def get_houses
+    authorize!
     @owner_id = params[:owner_id]
     @houses = if @owner_id
       User.find(@owner_id).houses.active.select(:id, :code)

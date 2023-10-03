@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    action_policy (0.6.7)
+      ruby-next-core (>= 0.14.0)
     actioncable (7.0.8)
       actionpack (= 7.0.8)
       activesupport (= 7.0.8)
@@ -387,6 +389,7 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-graphviz (1.2.5)
       rexml
+    ruby-next-core (0.15.3)
     ruby-progressbar (1.13.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
@@ -467,6 +470,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  action_policy
   annotate
   aws-sdk-s3
   barnes

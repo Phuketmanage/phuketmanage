@@ -1,26 +1,32 @@
 class Admin::EmplTypesController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   before_action :set_empl_type, only: %i[show edit update destroy]
 
   # @route GET /empl_types (empl_types)
   def index
+    authorize!
     @empl_types = EmplType.all
   end
 
   # @route GET /empl_types/:id (empl_type)
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /empl_types/new (new_empl_type)
   def new
+    authorize!
     @empl_type = EmplType.new
   end
 
   # @route GET /empl_types/:id/edit (edit_empl_type)
-  def edit; end
+  def edit
+    authorize! 
+  end
 
   # @route POST /empl_types (empl_types)
   def create
+    authorize! 
     @empl_type = EmplType.new(empl_type_params)
 
     respond_to do |format|
@@ -37,6 +43,7 @@ class Admin::EmplTypesController < AdminController
   # @route PATCH /empl_types/:id (empl_type)
   # @route PUT /empl_types/:id (empl_type)
   def update
+    authorize!
     respond_to do |format|
       if @empl_type.update(empl_type_params)
         format.html { redirect_to @empl_type, notice: 'Empl type was successfully updated.' }
@@ -50,6 +57,7 @@ class Admin::EmplTypesController < AdminController
 
   # @route DELETE /empl_types/:id (empl_type)
   def destroy
+    authorize!
     @empl_type.destroy
     respond_to do |format|
       format.html { redirect_to empl_types_url, notice: 'Empl type was successfully destroyed.' }

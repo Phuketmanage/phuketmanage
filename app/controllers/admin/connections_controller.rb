@@ -1,10 +1,10 @@
 class Admin::ConnectionsController < AdminController
-  load_and_authorize_resource
-
+  verify_authorized
   # before_action :set_house, only: :create
 
   # @route POST /connections (connections)
   def create
+    authorize! with: Admin::ConnectionPolicy
     @house = House.find_by(number: params[:hid])
     @connection = @house.connections.build(connection_params)
     if @connection.save
@@ -19,6 +19,7 @@ class Admin::ConnectionsController < AdminController
 
   # @route DELETE /connections/:id (connection)
   def destroy
+    authorize! with: Admin::ConnectionPolicy
     @connection = Connection.find(params[:id])
     hid = @connection.house.number
     @connection.destroy

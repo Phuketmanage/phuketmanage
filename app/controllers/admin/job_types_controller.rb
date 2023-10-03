@@ -1,25 +1,32 @@
 class Admin::JobTypesController < AdminController
-  load_and_authorize_resource
-
   before_action :set_job_type, only: %i[show edit update destroy]
+
+  verify_authorized
 
   # @route GET /job_types (job_types)
   def index
+    authorize!
     @job_types = JobType.all
   end
 
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /job_types/new (new_job_type)
   def new
+    authorize!
     @job_type = JobType.new
   end
 
   # @route GET /job_types/:id/edit (edit_job_type)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /job_types (job_types)
   def create
+    authorize!
     @job_type = JobType.new(job_type_params)
 
     respond_to do |format|
@@ -36,6 +43,7 @@ class Admin::JobTypesController < AdminController
   # @route PATCH /job_types/:id (job_type)
   # @route PUT /job_types/:id (job_type)
   def update
+    authorize!
     respond_to do |format|
       if @job_type.update(job_type_params)
         format.html { redirect_to job_types_path, notice: 'Job type was successfully updated.' }
@@ -49,6 +57,7 @@ class Admin::JobTypesController < AdminController
 
   # @route DELETE /job_types/:id (job_type)
   def destroy
+    authorize!
     @job_type.destroy
     respond_to do |format|
       format.html { redirect_to job_types_url, notice: 'Job type was successfully destroyed.' }

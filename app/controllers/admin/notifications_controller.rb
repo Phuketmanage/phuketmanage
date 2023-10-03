@@ -1,10 +1,13 @@
 class Admin::NotificationsController < AdminController
-  load_and_authorize_resource
+  verify_authorized
 
-  def index; end
+  def index
+    authorize!
+  end
 
   # @route DELETE /notifications/:id (notification)
   def destroy
+    authorize!
     @notification = Notification.find(params[:id])
     @notification.destroy
   end

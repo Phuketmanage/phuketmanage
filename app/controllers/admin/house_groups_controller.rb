@@ -1,26 +1,32 @@
 class Admin::HouseGroupsController < AdminController
-  load_and_authorize_resource id_param: :number
-
+  verify_authorized
   before_action :set_house_group, only: %i[show edit update destroy]
 
   # @route GET /house_groups (house_groups)
   def index
+    authorize!
     @house_groups = HouseGroup.all
   end
 
   # @route GET /house_groups/:id (house_group)
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /house_groups/new (new_house_group)
   def new
+    authorize!
     @house_group = HouseGroup.new
   end
 
   # @route GET /house_groups/:id/edit (edit_house_group)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /house_groups (house_groups)
   def create
+    authorize!
     @house_group = HouseGroup.new(house_group_params)
 
     respond_to do |format|
@@ -37,6 +43,7 @@ class Admin::HouseGroupsController < AdminController
   # @route PATCH /house_groups/:id (house_group)
   # @route PUT /house_groups/:id (house_group)
   def update
+    authorize!
     respond_to do |format|
       if @house_group.update(house_group_params)
         format.html { redirect_to @house_group, notice: 'House group was successfully updated.' }
@@ -50,6 +57,7 @@ class Admin::HouseGroupsController < AdminController
 
   # @route DELETE /house_groups/:id (house_group)
   def destroy
+    authorize!
     @house_group.destroy
     respond_to do |format|
       format.html { redirect_to house_groups_url, notice: 'House group was successfully destroyed.' }

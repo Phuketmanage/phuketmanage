@@ -1,24 +1,27 @@
 class Admin::TransactionFilesController < AdminController
-  load_and_authorize_resource
+  verify_authorized
 
   # @route GET /transaction_files (transaction_files)
   def index
-    if current_user.role?(['Owner'])
+    authorize!
+    if current_user.role? %w[Owner]
       files = Transaction.find(params[:transaction_id]).files.where(show: true)
-    elsif current_user.role?(%w[Admin Accounting Manager])
+    elsif current_user.role? %w[Manager Accounting Admin]
       files = Transaction.find(params[:transaction_id]).files
-    end
+    end  
     render json: { files: files }
   end
 
   # @route DELETE /transaction_file (transaction_file)
   def destroy
+    authorize!
     @file = TransactionFile.find(params['id'])
     @file.destroy
   end
 
   # @route DELETE /transaction_file_tmp (transaction_file_tmp)
   def destroy_tmp
+    authorize!
     key = params['key']
     S3_BUCKET.object(key).delete
     render json: { key: key }
@@ -26,6 +29,7 @@ class Admin::TransactionFilesController < AdminController
 
   # @route GET /transaction_file_toggle_show (transaction_file_toggle_show)
   def toggle_show
+    authorize!
     file = TransactionFile.where(id: params[:id]).first
     if file.present?
       file.update(show: params[:status]) if params[:status].present?
@@ -37,6 +41,7 @@ class Admin::TransactionFilesController < AdminController
 
   # @route GET /transaction_file_download (transaction_file_download)
   def download
+    authorize!
     key = params['key']
     file = S3_CLIENT.get_object(
       response_target: File.basename(key),
