@@ -19,10 +19,6 @@ class Admin::JobPolicy < ApplicationPolicy
     allow! if user&.role?(['Maid', 'Accounting', 'Guest relation', 'Manager'])
   end
 
-  def new?
-    allow! if user&.role?(['Accounting', 'Guest relation', 'Manager'])
-  end
-
   def create?
     allow! if user&.role?(['Accounting', 'Guest relation', 'Manager'])
   end
@@ -32,10 +28,6 @@ class Admin::JobPolicy < ApplicationPolicy
   end
 
   def job_order?
-    allow! if user&.role?(['Accounting', 'Guest relation', 'Manager'])
-  end
-
-  def edit?
     allow! if user&.role?(['Accounting', 'Guest relation', 'Manager'])
   end
 

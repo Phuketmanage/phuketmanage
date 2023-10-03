@@ -1,5 +1,4 @@
 class Admin::ConnectionsController < AdminController
-  verify_authorized
   # before_action :set_house, only: :create
 
   # @route POST /connections (connections)

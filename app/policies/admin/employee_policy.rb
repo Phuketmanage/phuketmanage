@@ -2,10 +2,6 @@ class Admin::EmployeePolicy < ApplicationPolicy
   def show?
   end
 
-  def new?
-    allow! if user&.role? %w[Manager]
-  end
-
   def update?
     allow! if user&.role? %w[Manager]
   end
@@ -19,10 +15,6 @@ class Admin::EmployeePolicy < ApplicationPolicy
   end
 
   def create?
-    allow! if user&.role? %w[Manager]
-  end
-
-  def edit?
     allow! if user&.role? %w[Manager]
   end
 

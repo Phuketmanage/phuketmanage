@@ -1,5 +1,4 @@
 class Admin::DocumentsController < AdminController
-  verify_authorized
 
   # @route GET /documents/statement (tmp_statement)
   def statement

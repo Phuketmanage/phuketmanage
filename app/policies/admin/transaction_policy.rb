@@ -2,10 +2,6 @@ class Admin::TransactionPolicy < ApplicationPolicy
   def show?
   end
 
-  def new?
-    allow! if user&.role? %w[Manager Accounting]
-  end
-
   def update?
     allow! if user&.role? %w[Manager Accounting] and check_edit_or_update(@record)
   end
@@ -27,10 +23,6 @@ class Admin::TransactionPolicy < ApplicationPolicy
 
   def update_invoice_ref?
     allow! if user&.role? %w[Manager Accounting]
-  end
-
-  def edit?
-    allow! if user&.role? %w[Manager Accounting] and check_edit_or_update(@record)
   end
 
   def destroy?

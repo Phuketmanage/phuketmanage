@@ -1,5 +1,4 @@
 class Admin::TranslationsController < AdminController
-  verify_authorized
 
   # @route GET /translate (translate)
   def show

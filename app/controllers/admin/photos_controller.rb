@@ -1,5 +1,4 @@
 class Admin::PhotosController < AdminController
-  verify_authorized
   before_action :get_house
   before_action :get_photo, only: %i[update sort destroy]
 

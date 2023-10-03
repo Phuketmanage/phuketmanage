@@ -1,5 +1,4 @@
 class Admin::TransactionFilesController < AdminController
-  verify_authorized
 
   # @route GET /transaction_files (transaction_files)
   def index

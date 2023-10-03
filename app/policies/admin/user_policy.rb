@@ -1,7 +1,4 @@
 class Admin::UserPolicy < ApplicationPolicy
-  def new?
-  end
-
   def inactive?
   end
 
@@ -20,9 +17,6 @@ class Admin::UserPolicy < ApplicationPolicy
   end
 
   def create?
-  end
-
-  def edit?
   end
 
   def destroy?

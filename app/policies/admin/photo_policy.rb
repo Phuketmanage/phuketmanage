@@ -1,8 +1,4 @@
 class Admin::PhotoPolicy < ApplicationPolicy
-  def new?
-    allow! if user&.role? %w[Manager]
-  end
-
   def update?
     allow! if user&.role? %w[Manager]
   end

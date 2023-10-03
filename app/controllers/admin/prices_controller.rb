@@ -1,7 +1,6 @@
 class Admin::PricesController < AdminController
   include Admin::SeasonsHelper
   include Loggable
-  verify_authorized
   layout "admin"
   before_action :set_house, only: %i[index new
                                      create_duration create_season

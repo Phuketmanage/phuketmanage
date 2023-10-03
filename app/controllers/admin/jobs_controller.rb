@@ -1,5 +1,4 @@
 class Admin::JobsController < AdminController
-  verify_authorized
   before_action :set_job, only: %i[show edit update update_laundry destroy]
   after_action :system_message_create, only: [:create]
   after_action :system_message_update, only: [:update]

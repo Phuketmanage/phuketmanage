@@ -31,15 +31,7 @@ class Admin::PricePolicy < ApplicationPolicy
     allow! if user&.role? %w[Manager]
   end
 
-  def edit?
-    allow! if user&.role? %w[Manager]
-  end
-
   def destroy?
-    allow! if user&.role? %w[Manager]
-  end
-
-  def new?
     allow! if user&.role? %w[Manager]
   end
 

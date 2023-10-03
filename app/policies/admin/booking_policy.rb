@@ -26,20 +26,12 @@ class Admin::BookingPolicy < ApplicationPolicy
   def destroy?
   end
 
-  def edit?
-    allow! if user&.role? %w[Manager]
-  end
-
   def canceled?
     allow! if user&.role? %w[Accounting Manager]
   end
 
   def check_in_out?
     allow! if user&.role? ['Guest relation', 'Manager']
-  end
-
-  def new?
-    allow! if user&.role? %w[Manager]
   end
 
   def index?

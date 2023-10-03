@@ -1,5 +1,4 @@
 class Admin::DurationsController < AdminController
-  verify_authorized
   before_action :set_duration, only: %i[show edit update destroy]
 
   # GET /durations

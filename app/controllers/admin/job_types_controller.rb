@@ -1,8 +1,6 @@
 class Admin::JobTypesController < AdminController
   before_action :set_job_type, only: %i[show edit update destroy]
 
-  verify_authorized
-
   # @route GET /job_types (job_types)
   def index
     authorize!

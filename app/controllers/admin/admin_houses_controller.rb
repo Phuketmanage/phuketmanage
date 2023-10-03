@@ -4,7 +4,6 @@ class Admin::AdminHousesController < AdminController
   include Admin::AdminHousesHelper
   before_action :set_house, only: %i[show edit update destroy]
   before_action :check_authorization, only: :show
-  verify_authorized
   before_action :search, only: :show
 
   # @route GET /admin_houses (admin_houses)

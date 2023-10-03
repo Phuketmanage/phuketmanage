@@ -1,5 +1,4 @@
 class Admin::TransfersController < AdminController
-  verify_authorized
   before_action :set_transfer, only: %i[show update destroy cancel]
 
   # @route GET /transfers (transfers)

@@ -1,5 +1,4 @@
 class Admin::LocationsController < AdminController
-  verify_authorized
   before_action :set_location, only: %i[show edit update destroy]
 
   # @route GET /locations (locations)

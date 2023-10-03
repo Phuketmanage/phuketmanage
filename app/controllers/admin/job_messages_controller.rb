@@ -1,5 +1,4 @@
 class Admin::JobMessagesController < AdminController
-  verify_authorized
 
   # @route POST /job_messages (job_messages)
   def create

@@ -3,10 +3,6 @@ class Admin::HouseGroupPolicy < ApplicationPolicy
     allow! if user&.role? %w[Manager]
   end
 
-  def new?
-    allow! if user&.role? %w[Manager]
-  end
-
   def update?
     allow! if user&.role? %w[Manager]
   end
@@ -16,10 +12,6 @@ class Admin::HouseGroupPolicy < ApplicationPolicy
   end
 
   def create?
-    allow! if user&.role? %w[Manager]
-  end
-
-  def edit?
     allow! if user&.role? %w[Manager]
   end
 

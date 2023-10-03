@@ -2,9 +2,6 @@ class Admin::TransactionTypePolicy < ApplicationPolicy
   def show?
   end
 
-  def new?
-  end
-
   def update?
   end
 
@@ -12,9 +9,6 @@ class Admin::TransactionTypePolicy < ApplicationPolicy
   end
 
   def create?
-  end
-
-  def edit?
   end
 
   def destroy?

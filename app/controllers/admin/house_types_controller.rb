@@ -1,5 +1,4 @@
 class Admin::HouseTypesController < AdminController
-  verify_authorized
   before_action :set_house_type, only: %i[show edit update destroy]
 
   # @route GET /house_types (house_types)

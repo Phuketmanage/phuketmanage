@@ -1,5 +1,4 @@
 class Admin::UsersController < AdminController
-  verify_authorized
 
   # @route GET /users (users)
   def index

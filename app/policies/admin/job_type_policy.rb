@@ -2,9 +2,6 @@ class Admin::JobTypePolicy < ApplicationPolicy
   def show?
   end
 
-  def new?
-  end
-
   def update?
   end
 
@@ -12,9 +9,6 @@ class Admin::JobTypePolicy < ApplicationPolicy
   end
 
   def create?
-  end
-
-  def edit?
   end
 
   def destroy?

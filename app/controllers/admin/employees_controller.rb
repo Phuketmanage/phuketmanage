@@ -1,5 +1,4 @@
 class Admin::EmployeesController < AdminController
-  verify_authorized
   before_action :set_employee, only: %i[show edit update destroy]
 
   # @route GET /employees (employees)

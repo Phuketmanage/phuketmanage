@@ -1,5 +1,4 @@
 class Admin::SeasonsController < AdminController
-  verify_authorized
   before_action :set_season, only: %i[show edit update destroy]
 
   # GET /seasons

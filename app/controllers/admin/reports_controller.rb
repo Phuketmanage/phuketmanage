@@ -1,5 +1,4 @@
 class Admin::ReportsController < AdminController
-  verify_authorized
 
   # @route GET /reports (reports)
   def index

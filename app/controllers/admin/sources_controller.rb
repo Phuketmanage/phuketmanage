@@ -1,5 +1,4 @@
 class Admin::SourcesController < AdminController
-  verify_authorized
   before_action :set_source, only: %i[show edit update destroy]
 
   # @route GET /sources (sources)

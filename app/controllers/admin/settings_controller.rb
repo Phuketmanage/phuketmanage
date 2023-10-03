@@ -1,5 +1,4 @@
 class Admin::SettingsController < AdminController
-  verify_authorized
   before_action :set_setting, only: %i[show edit update destroy]
 
   # @route GET /settings (settings)

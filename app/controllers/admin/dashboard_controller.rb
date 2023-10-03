@@ -1,5 +1,4 @@
 class Admin::DashboardController < AdminController
-  verify_authorized
   
   # @route GET /dashboard (dashboard)
   def index

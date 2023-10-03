@@ -1,5 +1,4 @@
 class Admin::NotificationsController < AdminController
-  verify_authorized
 
   def index
     authorize!

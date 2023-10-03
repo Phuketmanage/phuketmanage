@@ -1,5 +1,4 @@
 class Admin::OptionsController < AdminController
-  verify_authorized
   before_action :set_option, only: %i[show edit update destroy]
 
   # @route GET /options (options)

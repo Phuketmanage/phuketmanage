@@ -11,14 +11,6 @@ class Admin::TransferPolicy < ApplicationPolicy
     allow! if user&.role? %w[Transfer Manager]
   end
 
-  def new?
-    allow! if user&.role? %w[Manager]
-  end
-
-  def edit?
-    allow! if user&.role? %w[Manager]
-  end
-
   def create?
     allow! if user&.role? %w[Manager]
   end
@@ -40,6 +32,5 @@ class Admin::TransferPolicy < ApplicationPolicy
   end
 
   def destroy?
-    # allow! if user&.role? %w[Manager]
   end
 end
