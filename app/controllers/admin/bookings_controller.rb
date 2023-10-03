@@ -163,6 +163,7 @@ class Admin::BookingsController < AdminController
   # @route POST /bookings (bookings)
   def create
     authorize!
+    @booking = Booking.new booking_params
     search = Search.new(period: search_params, dtnb: 0)
     answer = search.is_house_available? @booking.house_id
     unless answer[:result]
