@@ -42,11 +42,12 @@ class Admin::TransactionPolicy < ApplicationPolicy
   end
 
   private
-    def check_edit_or_update(transaction)
-      transaction.date >= (Date.current - 30.days).beginning_of_month
-    end
 
-    def check_destroy(transaction)
-      transaction.date > Date.current - 1.day
-    end
+  def check_edit_or_update(transaction)
+    transaction.date >= (Date.current - 30.days).beginning_of_month
+  end
+
+  def check_destroy(transaction)
+    transaction.date > Date.current - 1.day
+  end
 end

@@ -1,28 +1,28 @@
 class Admin::DurationPolicy < ApplicationPolicy
   def show?
     allow! if user&.role? %w[Manager]
-  end                                                        
+  end
 
-  def new?                                                   
+  def new?
     allow! if user&.role? %w[Manager]
-  end                                                        
+  end
 
-  def update?                                                
+  def update?
     allow! if user&.role? %w[Manager]
-  end                                                        
+  end
 
-  def index?                                                 
+  def index?
     allow! if user&.role? %w[Manager]
-  end                                                        
+  end
 
-  def create?                                                
+  def create?
     allow! if user&.role? %w[Manager]
-  end                                                        
+  end
 
   def edit?
     allow! if user&.role? %w[Manager]
   end
-  
+
   def destroy?
     allow! if user&.role? %w[Manager]
   end

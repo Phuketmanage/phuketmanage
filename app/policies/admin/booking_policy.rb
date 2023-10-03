@@ -16,11 +16,11 @@ class Admin::BookingPolicy < ApplicationPolicy
   end
 
   def timeline?
-    allow! if user&.role? %w[Accounting Guest\ relation Manager]
+    allow! if user&.role? ['Accounting', 'Guest relation', 'Manager']
   end
 
   def timeline_data?
-    allow! if user&.role? %w[Accounting Guest\ relation Manager]
+    allow! if user&.role? ['Accounting', 'Guest relation', 'Manager']
   end
 
   def destroy?
@@ -35,7 +35,7 @@ class Admin::BookingPolicy < ApplicationPolicy
   end
 
   def check_in_out?
-    allow! if user&.role? %w[Guest\ relation Manager]
+    allow! if user&.role? ['Guest relation', 'Manager']
   end
 
   def new?
@@ -59,7 +59,7 @@ class Admin::BookingPolicy < ApplicationPolicy
   end
 
   def update_comment_gr?
-    allow! if user&.role? %w[Guest\ relation Manager]
+    allow! if user&.role? ['Guest relation', 'Manager']
   end
 
   def get_price?
