@@ -94,7 +94,7 @@ describe 'Transaction' do
         it { is_expected.to have_css('td.comment', text: 'Some welcome packs') }
       end
 
-      context 'when view welcome_packs' do
+      context 'when owner open balance' do
         before do
           sign_in owner
           visit transactions_path
