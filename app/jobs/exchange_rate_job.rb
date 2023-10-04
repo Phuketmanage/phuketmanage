@@ -4,7 +4,7 @@ class ExchangeRateJob < ApplicationJob
   end
 
   def perform
-    Setting.get_usd_rate
+    Setting.sync_usd_rate
   end
 
   private
