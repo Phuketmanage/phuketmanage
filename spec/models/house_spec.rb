@@ -137,4 +137,17 @@ RSpec.describe House do
       end
     end
   end
+
+  context 'when validates rooms with :for_rent context' do
+    let(:house) { build(:house, rooms: 0) }
+    let(:house_rooms) { build(:house, rooms: 1) }
+
+    it 'is valid with context :for_rent' do
+      expect(house_rooms).to be_valid(:for_rent)
+    end
+
+    it 'is not valid with context :for_rent' do
+      expect(house).not_to be_valid(:for_rent)
+    end
+  end
 end

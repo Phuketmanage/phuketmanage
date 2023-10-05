@@ -6,11 +6,11 @@ class Admin::SearchController < AdminController
 
   # @route GET /search (search)
   def index
-    @min_date = @search.min_date
-    @houses = []
+    @min_date  = @search.min_date
+    @houses    = []
     @locations = Location.all
-    @bdrs = House.where.not(rooms: nil).select(:rooms).distinct.pluck(:rooms).sort
-    @types = HouseType.all
+    @bdrs      = House.for_rent.select('DISTINCT(houses.rooms), houses.code').pluck(:rooms).sort
+    @types     = HouseType.all
     render :index and return unless params[:search].present? && @search.valid?
 
     # This controller is accesed by managment, so Management can see prices even for occupied houses
