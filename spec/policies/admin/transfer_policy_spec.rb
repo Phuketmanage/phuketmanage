@@ -1,9 +1,57 @@
 # spec/policies/admin/admin_house_policy_spec.rb
 require 'rails_helper'
 
-RSpec.describe Admin::PricePolicy, type: :policy do
+RSpec.describe Admin::TransferPolicy, type: :policy do
   let(:user) { create(:user) }
   let(:policy) { described_class.new(user:) }
+
+  describe "#index?" do
+    subject { policy.apply(:index?) }
+
+    context "when the user is not authorized" do
+      let(:user) { nil }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the user is authorized but has no roles" do
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the user role is an admin" do
+      let(:user) { create(:user, :admin) }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the user role is a transfer" do
+      let(:user) { create(:user, :transfer) }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the user role is a manager" do
+      let(:user) { create(:user, :manager) }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
+  describe "#index_supplier?" do
+    subject { policy.apply(:index_supplier?) }
+
+    context "when the user role is an admin" do
+      let(:user) { create(:user, :admin) }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the user is not authorized" do
+      let(:user) { nil }
+
+      it { is_expected.to be_truthy }
+    end
+  end
 
   describe "#show?" do
     subject { policy.apply(:show?) }
@@ -24,8 +72,56 @@ RSpec.describe Admin::PricePolicy, type: :policy do
       it { is_expected.to be_truthy }
     end
 
+    context "when the user role is a transfer" do
+      let(:user) { create(:user, :transfer) }
+
+      it { is_expected.to be_truthy }
+    end
+
     context "when the user role is a manager" do
       let(:user) { create(:user, :manager) }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
+  describe "#create?" do
+    subject { policy.apply(:create?) }
+
+    context "when the user is not authorized" do
+      let(:user) { nil }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the user is authorized but has no roles" do
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the user role is an admin" do
+      let(:user) { create(:user, :admin) }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the user role is a manager" do
+      let(:user) { create(:user, :manager) }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
+  describe "#confirmed?" do
+    subject { policy.apply(:confirmed?) }
+
+    context "when the user is not authorized" do
+      let(:user) { nil }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the user role is an admin" do
+      let(:user) { create(:user, :admin) }
 
       it { is_expected.to be_truthy }
     end
@@ -57,8 +153,8 @@ RSpec.describe Admin::PricePolicy, type: :policy do
     end
   end
 
-  describe "#create_duration?" do
-    subject { policy.apply(:create_duration?) }
+  describe "#cancel?" do
+    subject { policy.apply(:cancel?) }
 
     context "when the user is not authorized" do
       let(:user) { nil }
@@ -83,129 +179,11 @@ RSpec.describe Admin::PricePolicy, type: :policy do
     end
   end
 
-  describe "#create_season?" do
-    subject { policy.apply(:create_season?) }
+  describe "#canceled?" do
+    subject { policy.apply(:canceled?) }
 
     context "when the user is not authorized" do
       let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user role is a manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user role is an admin" do
-      let(:user) { create(:user, :admin) }
-
-      it { is_expected.to be_truthy }
-    end
-  end
-
-  describe "#copy_table?" do
-    subject { policy.apply(:copy_table?) }
-
-    context "when the user is not authorized" do
-      let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user role is a manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user role is an admin" do
-      let(:user) { create(:user, :admin) }
-
-      it { is_expected.to be_truthy }
-    end
-  end
-
-  describe "#log_event?" do
-    subject { policy.apply(:log_event?) }
-
-    it "returns false when the user is not admin nor manager" do
-      expect(subject).to be_falsey
-    end
-
-    context "when the user is an manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user role is an admin" do
-      let(:user) { create(:user, :admin) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user is not authorized" do
-      let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-  end
-
-  describe "#destroy_duration?" do
-    subject { policy.apply(:destroy_duration?) }
-
-    context "when the user is not authorized" do
-      let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user role is a manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user role is an admin" do
-      let(:user) { create(:user, :admin) }
-
-      it { is_expected.to be_truthy }
-    end
-  end
-
-  describe "#destroy_season?" do
-    subject { policy.apply(:destroy_season?) }
-
-    context "when the user is not authorized" do
-      let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user role is a manager" do
-      let(:user) { create(:user, :manager) }
 
       it { is_expected.to be_truthy }
     end
@@ -228,38 +206,6 @@ RSpec.describe Admin::PricePolicy, type: :policy do
 
     context "when the user is authorized but has no roles" do
       it { is_expected.to be_falsey }
-    end
-
-    context "when the user role is a manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context "when the user role is an admin" do
-      let(:user) { create(:user, :admin) }
-
-      it { is_expected.to be_truthy }
-    end
-  end
-
-  describe "#index?" do
-    subject { policy.apply(:index?) }
-
-    context "when the user is not authorized" do
-      let(:user) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is authorized but has no roles" do
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the user is an manager" do
-      let(:user) { create(:user, :manager) }
-
-      it { is_expected.to be_truthy }
     end
 
     context "when the user role is an admin" do

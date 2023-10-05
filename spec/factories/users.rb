@@ -57,5 +57,17 @@ FactoryBot.define do
     trait :client do
       roles { [Role.find_or_create_by(name: 'Client')] }
     end
+    trait :guest_relation do
+      roles { [Role.find_or_create_by(name: 'Guest relation')] }
+    end
+    trait :gardener do
+      roles { [Role.find_or_create_by(name: 'Gardener')] }
+    end
+    trait :transfer do
+      roles { [Role.find_or_create_by(name: 'Transfer')] }
+    end
+    trait :maid do
+      roles { [Role.find_or_create_by(name: 'Maid')] }
+    end
   end
 end

@@ -32,7 +32,7 @@ class ApplicationPolicy < ActionPolicy::Base
 
   private
 
-    def allow_admins
-      allow! if user&.role? 'Admin'
-    end
+  def allow_admins
+    allow! if user&.role? 'Admin'
+  end
 end
