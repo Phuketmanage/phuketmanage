@@ -1,12 +1,13 @@
 class Admin::ReportsController < AdminController
-  load_and_authorize_resource :class => false
 
   # @route GET /reports (reports)
   def index
+    authorize! with: Admin::ReportPolicy
   end
 
   # @route GET /report/balance (report_balance)
   def balance
+    authorize! with: Admin::ReportPolicy
     # @totals = get_owners_totals
     @users = User.joins(:roles, {transactions: :balance_outs})
                   .where('roles.name':'Owner', 'users.balance_closed': false)
@@ -17,6 +18,7 @@ class Admin::ReportsController < AdminController
 
   # @route GET /report/bookings (report_bookings)
   def bookings
+    authorize! with: Admin::ReportPolicy
     @from, @to, @error = set_period(params)
     @house_id = params[:house_id].present? ? params[:house_id] : nil
     @houses = House.active
@@ -34,6 +36,7 @@ class Admin::ReportsController < AdminController
 
   # @route GET /report/salary (report_salary)
   def salary
+    authorize! with: Admin::ReportPolicy
     @from, @to, @error = set_period(params)
     if !@error
       type_id = TransactionType.find_by(name_en: 'Rental').id

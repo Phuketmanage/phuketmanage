@@ -1,4 +1,5 @@
 class AdminController < ApplicationController
+  verify_authorized
   before_action :set_locale
 
   layout 'admin'

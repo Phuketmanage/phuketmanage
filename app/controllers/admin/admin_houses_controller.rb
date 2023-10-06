@@ -4,18 +4,18 @@ class Admin::AdminHousesController < AdminController
   include Admin::AdminHousesHelper
   before_action :set_house, only: %i[show edit update destroy]
   before_action :check_authorization, only: :show
-
-  load_and_authorize_resource class: House, id_param: :number
   before_action :search, only: :show
 
   # @route GET /admin_houses (admin_houses)
   def index
+    authorize! with: Admin::AdminHousePolicy
     @houses_for_rent = House.for_rent
     @houses_not_for_rent = House.not_for_rent
   end
 
   # @route GET /admin_houses/export (export_admin_houses)
   def export
+    authorize! with: Admin::AdminHousePolicy
     @houses_for_rent = House.for_rent
     @houses_not_for_rent = House.not_for_rent
     render layout: 'application', locals: { print: true }
@@ -23,21 +23,25 @@ class Admin::AdminHousesController < AdminController
 
   # @route GET /admin_houses/inactive (inactive_admin_houses)
   def inactive
+    authorize! with: Admin::AdminHousePolicy
     @inactive_houses = House.inactive
   end
 
   def test_upload
+    authorize! with: Admin::AdminHousePolicy
     @house = House.new
   end
 
   # @route GET /admin_houses/:id (admin_house)
   def show
+    authorize! with: Admin::AdminHousePolicy
     @occupied_days = @house.occupied_days(@settings['dtnb'])
     @min_date = @search.min_date
   end
 
   # @route GET /admin_houses/new (new_admin_house)
   def new
+    authorize! with: Admin::AdminHousePolicy
     @house = House.new
     @owners = User.with_role('Owner')
     @types = HouseType.all
@@ -49,6 +53,7 @@ class Admin::AdminHousesController < AdminController
 
   # @route GET /admin_houses/:id/edit (edit_admin_house)
   def edit
+    authorize! with: Admin::AdminHousePolicy
     @owners = User.with_role('Owner')
     @types = HouseType.all
     @sources = Source.syncable.order(:name)
@@ -58,6 +63,7 @@ class Admin::AdminHousesController < AdminController
 
   # @route POST /admin_houses (admin_houses)
   def create
+    authorize! with: Admin::AdminHousePolicy
     options = params[:options] || nil
     @house = House.new(admin_house_params)
     @house.secret = SecureRandom.hex(16)
@@ -80,6 +86,7 @@ class Admin::AdminHousesController < AdminController
   # @route PATCH /admin_houses/:id (admin_house)
   # @route PUT /admin_houses/:id (admin_house)
   def update
+    authorize! with: Admin::AdminHousePolicy
     respond_to do |format|
       if @house.update(admin_house_params)
         format.html { redirect_to admin_houses_path, notice: "House #{@house.code} was successfully updated." }
@@ -97,13 +104,13 @@ class Admin::AdminHousesController < AdminController
 
   # @route DELETE /admin_houses/:id (admin_house)
   def destroy
+    authorize! with: Admin::AdminHousePolicy
     @house.destroy
     respond_to do |format|
       format.html { redirect_to admin_houses_url, notice: 'House was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.

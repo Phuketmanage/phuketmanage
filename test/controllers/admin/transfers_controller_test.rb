@@ -47,7 +47,7 @@ class Admin::TransfersControllerTest < ActionDispatch::IntegrationTest
   test "should destroy transfer" do
     sign_in users(:manager)
     assert_no_difference('Transfer.count', -1) do
-      delete transfer_url(@transfer)
+      delete transfer_url(@transfer), xhr: true
     end
 
     sign_in users(:admin)

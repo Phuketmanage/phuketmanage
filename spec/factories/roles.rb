@@ -26,5 +26,17 @@ FactoryBot.define do
     trait :client do
       name { "Client" }
     end
+    trait :guest_relation do
+      name { "Guest relation" }
+    end
+    trait :gardener do
+      name { "Gardener" }
+    end
+    trait :transfer do
+      name { "Transfer" }
+    end
+    trait :maid do
+      name { "Maid" }
+    end
   end
 end

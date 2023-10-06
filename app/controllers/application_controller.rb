@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::Base
   before_action :set_settings
 
-  rescue_from CanCan::AccessDenied do |exception|
-    flash[:alert] = exception.message
+  rescue_from ActionPolicy::Unauthorized do |exception|
+    flash[:alert] = 'You are not authorized to access this page.'
     redirect_to root_url
-  end
+end
 
   private
 

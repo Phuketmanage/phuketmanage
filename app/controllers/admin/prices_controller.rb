@@ -1,8 +1,6 @@
 class Admin::PricesController < AdminController
   include Admin::SeasonsHelper
   include Loggable
-  load_and_authorize_resource :house, id_param: :number
-  # load_and_authorize_resource :price, through: :house, shallow: true
   layout "admin"
   before_action :set_house, only: %i[index new
                                      create_duration create_season
@@ -12,6 +10,7 @@ class Admin::PricesController < AdminController
 
   # @route GET /admin_houses/:admin_house_id/prices (admin_house_prices)
   def index
+    authorize!
     @houses = House.all.for_rent
     # @house = House.find(params[:house_id])
     @prices = @house.prices.all
@@ -21,9 +20,12 @@ class Admin::PricesController < AdminController
     @season = Season.new
   end
 
-  def show; end
+  def show
+    authorize!
+  end
 
   def new
+    authorize!
     # @house = House.find(params[:house_id])
     @price = Price.new
     @durations = @house.durations
@@ -31,6 +33,7 @@ class Admin::PricesController < AdminController
   end
 
   def edit
+    authorize!
     @house = @price.house
     @durations = @house.durations
     @seasons = @house.seasons
@@ -53,6 +56,7 @@ class Admin::PricesController < AdminController
 
   # @route POST /admin_houses/:admin_house_id/add_duration (admin_house_add_duration)
   def create_duration
+    authorize!
     # @house = House.find(params[:id])
     @seasons = @house.seasons
     @duration = @house.durations.build(duration_params)
@@ -78,6 +82,7 @@ class Admin::PricesController < AdminController
 
   # @route POST /admin_houses/:admin_house_id/add_season (admin_house_add_season)
   def create_season
+    authorize!
     # @house = House.find(params[:id])
     @durations = @house.durations
     @season = @house.seasons.build(season_params)
@@ -103,6 +108,7 @@ class Admin::PricesController < AdminController
 
   # @route POST /prices/:house_id/copy_table (copy_table)
   def copy_table
+    authorize!
     # @house = House.find(params[:id])
     copy_from_number = params[:copy_from_number]
     durations_from = House.find_by(number: copy_from_number).durations
@@ -134,6 +140,7 @@ class Admin::PricesController < AdminController
 
   # @route GET /prices/:id/update (price)
   def update
+    authorize!
     price = Price.find(params[:id])
     if price.update(price_params)
       log_event(price)
@@ -144,6 +151,7 @@ class Admin::PricesController < AdminController
   end
 
   def destroy
+    authorize!
     house = @price.house
     @price.destroy
     respond_to do |format|
@@ -154,6 +162,7 @@ class Admin::PricesController < AdminController
 
   # @route DELETE /admin_houses/:admin_house_id/delete_duration (admin_house_delete_duration)
   def destroy_duration
+    authorize!
     # house = House.find(params[:id])
     duration = Duration.find(params[:duration_id])
     Price.where(duration_id: duration.id).destroy_all
@@ -166,6 +175,7 @@ class Admin::PricesController < AdminController
 
   # @route DELETE /admin_houses/:admin_house_id/delete_season (admin_house_delete_season)
   def destroy_season
+    authorize!
     # house = House.find(params[:id])
     season = Season.find(params[:season_id])
     Price.where(season_id: season.id).destroy_all

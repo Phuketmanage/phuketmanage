@@ -1,8 +1,8 @@
 class Admin::JobMessagesController < AdminController
-  load_and_authorize_resource
 
   # @route POST /job_messages (job_messages)
   def create
+    authorize!
     job = Job.find(params['job_id'])
     @message = job.job_messages.new(job_message_params)
     @message.sender_id = current_user.id
@@ -17,6 +17,7 @@ class Admin::JobMessagesController < AdminController
   # @route DELETE /job_message (job_message)
   def destroy
     @message = JobMessage.find(params['id'])
+    authorize! @message
     S3_BUCKET.object(@message.message).delete
     @message.destroy
   end

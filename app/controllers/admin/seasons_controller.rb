@@ -1,34 +1,37 @@
 class Admin::SeasonsController < AdminController
-  load_and_authorize_resource :house
-  # load_and_authorize_resource :price, through: :house, shallow: true
-
   before_action :set_season, only: %i[show edit update destroy]
 
   # GET /seasons
   # GET /seasons.json
   def index
+    authorize!
     @house = House.find(params[:house_id])
     @seasons = @house.seasons
   end
 
   # GET /seasons/1
   # GET /seasons/1.json
-  def show; end
+  def show
+    authorize!
+  end
 
   # GET /seasons/new
   def new
+    authorize!
     @house = House.find(params[:house_id])
     @season = Season.new
   end
 
   # GET /seasons/1/edit
   def edit
+    authorize!
     @house = @season.house
   end
 
   # POST /seasons
   # POST /seasons.json
   def create
+    authorize!
     @house = House.find(params[:house_id])
     @season = @house.seasons.build(season_params)
 
@@ -47,6 +50,7 @@ class Admin::SeasonsController < AdminController
   # PATCH/PUT /seasons/1
   # PATCH/PUT /seasons/1.json
   def update
+    authorize!
     @house = @season.house
     respond_to do |format|
       if @season.update(season_params)
@@ -62,6 +66,7 @@ class Admin::SeasonsController < AdminController
   # DELETE /seasons/1
   # DELETE /seasons/1.json
   def destroy
+    authorize!
     @house = @season.house
     @season.destroy
     respond_to do |format|
