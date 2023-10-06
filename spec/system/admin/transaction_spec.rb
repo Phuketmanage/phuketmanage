@@ -32,8 +32,6 @@ describe 'Transaction' do
   end
 
   context 'when new transaction', js: true do
-    before { create(:transaction_type, :salary) }
-
     context 'when cleaning' do
       let!(:type_cleaning) { create(:transaction_type, :cleaning) }
 
