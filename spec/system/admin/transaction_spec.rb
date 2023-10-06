@@ -43,7 +43,7 @@ describe 'Transaction' do
       end
 
       context 'when manager open balance of company' do
-        before { visit transactions_path }
+        before { sleep 0.2; visit transactions_path }
 
         it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.de_co_cell', text: '1,070.00') }
@@ -51,7 +51,7 @@ describe 'Transaction' do
       end
 
       context 'when manager open balance of owner' do
-        before { visit transactions_path(owner_id: owner.id) }
+        before { sleep 0.2; visit transactions_path(owner_id: owner.id) }
 
         it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '1,070.00') }
@@ -60,6 +60,7 @@ describe 'Transaction' do
 
       context 'when the owner opens his balance' do
         before do
+          sleep 0.3
           sign_in owner
           visit transactions_path
         end
@@ -79,7 +80,7 @@ describe 'Transaction' do
       end
 
       context 'when manager open balance of company' do
-        before { visit transactions_path }
+        before { sleep 0.2; visit transactions_path }
 
         it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.de_co_cell', text: '330.00') }
@@ -87,7 +88,7 @@ describe 'Transaction' do
       end
 
       context 'when manager open balance of owner' do
-        before { visit transactions_path(owner_id: owner.id) }
+        before { sleep 0.2; visit transactions_path(owner_id: owner.id) }
 
         it { is_expected.to have_selector("tr#trsc_#{Transaction.last.id}_row") }
         it { is_expected.to have_css('td.cr_ow_cell', text: '330.00') }
@@ -96,6 +97,7 @@ describe 'Transaction' do
 
       context 'when owner open balance' do
         before do
+          sleep 0.3
           sign_in owner
           visit transactions_path
         end
