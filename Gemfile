@@ -24,7 +24,7 @@ gem 'maintenance_tasks' # Database maintenance tasks for Rails
 gem 'barnes'
 gem 'bootstrap', '~> 4.6.0'
 gem 'bootstrap-select-rails'
-gem 'cancancan'
+gem "action_policy"
 gem 'coffee-rails' # Use CoffeeScript for .coffee assets and views
 gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'

@@ -1,25 +1,30 @@
 class Admin::SourcesController < AdminController
-  load_and_authorize_resource
-
   before_action :set_source, only: %i[show edit update destroy]
 
   # @route GET /sources (sources)
   def index
+    authorize!
     @sources = Source.all
   end
 
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /sources/new (new_source)
   def new
+    authorize!
     @source = Source.new
   end
 
   # @route GET /sources/:id/edit (edit_source)
-  def edit; end
+  def edit
+    authorize!
+  end
 
   # @route POST /sources (sources)
   def create
+    authorize!
     @source = Source.new(source_params)
 
     respond_to do |format|
@@ -36,6 +41,7 @@ class Admin::SourcesController < AdminController
   # @route PATCH /sources/:id (source)
   # @route PUT /sources/:id (source)
   def update
+    authorize!
     respond_to do |format|
       if @source.update(source_params)
         format.html { redirect_to sources_url, notice: 'Source was successfully updated.' }
@@ -49,6 +55,7 @@ class Admin::SourcesController < AdminController
 
   # @route DELETE /sources/:id (source)
   def destroy
+    authorize!
     Booking.where(source_id: @source.id).update_all(source_id: nil)
     @source.destroy
 

@@ -1,11 +1,10 @@
 class Admin::BookingsController < AdminController
-  load_and_authorize_resource
-
   before_action :set_booking, only: %i[show edit update
                                        update_comment_gr destroy]
 
   # @route GET /calendar/ical/:hid (calendar)
   def ical
+    authorize!
     cal = Icalendar::Calendar.new
     hid = params[:hid]
     h = House.find_by(number: hid)
@@ -35,6 +34,7 @@ class Admin::BookingsController < AdminController
   # @route GET /admin_houses/:admin_house_id/bookings (admin_house_bookings)
   # @route GET /bookings (bookings)
   def index
+    authorize!
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
     @hid = params[:admin_house_id] || params[:hid]
@@ -48,6 +48,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/canceled (canceled_bookings)
   def canceled
+    authorize!
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
     @hid = params[:hid]
@@ -60,6 +61,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /owner/bookings (bookings_front)
   def index_front
+    authorize!
     @from, @to, @error = set_period(params)
     flash[:alert] = @error if @error
     @hid = params[:hid]
@@ -72,6 +74,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/timeline (timeline_bookings)
   def timeline
+    authorize!
     if !params[:from].present? && !params[:to].present?
       @from = Date.current
       if params[:period].nil? && Booking.count == 0
@@ -109,24 +112,28 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/timeline_data (timeline_data_bookings)
   def timeline_data
+    authorize!
     timeline = Booking.timeline_data params[:from], params[:to], params[:period], params[:house]
     render json: { timeline: }
   end
 
   # @route GET /bookings/check_in_out (check_in_out_bookings)
   def check_in_out
+    authorize!
     @type = (params[:commit].presence || 'All')
     @result = Booking.check_in_out params[:from], params[:to], @type
   end
 
   # @route GET /bookings/:id (booking)
   def show
+    authorize!
     render json: { booking: @booking }
   end
 
   # @route GET /admin_houses/:admin_house_id/bookings/new (new_admin_house_booking)
   # @route GET /bookings/new (new_booking)
   def new
+    authorize!
     @booking = Booking.new
     @houses = House.where(unavailable: false).order(:code).map { |h| [h.code, h.id] }
     @booking.house = House.find_by(id: params[:admin_house_id]) if params[:admin_house_id]
@@ -135,6 +142,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/:id/edit (edit_booking)
   def edit
+    authorize!
     @houses = House.all.order(:code).map { |h| [h.code, h.id] }
     @tenants = User.with_role('Tenant')
     search = Search.new({ rs: @booking.start, rf: @booking.finish })
@@ -153,6 +161,8 @@ class Admin::BookingsController < AdminController
 
   # @route POST /bookings (bookings)
   def create
+    authorize!
+    @booking = Booking.new booking_params
     search = Search.new(period: search_params, dtnb: 0)
     answer = search.is_house_available? @booking.house_id
     unless answer[:result]
@@ -187,6 +197,7 @@ class Admin::BookingsController < AdminController
 
   # @route POST /booking/new (booking_new)
   def create_front
+    authorize!
     search = Search.new(period: search_params, dtnb: @settings['dtnb'])
     house = House.find_by(number: params[:booking][:hid])
     answer = search.is_house_available? house.id
@@ -211,6 +222,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/sync (sync_bookings)
   def sync
+    authorize!
     if params[:hid].present?
       house = House.find_by(number: params[:hid])
       Booking.sync [house]
@@ -224,6 +236,7 @@ class Admin::BookingsController < AdminController
   # @route PATCH /bookings/:id (booking)
   # @route PUT /bookings/:id (booking)
   def update
+    authorize!
     search = Search.new(period: search_params, dtnb: 0)
     house_id = params[:booking][:house_id]
     answer = search.is_house_available? house_id, @booking.id
@@ -278,6 +291,7 @@ class Admin::BookingsController < AdminController
 
   # @route PATCH /bookings/:id/update_comment_gr (update_comment_gr_booking)
   def update_comment_gr
+    authorize!
     @booking.update(booking_params)
     @result = Booking.check_in_out
     redirect_to check_in_out_bookings_path
@@ -285,6 +299,7 @@ class Admin::BookingsController < AdminController
 
   # @route DELETE /bookings/:id (booking)
   def destroy
+    authorize!
     @booking.destroy
     respond_to do |format|
       path = if params[:hid]
@@ -299,6 +314,7 @@ class Admin::BookingsController < AdminController
 
   # @route GET /bookings/get_price (get_price_bookings)
   def get_price
+    authorize!
     booking = Booking.new
     search = Search.new(period: "#{params[:start]} - #{params[:finish]}",
                         dtnb: 0)

@@ -1,13 +1,14 @@
 class Admin::SearchController < AdminController
   include Admin::SearchHelper
-  before_action :check_authorization
-  authorize_resource class: false
   before_action :perform_search
+  verify_authorized except: :index
 
   # @route GET /search (search)
   def index
-    @min_date  = @search.min_date
-    @houses    = []
+    redirect_to generated_link_to_guests_search and return unless allowed_to?(:index?)
+    authorize!
+    @min_date = @search.min_date
+    @houses = []
     @locations = Location.all
     @bdrs      = House.for_rent.select('DISTINCT(houses.rooms), houses.code').pluck(:rooms).sort
     @types     = HouseType.all
@@ -30,12 +31,6 @@ class Admin::SearchController < AdminController
     else
       Search.new(search_params)
     end
-  end
-
-  def check_authorization
-    return if user_signed_in? && current_user.role?(%w[Admin Manager Accounting])
-
-    redirect_to generated_link_to_guests_search
   end
 
   def search_params

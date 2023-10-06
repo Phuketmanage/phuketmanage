@@ -1,12 +1,11 @@
 class Admin::JobsController < AdminController
-  load_and_authorize_resource
-
   before_action :set_job, only: %i[show edit update update_laundry destroy]
   after_action :system_message_create, only: [:create]
   after_action :system_message_update, only: [:update]
 
   # @route GET /jobs (jobs)
   def index
+    authorize!
     @job = Job.new
     @status = params[:status]
     if current_user.role? :admin
@@ -19,6 +18,7 @@ class Admin::JobsController < AdminController
 
   # @route GET /jobs/index_new (jobs_new)
   def index_new
+    authorize!
     maids = EmplType.find_by(name: 'Maids').employees.ids
     @jobs = Job.where(closed: nil, employee_id: maids).order(:plan)
     # @jobs = Job.where(closed: nil).order(:plan)
@@ -28,6 +28,7 @@ class Admin::JobsController < AdminController
 
   # @route GET /laundry (laundry)
   def laundry
+    authorize!
     from = params[:from]
     to = params[:to]
     if !from.present? && !to.present?
@@ -57,6 +58,7 @@ class Admin::JobsController < AdminController
 
   # @route GET /jobs/job_order (job_order)
   def job_order
+    authorize!
     if !params[:from].present? || !params[:to].present?
       # need to return error message
     elsif params[:from].present? && params[:to].present?
@@ -98,6 +100,7 @@ class Admin::JobsController < AdminController
 
   # @route GET /jobs/:id (job)
   def show
+    authorize!
     @message = JobMessage.new
     @messages = @job.job_messages.last(10)
     # @s3_direct_post = S3_BUCKET.presigned_post(key: "job_messages/#{@job.id}/${filename}", success_action_status: '201', acl: 'public-read')
@@ -117,17 +120,20 @@ class Admin::JobsController < AdminController
 
   # @route GET /jobs/new (new_job)
   def new
+    authorize!
     @job = Job.new
     @houses = House.all.order(:code)
   end
 
   # @route GET /jobs/:id/edit (edit_job)
   def edit
+    authorize!
     @houses = House.all.order(:code)
   end
 
   # @route POST /jobs (jobs)
   def create
+    authorize!
     @job = Job.new(job_params)
     @job.creator_id = current_user.id
     respond_to do |format|
@@ -158,6 +164,7 @@ class Admin::JobsController < AdminController
   # @route PATCH /jobs/:id (job)
   # @route PUT /jobs/:id (job)
   def update
+    authorize!
     if params[:done].present?
       @job_status_toggled = true
       @job.closed = Time.current if params[:done] == 'true'
@@ -179,12 +186,14 @@ class Admin::JobsController < AdminController
 
   # @route PATCH /jobs/:id/update_laundry (update_laundry)
   def update_laundry
+    authorize!
     @job.update(job_params)
     redirect_to laundry_path
   end
 
   # @route DELETE /jobs/:id (job)
   def destroy
+    authorize! @job
     @job.destroy
     respond_to do |format|
       format.html { redirect_to jobs_url, notice: 'Job was successfully destroyed.' }

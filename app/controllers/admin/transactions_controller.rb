@@ -1,13 +1,12 @@
 require 'csv'
 
 class Admin::TransactionsController < AdminController
-  load_and_authorize_resource
-
   before_action :set_transaction, only: %i[show edit update destroy]
 
   # @route GET /transactions (transactions)
   # @route GET /balance (balance_front)
   def index
+    authorize!
     @from = params[:from]
     @to = params[:to]
     session[:from] = params[:from]
@@ -117,10 +116,13 @@ class Admin::TransactionsController < AdminController
     end
   end
 
-  def show; end
+  def show
+    authorize!
+  end
 
   # @route GET /transactions_docs (transactions_docs)
   def docs
+    authorize!
     @from = params[:from]
     @to = params[:to]
     @owner = User.find(params[:view_user_id])
@@ -137,6 +139,7 @@ class Admin::TransactionsController < AdminController
 
   # @route GET /transactions/new (new_transaction)
   def new
+    authorize!
     if params[:tid].present?
       tid = params[:tid]
       old_transaction = Transaction.find(tid)
@@ -173,6 +176,7 @@ class Admin::TransactionsController < AdminController
 
   # @route GET /transactions/:id/edit (edit_transaction)
   def edit
+    authorize! @transaction
     @de_ow = @transaction.balance_outs.sum(:debit)
     @cr_ow = @transaction.balance_outs.sum(:credit)
     @de_co = @transaction.balances.sum(:debit)
@@ -192,6 +196,7 @@ class Admin::TransactionsController < AdminController
 
   # @route POST /transactions (transactions)
   def create
+    authorize!
     @transaction = Transaction.new(transaction_params)
     @transaction.set_owner_and_house
     respond_to do |format|
@@ -264,6 +269,7 @@ class Admin::TransactionsController < AdminController
   # @route PATCH /transactions/:id (transaction)
   # @route PUT /transactions/:id (transaction)
   def update
+    authorize! @transaction
     respond_to do |format|
       state_before = @transaction
       if @transaction.update(transaction_params)
@@ -341,6 +347,7 @@ class Admin::TransactionsController < AdminController
 
   # @route POST /transactions/update_invoice_ref (update_invoice_ref)
   def update_invoice_ref
+    authorize!
     error = 'Need to select Owner' unless session[:owner_id].present?
     if session[:from].to_date.month != session[:to].to_date.month
       error = 'Can update invoice ref_no only with in one month'
@@ -374,6 +381,7 @@ class Admin::TransactionsController < AdminController
 
   # @route DELETE /transactions/:id (transaction)
   def destroy
+    authorize! @transaction
     @transaction.destroy
     @transaction.booking.toggle_status if !@transaction.booking.nil?
     respond_to do |format|
@@ -393,6 +401,7 @@ class Admin::TransactionsController < AdminController
 
   # @route GET /transaction_warnings (transaction_warnings)
   def warnings
+    authorize!
     warning = ""
     type = params[:type]
     is_sum = params[:is_sum]
@@ -450,6 +459,7 @@ class Admin::TransactionsController < AdminController
 
   # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
   def raw_for_acc
+    authorize!
     @from = params[:from]
     @to = params[:to]
     @owner_id = params[:owner_id]

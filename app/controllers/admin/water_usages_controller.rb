@@ -1,10 +1,9 @@
 class Admin::WaterUsagesController < AdminController
-  load_and_authorize_resource
-
   before_action :set_water_usage, only: %i[show edit update destroy]
 
   # @route GET /water_usages (water_usages)
   def index
+    authorize!
     if params[:house_id].present?
       @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).first(30)
     else
@@ -16,7 +15,9 @@ class Admin::WaterUsagesController < AdminController
   end
 
   # @route GET /water_usages/:id (water_usage)
-  def show; end
+  def show
+    authorize!
+  end
 
   # def new
   #   @water_usage = WaterUsage.new
@@ -27,6 +28,7 @@ class Admin::WaterUsagesController < AdminController
 
   # @route POST /water_usages (water_usages)
   def create
+    authorize!
     @water_usage = WaterUsage.new(water_usage_params)
 
     respond_to do |format|
@@ -45,6 +47,7 @@ class Admin::WaterUsagesController < AdminController
   # @route PATCH /water_usages/:id (water_usage)
   # @route PUT /water_usages/:id (water_usage)
   def update
+    authorize!
     respond_to do |format|
       if @water_usage.update(water_usage_params)
         format.html do
@@ -61,6 +64,7 @@ class Admin::WaterUsagesController < AdminController
 
   # @route DELETE /water_usages/:id (water_usage)
   def destroy
+    authorize!
     @water_usage.destroy
     respond_to do |format|
       format.html { redirect_to water_usages_url, notice: 'Water usage was successfully destroyed.' }

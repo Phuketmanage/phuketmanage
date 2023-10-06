@@ -1,10 +1,10 @@
 class Admin::BookingFilesController < AdminController
-  load_and_authorize_resource
   before_action :set_booking, only: %i[create]
   before_action :set_booking_file, only: %i[destroy]
 
   # @route POST /bookings/:id/booking_files (booking_files)
   def create
+    authorize!
     @booking_file = @booking.files.new(booking_file_params)
     @booking_file.user_id = current_user.id
     if @booking_file.save
@@ -16,6 +16,7 @@ class Admin::BookingFilesController < AdminController
 
   # @route DELETE /booking_files/:id (booking_file)
   def destroy
+    authorize!
     @booking_file.destroy
 
     respond_to_success

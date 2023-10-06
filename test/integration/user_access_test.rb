@@ -140,9 +140,10 @@ class UserAccessTest < ActionDispatch::IntegrationTest
   test "user destroy jobs" do
     manager = users(:manager)
     admin = users(:admin)
-    ability = Ability.new(manager)
-    assert ability.can?(:destroy, Job.new(creator: manager))
-    assert ability.can?(:destroy, Job.new(creator: admin))
+    policy = Admin::JobPolicy.new({creator_id: manager.id}, user: manager)
+    assert policy.apply(:destroy?)
+    policy = Admin::JobPolicy.new({creator_id: admin.id}, user: manager)
+    assert policy.apply(:destroy?)
   end
 
   test 'Bookings (inner)' do

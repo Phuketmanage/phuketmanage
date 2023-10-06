@@ -2,6 +2,8 @@ SimpleCov.start 'rails' do
   # any custom configs like groups and filters can be here at a central place
   enable_coverage :branch
 
+  add_group "Policies", "app/policies"
+
   if ENV['CI']
     formatter SimpleCov::Formatter::SimpleFormatter
   else

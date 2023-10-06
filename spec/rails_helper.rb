@@ -16,6 +16,8 @@ require 'webmock/rspec'
 WebMock.enable!
 WebMock.disable_net_connect!(allow_localhost: true)
 SimpleCov.command_name 'Rspec'
+require 'action_policy/rspec'
+require 'action_policy/rspec/dsl'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
