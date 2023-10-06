@@ -95,7 +95,7 @@ class House < ApplicationRecord
   before_create :generate_number
 
   validates :description_en, :description_ru, presence: true
-  validates :rooms, presence: true, numericality: { greater_than: 0 }, on: :for_rent
+  validates :rooms, presence: true, numericality: { greater_than: 0 }, on: %i[create update], if: :rental
 
   scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }
   scope :inactive, -> { joins(:owner).where('users.balance_closed': true).or(where(balance_closed: true)) }
