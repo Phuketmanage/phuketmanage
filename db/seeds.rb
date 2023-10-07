@@ -853,6 +853,24 @@ TransactionType.create!(
       debit_owner: true,
       credit_owner: true,
       admin_only: false
+    },
+    {
+      name_en: "Welcome packs",
+      name_ru: "Приветственные наборы",
+      debit_company: true,
+      credit_company: false,
+      debit_owner: false,
+      credit_owner: true,
+      admin_only: false
+    },
+    {
+      name_en: "Cleaning",
+      name_ru: "Уборка",
+      debit_company: true,
+      credit_company: false,
+      debit_owner: false,
+      credit_owner: true,
+      admin_only: false
     }
   ]
 )

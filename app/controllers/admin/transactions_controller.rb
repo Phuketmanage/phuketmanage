@@ -37,12 +37,12 @@ class Admin::TransactionsController < AdminController
          current_user.role?(%w[Admin Manager Accounting])
         # Gray balance
         if params[:commit] != 'Acc'
-          @transactions = Transaction.full(@from, @to)
+          @transactions        = Transaction.full(@from, @to)
           @transactions_before = Transaction.before(@from)
           @transactions_by_cat = Transaction.by_cat(@from, @to)
-          if !current_user.role?(['Admin'])
-            filter_ids = TransactionType.find_by(name_en: 'Salary')
-            @transactions = @transactions.filtered(filter_ids)
+          filter_ids           = TransactionType.find_by(name_en: 'Salary')
+          if !current_user.role?(['Admin']) && filter_ids.present?
+            @transactions        = @transactions.filtered(filter_ids)
             @transactions_before = @transactions_before.filtered(filter_ids)
             @transactions_by_cat = @transactions_by_cat.filtered(filter_ids)
           end

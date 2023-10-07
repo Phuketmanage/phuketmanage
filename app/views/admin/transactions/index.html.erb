@@ -63,7 +63,7 @@
           <div class="dropdown balance_of">
             <%= text_field_tag :balance_of,
                 @owner_id.present? ? "#{@owner[:name]} #{@owner[:surname]}" : 'Company',
-                class:"form-control dropdown-toggle mb-2 mr-sm-2",
+                class: "form-control dropdown-toggle mb-2 mr-sm-2",
                 placeholder: "Enter house code",
                 autocomplete: "off",
                 data: { toggle: 'dropdown', display: "static" } %>
