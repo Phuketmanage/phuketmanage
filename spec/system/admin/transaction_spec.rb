@@ -16,7 +16,7 @@ describe 'Transaction' do
 
   context 'when open index page' do
     let!(:house_two) { create(:house, owner: owner) }
-    let!(:another_trsc) { create(:transaction, house: house_two, user_id: owner.id) }
+    let!(:another_tx) { create(:transaction, house: house_two, user_id: owner.id) }
 
     context "when transactions filter" do
       before do
@@ -26,7 +26,7 @@ describe 'Transaction' do
                                 house_id: transaction.house_id)
       end
 
-      it { is_expected.not_to have_css('td', text: another_trsc.house.code) }
+      it { is_expected.not_to have_css('td', text: another_tx.house.code) }
       it { is_expected.to have_css('td', text: transaction.house.code) }
     end
   end
