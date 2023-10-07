@@ -137,4 +137,23 @@ RSpec.describe House do
       end
     end
   end
+
+  context 'when add new house for rental' do
+    let(:house) { build(:house, rooms: 0, rental: true) }
+    let(:house_rooms) { build(:house, rooms: 1, rental: true) }
+
+    it 'with rooms' do
+      expect(house_rooms).to be_valid
+    end
+
+    it 'without rooms' do
+      expect(house).not_to be_valid
+    end
+  end
+
+  context 'when add new house for not rental' do
+    let(:house) { build(:house, rooms: 0) }
+
+    it { expect(house).to be_valid }
+  end
 end
