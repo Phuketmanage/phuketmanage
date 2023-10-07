@@ -19,6 +19,6 @@
     <%= link_to 'Print', "#", data: {
                                   print: rails_blob_path(booking_file.data),
                                   type: file_type} %> |
-    <%= link_to 'Delete', booking_file_path(id: booking_file.id), data: { confirm: 'Are you sure?', turbo_method: :delete} %>
+    <%= link_to 'Delete', booking_file_path(id: booking_file.id), method: :delete, data: { confirm: 'Are you sure?', turbo_method: :delete} %>
   </div>
 </li>
