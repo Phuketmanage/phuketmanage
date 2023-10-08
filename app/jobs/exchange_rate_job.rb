@@ -10,6 +10,7 @@ class ExchangeRateJob < ApplicationJob
   private
 
   def self.send_email_to_admin(exception)
-    AdminMailer.notify_failure(exception).deliver_now
+    subject = 'Task execution error'
+    AdminMailer.notify_failure(exception, subject).deliver_now
   end
 end

@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe AdminMailer, type: :mailer do
   context "when send exception to admin" do
     let(:mail_text) { 'Failed to fetch exchange rate data' }
-    let(:mail) { described_class.notify_failure(mail_text).deliver_now }
+    let(:mail) { described_class.notify_failure(mail_text, 'Error').deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('Task execution error')
+      expect(mail.subject).to eq('Error')
     end
 
     it 'renders the receiver email' do
