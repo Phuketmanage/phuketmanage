@@ -18,8 +18,9 @@ RSpec.describe ExchangeRateJob, type: :job do
 
     describe '.send_email_to_admin' do
       it 'sends an email to the admin' do
-        error = 'Something went wrong'
-        expect(AdminMailer).to receive(:notify_failure).with(error).and_return(double(deliver_now: true))
+        error   = 'Something went wrong'
+        subject = 'Task execution error'
+        expect(AdminMailer).to receive(:notify_failure).with(error, subject).and_return(double(deliver_now: true))
         described_class.send(:send_email_to_admin, error)
       end
     end

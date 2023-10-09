@@ -7,7 +7,7 @@
 #  text       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  house_id   :bigint           not null
+#  house_id   :bigint
 #
 # Indexes
 #
