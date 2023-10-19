@@ -1,6 +1,6 @@
 class Admin::AdminHousePolicy < ApplicationPolicy
   def index?
-    allow! if user&.role? %w[Manager]
+    allow! if user&.role? %w[Manager Accounting]
   end
 
   def export?
