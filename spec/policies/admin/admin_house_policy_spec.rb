@@ -29,6 +29,13 @@ RSpec.describe Admin::AdminHousePolicy, type: :policy do
 
       it { is_expected.to be_truthy }
     end
+
+    context "when the user role is a accounting" do
+      let(:user) { create(:user, :accounting) }
+
+      it { is_expected.to be_truthy }
+    end
+
   end
 
   describe "#export?" do
