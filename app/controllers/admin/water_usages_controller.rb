@@ -5,11 +5,11 @@ class Admin::WaterUsagesController < AdminController
   def index
     authorize!
     if params[:house_id].present?
-      @water_usage = WaterUsage.where(house_id: params[:house_id]).order(date: :desc).first(30)
+      @water_usage = WaterUsage.active.where(house_id: params[:house_id]).order(date: :desc).first(30)
     else
       @water_usages = WaterUsage.all
       @house_groups = HouseGroup.all
-      @houses = House.where(water_reading: true).order(:house_group_id, :code).all
+      @houses = House.active.where(water_reading: true).order(:house_group_id, :code).all
       @water_usage = WaterUsage.new
     end
   end
