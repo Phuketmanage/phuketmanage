@@ -316,7 +316,7 @@ class Admin::BookingsController < AdminController
   def get_price
     authorize!
     booking = Booking.new
-    search = Search.new(period: "#{params[:start]} - #{params[:finish]}",
+    search = Search.new(period: params[:period],
                         dtnb: 0)
     booking.house = House.find(params[:house_id])
     prices = search.get_prices [booking.house]
@@ -363,7 +363,7 @@ class Admin::BookingsController < AdminController
   end
 
   def search_params
-    "#{params[:booking][:start]} to #{params[:booking][:finish]}"
+    params[:booking][:period]
   end
 
   def set_booking
@@ -371,8 +371,7 @@ class Admin::BookingsController < AdminController
   end
 
   def booking_params
-    params.require(:booking).permit(:start,
-                                    :finish,
+    params.require(:booking).permit(:period,
                                     :house_id,
                                     :tenant_id,
                                     :number,

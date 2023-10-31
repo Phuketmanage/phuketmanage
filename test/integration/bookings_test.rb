@@ -11,12 +11,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
   test 'create new booking' do
     year = Date.current.year + 1
     # House not available
-    start = "7.07.#{year}".to_date
-    finish = "14.07.#{year}".to_date
+    period = "7.07.#{year} - 14.07.#{year}"
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -24,12 +22,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li',
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
-    start = "3.07.#{year}".to_date
-    finish = "10.07.#{year}".to_date
+    period = "3.07.#{year} - 10.07.#{year}"
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -37,12 +33,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li',
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
-    start = "20.07.#{year}".to_date
-    finish = "27.07.#{year}".to_date
+    period = "20.07.#{year} - 27.07.#{year}"
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -51,12 +45,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     # House not available have confirmed booking
-    start = "20.07.#{year}".to_date
-    finish = "28.07.#{year}".to_date
+    period = "20.07.#{year} - 28.07.#{year}"
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -65,12 +57,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_1).start.to_fs(:date)} - #{bookings(:_1).finish.to_fs(:date)}\"]"
 
     # House not available have temporary booking
-    start = "26.07.#{year}".to_date
-    finish = "05.08.#{year}".to_date
+    period = "26.07.#{year} - 05.08.#{year}"
     house = houses(:villa_1)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -79,12 +69,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_6).start.to_fs(:date)} - #{bookings(:_6).finish.to_fs(:date)}\"]"
 
     # House not available have block booking
-    start = "27.07.#{year}".to_date
-    finish = "10.08.#{year}".to_date
+    period = "26.07.#{year} - 10.08.#{year}"
     house = houses(:villa_3)
     assert_no_difference 'Booking.count' do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -93,12 +81,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_7).start.to_fs(:date)} - #{bookings(:_7).finish.to_fs(:date)}\"]"
 
     # Can create new booking
-    start = "22.07.#{year}"
-    finish = "29.07.#{year}"
+    period = "22.07.#{year} - 29.07.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -108,12 +94,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li', text: 'Booking was successfully created.'
 
     # Manager can create new booking even if dtnb = 2
-    start = "1.07.#{year}"
-    finish = "9.07.#{year}"
+    period = "1.07.#{year} - 9.07.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'confirmed',
                                               client_details: 'Test client' } }
@@ -139,9 +123,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
   test 'update booking' do
     year = Date.current.year + 1
     # Change only dates - house not available
-    new_start = "29.06.#{year}".to_date
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: @booking.finish,
+    new_period = "29.06.#{year} - #{@booking.finish}"
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: @booking.house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -149,9 +132,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_4).start.to_fs(:date)} - #{bookings(:_4).finish.to_fs(:date)}\"]"
 
     # Change only dates - house available for manager even dtnb = 2
-    new_start = "30.06.#{year}".to_date
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: @booking.finish,
+    new_period = "30.06.#{year} - #{@booking.finish}"
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: @booking.house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -161,17 +143,16 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
     # Change only dates - house available = success
-    new_start = "2.07.#{year}".to_date
+    new_period = "2.07.#{year} - #{@booking.finish}"
     houses(:villa_1)
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: @booking.finish,
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: @booking.house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
     assert_redirected_to admin_house_bookings_path(@booking.house.id)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
-    assert_equal @booking.reload.start, new_start
+    assert_equal @booking.reload.start, new_period.split.first
 
     # Change only house - house is not available
     old_house = @booking.house
@@ -198,11 +179,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_equal @booking.reload.house.id, new_house.id
 
     # Change dates and house - house is not available
-    new_start = "7.07.#{year}".to_date
-    new_finish = "17.07.#{year}".to_date
+    new_period = "7.07.#{year} - 17.07.#{year}"
     new_house = houses(:villa_3)
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: new_finish,
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -210,11 +189,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.to_fs(:date)} - #{bookings(:_2).finish.to_fs(:date)}\"]"
 
     # Change dates and house - house is not available because dtnb = 2
-    new_start = "25.07.#{year}".to_date
-    new_finish = "2.08.#{year}".to_date
+    new_period = "25.07.#{year} - 2.08.#{year}"
     new_house = houses(:villa_3)
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: new_finish,
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -222,11 +199,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
                   text: "House is not available for this period, overlapped with bookings: [\"#{bookings(:_2).start.to_fs(:date)} - #{bookings(:_2).finish.to_fs(:date)}\"]"
 
     # Change dates and house - house is available even dtnb = 2
-    new_start = "26.07.#{year}".to_date
-    new_finish = "2.08.#{year}".to_date
+    new_period = "26.07.#{year} - 2.08.#{year}"
     new_house = houses(:villa_3)
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: new_finish,
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -235,11 +210,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
 
     # Change dates and house - house is available = success
-    new_start = "22.07.#{year}".to_date
-    new_finish = "30.07.#{year}".to_date
+    new_period = "22.07.#{year} - 30.07.#{year}"
     new_house = houses(:villa_2)
-    put booking_path(@booking.id), params: { booking: { start: new_start,
-                                                        finish: new_finish,
+    put booking_path(@booking.id), params: { booking: { period: new_period,
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }

@@ -48,6 +48,7 @@
 #
 class Booking < ApplicationRecord
   attr_accessor :manual_price
+  attr_accessor :period
 
   enum status: {
     temporary: 0,
@@ -65,6 +66,7 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'BookingFile'
+  # before_validation :set_dates
   validates :start, :finish, :house_id, :status, :client_details, presence: true
   validate :price_chain, unless: :allotment?
 
@@ -387,7 +389,15 @@ class Booking < ApplicationRecord
     end
   end
 
+  # def period
+  #   return "#{self.start} - #{self.finish}" 
+  # end
   private
+
+  def set_dates
+    self.start =  period.split.first.to_date
+    self.finish = period.split.last.to_date
+  end
 
   def price_chain
     return unless !block? && (nett != sale - agent - comm)

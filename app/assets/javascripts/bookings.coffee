@@ -283,13 +283,9 @@ $(document).on "ready", ->
     printJS("#{$(this).data('print')}", $(this).data('type'))
 
   # Calculate booking price when dates and house choosen. If status block = set prices to zero
-  $('#booking_start').on 'change', (e) ->
-    $('#booking_finish').attr('min', "#{$(this).val()}")
-    check_price()
-  $('#booking_finish').on 'change', (e) ->
-    $('#booking_start').attr('max', "#{$(this).val()}")
-    check_price()
   $('#booking_house_id').on 'change', (e) ->
+    check_price()
+  $('#booking_period').on 'change', (e) ->
     check_price()
   $('#booking_status').on 'change', (e) ->
     check_price()
@@ -373,16 +369,15 @@ get_employees = (job_type_id, house_id) ->
       console.log('Was not able to read employees list')
 
 check_price = ()->
-  start = $('#booking_start').val()
-  finish = $('#booking_finish').val()
+  period = $('#booking_period').val()
   house_id = $('#booking_house_id').val()
   status = $('#booking_status').val()
-  if start != '' && finish != '' && house_id != '' && status != 'block' && !$('#manual_price_check_box').is(':checked')
+  if period != '' && house_id != '' && status != 'block' && !$('#manual_price_check_box').is(':checked')
     $.ajax
       url: '/bookings/get_price',
       type: "get",
       dataType: "json",
-      data: { start: start, finish: finish, house_id: house_id },
+      data: { period: period, house_id: house_id },
       success: (data) ->
         $('#booking_sale').val(data['sale'])
         $('#booking_agent').val(0)
