@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     get 'owner/bookings', to: 'bookings#index_front', as: 'bookings_front'
     resources :bookings do
       collection do
+        get 'min_rental_period'
         get 'get_price'
         get 'canceled'
         get 'timeline'

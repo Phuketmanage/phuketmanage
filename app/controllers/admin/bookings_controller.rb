@@ -325,6 +325,13 @@ class Admin::BookingsController < AdminController
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
   end
 
+  def min_rental_period
+    authorize!
+    duration = House.find(params[:house_id]).min_duration
+
+    render json: { min_duration: duration }
+  end
+
   private
 
   def set_houses
