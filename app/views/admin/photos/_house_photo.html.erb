@@ -4,10 +4,11 @@
                 method: :patch,
                 id: "form_edit_photo_id_#{house_photo.id}") do |f| %>
     <div class="row photo_row mb-3" id="photo_id_<%= house_photo.id %>">
+      <i class='col-md-1 bi bi-list'></i>
       <div class="col-md-2 photo_thumb">
         <img src="<%= house_photo.thumb %>" class='img-fluid mb-1' />
       </div>
-      <div class="col-md-8 photo_titles">
+      <div class="col-md-7 photo_titles">
         <%= f.text_field :title_en, placeholder: 'Title', class: 'form-control mb-1 photo_title_input', data: {photo_id: house_photo.id} %>
         <%= f.text_field :title_ru, placeholder: 'Подпись', class: 'form-control mb-1 photo_title_input', data: {photo_id: house_photo.id} %>
       </div>

@@ -51,9 +51,10 @@ $(document).on "ready", ->
                             <input name='utf8' type='hidden' value='✓'>
                             <input type='hidden' name='_method' value='patch'>
                             <input type='hidden' name='authenticity_token' value='#{authenticity_token}'>
-                            <div class='row photo_row mb-3' id='photo_id_#{data.id}''>
+                            <i class='col-md-1 bi bi-list'></i>
+                            <div class='row photo_row mb-2' id='photo_id_#{data.id}''>
                               <div class='col-md-2 photo_thumb' data-file-name='#{data.file_name}'></div>
-                              <div class='col-md-8 photo_titles'>
+                              <div class='col-md-7 photo_titles'>
                                 <input placeholder='Title' class='form-control mb-1 photo_title_input' type='text' name='house_photo[title_en]'' id='house_photo_title_en' data-photo-id='#{data.id}'>
                                 <input placeholder='Подпись' class='form-control mb-1 photo_title_input' type='text' name='house_photo[title_ru]'' id='house_photo_title_ru' data-photo-id='#{data.id}'>
                               </div>
