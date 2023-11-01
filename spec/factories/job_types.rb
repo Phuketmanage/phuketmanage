@@ -12,6 +12,8 @@
 #
 FactoryBot.define do
   factory :job_type do
-    
+    trait :type_manage do
+      name { "For management" }
+    end
   end
 end
