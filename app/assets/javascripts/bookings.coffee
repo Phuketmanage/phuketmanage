@@ -284,6 +284,7 @@ $(document).on "ready", ->
 
   # Calculate booking price when dates and house choosen. If status block = set prices to zero
   $('#booking_house_id').on 'change', (e) ->
+    get_periods()
     check_price()
   $('#booking_period').on 'change', (e) ->
     check_price()
@@ -367,6 +368,20 @@ get_employees = (job_type_id, house_id) ->
       # console.log 'Employee list loaded'
     error: (data) ->
       console.log('Was not able to read employees list')
+get_periods = ()->
+  house_id = $('#booking_house_id').val()
+  period_elem = $('#booking_period')
+  if house_id != ''
+    $.ajax
+      url: '/bookings/get_periods',
+      type: "get",
+      dataType: "json",
+      data: {house_id: house_id}
+      success: (data) ->
+        period_elem.attr('data-flatpickr-disable', data['occupied_days'])
+        period_elem.html()
+      error: (data) ->
+        console.log('Was not able to get periods for this house')
 
 check_price = ()->
   period = $('#booking_period').val()

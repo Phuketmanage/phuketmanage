@@ -325,11 +325,13 @@ class Admin::BookingsController < AdminController
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
   end
 
-  def min_rental_period
+  def get_periods
     authorize!
-    duration = House.find(params[:house_id]).min_duration
+    # byebug
+    house = House.find(params[:house_id])
+    duration = house.min_duration
 
-    render json: { min_duration: duration }
+    render json: { min_duration: duration, occupied_days: house.occupied_days.to_json }
   end
 
   private
@@ -346,7 +348,7 @@ class Admin::BookingsController < AdminController
     from = params[:from]
     to = params[:to]
     error = false
-    if !from.present? && !to.present?
+    if from.blank? && to.blank?
       from = Date.current
       if current_user.role?('Owner')
         house_ids = current_user.houses.ids
@@ -355,8 +357,8 @@ class Admin::BookingsController < AdminController
         bookings = Booking.active.where(finish: @from..)
       end
       to = bookings.maximum(:finish).to_date if bookings.any?
-      to = from if !to.present? || to < from
-    elsif !from.present? || !to.present?
+      to = from if to.blank? || to < from
+    elsif from.blank? || to.blank?
       error = 'Both dates should be selected'
     end
     [from, to, error]
