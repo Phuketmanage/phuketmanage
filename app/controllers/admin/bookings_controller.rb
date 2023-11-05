@@ -327,7 +327,6 @@ class Admin::BookingsController < AdminController
 
   def get_periods
     authorize!
-    # byebug
     house = House.find(params[:house_id])
     duration = house.min_duration
 
