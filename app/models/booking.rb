@@ -47,8 +47,7 @@
 #  fk_rails_...           (tenant_id => users.id)
 #
 class Booking < ApplicationRecord
-  attr_accessor :manual_price
-  attr_accessor :period
+  attr_accessor :manual_price, :period
 
   enum status: {
     temporary: 0,
@@ -389,16 +388,17 @@ class Booking < ApplicationRecord
     end
   end
 
-  # def period
-  #   return "#{self.start} - #{self.finish}" 
-  # end
+  def get_period
+    "#{start} - #{finish}"
+  end
+
   private
 
   def set_dates
-    if period.present?
-      self.start =  period.split.first.to_date
-      self.finish = period.split.last.to_date
-    end
+    return unless period.present?
+
+    self.start =  period.split.first.to_date
+    self.finish = period.split.last.to_date
   end
 
   def price_chain
