@@ -17,6 +17,7 @@ export default class extends Flatpickr {
 
   connect() {
     this.config = {
+      ...this.config,
       altFormat: "d.m.y",
       altInput: true,
       dateFormat: "Y-m-d",
@@ -28,6 +29,14 @@ export default class extends Flatpickr {
       mode: 'range',
     };
     super.connect();
+  }
+
+  update_attr(){
+    let house_id  = $('#booking_house_id').val()
+    fetch(`/bookings/get_periods?house_id=${house_id}`)
+      .then((response) => response.json())
+      .then((data) => 
+      this.data.set('disable', data['occupied_days']))
   }
 
   get locale() {

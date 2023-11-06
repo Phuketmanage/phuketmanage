@@ -2,7 +2,7 @@
   <%= render 'shared/error_messages', object: form.object %>
   <div class="row">
     <div class="col-md-2 form-group">
-      <%= form.select :house_id, @houses, { prompt: 'Select house' }, { class: "form-control" } %>
+      <%= form.select :house_id, @houses, { prompt: 'Select house' }, { class: "form-control", data: { "booking-target": "houseField", "action": "input->booking#updateFpicker", dates: [123] } } %>
     </div>
     <div class="col-md-4 form-group">
       <%= form.text_field :period,
@@ -16,6 +16,7 @@
                   flatpickr_now: Date.current.iso8601,
                   flatpickr_min_date: (Date.current + 1.day).iso8601,
                   flatpickr_disable: nil,
+                  action: "trigger-update@window->flatpickr#update_attr", 
                   },
                 value: booking.get_period %>
     </div>

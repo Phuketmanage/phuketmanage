@@ -389,7 +389,7 @@ class Booking < ApplicationRecord
   end
 
   def get_period
-    "#{start} - #{finish}"
+    "#{start} - #{finish}" if start.present? && finish.present?
   end
 
   private
