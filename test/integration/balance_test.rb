@@ -1081,12 +1081,10 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     # Create booking
     month = Date.current.month + 1
     year = Date.current.year
-    start = "10.#{month}.#{year}"
-    finish = "25.#{month}.#{year}"
+    period = "10.#{month}.#{year} - 25.#{month}.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
-      post bookings_path params: { booking: { start:,
-                                              finish:,
+      post bookings_path params: { booking: { period:,
                                               house_id: house.id,
                                               status: 'pending',
                                               client_details: 'Test client' } }

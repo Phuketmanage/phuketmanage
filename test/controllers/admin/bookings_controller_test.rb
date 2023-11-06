@@ -31,8 +31,7 @@ class Admin::BookingsControllerTest < ActionDispatch::IntegrationTest
   test "should create booking" do
     assert_difference('Booking.count', 1) do
       post bookings_path, params: { booking: {
-        start: "10.09.#{Date.current.year + 1}".to_date,
-        finish: "20.09.#{Date.current.year + 1}".to_date,
+        period: "10.09.#{Date.current.year + 1} - 20.09.#{Date.current.year + 1}",
         house_id: houses(:villa_1).id,
         status: 'confirmed',
         client_details: 'Test client'
@@ -44,8 +43,7 @@ class Admin::BookingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update booking" do
     patch booking_url(@booking), params: { booking: {
-      start: @booking.start,
-      finish: @booking.finish,
+      period: "#{@booking.start} - #{@booking.finish}",
       house_id: @booking.house_id,
       status: 'confirmed',
       client_details: 'Test client'

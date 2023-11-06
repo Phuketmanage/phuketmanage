@@ -17,8 +17,8 @@ class Search
 
     @rs = rs.present? ? rs.to_date : period.split.first.to_date
     @rf = rf.present? ? rf.to_date : period.split.last.to_date
-    @rs_e = rs - dtnb.to_i.days unless rs.nil?
-    @rf_e = rf + dtnb.to_i.days unless rf.nil?
+    @rs_e = @rs - dtnb.to_i.days 
+    @rf_e = @rf + dtnb.to_i.days
     @duration = (rf - rs).to_i if !rs.nil? || !rs.nil?
   end
 

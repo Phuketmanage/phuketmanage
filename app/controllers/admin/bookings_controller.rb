@@ -325,6 +325,7 @@ class Admin::BookingsController < AdminController
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
   end
 
+  # @route GET /bookings/get_periods (get_periods_bookings)
   def get_periods
     authorize!
     house = House.find(params[:house_id])
@@ -373,6 +374,8 @@ class Admin::BookingsController < AdminController
 
   def booking_params
     params.require(:booking).permit(:period,
+                                    :start,
+                                    :finish,
                                     :house_id,
                                     :tenant_id,
                                     :number,

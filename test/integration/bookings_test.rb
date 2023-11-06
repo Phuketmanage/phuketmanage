@@ -152,13 +152,12 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_house_bookings_path(@booking.house.id)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
-    assert_equal @booking.reload.start, new_period.split.first
+    assert_equal @booking.reload.start, new_period.split.first.to_date
 
     # Change only house - house is not available
     old_house = @booking.house
     new_house = houses(:villa_3)
-    put booking_path(@booking.id), params: { booking: { start: @booking.start,
-                                                        finish: @booking.finish,
+    put booking_path(@booking.id), params: { booking: { period: "#{@booking.start} - #{@booking.finish}",
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -168,8 +167,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     # Change only house - house available = success
     new_house = houses(:villa_2)
-    put booking_path(@booking.id), params: { booking: { start: @booking.start,
-                                                        finish: @booking.finish,
+    put booking_path(@booking.id), params: { booking: { period: "#{@booking.start} - #{@booking.finish}",
                                                         house_id: new_house.id,
                                                         status: 'confirmed',
                                                         client_details: 'Test client' } }
@@ -219,8 +217,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_house_bookings_path(@booking.house.id)
     follow_redirect!
     assert_select 'div.alert li', text: 'Booking was successfully updated.'
-    assert_equal @booking.reload.start, new_start
-    assert_equal @booking.reload.finish, new_finish
+    assert_equal @booking.reload.start, new_period.split.first.to_date
+    assert_equal @booking.reload.finish, new_period.split.last.to_date
     assert_equal @booking.reload.house.id, new_house.id
   end
 

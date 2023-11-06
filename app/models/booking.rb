@@ -66,7 +66,7 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'BookingFile'
-  # before_validation :set_dates
+  before_validation :set_dates
   validates :start, :finish, :house_id, :status, :client_details, presence: true
   validate :price_chain, unless: :allotment?
 
@@ -395,8 +395,10 @@ class Booking < ApplicationRecord
   private
 
   def set_dates
-    self.start =  period.split.first.to_date
-    self.finish = period.split.last.to_date
+    if period.present?
+      self.start =  period.split.first.to_date
+      self.finish = period.split.last.to_date
+    end
   end
 
   def price_chain
