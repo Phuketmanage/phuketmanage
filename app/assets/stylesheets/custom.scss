@@ -118,6 +118,13 @@ body {
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
+} 
+@media (min-width: 0px) {
+  .photo_row {
+    i {
+      display: none;
+    }
+  }
 }
 
 @media (min-width: 768px) {
@@ -125,6 +132,13 @@ body {
     display: block;
     height: auto !important;
     visibility: visible;
+  }
+
+  .photo_row {
+    i {
+      display: flex;
+      padding-left: 3em;
+    }
   }
 }
 
@@ -374,6 +388,16 @@ body {
 
 .transfer_canceled {
   color: grey;
+}
+
+#photo_previews{
+  ul {
+    padding-inline-start: 0;
+    list-style-type: none;
+  }
+}
+.photo_row {
+  align-items: center;
 }
 
 /*
