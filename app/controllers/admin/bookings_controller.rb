@@ -162,9 +162,10 @@ class Admin::BookingsController < AdminController
   # @route POST /bookings (bookings)
   def create
     authorize!
+    permission = true
     @booking = Booking.new booking_params
     search = Search.new(period: search_params, dtnb: 0)
-    answer = search.is_house_available? @booking.house_id
+    answer = search.is_house_available?(@booking.house_id, booking_id = nil, permission)
     unless answer[:result]
       @booking.errors.add(:base,
                           "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")

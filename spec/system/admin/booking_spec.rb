@@ -11,6 +11,8 @@ describe 'Booking' do
   let(:date_start) { current_date }
   let(:date_finish) { current_date + 10.days }
   let(:date_finish2) { current_date + 14.days }
+  let(:date_start_short) { current_date + 2.days }
+  let(:date_finish_short) { current_date + 5.days }
   let(:date_start_format) { date_start.strftime("%d.%m.%Y") }
   let(:date_finish_format) { date_finish.strftime("%d.%m.%Y") }
   let(:date_finish_format2) { date_finish2.strftime("%d.%m.%Y") }
@@ -47,6 +49,31 @@ describe 'Booking' do
       it { is_expected.to have_css('td', text: booking_pending.house.code) }
       it { is_expected.to have_css('td', text: booking_pending2.house.code) }
       it { is_expected.not_to have_css('td', text: booking_canceled.house.code) }
+    end
+
+    context "when add booking with period shorter then minimal" do
+      before do
+        create(:booking, :pending, house: create(:house, :with_seasons), start: date_start_short,
+                                   finish: date_finish_short)
+      end
+
+      it 'succesfully saves booking' do
+        expect(Booking.count).to eq(4)
+      end
+    end
+
+    context "when add overlapped booking with shorter period" do
+      let(:house) { create(:house, :with_seasons) }
+      let(:booking) { create(:booking, :pending, house:, start: date_start, finish: date_finish) }
+
+      it "doesn't create a new booking" do
+        expect do
+          post bookings_path,
+               params: { booking: { house_id: house.id, start: date_start_short, finish: date_finish_short } }
+        end.not_to change(Booking, :count)
+      end
+
+      # it { is_expected.to have_text("House is not available for this period, overlapped with bookings:") }
     end
 
     context "when visiting admin bookings with hid params" do
