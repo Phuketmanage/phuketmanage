@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [
+    "houseField",
     "saleField",
     "agentField",
     "commField",
@@ -10,7 +11,11 @@ export default class extends Controller {
     "commPercentage",
     "nettPercentage"
   ]
-
+  updateFpicker(){
+    const trigger = new CustomEvent('trigger-update')
+    window.dispatchEvent(trigger)
+  }
+  
   updatePercentage() {
     let saleValue = parseFloat(this.saleFieldTarget.value);
     let agentValue = parseFloat(this.agentFieldTarget.value);

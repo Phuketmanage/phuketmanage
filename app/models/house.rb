@@ -151,6 +151,10 @@ class House < ApplicationRecord
     end
   end
 
+  def min_duration
+    durations.minimum(:start)
+  end
+
   private
 
   def generate_number

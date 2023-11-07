@@ -17,8 +17,8 @@ class Search
 
     @rs = rs.present? ? rs.to_date : period.split.first.to_date
     @rf = rf.present? ? rf.to_date : period.split.last.to_date
-    @rs_e = rs - dtnb.to_i.days unless rs.nil?
-    @rf_e = rf + dtnb.to_i.days unless rf.nil?
+    @rs_e = @rs - dtnb.to_i.days
+    @rf_e = @rf + dtnb.to_i.days
     @duration = (rf - rs).to_i if !rs.nil? || !rs.nil?
   end
 
@@ -30,10 +30,10 @@ class Search
     @min_date ||= Date.current + min_days_before_check_in
   end
 
-  def is_house_available?(house_id, booking_id = nil)
+  def is_house_available?(house_id, booking_id = nil, permission = nil)
     result = {}
     result[:result] = true
-
+    
     overlapped = if booking_id.nil?
       Booking.where(
         'start <= ? AND finish >= ? AND status != ? AND house_id = ?',
@@ -50,7 +50,7 @@ class Search
       result[:overlapped] = overlapped.map { |b| "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)}" }
     end
 
-    result[:result] = false if duration_shorter_than_minimal?(house_id)
+    result[:result] = false if duration_shorter_than_minimal?(house_id, permission)
 
     result
   end
@@ -138,8 +138,12 @@ class Search
     end
   end
 
-  def duration_shorter_than_minimal?(house_id)
-    !check_house_min_booking_period(house_id)
+  def duration_shorter_than_minimal?(house_id, permission)
+    if permission
+      false
+    else
+      !check_house_min_booking_period(house_id)
+    end
   end
 
   def check_house_min_booking_period(house_id)

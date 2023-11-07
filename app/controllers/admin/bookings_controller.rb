@@ -162,9 +162,10 @@ class Admin::BookingsController < AdminController
   # @route POST /bookings (bookings)
   def create
     authorize!
+    permission = true
     @booking = Booking.new booking_params
     search = Search.new(period: search_params, dtnb: 0)
-    answer = search.is_house_available? @booking.house_id
+    answer = search.is_house_available?(@booking.house_id, booking_id = nil, permission)
     unless answer[:result]
       @booking.errors.add(:base,
                           "House is not available for this period, overlapped with bookings: #{answer[:overlapped]}")
@@ -316,13 +317,22 @@ class Admin::BookingsController < AdminController
   def get_price
     authorize!
     booking = Booking.new
-    search = Search.new(period: "#{params[:start]} - #{params[:finish]}",
+    search = Search.new(period: params[:period],
                         dtnb: 0)
     booking.house = House.find(params[:house_id])
     prices = search.get_prices [booking.house]
     booking.calc prices
 
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
+  end
+
+  # @route GET /bookings/get_reservations (get_reservations_bookings)
+  def get_reservations
+    authorize!
+    house = House.find(params[:house_id])
+    duration = house.min_duration
+
+    render json: { min_duration: duration, occupied_days: house.occupied_days.to_json }
   end
 
   private
@@ -339,7 +349,7 @@ class Admin::BookingsController < AdminController
     from = params[:from]
     to = params[:to]
     error = false
-    if !from.present? && !to.present?
+    if from.blank? && to.blank?
       from = Date.current
       if current_user.role?('Owner')
         house_ids = current_user.houses.ids
@@ -348,15 +358,15 @@ class Admin::BookingsController < AdminController
         bookings = Booking.active.where(finish: @from..)
       end
       to = bookings.maximum(:finish).to_date if bookings.any?
-      to = from if !to.present? || to < from
-    elsif !from.present? || !to.present?
+      to = from if to.blank? || to < from
+    elsif from.blank? || to.blank?
       error = 'Both dates should be selected'
     end
     [from, to, error]
   end
 
   def search_params
-    "#{params[:booking][:start]} to #{params[:booking][:finish]}"
+    params[:booking][:period]
   end
 
   def set_booking
@@ -364,7 +374,8 @@ class Admin::BookingsController < AdminController
   end
 
   def booking_params
-    params.require(:booking).permit(:start,
+    params.require(:booking).permit(:period,
+                                    :start,
                                     :finish,
                                     :house_id,
                                     :tenant_id,
