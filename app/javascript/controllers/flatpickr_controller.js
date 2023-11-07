@@ -33,7 +33,7 @@ export default class extends Flatpickr {
 
   update_attr(){
     let house_id  = $('#booking_house_id').val()
-    fetch(`/bookings/get_periods?house_id=${house_id}`)
+    fetch(`/bookings/get_reservations?house_id=${house_id}`)
       .then((response) => response.json())
       .then((data) => 
       this.data.set('disable', data['occupied_days']))

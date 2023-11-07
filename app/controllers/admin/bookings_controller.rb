@@ -326,8 +326,8 @@ class Admin::BookingsController < AdminController
     render json: { sale: booking.sale, comm: booking.comm, nett: booking.nett }
   end
 
-  # @route GET /bookings/get_periods (get_periods_bookings)
-  def get_periods
+  # @route GET /bookings/get_reservations (get_reservations_bookings)
+  def get_reservations
     authorize!
     house = House.find(params[:house_id])
     duration = house.min_duration
