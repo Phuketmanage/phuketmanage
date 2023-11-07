@@ -52,13 +52,12 @@ describe 'Booking' do
     end
 
     context "when add booking with period shorter then minimal" do
-      before do
-        create(:booking, :pending, house: create(:house, :with_seasons), start: date_start_short,
-                                   finish: date_finish_short)
-      end
+      let(:house) { create(:house, :with_seasons) }
 
-      it 'succesfully saves booking' do
-        expect(Booking.count).to eq(4)
+      it "creates a new booking" do
+        expect do
+          create(:booking, :pending, house:, start: date_start_short, finish: date_finish_short)
+        end.to change(Booking, :count).by(1)
       end
     end
 
