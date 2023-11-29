@@ -19,6 +19,7 @@ gem 'newrelic_rpm'
 gem 'lograge'
 gem "image_processing", ">= 1.2"
 gem 'maintenance_tasks' # Database maintenance tasks for Rails
+gem 'rack-timeout' # Abort requests that are taking too long
 
 # App
 gem 'barnes'
