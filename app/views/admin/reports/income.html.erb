@@ -1,0 +1,82 @@
+<h1>Income by house groups</h1>
+
+<%= form_with url: report_income_path, method: :get, local: true do |form| %>
+  <%= form.collection_check_boxes :groups, HouseGroup.order(:id), :id, :name %>
+  <div class="form-row">
+    <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+      <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+    </div>
+    <div class="col-6 col-lg-2 mb-1 mb-lg-0">
+      <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+    </div>
+    <%= submit_tag t('show'), class: "btn btn-primary mb-2 mr-2" %>
+  </div>
+<% end %>
+<div>
+  <div class="row">
+  <% @results.each do |result| %>
+    <div class="col">
+    <%= result[:group_name] %><br />
+    <% result[:values_by_type].each do |type_id, debit, credit| %>
+      <%= @transaction_type_names[type_id] %>
+      +<%= number_to_currency(debit, precision: 0, unit: '') %> /
+      -<%= number_to_currency(credit, precision: 0, unit: '') %><br />
+    <% end %>
+    <% if result[:values_by_type].any? %>
+    ---<br />
+      +<%= number_to_currency(result[:total_debit], precision: 0, unit: '') %> /
+      -<%= number_to_currency(result[:total_credit], precision: 0, unit: '') %>
+      = <%= number_to_currency(result[:total_debit] - result[:total_credit], precision: 0, unit: '') %>
+    <% end %>
+    </div>
+  <% end %>
+  <% if @results_with_out_groups.any? %>
+    <% @results_with_out_groups.each do |result| %>
+      <div class="col">
+      House with out groups<br />
+      <% result[:values_by_type].each do |type_id, debit, credit| %>
+        <%= @transaction_type_names[type_id] %>
+        +<%= number_to_currency(debit, precision: 0, unit: '') %> /
+        -<%= number_to_currency(credit, precision: 0, unit: '') %><br />
+      <% end %>
+      ---<br />
+        +<%= number_to_currency(result[:total_debit], precision: 0, unit: '') %> /
+        -<%= number_to_currency(result[:total_credit], precision: 0, unit: '') %>
+        = <%= number_to_currency(result[:total_debit] - result[:total_credit], precision: 0, unit: '') %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @results_with_out_houses.any? %>
+    <% @results_with_out_houses.each do |result| %>
+      <div class="col">
+      With out houses<br />
+      <% result[:values_by_type].each do |type_id, debit, credit| %>
+        <%= @transaction_type_names[type_id] %>
+        +<%= number_to_currency(debit, precision: 0, unit: '') %> /
+        -<%= number_to_currency(credit, precision: 0, unit: '') %><br />
+      <% end %>
+      ---<br />
+        +<%= number_to_currency(result[:total_debit], precision: 0, unit: '') %> /
+        -<%= number_to_currency(result[:total_credit], precision: 0, unit: '') %>
+        = <%= number_to_currency(result[:total_debit] - result[:total_credit], precision: 0, unit: '') %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @results_with_out_houses_or_owners.any? %>
+    <% @results_with_out_houses_or_owners.each do |result| %>
+      <div class="col">
+      With out houses or owners<br />
+      <% result[:values_by_type].each do |type_id, debit, credit| %>
+        <%= @transaction_type_names[type_id] %>
+        +<%= number_to_currency(debit, precision: 0, unit: '') %> /
+        -<%= number_to_currency(credit, precision: 0, unit: '') %><br />
+      <% end %>
+      ---<br />
+        +<%= number_to_currency(result[:total_debit], precision: 0, unit: '') %> /
+        -<%= number_to_currency(result[:total_credit], precision: 0, unit: '') %>
+        = <%= number_to_currency(result[:total_debit] - result[:total_credit], precision: 0, unit: '') %>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
+</div>

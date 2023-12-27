@@ -3,7 +3,7 @@
 
 <% sum = 0 %>
 <% @users.each do |u| %>
-  <%= "#{u.name} #{u.balance}"%><br />
+  <%= "#{u.name} #{u.surname} (#{u.code}) #{u.balance}"%><br />
   <% sum += u.balance %>
 <% end %>
 <%= sum %>

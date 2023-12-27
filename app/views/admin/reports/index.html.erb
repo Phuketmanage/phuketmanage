@@ -1,7 +1,9 @@
 <h1>Reports</h1>
 
-<%= link_to 'Bookings', report_bookings_path %>
+<%= link_to 'Bookings sources', report_bookings_path %><br />
 
 <% if current_user.role?("Admin") %>
-  <%= link_to 'Salary', report_salary_path %>
+  <%= link_to 'Salary', report_salary_path %><br />
+  <%= link_to 'Total owner balances', report_balance_path %><br />
+  <%= link_to 'Income', report_income_path %><br />
 <% end %>

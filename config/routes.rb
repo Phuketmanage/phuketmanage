@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get 'report/bookings', to: 'reports#bookings'
     get 'report/balance', to: 'reports#balance'
     get 'report/salary', to: 'reports#salary'
+    get 'report/income', to: 'reports#income'
     get 'reports', to: 'reports#index'
     resources :notifications, only: [:destroy]
     resources :water_usages
