@@ -46,6 +46,7 @@ class Admin::ReportsController < AdminController
     end
   end
 
+  # @route GET /report/income (report_income)
   def income
     authorize! with: Admin::ReportPolicy
     @groups = HouseGroup.all
