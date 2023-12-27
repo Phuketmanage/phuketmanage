@@ -13,7 +13,7 @@ class Admin::ReportsController < AdminController
                   .where('roles.name':'Owner', 'users.balance_closed': false)
                   .where('transactions.for_acc': false)
                   .group(:id)
-                  .select('users.name', '(sum(balance_outs.debit) - sum(balance_outs.credit)) as balance')
+                  .select('users.name, users.surname, users.code', '(sum(balance_outs.debit) - sum(balance_outs.credit)) as balance')
   end
 
   # @route GET /report/bookings (report_bookings)
@@ -44,6 +44,90 @@ class Admin::ReportsController < AdminController
     else
       flash[:alert] = @error
     end
+  end
+
+  def income
+    authorize! with: Admin::ReportPolicy
+    @groups = HouseGroup.all
+    @results = []
+    @results_with_out_groups = []
+    @results_with_out_houses = []
+    @results_with_out_houses_or_owners = []
+    if params[:groups].present?
+      @selected_groups = params[:groups].reject(&:empty?).map(&:to_i)
+      @selected_group_name = HouseGroup.where(id: @selected_groups).pluck(:id, :name).to_h
+      # Transactions with houses in groups
+      @selected_groups.each do |house_group|
+        @values_by_type = Transaction .joins(:house, :balances)
+                                      .where('houses.house_group_id': house_group)
+                                      .group('transactions.type_id')
+                                      .pluck('transactions.type_id','SUM(debit)', 'SUM(credit)')
+        @totals = Transaction .joins(:house, :balances)
+                              .where('houses.house_group_id': house_group)
+                              .group('houses.house_group_id')
+                              .pluck('SUM(debit)', 'SUM(credit)')
+        if @totals.any?
+          total_debit = @totals[0][0]
+          total_credit = @totals[0][1]
+        end
+
+        @results << {group_name: @selected_group_name[house_group], values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
+      end
+
+      # Transactions with houses with out groups
+      @values_by_type = Transaction .joins(:house, :balances)
+                                    .where('houses.house_group_id': nil)
+                                    .group('transactions.type_id')
+                                    .pluck('transactions.type_id','SUM(debit)', 'SUM(credit)')
+      @totals = Transaction .joins(:house, :balances)
+                            .where('houses.house_group_id': nil)
+                            .group('houses.house_group_id')
+                            .pluck('SUM(debit)', 'SUM(credit)')
+      if @totals.any?
+        total_debit = @totals[0][0]
+        total_credit = @totals[0][1]
+      end
+      if @values_by_type.any?
+        @results_with_out_groups << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
+      end
+
+      # Transactions with out houses
+      @values_by_type = Transaction .joins(:balances)
+                                    .where('house_id': nil)
+                                    .group('transactions.type_id')
+                                    .pluck('transactions.type_id','SUM(debit)', 'SUM(credit)')
+      @totals = Transaction .joins(:balances)
+                            .where('house_id': nil)
+                            .pluck('SUM(debit)', 'SUM(credit)')
+      if @totals.any?
+        total_debit = @totals[0][0]
+        total_credit = @totals[0][1]
+      end
+      if @values_by_type.any?
+        @results_with_out_houses << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
+      end
+
+      # Transactions with out houses or houses owners
+      @values_by_type = Transaction .joins(:balances)
+                                    .where(house_id: nil, user_id: nil)
+                                    .group('transactions.type_id')
+                                    .pluck('transactions.type_id','SUM(debit)', 'SUM(credit)')
+      @totals = Transaction .joins(:balances)
+                            .where('house_id': nil)
+                            .pluck('SUM(debit)', 'SUM(credit)')
+      if @totals.any?
+        total_debit = @totals[0][0]
+        total_credit = @totals[0][1]
+      end
+      if @values_by_type.any?
+        @results_with_out_houses_or_owners << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
+      end
+
+      @transaction_type_names = TransactionType.pluck(:id, :name_en).to_h
+
+
+    end
+
   end
 
 private

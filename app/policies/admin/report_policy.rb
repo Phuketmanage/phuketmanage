@@ -12,4 +12,7 @@ class Admin::ReportPolicy < ApplicationPolicy
 
   def balance?
   end
+
+  def income?
+  end
 end
