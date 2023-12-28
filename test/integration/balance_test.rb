@@ -580,12 +580,12 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     sign_in users(:admin)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n            /C"
+    assert_select "td.comment", "house rental /C (Inner comment: MyString)"
     sign_out users(:admin)
     sign_in users(:manager)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
-    assert_select "td.comment", "house rental\n            /C"
+    assert_select "td.comment", "house rental /C (Inner comment: MyString)"
     sign_out users(:manager)
     sign_in users(:owner_3)
     get transactions_path, params: { from:, to:, commit: 'Full' }
@@ -1079,8 +1079,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
 
   test "should change booking status" do
     # Create booking
-    month = Date.current.month + 1
-    year = Date.current.year
+    Date.current.month == 12 ? month = 1 : month = Date.current.month + 1
+    year = Date.current.year + 1
     period = "10.#{month}.#{year} - 25.#{month}.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do

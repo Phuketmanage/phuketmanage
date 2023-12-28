@@ -119,6 +119,7 @@
               <%= t.send("comment_#{I18n.locale}") %>
             <% end %>
             <%= t.cash ? "/C" : nil %>
+            <small><i><%= t.comment_inner && t.comment_inner.present? ? "(Inner comment: #{t.comment_inner})" : nil %></i></small>
           <% else %>
             <%= t.send("comment_#{I18n.locale}") %>
           <% end %>
@@ -149,11 +150,6 @@
           </td>
         <% end %>
       </tr>
-      <% if t.comment_inner.present? && current_user.role?(['Admin', 'Accounting', 'Manager']) %>
-        <tr>
-          <td colspan="8"><%= t.comment_inner %></td>
-        </tr>
-      <% end %>
     <% end %>
   </tbody>
   <tfoot>

@@ -559,7 +559,7 @@ react_to_select_trsc_type = (selected, init) ->
         $("#transaction_cr_ow").val('')
         $("#transaction_de_co").val('')
       $("#transaction_user_id").val([])
-      $("#comment_inner").hide()
+      # $("#comment_inner").hide()
       $("#ref_no").hide()
       $("#cr_co_label").text('Amount')
       $("#cr_co").show()
