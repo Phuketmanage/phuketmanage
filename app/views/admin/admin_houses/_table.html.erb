@@ -6,7 +6,8 @@
         Title: <%= house.generated_title(I18n.locale) %><br/>
         Owner: <%= "#{house.owner.name} #{house.owner.surname}" %><br/>
         Project: <%= house.project.present? ? house.project : '-' %><br/>
-        Address: <%=  link_to_google_map(house.address, house.google_map) %><br/>
+        Address: <%= link_to_google_map(house.address, house.google_map) %><br/>
+        Group: <%= house.house_group.name if house.house_group.present?  %><br/>
       </div>
     </div>
     <div class="text-right">
