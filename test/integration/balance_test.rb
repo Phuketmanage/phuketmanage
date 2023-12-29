@@ -167,10 +167,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     get transactions_path, params: { commit: 'Full' }
     assert_response :success
-    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", 0
-    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_path, params: { owner_id: @owner.id, commit: 'Full' }
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '50,000.00'
@@ -213,10 +210,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     get transactions_path, params: { commit: 'Full' }
     assert_response :success
-    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", 0
-    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", 0
+    assert_select "tr#trsc_#{t.id}" , count: 0
     get transactions_path, params: { owner_id: @owner.id, commit: 'Full' }
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '5,500.00'
@@ -353,8 +347,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_response :success
     get transactions_path, params: { commit: 'Company view' }
     assert_response :success
-    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
+    assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_path, params: { owner_id: @owner.id, commit: 'Owner view' }
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", ''
@@ -565,8 +558,8 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     to = Transaction.maximum(:date)
     get transactions_path, params: { from:, to: }
     de_co_sum = Transaction.joins(:balances).sum('balances.debit')
-    assert_equal BigDecimal('109_250.99'), de_co_sum
-    assert_select "#de_co_sum", "109,250.99"
+    assert_equal BigDecimal('109_850.99'), de_co_sum
+    assert_select "#de_co_sum", "109,850.99"
     cr_co_sum = Transaction.joins(:balances).sum('balances.credit')
     assert_in_delta(7000.99, cr_co_sum)
     assert_select "#cr_co_sum", "7,000.99"
@@ -595,15 +588,15 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   end
 
   test 'Balance column should show for admin' do
-    from = '2019-09-10'
+    from = '2019-09-09'
     to = '2023-05-31'
     sign_in users(:admin)
     get transactions_path, params: { from:, to:, commit: 'Full' }
     assert_response :success
     assert_select "th.balance", "Balance"
     assert_select "td#co_prev_balance", "7,000.00"
-    assert_select "td.balance_sum_cell", "27,000.00"
-    assert_select "td#co_balance", "58,750.00"
+    assert_select "tr.trsc_row", count: 7
+    assert_select "td#co_balance", "59,350.00"
     sign_out users(:admin)
     sign_in users(:accounting)
     get transactions_path, params: { from:, to:, commit: 'Full' }
@@ -650,10 +643,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     t = Transaction.last
     get transactions_path, params: { commit: 'Full' }
     assert_response :success
-    assert_select "tr#trsc_#{t.id}_row td.de_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.cr_co_cell", ''
-    assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", 0
-    assert_select "tr#trsc_#{t.id}_row td.cr_ow_cell", 0
+    assert_select "tr#trsc_#{t.id}_row", count: 0
     get transactions_path, params: { owner_id: @owner.id, commit: 'Full' }
     assert_response :success
     assert_select "tr#trsc_#{t.id}_row td.de_ow_cell", '150,000.00'
@@ -712,9 +702,9 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     assert_select "tr#trsc_#{t.id}_row td.cr_ow_net_cell", '20 000,00'
     assert_select "tr#trsc_#{t.id}_row td.de_co_cell", '2 000,00'
     assert_select "#de_ow_sum", "150 000,00"
-    assert_select "#cr_ow_net_sum", "120 000,00"
-    assert_select "#de_co_sum", "12 000,00"
-    assert_select "#ow_balance", "18 000,00"
+    assert_select "#cr_ow_net_sum", "122 000,00"
+    assert_select "#de_co_sum", "12 600,00"
+    assert_select "#ow_balance", "15 400,00"
   end
 
   test 'should show files in company view' do
@@ -980,7 +970,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
     # warning = JSON.parse(@response.body)
-    assert_select "tr.trsc_row", 8
+    assert_select "tr.trsc_row", 9
 
     # Add hidden transaction and check that amount of transctions in accounting view do not change
     type = TransactionType.find_by(name_en: 'Suppliers')
@@ -997,7 +987,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
-    assert_select "tr.trsc_row", 8
+    assert_select "tr.trsc_row", 9
 
     # Add normal transaction and check that amount of transctions in accounting view change
     type = TransactionType.find_by(name_en: 'Gasoline')
@@ -1013,7 +1003,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
-    assert_select "tr.trsc_row", 9
+    assert_select "tr.trsc_row", 10
 
     # Manager can not see salary
     type = TransactionType.find_by(name_en: 'Salary')
@@ -1029,13 +1019,13 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     end
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
-    assert_select "tr.trsc_row", 10
+    assert_select "tr.trsc_row", 11
     assert_select "tr.trsc_row td.comment", { count: 1, text: "Salary Tech" }
     sign_out users(:admin)
     sign_in users(:manager)
     get transactions_path, params: { from:, to:, commit: 'Acc' }
     assert_response :success
-    assert_select "tr.trsc_row", 9
+    assert_select "tr.trsc_row", 10
     assert_select "tr.trsc_row td.comment", { count: 0, text: "Salary Tech" }
   end
 
@@ -1062,13 +1052,15 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
     get transactions_path, params: { from:, to:, commit: 'Full' }
     # get transaction after new and check that balance is 27,000 and not 31,000 that include just created
     tr_after = transactions(:one)
-    assert_select "tr#trsc_#{tr_after.id}_row td.balance_sum_cell", '27,000.00'
+    assert_select "tr.trsc_row", count: 4
+    assert_select "td#co_balance", '22,000.00'
+    assert_select "tr#trsc_#{tr_after.id}_row td.balance_sum_cell", '22,000.00'
     assert_select "td#de_co_sum", '27,000.00'
     # test that for_acc not counted in before transactions also
     from = '2019-09-10'
     to = '2019-09-12'
     get transactions_path, params: { from:, to:, commit: 'Full' }
-    assert_select "td#de_co_sum", '54,750.99'
+    assert_select "td#de_co_sum", '47,750.99'
     # check for manager
     sign_in users(:manager)
     from = '2019-08-1'

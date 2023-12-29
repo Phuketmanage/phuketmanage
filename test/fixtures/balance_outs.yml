@@ -75,3 +75,13 @@ seven:
   trsc: seven
   debit: 0.0
   credit: 10000.0
+
+eight1:
+  trsc: eight
+  debit: 0.0
+  credit: 2000.0
+
+eight2:
+  trsc: eight
+  debit: 0.0
+  credit: 600.0

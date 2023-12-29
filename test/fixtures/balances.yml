@@ -58,3 +58,13 @@ six:
   trsc: seven
   debit: 10000.0
   credit: 0.0
+
+seven:
+  trsc: eight
+  debit: 10000.0
+  credit: 0.0
+
+seven:
+  trsc: eight
+  debit: 600.0
+  credit: 0.0

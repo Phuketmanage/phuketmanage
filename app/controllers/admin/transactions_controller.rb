@@ -37,7 +37,7 @@ class Admin::TransactionsController < AdminController
          current_user.role?(%w[Admin Manager Accounting])
         # Gray balance
         if params[:commit] != 'Acc'
-          @transactions        = Transaction.full(@from, @to)
+          @transactions        = Transaction.full(@from, @to).for_company
           @transactions_before = Transaction.before(@from)
           @transactions_by_cat = Transaction.by_cat(@from, @to)
           filter_ids           = TransactionType.find_by(name_en: 'Salary')
@@ -49,11 +49,11 @@ class Admin::TransactionsController < AdminController
           @type = 'full'
         # White balance
         elsif params[:commit] == 'Acc'
-          @transactions = Transaction.acc(@from, @to)
+          @transactions = Transaction.acc(@from, @to).for_company
           @transactions_before = Transaction.acc_before(@from)
           if !current_user.role?(['Admin'])
             filter_ids = TransactionType.find_by(name_en: 'Salary')
-            @transactions = @transactions.filtered(filter_ids)
+            @transactions = Transaction.acc(@from, @to).filtered(filter_ids).for_company
             @transactions_before = @transactions_before.filtered(filter_ids)
           end
           @type = 'acc'

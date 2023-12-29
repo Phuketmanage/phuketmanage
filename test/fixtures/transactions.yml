@@ -129,12 +129,12 @@ five:
   comment_inner: MyString
 
 six:
-  date: '10.09.2019'
+  date: '09.09.2019'
   ref_no:
   house:
-  type: utilities
+  type: office
   user:
-  comment_en: utilities
+  comment_en: Office utilities
   comment_ru: MyString
   comment_inner: MyString
 
