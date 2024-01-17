@@ -19,10 +19,18 @@
       </tr>
     </thead>
     <tbody>
+      <% total_sale = 0 %>
+      <% total_agent = 0 %>
+      <% total_comm = 0 %>
+      <% total_nett = 0 %>
       <% bookings.each do |booking| %>
         <% income = booking.transactions.joins(:balance_outs).sum(:debit) %>
         <% comm = booking.transactions.joins(:balance_outs).sum(:credit) %>
         <% to_owner = income - comm %>
+        <% total_sale += booking.sale %>
+        <% total_agent += booking.agent %>
+        <% total_comm += booking.comm %>
+        <% total_nett += booking.nett %>
         <% if !booking.ignore_warnings && (booking.start < Date.current && to_owner < booking.nett && booking.status != 'canceled') %>
           <tr class="bg-light table-danger" id="<%= booking.number %>" data-toggle="tooltip" data-placement="right" title="Problem with payment to owner">
           <% elsif !booking.ignore_warnings && to_owner > booking.nett %>
@@ -119,6 +127,18 @@
                       </td>
                     </tr>
                   <% end %>
+                  <tr class="font-weight-bold">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><%= total_sale %></td>
+                    <td><%= total_agent %></td>
+                    <td></td>
+                    <td><%= total_comm %></td>
+                    <td><%= total_nett %></td>
+                    <td></td>
+                  </tr>
                 </tbody>
               </table>
             <% end %>
