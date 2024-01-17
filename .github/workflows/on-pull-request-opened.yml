@@ -7,6 +7,7 @@ on:
 
 jobs:
   add-pull-request-to-project-and-associate-with-issue:
+    permissions: write-all
     name: Set pull request assignee and associate with issues
     runs-on: ubuntu-latest
     steps:
