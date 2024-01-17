@@ -72,8 +72,8 @@ class Admin::ReportsController < AdminController
                                 .group('houses.house_group_id')
                                 .pluck('SUM(debit)', 'SUM(credit)')
           if @totals.any?
-            total_debit = @totals[0][0]
-            total_credit = @totals[0][1]
+            total_debit = @totals[0][0] || 0
+            total_credit = @totals[0][1] || 0
           end
 
           @results << {group_name: @selected_group_name[house_group], values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
@@ -91,8 +91,8 @@ class Admin::ReportsController < AdminController
                               .group('houses.house_group_id')
                               .pluck('SUM(debit)', 'SUM(credit)')
         if @totals.any?
-          total_debit = @totals[0][0]
-          total_credit = @totals[0][1]
+          total_debit = @totals[0][0] || 0
+          total_credit = @totals[0][1] || 0
         end
         if @values_by_type.any?
           @results_with_out_groups << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
@@ -111,8 +111,8 @@ class Admin::ReportsController < AdminController
                               .where.not('user_id': nil)
                               .pluck('SUM(debit)', 'SUM(credit)')
         if @totals.any?
-          total_debit = @totals[0][0]
-          total_credit = @totals[0][1]
+          total_debit = @totals[0][0] || 0
+          total_credit = @totals[0][1] || 0
         end
         if @values_by_type.any?
           @results_with_out_houses << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
@@ -131,8 +131,8 @@ class Admin::ReportsController < AdminController
                               .where(user_id: nil)
                               .pluck('SUM(debit)', 'SUM(credit)')
         if @totals.any?
-          total_debit = @totals[0][0]
-          total_credit = @totals[0][1]
+          total_debit = @totals[0][0] || 0
+          total_credit = @totals[0][1] || 0
         end
         if @values_by_type.any?
           @results_with_out_houses_or_owners << {group_name: nil, values_by_type: @values_by_type, total_debit: total_debit, total_credit: total_credit }
