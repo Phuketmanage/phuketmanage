@@ -567,7 +567,7 @@ react_to_select_trsc_type = (selected, init) ->
         $('#transaction_comment_en').val(selected)
       $("#house_id").hide()
       $("#owner_id").hide()
-    if selected == 'Other'
+    if jQuery.inArray(selected, ['Other', 'Investments']) != -1
       $("#house_id").show()
       $("#owner_id").show()
       $("#de_ow_label").text('Debit Owner')
