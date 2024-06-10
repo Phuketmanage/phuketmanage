@@ -40,7 +40,7 @@
             <td><%= number_to_currency(source.agent_sum, precision: 0, unit: '') if !source.agent_sum.nil? %> (<%= (source.agent_sum.to_d/source.sale_sum*100).round %>%)</td>
             <td><%= number_to_currency(source.comm_sum, precision: 0, unit: '') if !source.comm_sum.nil? %> (<%= (source.comm_sum.to_d/source.sale_sum*100).round %>%)</td>
             <td><%= number_to_currency(source.nett_sum, precision: 0, unit: '') if !source.nett_sum.nil? %></td>
-            <% if (source.source_id.present? && (source.source_count.to_d/@totals.qty*100).round > 10) %>
+            <% if (source.source_id.present? && (source.source_count.to_d/@totals.qty*100).round < 10) %>
               <%  sub_totals["qty_sum"] += source.source_count %>
               <%  sub_totals["sale_sum"] += source.sale_sum %>
               <%  sub_totals["agent_sum"] += source.agent_sum %>
