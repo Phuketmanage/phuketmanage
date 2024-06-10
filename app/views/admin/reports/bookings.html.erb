@@ -25,23 +25,23 @@
       <table class="table">
         <tr>
           <th>Source</th>
-          <th>Bookings</th>
-          <th>Sale</th>
-          <th>Agent</th>
-          <th>Comm</th>
-          <th>Owner</th>
+          <th>Bookings qty</th>
+          <th>Sale, THB</th>
+          <th>Agent, THB</th>
+          <th>Comm, THB</th>
+          <th>Owner, THB</th>
         </tr>
         <% @details.each do |source| %>
           <tr>
             <td><%= @sources[source.source_id] %></td>
-            <td><%= source.source_count %></td>
-            <td><%= source.sale_sum %></td>
-            <td><%= source.agent_sum %></td>
-            <td><%= source.comm_sum %></td>
-            <td><%= source.nett_sum %></td>
+            <td><%= source.source_count %> (<%= (source.source_count.to_d/@total*100).round %>)%</td>
+            <td><%= number_to_currency(source.sale_sum, precision: 0, unit: '') %></td>
+            <td><%= number_to_currency(source.agent_sum, precision: 0, unit: '') %></td>
+            <td><%= number_to_currency(source.comm_sum, precision: 0, unit: '') %></td>
+            <td><%= number_to_currency(source.nett_sum, precision: 0, unit: '') %></td>
           </tr>
         <% end %>
-        <tr><td></td><td><%= @total %></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td><b>Total:</b></td><td><b><%= @total %></b></td><td></td><td></td><td></td><td></td></tr>
       </table>
     </div>
     Statistic showen for all bookings with statuses temporary, pending, confirmed, paid, changing exclude bookings with statuses canceled and block.
