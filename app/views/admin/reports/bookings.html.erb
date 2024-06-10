@@ -59,7 +59,7 @@
         </tr>
         <tr style="font-weight:bold">
           <td>Agents with qty < 10%:</td>
-          <td><%= sub_totals["qty_sum"] %></td>
+          <td><%= sub_totals["qty_sum"]  %> (<%= (sub_totals["qty_sum"]/@totals.qty.to_d*100).round if @totals.qty > 0 %>%)</td>
           <td><%= number_to_currency(sub_totals["sale_sum"], precision: 0, unit: '') %> (<%= (sub_totals["sale_sum"]/@totals.sale_sum.to_d*100).round if @totals.sale_sum > 0 %>%)</td>
           <td><%= number_to_currency(sub_totals["agent_sum"], precision: 0, unit: '') %> (<%= (sub_totals["agent_sum"].to_d/@totals.agent_sum*100).round if @totals.agent_sum > 0 %>%)</td>
           <td><%= number_to_currency(sub_totals["comm_sum"], precision: 0, unit: '') %> (<%= (sub_totals["comm_sum"]/@totals.comm_sum.to_d*100).round if @totals.comm_sum > 0 %>%)  </td>
