@@ -31,6 +31,7 @@
           <th>Comm, THB</th>
           <th>Owner, THB</th>
         </tr>
+        <% sub_totals = {"qty_sum" =>0, "sale_sum" => 0, "agent_sum" => 0, "comm_sum" => 0, "nett_sum" => 0} %>
         <% @details.each do |source| %>
           <tr>
             <td><%= @sources[source.source_id] %></td>
@@ -39,6 +40,13 @@
             <td><%= number_to_currency(source.agent_sum, precision: 0, unit: '') if !source.agent_sum.nil? %> (<%= (source.agent_sum.to_d/source.sale_sum*100).round %>%)</td>
             <td><%= number_to_currency(source.comm_sum, precision: 0, unit: '') if !source.comm_sum.nil? %> (<%= (source.comm_sum.to_d/source.sale_sum*100).round %>%)</td>
             <td><%= number_to_currency(source.nett_sum, precision: 0, unit: '') if !source.nett_sum.nil? %></td>
+            <% if (source.source_id.present? && (source.source_count.to_d/@totals.qty*100).round > 10) %>
+              <%  sub_totals["qty_sum"] += source.source_count %>
+              <%  sub_totals["sale_sum"] += source.sale_sum %>
+              <%  sub_totals["agent_sum"] += source.agent_sum %>
+              <%  sub_totals["comm_sum"] += source.comm_sum %>
+              <%  sub_totals["nett_sum"] += source.nett_sum %>
+            <% end %>
           </tr>
         <% end %>
         <tr style="font-weight:bold">
@@ -47,7 +55,16 @@
           <td><%= number_to_currency(@totals.sale_sum, precision: 0, unit: '') if !@totals.sale_sum.nil? %></td>
           <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') if !@totals.agent_sum.nil? %> (<%= (@totals.agent_sum.to_d/@totals.sale_sum*100).round if !@totals.agent_sum.nil? %>%) </td>
           <td><%= number_to_currency(@totals.comm_sum, precision: 0, unit: '') if !@totals.comm_sum.nil? %> (<%= (@totals.comm_sum.to_d/@totals.sale_sum*100).round if !@totals.comm_sum.nil? %>%) </td>
-          <td><%= number_to_currency(@totals.nett_sum, precision: 0, unit: '') if !@totals.nett_sum.nil? %></td></tr>
+          <td><%= number_to_currency(@totals.nett_sum, precision: 0, unit: '') if !@totals.nett_sum.nil? %></td>
+        </tr>
+        <tr style="font-weight:bold">
+          <td>Agents with qty < 10%:</td>
+          <td><%= sub_totals["qty_sum"] %></td>
+          <td><%= number_to_currency(sub_totals["sale_sum"], precision: 0, unit: '') %> (<%= (sub_totals["sale_sum"]/@totals.sale_sum.to_d*100).round %>%)</td>
+          <td><%= number_to_currency(sub_totals["agent_sum"], precision: 0, unit: '') %> (<%= (sub_totals["agent_sum"].to_d/@totals.agent_sum*100).round if @totals.agent_sum > 0 %>%)</td>
+          <td><%= number_to_currency(sub_totals["comm_sum"], precision: 0, unit: '') %> (<%= (sub_totals["comm_sum"]/@totals.comm_sum.to_d*100).round if @totals.comm_sum > 0 %>%)  </td>
+          <td><%= number_to_currency(sub_totals["nett_sum"], precision: 0, unit: '') %></td>
+        </tr>
       </table>
     </div>
     Statistic showen for all bookings with statuses temporary, pending, confirmed, paid, changing exclude bookings with statuses canceled and block.
