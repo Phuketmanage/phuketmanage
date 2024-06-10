@@ -32,7 +32,7 @@ class Admin::ReportsController < AdminController
       else
         bookings = bookings.all
       end
-      @total = bookings.count
+      @totals = bookings.select("COUNT(id) as qty", "SUM(sale) as sale_sum", "SUM(agent) AS agent_sum", "SUM(comm) AS comm_sum", "SUM(nett) AS nett_sum")[0]
       @details = bookings .group(:source_id)
                           .order(count: :desc)
                           .select(:source_id, "COUNT(*) AS source_count",
