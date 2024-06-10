@@ -26,17 +26,25 @@
         <tr>
           <th>Source</th>
           <th>Bookings</th>
-          <th>Volume</th>
+          <th>Sale</th>
+          <th>Agent</th>
+          <th>Comm</th>
+          <th>Owner</th>
         </tr>
-        <% @details.each do |key, value| %>
+        <% @details.each do |source| %>
           <tr>
-            <td><%= key.present? ? Source.find(key).name : 'Direct' %></td>
-            <td><%= value %></td>
-            <td><%= (value/@total.to_f*100).round(2) %> %</td>
+            <td><%= @sources[source.source_id] %></td>
+            <td><%= source.source_count %></td>
+            <td><%= source.sale_sum %></td>
+            <td><%= source.agent_sum %></td>
+            <td><%= source.comm_sum %></td>
+            <td><%= source.nett_sum %></td>
           </tr>
         <% end %>
+        <tr><td></td><td><%= @total %></td><td></td><td></td><td></td><td></td></tr>
       </table>
     </div>
+    Statistic showen for all bookings with statuses temporary, pending, confirmed, paid, changing exclude bookings with statuses canceled and block.
   <% else %>
     <div class="bg-white p-3">
       No bookings for this period
