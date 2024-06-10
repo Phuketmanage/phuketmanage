@@ -45,8 +45,8 @@
           <td>Total:</td>
           <td><%= @totals.qty %></td>
           <td><%= number_to_currency(@totals.sale_sum, precision: 0, unit: '') if !@totals.sale_sum.nil? %></td>
-          <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') if !@totals.agent_sum.nil? %> (<%= (@totals.agent_sum.to_d/@totals.sale_sum*100).round %>%) if !@totals.agent_sum.nil?</td>
-          <td><%= number_to_currency(@totals.comm_sum, precision: 0, unit: '') if !@totals.comm_sum.nil? %> (<%= (@totals.comm_sum.to_d/@totals.sale_sum*100).round %>%) if !@totals.comm_sum.nil?</td>
+          <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') if !@totals.agent_sum.nil? %> (<%= (@totals.agent_sum.to_d/@totals.sale_sum*100).round if !@totals.agent_sum.nil? %>%) </td>
+          <td><%= number_to_currency(@totals.comm_sum, precision: 0, unit: '') if !@totals.comm_sum.nil? %> (<%= (@totals.comm_sum.to_d/@totals.sale_sum*100).round if !@totals.comm_sum.nil? %>%) </td>
           <td><%= number_to_currency(@totals.nett_sum, precision: 0, unit: '') if !@totals.nett_sum.nil? %></td></tr>
       </table>
     </div>
