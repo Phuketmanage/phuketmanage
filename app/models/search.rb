@@ -162,7 +162,7 @@ class Search
   private
 
   def start_end_correct
-    errors.add(:base, I18n.t('search.date_not_set')) if period.blank?
+    errors.add(:base, I18n.t('search.dates_not_set')) if period.blank?
     errors.add(:base, I18n.t('search.both_dates')) if period.split.length < 3
     return unless !rs.nil? || !rf.nil?
 

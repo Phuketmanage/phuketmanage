@@ -66,7 +66,8 @@ class Booking < ApplicationRecord
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'BookingFile'
   before_validation :set_dates
-  validates :start, :finish, :house_id, :status, :client_details, presence: true
+  validates :status, :client_details, presence: true
+  validate :validate_dates
   validate :price_chain, unless: :allotment?
 
   scope :active, -> { where.not(status: [:canceled]) }
@@ -81,13 +82,13 @@ class Booking < ApplicationRecord
   def toggle_status
     return unless %w[block canceled].exclude?(status)
 
-    update(status: 'pending') if transactions.count == 0
+    update(status: 'pending') if transactions.count.zero?
     update(status: 'confirmed') if !fully_paid? && transactions.count >= 1
     update(status: 'paid') if fully_paid?
   end
 
   def fully_paid?
-    return if status == %w[block canceled]
+    return false if status == %w[block canceled]
 
     income = transactions.joins(:balance_outs).sum(:debit)
     comm = transactions.joins(:balance_outs).sum(:credit)
@@ -97,13 +98,13 @@ class Booking < ApplicationRecord
 
   def self.check_in_out(from = nil, to = nil, type = nil)
     result = []
-    if !from.present? && !to.present?
+    if from.blank? && to.blank?
       from = Date.current
       to = Booking.maximum(:finish)
-    elsif from.present? && !to.present?
+    elsif from.present? && to.blank?
       from = from.to_date
       to = Booking.maximum(:finish)
-    elsif !from.present? && to.present?
+    elsif from.blank? && to.present?
       from = Date.current
       to = to.to_date
     elsif from.present? && to.present?
@@ -135,7 +136,7 @@ class Booking < ApplicationRecord
         result << line
       end
       next unless (type == 'All' || type != 'Check in') &&
-                  ((!b.check_out.present? && b.finish >= from && b.finish <= to) ||
+                  ((b.check_out.blank? && b.finish >= from && b.finish <= to) ||
                   (b.check_out.present? && b.check_out >= from && b.check_out <= to))
 
       line = {}
@@ -197,20 +198,20 @@ class Booking < ApplicationRecord
   end
 
   def self.timeline_data(from = nil, to = nil, period = nil, house_number = nil)
-    if !from.present? && !to.present?
+    if from.blank? && to.blank?
       from = Date.current
-      if period.nil? && Booking.count == 0
+      if period.nil? && Booking.count.zero?
         period = 45
         to = Date.current + (period.to_i - 1).days
-      elsif period.nil? && Booking.count > 0
+      elsif period.nil? && Booking.count.positive?
         to = Booking.maximum(:finish).to_date
       else
         to = Date.current + (period.to_i - 1).days
       end
-    elsif from.present? && !to.present?
+    elsif from.present? && to.blank?
       from = from.to_date
       to = Booking.maximum(:finish)
-    elsif !from.present? && to.present?
+    elsif from.blank? && to.present?
       from = Booking.minimum(:start)
       to = to.to_date
     elsif from.present? && to.present?
@@ -225,10 +226,10 @@ class Booking < ApplicationRecord
     timeline[:houses] = []
     # houses = House.order(:unavailable, :house_group_id, :code)
     houses = if house_number.present?
-      houses = House.where(number: house_number).all
+      House.where(number: house_number).all
     else
       # House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
-      houses = House.for_timeline
+      House.for_timeline
     end
     y = 1
     houses.each do |h|
@@ -395,10 +396,16 @@ class Booking < ApplicationRecord
   private
 
   def set_dates
-    return unless period.present?
+    return if period.blank?
 
-    self.start =  period.split.first.to_date
-    self.finish = period.split.last.to_date
+    self.start = period.split.first.to_date rescue nil
+    self.finish = period.split.last.to_date rescue nil
+  end
+
+  def validate_dates
+    return errors.add(:base, I18n.t("search.dates_not_set")) unless [start, finish].all?(&:present?)
+
+    errors.add(:base, I18n.t("search.rf_less_rs")) if start > finish
   end
 
   def price_chain
