@@ -1072,7 +1072,7 @@ class BalanceAmountTest < ActionDispatch::IntegrationTest
   test "should change booking status" do
     # Create booking
     Date.current.month == 12 ? month = 1 : month = Date.current.month + 1
-    year = Date.current.year + 1
+    year = Date.current.year + 2
     period = "10.#{month}.#{year} - 25.#{month}.#{year}"
     house = houses(:villa_1)
     assert_difference 'Booking.count', 1 do
