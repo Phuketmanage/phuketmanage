@@ -35,19 +35,19 @@
           <tr>
             <td><%= @sources[source.source_id] %></td>
             <td><%= source.source_count %> (<%= (source.source_count.to_d/@totals.qty*100).round %>%)</td>
-            <td><%= number_to_currency(source.sale_sum, precision: 0, unit: '') %></td>
-            <td><%= number_to_currency(source.agent_sum, precision: 0, unit: '') %> (<%= (source.agent_sum.to_d/source.sale_sum*100).round %>%)</td>
-            <td><%= number_to_currency(source.comm_sum, precision: 0, unit: '') %> (<%= (source.comm_sum.to_d/source.sale_sum*100).round %>%)</td>
-            <td><%= number_to_currency(source.nett_sum, precision: 0, unit: '') %></td>
+            <td><%= number_to_currency(source.sale_sum, precision: 0, unit: '') if !source.sale_sum.nil? %></td>
+            <td><%= number_to_currency(source.agent_sum, precision: 0, unit: '') if !source.agent_sum.nil? %> (<%= (source.agent_sum.to_d/source.sale_sum*100).round %>%)</td>
+            <td><%= number_to_currency(source.comm_sum, precision: 0, unit: '') if !source.comm_sum.nil? %> (<%= (source.comm_sum.to_d/source.sale_sum*100).round %>%)</td>
+            <td><%= number_to_currency(source.nett_sum, precision: 0, unit: '') if !source.nett_sum.nil? %></td>
           </tr>
         <% end %>
         <tr style="font-weight:bold">
           <td>Total:</td>
           <td><%= @totals.qty %></td>
-          <td><%= number_to_currency(@totals.sale_sum, precision: 0, unit: '') %></td>
-          <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') %> (<%= (@totals.agent_sum.to_d/@totals.sale_sum*100).round %>%)</td>
-          <td><%= number_to_currency(@totals.comm_sum, precision: 0, unit: '') %> (<%= (@totals.comm_sum.to_d/@totals.sale_sum*100).round %>%)</td>
-          <td><%= number_to_currency(@totals.nett_sum, precision: 0, unit: '') %></td></tr>
+          <td><%= number_to_currency(@totals.sale_sum, precision: 0, unit: '') if !@totals.sale_sum.nil? %></td>
+          <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') if !@totals.agent_sum.nil? %> (<%= (@totals.agent_sum.to_d/@totals.sale_sum*100).round %>%)</td>
+          <td><%= number_to_currency(@totals.agent_sum, precision: 0, unit: '') if !@totals.agent_sum.nil? %> (<%= (@totals.comm_sum.to_d/@totals.sale_sum*100).round %>%)</td>
+          <td><%= number_to_currency(@totals.nett_sum, precision: 0, unit: '') if !@totals.nett_sum.nil? %></td></tr>
       </table>
     </div>
     Statistic showen for all bookings with statuses temporary, pending, confirmed, paid, changing exclude bookings with statuses canceled and block.
