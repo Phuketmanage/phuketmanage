@@ -23,11 +23,24 @@ class Admin::ReportsController < AdminController
     @house_id = params[:house_id].present? ? params[:house_id] : nil
     @houses = House.active
     if !@error
-      @total = Booking.where(start: ..@to.to_date, finish: @from.to_date..).count
+      @total = Booking.where(start: ..@to.to_date, finish: @from.to_date..)
+                      .where.not(status:["block","canceled"]).count
+      @sources = Source.all.pluck(:id, :name).to_h
       if @house_id.present?
-        @details = Booking.where(start: ..@to.to_date, finish: @from.to_date.., house_id: @house_id).group(:source_id).order(count: :desc).count
+        @details = Booking.where(start: ..@to.to_date, finish: @from.to_date.., house_id: @house_id)
+                          .where.not(status:["block","canceled"])
+                          .group(:source_id).order(count: :desc).count
       else
-        @details = Booking.where(start: ..@to.to_date, finish: @from.to_date..).group(:source_id).order(count: :desc).count
+        # @details = Booking.where(start: ..@to.to_date, finish: @from.to_date..)
+        #                   .where.not(status:["block","canceled"])
+        #                   .group(:source_id)
+        #                   .select(SUM(:agent))
+        #                   .order(count: :desc).count
+        @details = Booking.where(start: ..@to.to_date, finish: @from.to_date..)
+                          .where.not(status:["block","canceled"])
+                          .group(:source_id)
+                          .order(count: :desc)
+                          .select(:source_id, "COUNT(*) AS source_count", "SUM(sale) AS sale_sum", "SUM(agent) AS agent_sum", "SUM(comm) AS comm_sum", "SUM(nett) AS nett_sum")
       end
     else
       flash[:alert] = @error
