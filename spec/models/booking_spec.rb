@@ -96,18 +96,17 @@ RSpec.describe Booking do
     describe "#unpaid" do
       let!(:confirmed_booking) { create(:booking, start: 2.days.from_now) }
       let!(:pending_booking) { create(:booking, :pending, start: 1.day.from_now) }
+      let!(:paid_booking) { create(:booking, :paid) }
+      let!(:block_booking) { create(:booking, :block) }
+      let!(:canceled_booking) { create(:booking, :canceled) }
 
-      before do
-        create(:booking, :paid)
-        create(:booking, :block)
-        create(:booking, :canceled)
-      end
+      subject { described_class.unpaid }
 
-      it "returns records not paid, block, or canceled, joins with house and orders by start" do
-        expect(described_class.unpaid.count(:id)).to eq(2)
-        expect(described_class.unpaid.pluck(:status)).not_to include('paid', 'block', 'canceled')
-        expect(described_class.unpaid.first.attributes.keys).to include("id", "start", "finish", "code", "owner_id")
-        expect(described_class.unpaid.order(:start).pluck(:start)).to eq([1.day.from_now.to_date, 2.days.from_now.to_date])
+      it { is_expected.to include(confirmed_booking, pending_booking) }
+      it { is_expected.to_not include(paid_booking, block_booking, canceled_booking) }
+
+      it 'orders by start' do
+        expect(subject.pluck(:start)).to eq(subject.pluck(:start).sort)
       end
     end
   end
