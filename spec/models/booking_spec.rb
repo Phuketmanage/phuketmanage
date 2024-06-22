@@ -155,16 +155,41 @@ RSpec.describe Booking do
     describe '.check_in_out' do
       subject { described_class.check_in_out(from, to, type) }
 
-      let(:from) { nil }
-      let(:to) { nil }
-      let(:type) { nil }
+      let(:to) {  }
+      let(:from) {  }
+      let(:type) {  }
 
-      let!(:booking_in) { create(:booking, start: Date.current, check_in: nil) }
-      let!(:booking_out) { create(:booking, finish: Date.current, check_out: nil) }
-      let!(:booking_block) { create(:booking, :block) }
+      let!(:booking_in) { create(:booking, start: 1.week.ago, finish: 1.week.from_now, check_in: Date.current) }
+      let!(:booking_out) { create(:booking, start: 1.week.ago, finish: 1.week.from_now, check_out: Date.current) }
+      let!(:booking_block) { create(:booking, :block, start: 1.day.from_now, finish: 1.week.from_now) }
 
-      context 'when no from and to dates are provided' do
+      context 'when no from, to and type provided' do
         it 'returns bookings within the default date range' do
+          expect(subject.pluck(:booking_id)).to include(booking_block.id, booking_in.id, booking_out.id)
+        end
+      end
+
+      context 'when only from date is provided' do
+        let(:from) { Date.current - 1.day }
+
+        it 'returns bookings from the provided from date to the maximum finish date' do
+          expect(subject.pluck(:booking_id)).to include(booking_in.id, booking_out.id)
+        end
+      end
+
+      context 'when only to date is provided' do
+        let(:to) { Date.current + 1.day }
+
+        it 'returns bookings from the current date to the provided to date' do
+          expect(subject.pluck(:booking_id)).to include(booking_in.id, booking_out.id)
+        end
+      end
+
+      context 'when both from and to dates are provided' do
+        let(:from) { Date.current - 1.day }
+        let(:to) { Date.current + 1.day }
+
+        it 'returns bookings within the provided date range' do
           expect(subject.pluck(:booking_id)).to include(booking_in.id, booking_out.id)
         end
       end
@@ -175,6 +200,23 @@ RSpec.describe Booking do
         it 'returns only block bookings' do
           expect(subject.pluck(:booking_id)).to include(booking_block.id)
           expect(subject.pluck(:booking_id)).not_to include(booking_in.id, booking_out.id)
+        end
+      end
+
+      context 'when type is Check in' do
+        let(:type) { 'Check in' }
+
+        it 'returns only check in bookings' do
+          expect(subject.pluck(:booking_id)).to include(booking_in.id, booking_block.id)
+          expect(subject.pluck(:booking_id)).not_to include(booking_out.id)
+        end
+      end
+
+      context 'when type is Check out' do
+        let(:type) { 'Check out' }
+
+        it 'returns only check out bookings' do
+          expect(subject.pluck(:booking_id)).to include(booking_in.id, booking_out.id, booking_block.id)
         end
       end
     end
