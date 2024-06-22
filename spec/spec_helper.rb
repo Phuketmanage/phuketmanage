@@ -3,8 +3,8 @@ require 'simplecov-console'
 require 'simplecov-lcov'
 
 SimpleCov.start 'rails' do
-  add_filter(/^\/spec\//) # For RSpec
-  add_filter(/^\/test\//) # For Minitest
+  add_filter(%r{^/spec/}) # For RSpec
+  add_filter(%r{^/test/}) # For Minitest
   enable_coverage(:branch) # Report branch coverage to trigger branch-level undercover warnings
 
   # This is useful if you want to run a single spec file and see the coverage report for that file only.
@@ -16,12 +16,6 @@ SimpleCov.start 'rails' do
     # in it. So this below will strip all that and just leave the file path.
     # Example of argument with line number: "models/user_spec.rb:100"
     file_paths = spec_paths.map { _1.gsub(%r{spec/|_spec}, '').gsub(root_path, '').gsub(/:[0-9]|\.[a-z]+/, '') }
-    # hack due to API specs being in the wrong nesting currently
-    file_paths += file_paths.grep(%r{/admin/}).map { _1.gsub('_controller', '').gsub('controllers/', '') }
-    # hack for api_spec.rb
-    file_paths += file_paths.grep(%r{/v[0-9]+/api$}).map { _1.gsub(%r{/v[0-9]+/api$}, '/helpers') }
-    # hack for thor scripts
-    file_paths += file_paths.grep(/_thor$/).map { _1.gsub(/_thor$/, '.thor') }
 
     add_filter do |file|
       filename = file.filename.gsub(root_path, '')
@@ -34,7 +28,7 @@ SimpleCov.start 'rails' do
   formatter SimpleCov::Formatter::MultiFormatter.new(
     [
       SimpleCov::Formatter::HTMLFormatter,
-      SimpleCov::Formatter::Console,
+      SimpleCov::Formatter::Console
     ]
   )
 end

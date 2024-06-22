@@ -33,7 +33,7 @@ class Search
   def is_house_available?(house_id, booking_id = nil, permission = nil)
     result = {}
     result[:result] = true
-    
+
     overlapped = if booking_id.nil?
       Booking.where(
         'start <= ? AND finish >= ? AND status != ? AND house_id = ?',
@@ -80,11 +80,10 @@ class Search
 
   def get_seasons(seasons)
     overlapping_seasons = []
-    overlapped_info = {}
     days_left = duration
     year_modifier = 0
     year = rs.year
-    until days_left == 0
+    until days_left.zero?
       seasons.each_with_index do |s, index|
         trans_season_modifier = 0
         trans_season_modifier = -1 if s.ssm > s.sfm
@@ -95,7 +94,7 @@ class Search
 
         overlapping_seasons << get_overlapped_info(s.id, ss, sf, rs, rf)
         days_left -= overlapping_seasons.last[:days]
-        break if days_left == 0
+        break if days_left.zero?
       end
       break if year_modifier > 1
     end
@@ -106,15 +105,11 @@ class Search
     s = [rs, ss].max
     f = [rf, sf].min
     days = (f.to_date - s.to_date).to_i
-    hash = { id: sid, days:, ss:, sf: }
+    { id: sid, days:, ss:, sf: }
   end
 
   def overlapping?(ss, sf, rs, rf)
-    if rs < sf && rf > ss
-      true
-    else
-      false
-    end
+    rs < sf && rf > ss
   end
 
   def get_available_houses(management = false)
@@ -129,7 +124,7 @@ class Search
     houses = houses.joins(:locations).where(locations: { id: @location }) if @location.present?
     houses = houses.joins(:type).where(house_types: { id: @type }) if @type.present?
     houses = houses.where(rooms: @bdr) if @bdr.present?
-    available_houses = if booked_house_ids.any? && !management
+    if booked_house_ids.any? && !management
       { available: houses.where.not(id: booked_house_ids).order("RANDOM()"),
         unavailable_ids: [] }
     else
@@ -150,13 +145,12 @@ class Search
     min_house_period = Duration.where(house_id:).minimum(:start)
     if min_house_period.nil?
       errors.add(:base, I18n.t('search.unavailable'))
-      false
     else
       return true if @duration >= min_house_period
 
       errors.add(:base, I18n.t('search.duration_shorter_than_minimal', min_house_period:))
-      false
     end
+    false
   end
 
   private

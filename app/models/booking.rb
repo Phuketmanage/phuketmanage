@@ -65,6 +65,7 @@ class Booking < ApplicationRecord
   has_many :transfers, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'BookingFile'
+
   before_validation :set_dates
   validates :status, :client_details, presence: true
   validate :validate_dates
@@ -74,26 +75,28 @@ class Booking < ApplicationRecord
   scope :for_owner, -> { where.not(status: %i[canceled temporary]).order(:start) }
   scope :real, -> { where.not(status: %i[canceled block]) }
   scope :unpaid, lambda {
-                   where.not(status: %i[paid block canceled])
-                     .joins(:house)
-                     .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id').order('bookings.start')
-                 }
+    where.not(status: %i[paid block canceled])
+      .joins(:house)
+      .select('bookings.id', 'bookings.start', 'bookings.finish', 'houses.code', 'owner_id')
+      .order('bookings.start')
+  }
 
   def toggle_status
-    return unless %w[block canceled].exclude?(status)
+    return if %w[block canceled].include?(status)
 
-    update(status: 'pending') if transactions.count.zero?
-    update(status: 'confirmed') if !fully_paid? && transactions.count >= 1
+    return update(status: 'pending') if transactions.empty?
+    return update(status: 'confirmed') if !fully_paid? && transactions.any?
+
     update(status: 'paid') if fully_paid?
   end
 
   def fully_paid?
-    return false if status == %w[block canceled]
+    return false if %w[block canceled].include?(status) || nett.zero?
 
     income = transactions.joins(:balance_outs).sum(:debit)
     comm = transactions.joins(:balance_outs).sum(:credit)
     to_owner = income - comm
-    to_owner == nett && nett != 0
+    to_owner == nett
   end
 
   def self.check_in_out(from = nil, to = nil, type = nil)
@@ -116,9 +119,9 @@ class Booking < ApplicationRecord
     bookings.each do |b|
       next if type == 'Block' && b.status != 'block'
 
-      if  (type == 'All' || type != 'Check out') &&
-          ((!b.check_in && b.start >= from && b.start <= to) ||
-          (b.check_in && b.check_in >= from && b.check_in <= to))
+      if (type == 'All' || type != 'Check out') &&
+         ((!b.check_in && b.start >= from && b.start <= to) ||
+           (b.check_in && b.check_in >= from && b.check_in <= to))
         line = {}
         line[:booking_id] = b.id
         line[:type] = 'IN'
@@ -137,7 +140,7 @@ class Booking < ApplicationRecord
       end
       next unless (type == 'All' || type != 'Check in') &&
                   ((b.check_out.blank? && b.finish >= from && b.finish <= to) ||
-                  (b.check_out.present? && b.check_out >= from && b.check_out <= to))
+                    (b.check_out.present? && b.check_out >= from && b.check_out <= to))
 
       line = {}
       line[:booking_id] = b.id
@@ -198,109 +201,68 @@ class Booking < ApplicationRecord
   end
 
   def self.timeline_data(from = nil, to = nil, period = nil, house_number = nil)
-    if from.blank? && to.blank?
-      from = Date.current
-      if period.nil? && Booking.count.zero?
-        period = 45
-        to = Date.current + (period.to_i - 1).days
-      elsif period.nil? && Booking.count.positive?
-        to = Booking.maximum(:finish).to_date
-      else
-        to = Date.current + (period.to_i - 1).days
-      end
-    elsif from.present? && to.blank?
-      from = from.to_date
-      to = Booking.maximum(:finish)
-    elsif from.blank? && to.present?
-      from = Booking.minimum(:start)
-      to = to.to_date
-    elsif from.present? && to.present?
-      from = from.to_date
-      to = to.to_date
-    end
-    days = (to - from).to_i + 1
-    timeline = {}
-    # timeline[:start] = today
-    timeline[:start] = from
-    timeline[:days] = days
-    timeline[:houses] = []
-    # houses = House.order(:unavailable, :house_group_id, :code)
-    houses = if house_number.present?
-      House.where(number: house_number).all
+    from ||= Date.current
+    to ||= if period.nil? && count.zero?
+      from + 44.days
+    elsif period.nil?
+      maximum(:finish).to_date
     else
-      # House.where.not(balance_closed: true, hide_in_timeline: true).order(:unavailable, :house_group_id, :code)
-      House.for_timeline
+      from + (period.to_i - 1).days
     end
-    y = 1
-    houses.each do |h|
-      # Get bookings for house
-      # bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', today, last_date, Booking.statuses[:canceled]).order(:finish)
-      bookings = h.bookings.where('finish >= ? AND "start" <= ? AND status != ?', from, to,
-                                  Booking.statuses[:canceled]).order(:finish)
-      house = {}
-      house[:hid] = h.number
-      house[:y] = y
-      house[:bookings] = []
-      bookings.each do |b|
-        booking = {}
-        booking[:id] = b.id
-        booking[:number] = b.number
-        booking[:status] = b.status
-        booking[:comment] = b.comment
-        booking[:x] = ([b.start, from].max - from).to_i + 1
-        booking[:y] = y
-        booking[:length] = ([b.finish, to].min - [b.start, from].max).to_i + 1
-        # 14.07.2022: startin - if booking start in timeline frame and need red line style to show start day
-        booking[:startsin] = b.start >= from ? 1 : 0
-        # 14.07.2022: show brief booking details in tooltip
-        source = b.source.name if b.source.present?
-        booking[:details] =
-          "#{b.start.to_fs(:date)} - #{b.finish.to_fs(:date)} #{b.client_details} #{source}"
-        # Get jobs for bookings
-        jt_fm = JobType.find_by(name: 'For management').id
-        # jobs = b.jobs
-        jobs = b.jobs.where.not(job_type_id: jt_fm)
-        booking[:jobs] = []
-        jobs.each do |j|
-          job = {}
-          job[:id] = j.id
-          job[:type_id] = j.job_type_id
-          job[:employee_id] = j.employee.id unless j.employee.nil?
-          job[:empl_type_id] = j.employee.type.id unless j.employee.nil?
-          # job[:x] = (j.plan - today).to_i+1
-          job[:x] = (j.plan - from).to_i + 1
-          job[:time] = j.time
-          job[:job] = j.job
-          job[:comment] = j.comment
-          job[:code] = j.job_type.code
-          job[:color] = j.job_type.color
-          booking[:jobs] << job
-        end
-        house[:bookings] << booking
-      end
-      # Get jobs for house
-      jt_fm = JobType.find_by(name: 'For management').id
-      # jobs = h.jobs
-      jobs = h.jobs.where.not(job_type_id: jt_fm).where(booking_id: nil)
-      house[:jobs] = []
-      jobs.each do |j|
-        job = {}
-        job[:id] = j.id
-        job[:type_id] = j.job_type_id
-        job[:employee_id] = j.employee.id unless j.employee.nil?
-        job[:empl_type_id] = j.employee.type.id unless j.employee.nil?
-        job[:x] = (j.plan - from).to_i + 1 if j.plan.present?
-        job[:time] = j.time
-        job[:job] = j.job
-        job[:comment] = j.comment
-        job[:code] = j.job_type.code
-        job[:color] = j.job_type.color
-        house[:jobs] << job
-      end
-      timeline[:houses] << house
-      y += 1
-    end
-    timeline
+
+    days = (to - from).to_i + 1
+    houses = house_number ? House.where(number: house_number) : House.for_timeline
+
+    {
+      start: from,
+      days:,
+      houses: houses.map { |house| house_timeline_data(house, from, to) }
+    }
+  end
+
+  def self.house_timeline_data(house, from, to)
+    bookings = house.bookings.where('finish >= ? AND start <= ? AND status != ?', from, to,
+                                    statuses[:canceled]).order(:finish)
+    jobs = house.jobs.where.not(job_type_id: JobType.find_by(name: 'For management').id).where(booking_id: nil)
+
+    {
+      hid: house.number,
+      y: house.id,
+      bookings: bookings.map { |booking| booking_timeline_data(booking, from, to) },
+      jobs: jobs.map { |job| job_timeline_data(job, from) }
+    }
+  end
+
+  def self.booking_timeline_data(booking, from, to)
+    {
+      id: booking.id,
+      number: booking.number,
+      status: booking.status,
+      comment: booking.comment,
+      x: ([booking.start, from].max - from).to_i + 1,
+      y: booking.house.id,
+      length: ([booking.finish, to].min - [booking.start, from].max).to_i + 1,
+      startsin: booking.start >= from ? 1 : 0,
+      details: "#{booking.start.to_fs(:date)} - #{booking.finish.to_fs(:date)} #{booking.client_details} #{booking.source&.name}",
+      jobs: booking.jobs.where.not(job_type_id: JobType.find_by(name: 'For management').id).map do |job|
+              job_timeline_data(job, from)
+            end
+    }
+  end
+
+  def self.job_timeline_data(job, from)
+    {
+      id: job.id,
+      type_id: job.job_type_id,
+      employee_id: job.employee&.id,
+      empl_type_id: job.employee&.type&.id,
+      x: (job.plan - from).to_i + 1,
+      time: job.time,
+      job: job.job,
+      comment: job.comment,
+      code: job.job_type.code,
+      color: job.job_type.color
+    }
   end
 
   def calc(price)
@@ -335,10 +297,10 @@ class Booking < ApplicationRecord
             # # after booking
             next if c.source.name == 'Airbnb' &&
                     (e.summary.strip == 'Airbnb (Not available)' ||
-                    e.description.nil?)
+                      e.description.nil?)
             next if c.source.name == 'Tripadvisor' &&
                     (e.summary.strip == 'Not available' ||
-                    e.description.nil?)
+                      e.description.nil?)
             next if e.dtend < Time.current
 
             # #Airbnb, Homeaway: Check if booking was synced before
@@ -368,7 +330,7 @@ class Booking < ApplicationRecord
               ical_UID: e.uid,
               comment: "#{e.summary} \n #{e.description}",
               client_details: "#{e.summary} \n #{e.description}",
-              synced: true,
+              synced: true
             )
             search = Search.new(rs: booking.start, rf: booking.finish)
             prices = search.get_prices [h]
@@ -400,8 +362,16 @@ class Booking < ApplicationRecord
   def set_dates
     return if period.blank?
 
-    self.start = period.split.first.to_date rescue nil
-    self.finish = period.split.last.to_date rescue nil
+    self.start = begin
+      period.split.first.to_date
+    rescue StandardError
+      nil
+    end
+    self.finish = begin
+      period.split.last.to_date
+    rescue StandardError
+      nil
+    end
   end
 
   def validate_dates

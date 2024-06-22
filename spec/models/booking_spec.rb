@@ -139,19 +139,19 @@ RSpec.describe Booking do
 
       it 'does not change status for block bookings' do
         booking.update(status: :block)
-        expect { booking.toggle_status }.not_to change { booking.status }
+        expect { booking.toggle_status }.not_to(change(booking, :status))
       end
 
       it 'does not change status for canceled bookings' do
         booking.update(status: :canceled)
-        expect { booking.toggle_status }.not_to change { booking.status }
+        expect { booking.toggle_status }.not_to(change(booking, :status))
       end
     end
 
     describe '#fully_paid?' do
       let(:job_type) { create(:job_type, name: 'For management') }
       let(:booking) { create(:booking, status: :pending, nett: 1000, sale: 1000, agent: 0, comm: 0) }
-      let!(:transaction) { create(:transaction, booking: booking) }
+      let!(:transaction) { create(:transaction, booking:) }
 
       it 'returns false for block bookings' do
         booking.update(status: :block)
@@ -167,17 +167,17 @@ RSpec.describe Booking do
     describe '.timeline_data' do
       let(:house) { create(:house) }
       let!(:job_type) { create(:job_type, name: 'For management') }
-      let!(:booking) { create(:booking, house: house, start: Date.current, finish: Date.current + 3.days) }
+      let!(:booking) { create(:booking, house:, start: Date.current, finish: Date.current + 3.days) }
 
       it 'handles scenario when no bookings exist' do
-        allow(Booking).to receive(:count).and_return(0)
+        allow(described_class).to receive(:count).and_return(0)
         result = described_class.timeline_data
         expect(result[:days]).to eq(45)
       end
 
       it 'uses maximum finish date when bookings exist and no period is specified' do
-        allow(Booking).to receive(:count).and_return(1)
-        allow(Booking).to receive(:maximum).with(:finish).and_return(1.month.from_now.to_date)
+        allow(described_class).to receive(:count).and_return(1)
+        allow(described_class).to receive(:maximum).with(:finish).and_return(1.month.from_now.to_date)
         result = described_class.timeline_data
         expect(result[:days]).to eq(31)
       end
@@ -201,7 +201,7 @@ RSpec.describe Booking do
 
     describe '#fully_paid?' do
       let(:booking) { create(:booking, nett: 1000, sale: 1000, agent: 0, comm: 0) }
-      let!(:transaction) { create(:transaction, booking: booking) }
+      let!(:transaction) { create(:transaction, booking:) }
 
       it 'returns false for block or canceled bookings' do
         booking.status = :block
@@ -221,11 +221,13 @@ RSpec.describe Booking do
         expect(booking.fully_paid?).to be false
       end
     end
-
   end
 
   describe '.check_in_out' do
-    let!(:booking) { create(:booking, start: Date.current, finish: Date.current + 3.days, check_in: Date.current, check_out: Date.current + 3.days) }
+    let!(:booking) do
+      create(:booking, start: Date.current, finish: Date.current + 3.days, check_in: Date.current,
+                       check_out: Date.current + 3.days)
+    end
 
     it 'returns check-in and check-out data' do
       result = described_class.check_in_out
@@ -249,7 +251,10 @@ RSpec.describe Booking do
 
   describe '.check_in_out' do
     let(:house) { create(:house) }
-    let!(:booking) { create(:booking, house: house, start: Date.current, finish: Date.current + 3.days, check_in: Date.current, check_out: Date.current + 3.days) }
+    let!(:booking) do
+      create(:booking, house:, start: Date.current, finish: Date.current + 3.days, check_in: Date.current,
+                       check_out: Date.current + 3.days)
+    end
 
     it 'handles different date scenarios' do
       expect(described_class.check_in_out(nil, nil, 'All')).to be_present
@@ -259,14 +264,14 @@ RSpec.describe Booking do
     end
 
     it 'handles block bookings' do
-      block_booking = create(:booking, house: house, status: :block, start: Date.current, finish: Date.current + 1.day)
+      block_booking = create(:booking, house:, status: :block, start: Date.current, finish: Date.current + 1.day)
       result = described_class.check_in_out(nil, nil, 'Block')
-      expect(result.map { |r| r[:booking_id] }).to include(block_booking.id)
+      expect(result.pluck(:booking_id)).to include(block_booking.id)
     end
 
     it 'includes transfer information' do
-      create(:transfer, booking: booking, trsf_type: :IN, from: 'Airport', time: '14:00', remarks: 'VIP')
-      create(:transfer, booking: booking, trsf_type: :OUT, time: '12:00', remarks: 'Standard')
+      create(:transfer, booking:, trsf_type: :IN, from: 'Airport', time: '14:00', remarks: 'VIP')
+      create(:transfer, booking:, trsf_type: :OUT, time: '12:00', remarks: 'Standard')
 
       result = described_class.check_in_out
       expect(result.find { |r| r[:type] == 'IN' }[:transfers]).to include('Airport-14:00 VIP')
@@ -277,7 +282,7 @@ RSpec.describe Booking do
   describe '.timeline_data' do
     let!(:job_type) { create(:job_type, name: 'For management') }
     let!(:house) { create(:house) }
-    let!(:booking) { create(:booking, house: house, start: Date.current, finish: Date.current + 3.days) }
+    let!(:booking) { create(:booking, house:, start: Date.current, finish: Date.current + 3.days) }
 
     it 'returns timeline data' do
       result = described_class.timeline_data
@@ -294,10 +299,10 @@ RSpec.describe Booking do
 
   describe '.timeline_data' do
     let(:house) { create(:house) }
-    let!(:booking) { create(:booking, house: house, start: Date.current, finish: Date.current + 3.days) }
-    let!(:management_job) { create(:job, booking: booking, plan: Date.current + 1.day, job_type: job_type) }
-    let!(:house_job) { create(:job, house: house, booking: nil, plan: Date.current + 2.days) }
-    let!(:booking_job) { create(:job, house: house, booking: booking, plan: Date.current + 2.days) }
+    let!(:booking) { create(:booking, house:, start: Date.current, finish: Date.current + 3.days) }
+    let!(:management_job) { create(:job, booking:, plan: Date.current + 1.day, job_type:) }
+    let!(:house_job) { create(:job, house:, booking: nil, plan: Date.current + 2.days) }
+    let!(:booking_job) { create(:job, house:, booking:, plan: Date.current + 2.days) }
     let!(:job_type) { create(:job_type, name: 'For management') }
 
     it 'handles different date scenarios' do
@@ -328,7 +333,7 @@ RSpec.describe Booking do
 
   describe '.sync' do
     let(:house) { create(:house) }
-    let(:connection) { create(:connection, house: house) }
+    let(:connection) { create(:connection, house:) }
 
     it 'syncs bookings from external sources' do
       allow(OpenURI).to receive(:open_uri).and_return(double(read: "BEGIN:VCALENDAR\nEND:VCALENDAR"))
@@ -346,7 +351,7 @@ RSpec.describe Booking do
 
   describe '.sync' do
     let(:house) { create(:house) }
-    let!(:connection) { create(:connection, house: house) }
+    let!(:connection) { create(:connection, house:) }
 
     before do
       allow(OpenURI).to receive(:open_uri).and_return(double(read: "BEGIN:VCALENDAR\nEND:VCALENDAR"))
@@ -370,7 +375,7 @@ RSpec.describe Booking do
       past_event = double(dtend: 1.day.ago, summary: 'Past Event', description: 'Description')
       allow(Icalendar::Calendar).to receive(:parse).and_return([double(events: [past_event])])
 
-      expect { described_class.sync([house]) }.not_to change(Booking, :count)
+      expect { described_class.sync([house]) }.not_to change(described_class, :count)
     end
 
     it 'creates new bookings for valid events' do
@@ -383,13 +388,13 @@ RSpec.describe Booking do
       )
       allow(Icalendar::Calendar).to receive(:parse).and_return([double(events: [future_event])])
 
-      expect { described_class.sync([house]) }.to change(Booking, :count).by(1)
+      expect { described_class.sync([house]) }.to change(described_class, :count).by(1)
     end
   end
 
   describe '.sync' do
     let(:house) { create(:house) }
-    let!(:connection) { create(:connection, house: house) }
+    let!(:connection) { create(:connection, house:) }
 
     before do
       allow(OpenURI).to receive(:open_uri).and_return(double(read: "BEGIN:VCALENDAR\nEND:VCALENDAR"))
@@ -413,27 +418,27 @@ RSpec.describe Booking do
 
       it 'handles Airbnb source' do
         allow(connection.source).to receive(:name).and_return('Airbnb')
-        expect { described_class.sync([house]) }.to change(Booking, :count).by(1)
+        expect { described_class.sync([house]) }.to change(described_class, :count).by(1)
       end
 
       it 'handles Tripadvisor source' do
         allow(connection.source).to receive(:name).and_return('Tripadvisor')
-        expect { described_class.sync([house]) }.to change(Booking, :count).by(1)
+        expect { described_class.sync([house]) }.to change(described_class, :count).by(1)
       end
 
       it 'handles Homeaway source' do
         allow(connection.source).to receive(:name).and_return('Homeaway')
-        expect { described_class.sync([house]) }.to change(Booking, :count).by(1)
+        expect { described_class.sync([house]) }.to change(described_class, :count).by(1)
       end
 
       it 'handles Booking.com source' do
         allow(connection.source).to receive(:name).and_return('Booking')
-        expect { described_class.sync([house]) }.to change(Booking, :count).by(1)
+        expect { described_class.sync([house]) }.to change(described_class, :count).by(1)
       end
     end
 
     context 'when handling existing bookings' do
-      let(:existing_booking) { create(:booking, house: house, ical_UID: 'existing_uid') }
+      let(:existing_booking) { create(:booking, house:, ical_UID: 'existing_uid') }
       let(:updated_event) do
         double(
           dtstart: 2.days.from_now,
@@ -458,14 +463,14 @@ RSpec.describe Booking do
           finish: 4.days.from_now,
           comment: "Updated Event \n Updated Description"
         )
-        expect { described_class.sync([house]) }.not_to change { existing_booking.reload.updated_at }
+        expect { described_class.sync([house]) }.not_to(change { existing_booking.reload.updated_at })
       end
     end
   end
 
   describe '#calc' do
     let(:house) { create(:house, type: create(:house_type, comm: 10)) }
-    let(:booking) { build(:booking, house: house) }
+    let(:booking) { build(:booking, house:) }
 
     it 'calculates prices when given a price hash' do
       price_hash = { '2024-06-01' => { total: 1000 } }
