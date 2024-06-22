@@ -126,7 +126,7 @@ class Booking < ApplicationRecord
         line[:transfers] = []
         transfers = b.transfers.where(trsf_type: :IN)
         transfers.each do |t|
-          line_in[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
+          line[:transfers] << "#{t.from}-#{t.time} #{t.remarks}"
         end
         line[:status] = b.status
         line[:house] = b.house.code
@@ -146,7 +146,7 @@ class Booking < ApplicationRecord
       line[:transfers] = []
       transfers = b.transfers.where(trsf_type: :OUT)
       transfers.each do |t|
-        line_out[:transfers] << "#{t.time} #{t.remarks}"
+        line[:transfers] << "#{t.time} #{t.remarks}"
       end
       line[:status] = b.status
       line[:house] = b.house.code
@@ -367,7 +367,8 @@ class Booking < ApplicationRecord
               finish: e.dtend,
               ical_UID: e.uid,
               comment: "#{e.summary} \n #{e.description}",
-              synced: true
+              client_details: "#{e.summary} \n #{e.description}",
+              synced: true,
             )
             search = Search.new(rs: booking.start, rf: booking.finish)
             prices = search.get_prices [h]
@@ -375,7 +376,8 @@ class Booking < ApplicationRecord
             # puts "Search: #{search.inspect}"
             # puts "House: #{h.inspect}"
             booking.calc prices
-            booking.save
+            booking.toggle_status
+            booking.save!
           end
         rescue OpenURI::HTTPError => e
           response = e.io
