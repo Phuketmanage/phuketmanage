@@ -76,6 +76,8 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
+  gem 'simplecov-lcov', require: false
   gem 'timecop'
   gem "webmock"
 end
