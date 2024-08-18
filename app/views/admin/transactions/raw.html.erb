@@ -1,5 +1,6 @@
 <h1>Balance of <%= "#{@owner.name}" %></h1>
 <h5><%= "Period #{@from.to_date.to_fs(:date)} - #{@to.to_date.to_fs(:date)}" %></h3>
+<h5>Asset: <%= House.find(@house_id).code if @house_id.present? %></h3>
 <table class="table table-sm">
   <tr>
     <td width="10%">Date</td>
@@ -18,7 +19,7 @@
       <td><%= t.comment_en %><%= t.cash ? " /C" : nil %></td>
       <td>
         <% i = 0 %>
-        <% t.files.each do |f| %>
+        <% t.files.where(show: true).each do |f| %>
           <% i +=1 %>
           <%= link_to "File_#{i} (#{File.extname(f.url)})", f.full_url, target: '_blank' %>
         <% end %>

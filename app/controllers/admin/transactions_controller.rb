@@ -465,8 +465,8 @@ class Admin::TransactionsController < AdminController
     @house_id = params[:house_id]
     @owner_id = params[:owner_id]
     @owner = User.find(@owner_id)
-    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(:date, :created_at).all
-    @transactions = Transaction.where(house_id: @house_id).all if @house_id.present?
+    @transactions = Transaction.where(date: @from..@to, user_id: @owner_id, for_acc: false).order(:date, :created_at).all
+    # @transactions = @transactions.where(house_id: @house_id).all if @house_id.present?
   end
 
   # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
@@ -476,9 +476,13 @@ class Admin::TransactionsController < AdminController
     @to = params[:to]
     @owner_id = params[:owner_id]
     @owner = User.find(@owner_id)
-    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ? AND hidden = ?', @from, @to, @owner_id, false).order(
-      :date, :created_at
-    ).all
+    # @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ? AND hidden = ?', @from, @to, @owner_id, false).order(
+    #   :date, :created_at
+    # ).all
+
+    @transactions = Transaction.where(date: @from..@to, user_id: @owner_id, hidden: false).order(:date, :created_at).all
+    @transactions = @transactions.where(house_id: @house_id).all if @house_id.present?
+
   end
 
   private
