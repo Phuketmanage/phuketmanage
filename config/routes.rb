@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get 'transaction_files', to: 'transaction_files#index'
     get 'transaction_warnings', to: 'transactions#warnings'
     get 'transaction_raw_for_acc', to: 'transactions#raw_for_acc'
+    get 'transaction_raw', to: 'transactions#raw'
     get 'jobs/index_new', to: 'jobs#index_new', as: 'jobs_new'
     get 'laundry', to: 'jobs#laundry', as: 'laundry'
     patch 'jobs/:id/update_laundry', to: 'jobs#update_laundry', as: 'update_laundry'

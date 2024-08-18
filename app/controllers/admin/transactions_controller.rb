@@ -457,6 +457,16 @@ class Admin::TransactionsController < AdminController
     render json: { field: field, warning: warning }
   end
 
+  # @route GET /transaction_raw (transaction_raw)
+  def raw
+    authorize!
+    @from = params[:from]
+    @to = params[:to]
+    @owner_id = params[:owner_id]
+    @owner = User.find(@owner_id)
+    @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(:date, :created_at).all
+  end
+
   # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
   def raw_for_acc
     authorize!
