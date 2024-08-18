@@ -462,9 +462,11 @@ class Admin::TransactionsController < AdminController
     authorize!
     @from = params[:from]
     @to = params[:to]
+    @house_id = params[:house_id]
     @owner_id = params[:owner_id]
     @owner = User.find(@owner_id)
     @transactions = Transaction.where('date >= ? AND date <= ? AND user_id = ?', @from, @to, @owner_id).order(:date, :created_at).all
+    @transactions = Transaction.where(house_id: @house_id).all if @house_id.present?
   end
 
   # @route GET /transaction_raw_for_acc (transaction_raw_for_acc)
