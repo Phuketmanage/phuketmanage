@@ -1,0 +1,28 @@
+<h1>Balance of <%= "#{@owner.name}" %></h1>
+<h5><%= "Period #{@from.to_date.to_fs(:date)} - #{@to.to_date.to_fs(:date)}" %></h3>
+<table class="table table-sm">
+  <tr>
+    <td width="10%">Date</td>
+    <td>Debit</td>
+    <td>Credit</td>
+    <td>Comment</td>
+    <td>Files</td>
+  </tr>
+  <% @transactions.each do |t| %>
+    <% de_ow = t.balance_outs.sum(:debit) %>
+    <% cr_ow = t.balance_outs.sum(:credit) %>
+    <tr>
+      <td><%= t.date.to_fs(:date) %></td>
+      <td><%= number_to_currency(de_ow, precision: 2, unit: '') if de_ow > 0 %></td>
+      <td><%= number_to_currency(cr_ow, precision: 2, unit: '') if cr_ow > 0 %></td>
+      <td><%= t.comment_en %><%= t.cash ? " /C" : nil %></td>
+      <td>
+        <% i = 0 %>
+        <% t.files.each do |f| %>
+          <% i +=1 %>
+          <%= link_to "File_#{i} (#{File.extname(f.url)})", f.full_url, target: '_blank' %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
