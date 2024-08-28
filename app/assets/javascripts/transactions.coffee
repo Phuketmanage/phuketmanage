@@ -380,6 +380,24 @@ $(document).on "ready", ->
     if isNaN(cr_co) then cr_co = 0
     $('#transaction_de_co').val(Math.round((de_ow+cr_ow+cr_co)*add/100))
 
+  #raw.html.erb
+  $('a[data-hide-comm]').on "click", (e) ->
+    e.preventDefault()
+    $('th.comm').toggle()
+    $('td.comm').toggle()
+
+  $('a[data-hide-debit]').on "click", (e) ->
+    e.preventDefault()
+    $('th.debit').toggle()
+    $('td.debit').toggle()
+    $('tr.debit').toggle()
+
+  $('a.hide').on "click", (e) ->
+    e.preventDefault()
+    trsc_id = $(this).data('trsc-id')
+    $('tr#'+trsc_id).toggleClass("d-print-none")
+    $('tr#'+trsc_id).toggleClass("bg-secondary")
+
 check_warnings = (type, is_sum, user_id, field, text) ->
   date = $('#transaction_date').val()
   if date != ""
