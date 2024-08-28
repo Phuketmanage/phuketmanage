@@ -29,6 +29,10 @@ class Admin::TransactionPolicy < ApplicationPolicy
     allow! if user&.role? %w[Manager Accounting] and check_destroy(@record)
   end
 
+  def raw?
+    allow! if user&.role? %w[Admin Accounting]
+  end
+
   def raw_for_acc?
     allow! if user&.role? %w[Admin]
   end
