@@ -11,7 +11,7 @@
     <th class="comm">Comm</td>
     <th>Comment</td>
     <th>Files</td>
-    <th></th>
+    <th class="d-print-none"></th>
   </thead>
   <% @transactions.each do |t| %>
     <% de_ow = t.balance_outs.sum(:debit) %>
@@ -30,7 +30,7 @@
           <%= link_to "File_#{i} (#{File.extname(f.url)})", f.full_url, target: '_blank' %>
         <% end %>
       </td>
-      <td><a href="#" class="hide" data-trsc-id="<%= t.id %>">hide</a></td></td>
+      <td class="d-print-none"><a href="#" class="hide" data-trsc-id="<%= t.id %>">hide</a></td></td>
     </tr>
   <% end %>
 </table>
