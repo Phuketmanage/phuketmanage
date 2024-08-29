@@ -528,5 +528,10 @@ span.gallery_text {
 
 .tech_data {
   color: #899499;
-  font-weight: 200
+  font-weight: 200;
+}
+
+// raw.html.erb
+.removed-text {
+  text-decoration: line-through;
 }

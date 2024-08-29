@@ -396,7 +396,7 @@ $(document).on "ready", ->
     e.preventDefault()
     trsc_id = $(this).data('trsc-id')
     $('tr#'+trsc_id).toggleClass("d-print-none")
-    $('tr#'+trsc_id).toggleClass("bg-secondary")
+    $('tr#'+trsc_id).toggleClass("removed-text")
 
 check_warnings = (type, is_sum, user_id, field, text) ->
   date = $('#transaction_date').val()
