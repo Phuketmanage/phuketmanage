@@ -33,12 +33,6 @@
           <% amenities << t('houses.kitchen') if h.option('Kitchen') %>
           <%= amenities.join(", ") %>
       </p>
-      <p class="card-text">
-        <% text = simple_format h.send("description_#{I18n.locale}") %>
-        <%= truncate(text,
-                            length: 140,
-                            separator: ' ', escape: false) %>
-      </p>
       <div class='row'>
         <div class="col">
       <% if from_search == true %>
