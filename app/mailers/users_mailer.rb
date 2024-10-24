@@ -10,8 +10,8 @@ class UsersMailer < Devise::Mailer
   #
   def reset_password_instructions(record, token, opts = {})
     headers["Custom-header"] = "Bar"
-    opts[:from] = 'Sunbeam property <info@phuketmanage.com>'
-    opts[:reply_to] = 'Sunbeam property <info@phuketmanage.com>'
+    opts[:from] = 'Phuket manage <info@phuketmanage.com>'
+    opts[:reply_to] = 'Phuket manage <info@phuketmanage.com>'
     opts[:to] = "#{record.name} #{record.surname} <#{record.email}>"
     I18n.with_locale(record.locale ||= :en) do
       opts[:subject] = default_i18n_subject
