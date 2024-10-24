@@ -23,7 +23,7 @@ gem 'rack-timeout' # Abort requests that are taking too long
 
 # App
 gem 'barnes'
-gem 'bootstrap', '~> 4.6.0'
+gem 'bootstrap', '~> 4.6.2'
 gem 'bootstrap-select-rails'
 gem "action_policy"
 gem 'coffee-rails' # Use CoffeeScript for .coffee assets and views
