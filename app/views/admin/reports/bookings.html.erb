@@ -25,25 +25,39 @@
         <tr>
           <th>Source</th>
           <th>Bookings</th>
-          <th>Canceled bookings</th>
+          <th>Canceled</th>
+          <th>Block</th>
+          <th>Real</th>
           <th>Sale, THB</th>
           <th>Agent, THB</th>
           <th>Comm, THB</th>
           <th>Owner, THB</th>
         </tr>
-        <% sub_totals = {"qty_sum" =>0, "qty_cancel_sum" =>0, "sale_sum" => 0, "agent_sum" => 0, "comm_sum" => 0, "nett_sum" => 0} %>
+        <% sub_totals = {"qty_sum" =>0, "qty_cancel_sum" =>0, "qty_block_sum" =>0,"qty_real_sum" =>0, "sale_sum" => 0, "agent_sum" => 0, "comm_sum" => 0, "nett_sum" => 0} %>
         <% @details.each do |source| %>
           <tr>
             <td><%= @sources[source.source_id] %></td>
-            <td><%= !source.source_qty.nil? ? source.source_qty : 0 %> (<%= !source.source_qty.nil? && @totals.qty > 0 ? (source.source_qty.to_d/@totals.qty*100).round : 0 %>%)</td>
-            <td><%= !source.source_qty_cancel.nil? ? source.source_qty_cancel : 0 %> (<%= !source.source_qty_cancel.nil? && @totals.qty_cancel > 0 ? (source.source_qty_cancel.to_d/@totals.qty_cancel*100).round : 0 %>%)</td>
+            <td><%= !source.qty.nil? ? source.qty : 0 %> (<%= !source.qty.nil? && @totals.qty > 0 ? (source.qty.to_d/@totals.qty*100).round : 0 %>%)</td>
+            <td><%= !source.qty_cancel.nil? ? source.qty_cancel : 0 %> (<%= !source.qty.nil? && source.qty > 0 ? CGI.unescape_html("&#8592;#{source.qty_cancel/source.qty}") : 0 %>% <%= !source.qty_cancel.nil? && @totals.qty_cancel > 0 ? CGI.unescape_html("&#8595;#{(source.qty_cancel.to_d/@totals.qty_cancel*100).round}") : 0 %>%)</td>
+            <td><%= !source.qty_block.nil? ? source.qty_block : 0 %></td>
+            <td><nobr><%= source_real = source.qty-source.qty_cancel-source.qty_block %>
+              (<%= CGI.unescape_html("&#8592;#{!source.qty.nil? && source.qty > 0 ? (source_real/source.qty*100).round : 0}") %>%
+              <%= CGI.unescape_html("&#8595;#{!@totals.qty.nil? && @totals.qty > 0 ? (source_real/@totals.qty*100).round : 0}") %>%)</nobr>
+            </td>
             <td><%= !source.sale_sum.nil? ? number_to_currency(source.sale_sum, precision: 0, unit: '') : 0 %></td>
-            <td><%= !source.agent_sum.nil? ? number_to_currency(source.agent_sum, precision: 0, unit: '') : 0 %> (<%= !source.agent_sum.nil? ? CGI.unescape_html("&#8592;#{(source.agent_sum.to_d/source.sale_sum*100).round}") : 0 %>% <%= !source.agent_sum.nil? ? CGI.unescape_html("&#8595;#{(source.agent_sum.to_d/@totals.sale_sum*100).round}") : 0 %>%)</td>
-            <td><%= !source.comm_sum.nil? ? number_to_currency(source.comm_sum, precision: 0, unit: '') : 0 %> (<%= !source.comm_sum.nil? ? CGI.unescape_html("&#8592;#{(source.comm_sum.to_d/source.sale_sum*100).round}") : 0 %>% <%= !source.comm_sum.nil? ? CGI.unescape_html("&#8595;#{(source.comm_sum.to_d/@totals.comm_sum*100).round}") : 0 %>%)</td>
+            <td><nobr><%= !source.agent_sum.nil? ? number_to_currency(source.agent_sum, precision: 0, unit: '') : 0 %>
+              (<%= CGI.unescape_html("&#8592;#{!source.agent_sum.nil? ? (source.agent_sum.to_d/source.sale_sum*100).round : 0}") %>%
+              <%= CGI.unescape_html("&#8595;#{!source.agent_sum.nil? ? (source.agent_sum.to_d/@totals.sale_sum*100).round : 0}") %>%)</nobr>
+            </td>
+            <td><nobr><%= !source.comm_sum.nil? ? number_to_currency(source.comm_sum, precision: 0, unit: '') : 0 %>
+              (<%= CGI.unescape_html("&#8592;#{!source.comm_sum.nil? ? (source.comm_sum.to_d/source.sale_sum*100).round : 0}") %>%
+              <%= CGI.unescape_html("&#8595;#{!source.comm_sum.nil? ? (source.comm_sum.to_d/@totals.comm_sum*100).round : 0}") %>%)</nobr></td>
             <td><%= !source.nett_sum.nil? ? number_to_currency(source.nett_sum, precision: 0, unit: '') : 0 %></td>
-            <% if (source.source_id.present? && @totals.qty > 0 && (source.source_qty.to_d/@totals.qty*100).round < 10) %>
-              <%  sub_totals["qty_sum"] += source.source_qty %>
-              <%  sub_totals["qty_cancel_sum"] += source.source_qty_cancel %>
+            <% if (source.source_id.present? && @totals.qty > 0 && (source.qty.to_d/@totals.qty*100).round < 10) %>
+              <%  sub_totals["qty_sum"] += source.qty %>
+              <%  sub_totals["qty_cancel_sum"] += source.qty_cancel %>
+              <%  sub_totals["qty_block_sum"] += source.qty_block %>
+              <%  sub_totals["qty_real_sum"] += source.qty-source.qty_cancel-source.qty_block %>
               <%  sub_totals["sale_sum"] += source.sale_sum if !source.sale_sum.nil?%>
               <%  sub_totals["agent_sum"] += source.agent_sum if !source.agent_sum.nil? %>
               <%  sub_totals["comm_sum"] += source.comm_sum if !source.comm_sum.nil?%>
@@ -55,6 +69,8 @@
           <td>Total:</td>
           <td><%= @totals.qty %></td>
           <td><%= @totals.qty_cancel %></td>
+          <td><%= @totals.qty_block %></td>
+          <td><%= @totals.qty - @totals.qty_cancel - @totals.qty_block %></td>
           <td><%= !@totals.sale_sum.nil? ? number_to_currency(@totals.sale_sum, precision: 0, unit: '') : 0  %></td>
           <td><%= !@totals.agent_sum.nil? ? number_to_currency(@totals.agent_sum, precision: 0, unit: '') : 0 %> (<%= !@totals.agent_sum.nil? ? (@totals.agent_sum.to_d/@totals.sale_sum*100).round : 0 %>%) </td>
           <td><%= !@totals.comm_sum.nil? ? number_to_currency(@totals.comm_sum, precision: 0, unit: '') : 0  %> (<%= !@totals.comm_sum.nil? ? (@totals.comm_sum.to_d/@totals.sale_sum*100).round : 0 %>%) </td>
@@ -64,6 +80,8 @@
           <td>Agents with qty < 10%:</td>
           <td><%= sub_totals["qty_sum"]  %> (<%= (sub_totals["qty_sum"]/@totals.qty.to_d*100).round if @totals.qty > 0 %>%)</td>
           <td><%= sub_totals["qty_cancel_sum"]  %> (<%= (sub_totals["qty_cancel_sum"]/@totals.qty.to_d*100).round if @totals.qty > 0 %>%)</td>
+          <td><%= sub_totals["qty_block_sum"]  %> (<%= (sub_totals["qty_block_sum"]/@totals.qty.to_d*100).round if @totals.qty > 0 %>%)</td>
+          <td><%= sub_totals["qty_real"]  %> (<%= (sub_totals["qty_real_sum"]/@totals.qty.to_d*100).round if @totals.qty > 0 %>%)</td>
           <td><%= number_to_currency(sub_totals["sale_sum"], precision: 0, unit: '') %> (<%= (sub_totals["sale_sum"]/@totals.sale_sum.to_d*100).round if !@totals.sale_sum.nil? && @totals.sale_sum > 0  %>%)</td>
           <td><%= number_to_currency(sub_totals["agent_sum"], precision: 0, unit: '') %> (<%= (sub_totals["agent_sum"]/@totals.agent_sum.to_d*100).round if !@totals.agent_sum.nil? && @totals.agent_sum > 0 %>%)</td>
           <td><%= number_to_currency(sub_totals["comm_sum"], precision: 0, unit: '') %> (<%= (sub_totals["comm_sum"]/@totals.comm_sum.to_d*100).round if !@totals.comm_sum.nil? && @totals.comm_sum > 0 %>%)  </td>

@@ -33,16 +33,18 @@ class Admin::ReportsController < AdminController
         bookings = bookings.all
       end
       # @totals = bookings.select("COUNT(id) as qty", "SUM(sale) as sale_sum", "SUM(agent) AS agent_sum", "SUM(comm) AS comm_sum", "SUM(nett) AS nett_sum")[0]
-      @totals = bookings.select("COUNT(id) FILTER (WHERE status != 4) as qty",
+      @totals = bookings.select("COUNT(id) as qty",
                                 "COUNT(id) FILTER (WHERE status = 4) as qty_cancel",
+                                "COUNT(id) FILTER (WHERE status = 6) as qty_block",
                                 "SUM(sale) FILTER (WHERE status != 4) as sale_sum",
                                 "SUM(agent) FILTER (WHERE status != 4) AS agent_sum",
                                 "SUM(comm) FILTER (WHERE status != 4) AS comm_sum",
                                 "SUM(nett) FILTER (WHERE status != 4) AS nett_sum")[0]
       @details = bookings .group(:source_id)
                           .order(count: :desc)
-                          .select(:source_id, "COUNT(*) FILTER (WHERE status != 4) AS source_qty",
-                                              "COUNT(id) FILTER (WHERE status = 4) as source_qty_cancel",
+                          .select(:source_id, "COUNT(*) AS qty",
+                                              "COUNT(id) FILTER (WHERE status = 4) as qty_cancel",
+                                              "COUNT(id) FILTER (WHERE status = 6) as qty_block",
                                               "SUM(sale) FILTER (WHERE status != 4) AS sale_sum",
                                               "SUM(agent) FILTER (WHERE status != 4) AS agent_sum",
                                               "SUM(comm) FILTER (WHERE status != 4) AS comm_sum",
