@@ -39,7 +39,7 @@
             <td><nobr><%= @sources[source.source_id] %></nobr></td>
             <td><%= !source.qty.nil? ? source.qty : 0 %> (<%= !source.qty.nil? && @totals.qty > 0 ? (source.qty.to_d/@totals.qty*100).round : 0 %>%)</td>
             <td><nobr><%= !source.qty_cancel.nil? ? source.qty_cancel : 0 %>
-              (<%= CGI.unescape_html("&#8592;#{!source.qty.nil? && source.qty > 0 ? (source.qty_cancel.to_d/source.qty).round : 0}") %>%
+              (<%= CGI.unescape_html("&#8592;#{!source.qty.nil? && source.qty > 0 ? (source.qty_cancel.to_d/source.qty*100).round : 0}") %>%
               <%= CGI.unescape_html("&#8595;#{!source.qty_cancel.nil? && @totals.qty_cancel > 0 ? (source.qty_cancel.to_d/@totals.qty_cancel*100).round : 0}") %>%)</nobr>
             </td>
             <td><%= !source.qty_block.nil? ? source.qty_block : 0 %></td>
