@@ -26,7 +26,7 @@ class Admin::ReportsController < AdminController
       @sources = Source.all.pluck(:id, :name).to_h
 
       bookings = Booking.where(start: ..@to.to_date, finish: @from.to_date..)
-                        .where.not(status:["block"])
+                        #.where.not(status:["block"])
       if @house_id.present?
         bookings = bookings.where(house_id: @house_id).all
       else
