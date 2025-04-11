@@ -29,7 +29,6 @@ gem 'bootstrap-select-rails'
 gem 'coffee-rails' # Use CoffeeScript for .coffee assets and views
 gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
-gem 'dotenv-rails', groups: %i[development test]
 gem 'easy_translate'
 gem 'flag-icons-rails'
 gem 'font_awesome5_rails'
