@@ -58,7 +58,7 @@ jobs:
         tar -zcf artefacts/workspace.tar.gz --exclude=./artefacts .
 
     - name: Upload workspace
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: workspace.tar.gz
         path: artefacts/workspace.tar.gz
@@ -75,7 +75,7 @@ jobs:
         ruby-version: 3.2.2
 
     - name: Download workspace
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: workspace.tar.gz
 
@@ -110,7 +110,7 @@ jobs:
         ruby-version: 3.2.2
 
     - name: Download workspace
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: workspace.tar.gz
 
@@ -150,7 +150,7 @@ jobs:
         ruby-version: 3.2.2
 
     - name: Download workspace
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: workspace.tar.gz
 
