@@ -3,32 +3,34 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.2'
+ruby '3.3.0'
 
 # System
 gem "aws-sdk-s3" # TODO: add: 'require: false' when remove old storage system
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
+gem 'good_job'
+gem "image_processing", ">= 1.2"
+gem 'lograge'
+gem 'maintenance_tasks' # Database maintenance tasks for Rails
+gem 'newrelic_rpm'
 gem "pg", "~> 1.5"
 gem "puma", "~> 6"
+gem 'rack-timeout' # Abort requests that are taking too long
 gem "rails", "~> 7.0.8"
 gem 'sassc-rails' # Use SCSS for stylesheets
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'webrick', require: false
-gem 'good_job'
-gem 'newrelic_rpm'
-gem 'lograge'
-gem "image_processing", ">= 1.2"
-gem 'maintenance_tasks' # Database maintenance tasks for Rails
-gem 'rack-timeout' # Abort requests that are taking too long
 
 # App
+gem "action_policy"
 gem 'barnes'
 gem 'bootstrap', '~> 4.6.2'
 gem 'bootstrap-select-rails'
-gem "action_policy"
 gem 'coffee-rails' # Use CoffeeScript for .coffee assets and views
 gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
+gem 'dotenv-rails', groups: %i[development test]
+gem 'easy_translate'
 gem 'flag-icons-rails'
 gem 'font_awesome5_rails'
 gem 'icalendar', '~> 2.7', '>= 2.7.1'
@@ -37,38 +39,37 @@ gem 'jquery-rails'
 gem "jsbundling-rails", "~> 1.1"
 gem 'momentjs-rails'
 gem 'rails-i18n', '~> 7.0.0'
+gem "ranked-model", "~> 0.4.8"
+gem "requestjs-rails", "~> 0.0.10"
 gem 'stimulus-rails'
 gem "terser", "~> 1.1"
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
-gem 'easy_translate'
-gem "ranked-model", "~> 0.4.8"
-gem "requestjs-rails", "~> 0.0.10"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'brakeman'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
-  gem 'rspec-rails'
   gem 'faker'
-  gem 'brakeman'
+  gem 'rspec-rails'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '>= 3.0.5'
-  gem 'web-console', '>= 3.3.0'
+  gem 'annotate'
   gem "better_errors", "~> 2" # Shows better errors description on errors page
   gem "binding_of_caller" # For better errors: activates webconsole directly in browser
   gem 'chusaku', require: false # annotations for routes
   gem "letter_opener", "~> 1.8"
+  gem 'listen', '>= 3.0.5'
   gem 'rails-erd'
   gem "rubocop-minitest"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
-  gem 'annotate'
+  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do

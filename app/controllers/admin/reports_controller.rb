@@ -14,6 +14,7 @@ class Admin::ReportsController < AdminController
                   .where('transactions.for_acc': false)
                   .group(:id)
                   .select('users.name, users.surname, users.code', '(sum(balance_outs.debit) - sum(balance_outs.credit)) as balance')
+                  .order(:balance)
   end
 
   # @route GET /report/bookings (report_bookings)

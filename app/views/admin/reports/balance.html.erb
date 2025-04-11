@@ -1,9 +1,46 @@
-<h1>Reports#index</h1>
-<p>Find me in app/views/reports/index.html.erb</p>
+<h1>Balace totals</h1>
 
-<% sum = 0 %>
-<% @users.each do |u| %>
-  <%= "#{u.name} #{u.surname} (#{u.code}) #{u.balance}"%><br />
-  <% sum += u.balance %>
-<% end %>
-<%= sum %>
+<div class="row">
+  <div class="col">
+    <h5>Mainteance</h5>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Balance</th>
+      </tr>
+      <% sum = 0 %>
+      <% @users.each do |u| %>
+        <% sum += u.balance %>
+        <tr>
+          <td><%= "#{u.name} #{u.surname} (#{u.code})"%></td>
+          <td><%= u.balance %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td></td>
+        <td><%= sum %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col">
+    <h5>Design</h5>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Balance</th>
+      </tr>
+      <% sum = 0 %>
+      <% @users.each do |u| %>
+        <% sum += u.balance %>
+        <tr>
+          <td><%= "#{u.name} #{u.surname} (#{u.code})"%></td>
+          <td><%= u.balance %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td></td>
+        <td><%= sum %></td>
+      </tr>
+    </table>
+  </div>
+</div>
