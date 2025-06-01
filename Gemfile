@@ -27,6 +27,7 @@ gem "action_policy"
 gem 'barnes'
 gem 'bootstrap', '~> 4.6.2'
 gem 'bootstrap-select-rails'
+gem 'chusaku', require: false # annotations for routes
 gem 'coffee-rails' # Use CoffeeScript for .coffee assets and views
 gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
@@ -61,7 +62,6 @@ group :development do
   gem 'annotate'
   gem "better_errors", "~> 2" # Shows better errors description on errors page
   gem "binding_of_caller" # For better errors: activates webconsole directly in browser
-  gem 'chusaku', require: false # annotations for routes
   gem "letter_opener", "~> 1.8"
   gem 'listen', '>= 3.0.5'
   gem 'rails-erd'
