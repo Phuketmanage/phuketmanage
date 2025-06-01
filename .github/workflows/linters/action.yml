@@ -4,6 +4,10 @@ description: Run Ruby Linters
 runs:
   using: "composite"
   steps:
+    - name: Install bundle
+      run: bundle install
+      shell: bash
+
     - name: Chusaku
       run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
       shell: bash
