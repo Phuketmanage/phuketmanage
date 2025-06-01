@@ -51,6 +51,9 @@ jobs:
         echo "Precompiling assets..."
         bundle exec rails assets:precompile
 
+    - name: Run Chusaku
+      run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
+
     - name: Save workspace
       run: |
         echo "Compressing workspace..."
@@ -72,7 +75,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2.2
+        ruby-version: 3.3.0
 
     - name: Download workspace
       uses: actions/download-artifact@v4
@@ -107,7 +110,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2.2
+        ruby-version: 3.3.0
 
     - name: Download workspace
       uses: actions/download-artifact@v4
@@ -147,7 +150,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2.2
+        ruby-version: 3.3.0
 
     - name: Download workspace
       uses: actions/download-artifact@v4
