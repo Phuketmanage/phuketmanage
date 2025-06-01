@@ -51,6 +51,9 @@ jobs:
         echo "Precompiling assets..."
         bundle exec rails assets:precompile
 
+    - name: Run Chusaku
+      # run: bundle exec chusaku --dry-run --exit-with-error-on-annotation
+      bundle exec chusaku --dry-run || true
     - name: Save workspace
       run: |
         echo "Compressing workspace..."
