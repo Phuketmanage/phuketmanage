@@ -2,6 +2,9 @@
 
 Rails.application.routes.draw do
   root to: 'guests/index#index'
+  # devise_scope :user do
+  #   root to: "devise/sessions#new"
+  # end
 
   scope "(:locale)" do
     devise_for :users, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
@@ -13,6 +16,16 @@ Rails.application.routes.draw do
     resources :houses, only: %i[show index]
     get :about, to: 'about#index'
   end
+  # scope "(:locale)", locale: /ru/ do
+  #   devise_scope :user do
+  #     root to: "devise/sessions#new", as: :locale_root
+  #   end
+
+  #   scope module: 'guests', as: 'guests' do
+  #     resources :houses, only: %i[show index]
+  #     get :about, to: 'about#index'
+  #   end
+  # end
 
   # Admin controllers
   scope module: 'admin' do

@@ -1,5 +1,4 @@
 class Admin::DashboardController < AdminController
-  
   # @route GET /dashboard (dashboard)
   def index
     authorize! with: Admin::DashboardPolicy
