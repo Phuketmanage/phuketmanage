@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'Flatpickr', freeze: '2023-02-01', js: true do
+describe 'Flatpickr', :js, freeze: '2023-02-01' do
   let(:house) { create(:house) }
   let(:current_date) { '2023-02-01'.to_date }
   let!(:type) { create(:house_type, :villa) }
@@ -20,7 +20,10 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "shows calendar" do
-        expect(page).to have_css('div.flatpickr-calendar', visible: true)
+        # expect(page).to have_css('div.flatpickr-calendar', visible: true)
+        Capybara.using_wait_time(1) do
+          expect(page).to have_css('div.flatpickr-calendar.is-open')
+        end
       end
 
       it "has monday as first day of week" do
@@ -31,11 +34,11 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "the dates before today are disabled" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
       end
 
       it "today is proper set" do
-        expect(page).to have_selector('span.flatpickr-day.today', visible: true, exact_text: '1')
+        expect(page).to have_css('span.flatpickr-day.today', visible: true, exact_text: '1')
       end
 
       it "today is avaliable" do
@@ -57,11 +60,11 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "+1 day is not avaliable" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '2')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '2')
       end
 
       it "+2 days is avaliable" do
-        expect(page).not_to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '3')
+        expect(page).to have_no_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '3')
       end
     end
   end
@@ -82,11 +85,11 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "the dates before today are disabled" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
       end
 
       it "today is proper set" do
-        expect(page).to have_selector('span.flatpickr-day.today', visible: true, exact_text: '1')
+        expect(page).to have_css('span.flatpickr-day.today', visible: true, exact_text: '1')
       end
 
       it "today is avaliable" do
@@ -100,13 +103,13 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "the booked dates are disabled" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '6')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '7')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '8')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '9')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '10')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '11')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '12')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '6')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '7')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '8')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '9')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '10')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '11')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '12')
       end
 
       it "the day after booking is avaliable" do
@@ -128,11 +131,11 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "+1 day is not avaliable" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '2')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '2')
       end
 
       it "+2 days is avaliable" do
-        expect(page).not_to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '3')
+        expect(page).to have_no_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '3')
       end
     end
 
@@ -150,11 +153,11 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "the dates before today are disabled" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '31')
       end
 
       it "today is proper set" do
-        expect(page).to have_selector('span.flatpickr-day.today', visible: true, exact_text: '1')
+        expect(page).to have_css('span.flatpickr-day.today', visible: true, exact_text: '1')
       end
 
       it "today is avaliable" do
@@ -168,15 +171,15 @@ describe 'Flatpickr', freeze: '2023-02-01', js: true do
       end
 
       it "the booked dates + dtnb days around are disabled" do
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '5')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '6')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '7')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '8')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '9')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '10')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '11')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '12')
-        expect(page).to have_selector('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '13')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '5')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '6')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '7')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '8')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '9')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '10')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '11')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '12')
+        expect(page).to have_css('span.flatpickr-day.flatpickr-disabled', visible: true, exact_text: '13')
       end
 
       it "the (day after booking) + (dtnb days) is avaliable" do
