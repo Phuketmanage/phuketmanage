@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     post 'job_messages', to: 'job_messages#create'
     delete 'job_message', to: 'job_messages#destroy'
     get 'logs', to: 'logs#index'
-    get 'test', to: 'pages#test'
+    # get 'test', to: 'pages#test'
     resources :locations, except: :show
     resources :options, except: :show
     get 'owner', to: 'admin#index', as: 'owner'
