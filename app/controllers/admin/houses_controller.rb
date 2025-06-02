@@ -27,6 +27,7 @@ class Admin::HousesController < Admin::AdminController
     @inactive_houses = House.inactive
   end
 
+  # @route GET /test_upload (test_upload)
   def test_upload
     authorize! with: Admin::AdminHousePolicy
     @house = House.new
