@@ -1,4 +1,4 @@
-class Admin::EmployeesController < AdminController
+class Admin::EmployeesController < Admin::AdminController
   before_action :set_employee, only: %i[show edit update destroy]
 
   # @route GET /employees (employees)

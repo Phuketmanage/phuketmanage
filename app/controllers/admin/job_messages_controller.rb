@@ -1,4 +1,4 @@
-class Admin::JobMessagesController < AdminController
+class Admin::JobMessagesController < Admin::AdminController
 
   # @route POST /job_messages (job_messages)
   def create

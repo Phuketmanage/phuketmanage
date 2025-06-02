@@ -1,4 +1,4 @@
-class Admin::DocumentsController < AdminController
+class Admin::DocumentsController < Admin::AdminController
 
   # @route GET /documents/statement (tmp_statement)
   def statement

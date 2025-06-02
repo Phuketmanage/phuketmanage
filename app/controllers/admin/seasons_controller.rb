@@ -1,4 +1,4 @@
-class Admin::SeasonsController < AdminController
+class Admin::SeasonsController < Admin::AdminController
   before_action :set_season, only: %i[show edit update destroy]
 
   # GET /seasons

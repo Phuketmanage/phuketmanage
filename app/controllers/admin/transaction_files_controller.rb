@@ -1,4 +1,4 @@
-class Admin::TransactionFilesController < AdminController
+class Admin::TransactionFilesController < Admin::AdminController
 
   # @route GET /transaction_files (transaction_files)
   def index

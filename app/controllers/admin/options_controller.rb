@@ -1,4 +1,4 @@
-class Admin::OptionsController < AdminController
+class Admin::OptionsController < Admin::AdminController
   before_action :set_option, only: %i[show edit update destroy]
 
   # @route GET /options (options)

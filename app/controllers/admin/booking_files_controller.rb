@@ -1,4 +1,4 @@
-class Admin::BookingFilesController < AdminController
+class Admin::BookingFilesController < Admin::AdminController
   before_action :set_booking, only: %i[create]
   before_action :set_booking_file, only: %i[destroy]
 

@@ -1,4 +1,4 @@
-class Admin::WaterUsagesController < AdminController
+class Admin::WaterUsagesController < Admin::AdminController
   before_action :set_water_usage, only: %i[show edit update destroy]
 
   # @route GET /water_usages (water_usages)

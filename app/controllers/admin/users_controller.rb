@@ -1,4 +1,4 @@
-class Admin::UsersController < AdminController
+class Admin::UsersController < Admin::AdminController
 
   # @route GET /users (users)
   def index

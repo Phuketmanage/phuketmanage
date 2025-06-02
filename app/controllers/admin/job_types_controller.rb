@@ -1,4 +1,4 @@
-class Admin::JobTypesController < AdminController
+class Admin::JobTypesController < Admin::AdminController
   before_action :set_job_type, only: %i[show edit update destroy]
 
   # @route GET /job_types (job_types)

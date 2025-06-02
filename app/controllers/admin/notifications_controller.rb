@@ -1,4 +1,4 @@
-class Admin::NotificationsController < AdminController
+class Admin::NotificationsController < Admin::AdminController
 
   def index
     authorize!

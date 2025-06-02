@@ -1,4 +1,4 @@
-class Admin::PricesController < AdminController
+class Admin::PricesController < Admin::AdminController
   include Admin::SeasonsHelper
   include Loggable
   layout "admin"

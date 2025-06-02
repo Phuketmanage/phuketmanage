@@ -1,4 +1,4 @@
-class Admin::SourcesController < AdminController
+class Admin::SourcesController < Admin::AdminController
   before_action :set_source, only: %i[show edit update destroy]
 
   # @route GET /sources (sources)
