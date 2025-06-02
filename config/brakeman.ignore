@@ -1,36 +1,13 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "2fb2e6dbfd8155cf2b941e8b1f8e603f003fed2209b5759128b80f3380500016",
-      "check_name": "FileAccess",
-      "message": "Parameter value used in file name",
-      "file": "app/controllers/admin/booking_files_controller.rb",
-      "line": 10,
-      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.new(params[:booking_file][:file])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::BookingFilesController",
-        "method": "create"
-      },
-      "user_input": "params[:booking_file][:file]",
-      "confidence": "High",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "352d05c4aff560aa37a0a4b79b1e9d32e90704e8221693df4c0339f135d23e62",
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
       "file": "app/views/guests/houses/_preview.html.erb",
-      "line": 51,
+      "line": 45,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(\"Photo\", House.new.photo_link, :target => \"_blank\")",
       "render_path": [
@@ -38,7 +15,7 @@
           "type": "controller",
           "class": "Guests::IndexController",
           "method": "index",
-          "line": 11,
+          "line": 12,
           "file": "app/controllers/guests/index_controller.rb",
           "rendered": {
             "name": "guests/index/index",
@@ -74,7 +51,7 @@
       "check_name": "SendFile",
       "message": "Parameter value used in file name",
       "file": "app/controllers/admin/transaction_files_controller.rb",
-      "line": 48,
+      "line": 52,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "send_file(open(S3_CLIENT.get_object(:response_target => File.basename(params[\"key\"]), :bucket => ENV.fetch(\"S3_BUCKET\", nil), :key => params[\"key\"]).body))",
       "render_path": null,
@@ -97,7 +74,7 @@
       "check_name": "FileAccess",
       "message": "Parameter value used in file name",
       "file": "app/controllers/admin/transaction_files_controller.rb",
-      "line": 46,
+      "line": 50,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
       "code": "open(S3_CLIENT.get_object(:response_target => File.basename(params[\"key\"]), :bucket => ENV.fetch(\"S3_BUCKET\", nil), :key => params[\"key\"]).body)",
       "render_path": null,
@@ -114,31 +91,50 @@
       "note": ""
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 7.0.8.7 ended on 2025-04-01",
+      "file": "Gemfile.lock",
+      "line": 316,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
-      "fingerprint": "d53a34f48717e41bd6972e0b0b3317f7fcf9f45f1f1aadc4557e2c5fb191e43a",
+      "fingerprint": "ebc18e2cc35aacb1ba7dc9cf98aafc56918ba2410de048441ba07cc86d0aab36",
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/admin/admin_houses/show.html.erb",
-      "line": 37,
+      "file": "app/views/admin/houses/show.html.erb",
+      "line": 47,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(\"Photo\", House.new(admin_house_params).photo_link, :target => \"_blank\")",
       "render_path": [
         {
           "type": "controller",
-          "class": "Admin::AdminHousesController",
+          "class": "Admin::HousesController",
           "method": "create",
-          "line": 66,
-          "file": "app/controllers/admin/admin_houses_controller.rb",
+          "line": 74,
+          "file": "app/controllers/admin/houses_controller.rb",
           "rendered": {
-            "name": "admin/admin_houses/show",
-            "file": "app/views/admin/admin_houses/show.html.erb"
+            "name": "admin/houses/show",
+            "file": "app/views/admin/houses/show.html.erb"
           }
         }
       ],
       "location": {
         "type": "template",
-        "template": "admin/admin_houses/show"
+        "template": "admin/houses/show"
       },
       "user_input": "House.new(admin_house_params).photo_link",
       "confidence": "Weak",
@@ -148,6 +144,5 @@
       "note": ""
     }
   ],
-  "updated": "2023-08-15 15:09:22 +0300",
-  "brakeman_version": "6.0.1"
+  "brakeman_version": "7.0.2"
 }
