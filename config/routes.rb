@@ -98,7 +98,7 @@ Rails.application.routes.draw do
     get 'test_upload', to: 'houses#test_upload'
     get 'prices/:id/update', to: 'prices#update', as: 'price'
     post 'prices/:house_id/copy_table', to: 'prices#copy_table', as: 'copy_table'
-    get 'owner', to: 'owner#index'
+    # get 'owner', to: 'owner#index'
     get 'tenant', to: 'tenant#index'
     get 'search', to: 'search#index'
     resources :settings
