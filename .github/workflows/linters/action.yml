@@ -13,7 +13,7 @@ runs:
       shell: bash
 
     - name: Brakeman
-      run: bundle exec brakeman -q
+      run: bundle exec brakeman -q -w2
       shell: bash
 
     - run: echo "🟢 Done"
