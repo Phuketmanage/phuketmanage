@@ -1,4 +1,4 @@
-class Admin::TransactionTypesController < AdminController
+class Admin::TransactionTypesController < Admin::AdminController
   before_action :set_transaction_type, only: %i[show edit update destroy]
 
   # @route GET /transaction_types (transaction_types)

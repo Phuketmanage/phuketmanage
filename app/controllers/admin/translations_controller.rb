@@ -1,4 +1,4 @@
-class Admin::TranslationsController < AdminController
+class Admin::TranslationsController < Admin::AdminController
 
   # @route GET /translate (translate)
   def show

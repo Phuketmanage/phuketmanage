@@ -1,4 +1,4 @@
-class Admin::SearchController < AdminController
+class Admin::SearchController < Admin::AdminController
   include Admin::SearchHelper
   before_action :perform_search
   verify_authorized except: :index

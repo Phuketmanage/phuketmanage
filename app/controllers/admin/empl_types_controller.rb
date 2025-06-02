@@ -1,4 +1,4 @@
-class Admin::EmplTypesController < AdminController
+class Admin::EmplTypesController < Admin::AdminController
   before_action :set_empl_type, only: %i[show edit update destroy]
 
   # @route GET /empl_types (empl_types)

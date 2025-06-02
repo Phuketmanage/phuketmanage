@@ -1,4 +1,4 @@
-class Admin::BookingsController < AdminController
+class Admin::BookingsController < Admin::AdminController
   before_action :set_booking, only: %i[show edit update
                                        update_comment_gr destroy]
 

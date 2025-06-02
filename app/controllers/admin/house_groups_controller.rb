@@ -1,4 +1,4 @@
-class Admin::HouseGroupsController < AdminController
+class Admin::HouseGroupsController < Admin::AdminController
   before_action :set_house_group, only: %i[show edit update destroy]
 
   # @route GET /house_groups (house_groups)

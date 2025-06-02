@@ -1,6 +1,6 @@
 require 'csv'
 
-class Admin::TransactionsController < AdminController
+class Admin::TransactionsController < Admin::AdminController
   before_action :set_transaction, only: %i[show edit update destroy]
 
   # @route GET /transactions (transactions)

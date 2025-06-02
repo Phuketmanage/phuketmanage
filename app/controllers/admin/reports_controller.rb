@@ -1,4 +1,4 @@
-class Admin::ReportsController < AdminController
+class Admin::ReportsController < Admin::AdminController
 
   # @route GET /reports (reports)
   def index

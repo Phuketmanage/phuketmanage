@@ -1,4 +1,4 @@
-class Admin::PhotosController < AdminController
+class Admin::PhotosController < Admin::AdminController
   before_action :get_house
   before_action :get_photo, only: %i[update sort destroy]
 

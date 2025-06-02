@@ -1,4 +1,4 @@
-class Admin::DurationsController < AdminController
+class Admin::DurationsController < Admin::AdminController
   before_action :set_duration, only: %i[show edit update destroy]
 
   # GET /durations

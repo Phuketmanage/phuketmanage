@@ -1,4 +1,4 @@
-class Admin::ConnectionsController < AdminController
+class Admin::ConnectionsController < Admin::AdminController
   # before_action :set_house, only: :create
 
   # @route POST /connections (connections)

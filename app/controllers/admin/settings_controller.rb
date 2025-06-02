@@ -1,4 +1,4 @@
-class Admin::SettingsController < AdminController
+class Admin::SettingsController < Admin::AdminController
   before_action :set_setting, only: %i[show edit update destroy]
 
   # @route GET /settings (settings)

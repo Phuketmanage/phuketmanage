@@ -1,4 +1,4 @@
-class Admin::TransfersController < AdminController
+class Admin::TransfersController < Admin::AdminController
   before_action :set_transfer, only: %i[show update destroy cancel]
 
   # @route GET /transfers (transfers)
