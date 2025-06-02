@@ -1,6 +1,6 @@
 # rubocop:disable RSpec/Metrics/ClassLength
 
-class Admin::AdminHousesController < Admin::AdminController
+class Admin::HousesController < Admin::AdminController
   include Admin::AdminHousesHelper
   before_action :set_house, only: %i[show edit update destroy]
   before_action :check_authorization, only: :show

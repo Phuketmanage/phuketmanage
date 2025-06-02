@@ -2,9 +2,6 @@
 
 Rails.application.routes.draw do
   root to: 'guests/index#index'
-  # devise_scope :user do
-  #   root to: "devise/sessions#new"
-  # end
 
   scope "(:locale)" do
     devise_for :users, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
@@ -16,16 +13,6 @@ Rails.application.routes.draw do
     resources :houses, only: %i[show index]
     get :about, to: 'about#index'
   end
-  # scope "(:locale)", locale: /ru/ do
-  #   devise_scope :user do
-  #     root to: "devise/sessions#new", as: :locale_root
-  #   end
-
-  #   scope module: 'guests', as: 'guests' do
-  #     resources :houses, only: %i[show index]
-  #     get :about, to: 'about#index'
-  #   end
-  # end
 
   # Admin controllers
   scope module: 'admin' do
@@ -74,7 +61,7 @@ Rails.application.routes.draw do
     get '/transfers/:number/confirmed', to: 'transfers#confirmed', as: 'supplier_confirm_transfer'
     get '/transfers/:number/canceled', to: 'transfers#canceled', as: 'supplier_cancel_transfer'
     get '/transfers/supplier', to: 'transfers#index_supplier', as: 'transfers_supplier'
-    resources :admin_houses do
+    resources :houses, path: 'admin_houses', as: 'admin_houses' do
       resources :prices, only: [:index]
       resources :photos, only: %i[index new destroy update] do
         put 'sort', on: :member
@@ -85,7 +72,7 @@ Rails.application.routes.draw do
       post 'add_season', to: 'prices#create_season'
       delete 'delete_season', to: 'prices#destroy_season'
       resources :bookings, only: %i[index new]
-      get 'inactive', to: 'admin_houses#inactive', on: :collection
+      get 'inactive', to: 'houses#inactive', on: :collection
       get 'export', on: :collection
     end
     post 'booking/new', to: 'bookings#create_front'
