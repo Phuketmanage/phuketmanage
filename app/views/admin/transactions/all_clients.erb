@@ -1,0 +1,49 @@
+<h1><%= t('balance') %></h1>
+  <%= form_with(url: all_clients_path, method: :get, local: true, class: 'd-print-none') do |form| %>
+    <div class="form-row mb-2">
+      <div class="col-6 col-lg-2">
+        <%= date_field_tag :from, {}, value: @from, class: "form-control" %>
+      </div>
+      <div class="col-6 col-lg-2">
+        <%= date_field_tag :to, {}, value: @to, class: "form-control mb-2 mr-md-2" %>
+      </div>
+      <div class="form-row col-12 col-lg-4 mt-2 mt-lg-0">
+        <div class="col-6">
+          <%#= hidden_field_tag :owner_id, @owner.id %>
+          <%= submit_tag t('show'), class: "btn btn-primary btn-block" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% if @error %>
+    <div class="alert alert-warning" role="alert">
+      <%= @error %>
+    </div>
+  <% else %>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th class="col-1"><%= t('date_text') %></th>
+            <th class="col-1"><%= t('debit') %></th>
+            <th class="col-1"><%= t('credit') %></th>
+            <th class="col-1"><%= t('owner') %></th>
+            <th class="col-1"><%= t('house') %></th>
+            <th><%= t('comment') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transactions.each do |t| %>
+            <tr>
+              <td><%= t.date.strftime('%d.%m.%Y') %></td>
+              <td class="text-right"><%= number_to_currency(t.debit, unit: '') %></td>
+              <td class="text-right"><%= number_to_currency(t.credit, unit: '') %></td>
+              <td><%= "#{t.user&.name} #{t.user&.surname}" %></td>
+              <td><%= t.house&.code %></td>
+              <td><%= t.comment_en %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>

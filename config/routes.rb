@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     resources :locations, except: :show
     resources :options, except: :show
     # get 'owner', to: 'admin#index', as: 'owner'
+    get 'transactions/all_clients', to: 'transactions#all_clients', as: 'all_clients'
     resources :transactions, except: [:show]
     get 'transactions_docs', to: 'transactions#docs', as: 'transactions_docs'
     post 'transactions/update_invoice_ref', to: 'transactions#update_invoice_ref', as: 'update_invoice_ref'
