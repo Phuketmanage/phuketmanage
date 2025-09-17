@@ -116,6 +116,7 @@ class Admin::TransactionsController < Admin::AdminController
     end
   end
 
+  # @route GET /transactions/all_clients (all_clients)
   def all_clients
     authorize!
     @from = params[:from]
