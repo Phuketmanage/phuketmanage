@@ -30,7 +30,7 @@
             <th class="col-1"><%= t('date_text') %></th>
             <th class="col-1"><%= t('debit') %></th>
             <th class="col-1"><%= t('credit') %></th>
-            <th class="col-1"><%= t('owner') %></th>
+            <th class="col-3"><%= t('owner') %></th>
             <th class="col-1"><%= t('house') %></th>
             <th><%= t('comment') %></th>
           </tr>
@@ -47,6 +47,14 @@
             </tr>
           <% end %>
         </tbody>
+        <tfoot>
+          <tr>
+            <th><%= t('total') %></th>
+            <th class="text-right"><%= number_to_currency(@transactions.sum { |t| t.debit.to_d }, unit: '') %></th>
+            <th class="text-right"><%= number_to_currency(@transactions.sum { |t| t.credit.to_d }, unit: '') %></th>
+            <th colspan="3"></th>
+          </tr>
+        </tfoot>
       </table>
     </div>
   <% end %>
