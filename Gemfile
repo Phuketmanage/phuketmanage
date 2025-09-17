@@ -46,6 +46,7 @@ gem 'stimulus-rails'
 gem "terser", "~> 1.1"
 gem "turbo-rails", "~> 1.4.0"
 gem 'twilio-ruby'
+gem "mutex_m"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
