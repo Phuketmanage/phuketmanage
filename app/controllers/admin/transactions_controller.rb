@@ -116,6 +116,27 @@ class Admin::TransactionsController < Admin::AdminController
     end
   end
 
+  def all_clients
+    authorize!
+    @from = params[:from]
+    @to = params[:to]
+    if !@from.present? && !@to.present?
+      @from = Date.current.beginning_of_month
+      @to = Date.current.end_of_month
+    elsif !@from.present? || !@to.present?
+      @error = 'Both dates should be selected'
+    end
+    # @owner = User.find(params[:view_user_id])
+    # @one_house = true
+    # @one_house = false if @owner.houses.count > 1
+    @transactions = Transaction.joins(:balance_outs)
+                                .includes(:house, :user)
+                                .where(transactions: {date: @from..@to, for_acc: false })
+                                .select('transactions.*, COALESCE(SUM(balance_outs.debit), 0)  AS debit, COALESCE(SUM(balance_outs.credit), 0) AS credit')
+                                .group('transactions.id')
+                                .order(:date, :created_at).all
+  end 
+
   def show
     authorize!
   end
