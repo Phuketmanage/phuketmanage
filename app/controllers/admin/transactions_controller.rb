@@ -127,12 +127,14 @@ class Admin::TransactionsController < Admin::AdminController
     elsif !@from.present? || !@to.present?
       @error = 'Both dates should be selected'
     end
+    group_id = params[:house_group_id]
     # @owner = User.find(params[:view_user_id])
     # @one_house = true
     # @one_house = false if @owner.houses.count > 1
-    @transactions = Transaction.joins(:balance_outs)
-                                .includes(:house, :user)
-                                .where(transactions: {date: @from..@to, for_acc: false })
+    @transactions = Transaction.joins(:balance_outs, :house)
+                                .preload(:house, :user)
+                                .where(transactions: {date: @from..@to, for_acc: false})
+                                .yield_self { |q| group_id.present? ? q.where(houses: { house_group_id: group_id }) : q }
                                 .select('transactions.*, COALESCE(SUM(balance_outs.debit), 0)  AS debit, COALESCE(SUM(balance_outs.credit), 0) AS credit')
                                 .group('transactions.id')
                                 .order(:date, :created_at).all
