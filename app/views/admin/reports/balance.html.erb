@@ -47,7 +47,7 @@
   <% @users.each do |u| %>
     <tr>
       <td>
-        <%= "#{u.code}: #{u.name} #{u.surname}"%>
+        <%= "#{u.code}: " if u.code.present? %><%= "#{u.name} #{u.surname}"%>
         <% if u.user_balance_closed %>
           (closed)
         <% end %>
