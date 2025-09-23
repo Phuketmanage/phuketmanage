@@ -91,7 +91,7 @@ class Admin::UsersController < Admin::AdminController
     authorize!
     user = User.find(params[:id])
     user.send_reset_password_instructions
-    redirect_to users_path
+    redirect_to users_path, flash: { notice: "Password reset instructions sent to #{user.email}" }
   end
 
   # @route GET /users/get_houses (users_get_houses)

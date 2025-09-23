@@ -18,7 +18,9 @@ class Admin::JobMessagesController < Admin::AdminController
   def destroy
     @message = JobMessage.find(params['id'])
     authorize! @message
-    S3_BUCKET.object(@message.message).delete
+    if Rails.env.production? && @message.message.present?
+      S3_BUCKET.object(@message.message).delete
+    end
     @message.destroy
   end
 
