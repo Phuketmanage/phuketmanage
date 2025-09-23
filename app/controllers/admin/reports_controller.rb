@@ -11,9 +11,8 @@ class Admin::ReportsController < Admin::AdminController
 
     @house_groups = HouseGroup.all
     base = User.joins(:roles, {transactions: :balance_outs})
+                  .left_joins(transactions: { house: :house_group })
                   .where(roles: {name: 'Owner'})
-                  # .where(users: {balance_closed: false})
-                  # .where(houses: {balance_closed: false})
                   .where(transactions: {for_acc: false})
 
     if params[:from].present? && params[:to].present?
@@ -30,17 +29,15 @@ class Admin::ReportsController < Admin::AdminController
       base = base.where(users: {balance_closed: false})
     end
 
-    # Игнорировать дома с закрытым балансом
+    # Игнорировать дома с закрытым балансом, но НЕ выкидывать транзакции без дома
     if params[:ignore_houses_with_closed_balance] == '1'
       @ignore_houses_with_closed_balance = true
-      base = base.joins(transactions: :house)
-                  .where(houses: {balance_closed: false})
+      base = base.where("houses.balance_closed = FALSE OR houses.id IS NULL")
     end
 
-    # Фильтр по группе домов
+    # Фильтр по группе домов. По условию — тоже не выкидываем транзакции без дома:
     if params[:house_group_id].present?
-      base = base .joins(transactions: {house: :house_group})
-                  .where(house_groups: { id: params[:house_group_id]} )  
+      base = base.where("house_groups.id = ? OR houses.id IS NULL", params[:house_group_id])  
     else
       base = base .left_joins(transactions: :house)
     end
@@ -52,8 +49,9 @@ class Admin::ReportsController < Admin::AdminController
                   'COALESCE(sum(balance_outs.debit), 0) as debit_sum',  
                   'COALESCE(sum(balance_outs.credit), 0) as credit_sum', 
                   'COALESCE(sum(balance_outs.debit) - sum(balance_outs.credit), 0) as balance',
-                  "STRING_AGG(DISTINCT CASE WHEN houses.balance_closed THEN houses.code || ' (closed)' ELSE houses.code END, ', ') AS house_codes"
-                )
+                  "STRING_AGG(DISTINCT CASE WHEN houses.code IS NULL THEN NULL
+                                WHEN houses.balance_closed THEN houses.code || ' (закрыт)'
+                                ELSE houses.code END, ', ') AS house_codes")
 
   end
 
