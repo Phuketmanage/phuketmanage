@@ -8,7 +8,7 @@ ruby '3.3.0'
 # System
 gem "aws-sdk-s3" # TODO: add: 'require: false' when remove old storage system
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
-gem 'good_job'
+# gem 'good_job'
 gem "image_processing", ">= 1.2"
 gem 'lograge'
 gem 'maintenance_tasks' # Database maintenance tasks for Rails
