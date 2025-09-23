@@ -116,7 +116,7 @@ Rails.application.routes.draw do
 
   # Admin dashboards
   authenticate :user, ->(user) { user.role?('Admin') } do
-    mount GoodJob::Engine => '/admin/activejob'
+    # mount GoodJob::Engine => '/admin/activejob'
     resources :uploads_tests # TODO: Remove after #353
     mount MaintenanceTasks::Engine => "/admin/maintenance_tasks"
   end

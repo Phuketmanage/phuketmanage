@@ -92,5 +92,5 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
-  config.active_job.queue_adapter = :good_job
+  config.active_job.queue_adapter = :async
 end
