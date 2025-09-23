@@ -10,10 +10,13 @@ class Admin::ReportsController < Admin::AdminController
     authorize! with: Admin::ReportPolicy
 
     @house_groups = HouseGroup.all
-    base = User.joins(:roles, {transactions: :balance_outs})
-                  .left_joins(transactions: { house: :house_group })
-                  .where(roles: {name: 'Owner'})
-                  .where(transactions: {for_acc: false})
+    # Базовый запрос: оставляем INNER JOIN на balance_outs (его надо агрегировать),
+    # а для house/house_group используем LEFT JOIN — чтобы не терять записи без house_id.
+    base = User
+      .joins(:roles, transactions: :balance_outs)
+      .left_joins(transactions: { house: :house_group })
+      .where(roles: { name: "Owner" })
+      .where(transactions: { for_acc: false })
 
     if params[:from].present? && params[:to].present?
       @from = Date.parse(params[:from]) rescue nil
@@ -29,17 +32,16 @@ class Admin::ReportsController < Admin::AdminController
       base = base.where(users: {balance_closed: false})
     end
 
-    # Игнорировать дома с закрытым балансом, но НЕ выкидывать транзакции без дома
-    if params[:ignore_houses_with_closed_balance] == '1'
+    # Игнорировать дома с закрытым балансом
+    if params[:ignore_houses_with_closed_balance] == "1"
       @ignore_houses_with_closed_balance = true
-      base = base.where("houses.balance_closed = FALSE OR houses.id IS NULL")
+      base = base.where("houses.balance_closed = FALSE OR transactions.house_id IS NULL")
     end
 
-    # Фильтр по группе домов. По условию — тоже не выкидываем транзакции без дома:
+    # Фильтр по группе: берём транзакции из выбранной группы ИЛИ без дома вовсе
     if params[:house_group_id].present?
-      base = base.where("house_groups.id = ? OR houses.id IS NULL", params[:house_group_id])  
-    else
-      base = base .left_joins(transactions: :house)
+      base = base.where("house_groups.id = :gid OR transactions.house_id IS NULL",
+                        gid: params[:house_group_id])
     end
 
     @users = base .group('users.id')
@@ -49,9 +51,8 @@ class Admin::ReportsController < Admin::AdminController
                   'COALESCE(sum(balance_outs.debit), 0) as debit_sum',  
                   'COALESCE(sum(balance_outs.credit), 0) as credit_sum', 
                   'COALESCE(sum(balance_outs.debit) - sum(balance_outs.credit), 0) as balance',
-                  "STRING_AGG(DISTINCT CASE WHEN houses.code IS NULL THEN NULL
-                                WHEN houses.balance_closed THEN houses.code || ' (закрыт)'
-                                ELSE houses.code END, ', ') AS house_codes")
+                  "STRING_AGG(DISTINCT CASE WHEN houses.balance_closed THEN houses.code || ' (closed)' ELSE houses.code END, ', ') AS house_codes"
+                )
 
   end
 
