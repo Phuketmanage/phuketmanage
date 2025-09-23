@@ -3,7 +3,7 @@
 class CreateGoodJobs < ActiveRecord::Migration[7.0]
   def change
     # Uncomment for Postgres v12 or earlier to enable gen_random_uuid() support
-    enable_extension 'pgcrypto'
+    # enable_extension 'pgcrypto'
 
     create_table :good_jobs, id: :uuid do |t|
       t.text :queue_name
@@ -29,6 +29,9 @@ class CreateGoodJobs < ActiveRecord::Migration[7.0]
       t.integer :executions_count
       t.text :job_class
       t.integer :error_event, limit: 2
+      t.text :labels, array: true
+      t.uuid :locked_by_id
+      t.datetime :locked_at
     end
 
     create_table :good_job_batches, id: :uuid do |t|
@@ -43,6 +46,7 @@ class CreateGoodJobs < ActiveRecord::Migration[7.0]
       t.datetime :enqueued_at
       t.datetime :discarded_at
       t.datetime :finished_at
+      t.datetime :jobs_finished_at
     end
 
     create_table :good_job_executions, id: :uuid do |t|
@@ -56,11 +60,15 @@ class CreateGoodJobs < ActiveRecord::Migration[7.0]
       t.datetime :finished_at
       t.text :error
       t.integer :error_event, limit: 2
+      t.text :error_backtrace, array: true
+      t.uuid :process_id
+      t.interval :duration
     end
 
     create_table :good_job_processes, id: :uuid do |t|
       t.timestamps
       t.jsonb :state
+      t.integer :lock_type, limit: 2
     end
 
     create_table :good_job_settings, id: :uuid do |t|
@@ -70,19 +78,27 @@ class CreateGoodJobs < ActiveRecord::Migration[7.0]
       t.index :key, unique: true
     end
 
-    add_index :good_jobs, :scheduled_at, where: "(finished_at IS NULL)", name: "index_good_jobs_on_scheduled_at"
+    add_index :good_jobs, :scheduled_at, where: "(finished_at IS NULL)", name: :index_good_jobs_on_scheduled_at
     add_index :good_jobs, [:queue_name, :scheduled_at], where: "(finished_at IS NULL)", name: :index_good_jobs_on_queue_name_and_scheduled_at
     add_index :good_jobs, [:active_job_id, :created_at], name: :index_good_jobs_on_active_job_id_and_created_at
     add_index :good_jobs, :concurrency_key, where: "(finished_at IS NULL)", name: :index_good_jobs_on_concurrency_key_when_unfinished
-    add_index :good_jobs, [:cron_key, :created_at], name: :index_good_jobs_on_cron_key_and_created_at
-    add_index :good_jobs, [:cron_key, :cron_at], name: :index_good_jobs_on_cron_key_and_cron_at, unique: true
-    add_index :good_jobs, [:active_job_id], name: :index_good_jobs_on_active_job_id
+    add_index :good_jobs, [:concurrency_key, :created_at], name: :index_good_jobs_on_concurrency_key_and_created_at
+    add_index :good_jobs, [:cron_key, :created_at], where: "(cron_key IS NOT NULL)", name: :index_good_jobs_on_cron_key_and_created_at_cond
+    add_index :good_jobs, [:cron_key, :cron_at], where: "(cron_key IS NOT NULL)", unique: true, name: :index_good_jobs_on_cron_key_and_cron_at_cond
     add_index :good_jobs, [:finished_at], where: "retried_good_job_id IS NULL AND finished_at IS NOT NULL", name: :index_good_jobs_jobs_on_finished_at
     add_index :good_jobs, [:priority, :created_at], order: { priority: "DESC NULLS LAST", created_at: :asc },
       where: "finished_at IS NULL", name: :index_good_jobs_jobs_on_priority_created_at_when_unfinished
+    add_index :good_jobs, [:priority, :created_at], order: { priority: "ASC NULLS LAST", created_at: :asc },
+      where: "finished_at IS NULL", name: :index_good_job_jobs_for_candidate_lookup
     add_index :good_jobs, [:batch_id], where: "batch_id IS NOT NULL"
     add_index :good_jobs, [:batch_callback_id], where: "batch_callback_id IS NOT NULL"
+    add_index :good_jobs, :labels, using: :gin, where: "(labels IS NOT NULL)", name: :index_good_jobs_on_labels
 
     add_index :good_job_executions, [:active_job_id, :created_at], name: :index_good_job_executions_on_active_job_id_and_created_at
+    add_index :good_jobs, [:priority, :scheduled_at], order: { priority: "ASC NULLS LAST", scheduled_at: :asc },
+      where: "finished_at IS NULL AND locked_by_id IS NULL", name: :index_good_jobs_on_priority_scheduled_at_unfinished_unlocked
+    add_index :good_jobs, :locked_by_id,
+      where: "locked_by_id IS NOT NULL", name: "index_good_jobs_on_locked_by_id"
+    add_index :good_job_executions, [:process_id, :created_at], name: :index_good_job_executions_on_process_id_and_created_at
   end
 end
