@@ -29,6 +29,7 @@ class TransactionFile < ApplicationRecord
   private
 
   def delete_file_from_s3
+    return unless Rails.env.production?
     S3_BUCKET.object(url).delete
   end
 end
