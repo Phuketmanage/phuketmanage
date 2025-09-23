@@ -8,16 +8,53 @@ class Admin::ReportsController < Admin::AdminController
   # @route GET /report/balance (report_balance)
   def balance
     authorize! with: Admin::ReportPolicy
-    # @totals = get_owners_totals
-    @users = User.joins(:roles, {transactions: :balance_outs})
-                  .where('roles.name':'Owner', 'users.balance_closed': false)
-                  .where('transactions.for_acc': false)
-                  .group(:id)
-                  .order('users.name', 'users.surname')
+
+    @house_groups = HouseGroup.all
+    base = User.joins(:roles, {transactions: :balance_outs})
+                  .where(roles: {name: 'Owner'})
+                  # .where(users: {balance_closed: false})
+                  # .where(houses: {balance_closed: false})
+                  .where(transactions: {for_acc: false})
+
+    if params[:from].present? && params[:to].present?
+      @from = Date.parse(params[:from]) rescue nil
+      @to = Date.parse(params[:to]) rescue nil
+      if @from && @to
+        base = base.where('transactions.date >= ? AND transactions.date <= ?', @from, @to)
+      end
+    end
+
+    # Игнорировать пользователей с закрытым балансом 
+    if params[:ignore_users_with_closed_balance] == '1'
+      @ignore_users_with_closed_balance = true
+      base = base.where(users: {balance_closed: false})
+    end
+
+    # Игнорировать дома с закрытым балансом
+    if params[:ignore_houses_with_closed_balance] == '1'
+      @ignore_houses_with_closed_balance = true
+      base = base.joins(transactions: :house)
+                  .where(houses: {balance_closed: false})
+    end
+
+    # Фильтр по группе домов
+    if params[:house_group_id].present?
+      base = base .joins(transactions: {house: :house_group})
+                  .where(house_groups: { id: params[:house_group_id]} )  
+    else
+      base = base .left_joins(transactions: :house)
+    end
+
+    @users = base .group('users.id')
+                  .order('users.name', 'users.surname')                  
                   .select('users.name, users.surname, users.code', 
-                    'sum(balance_outs.debit) as debit_sum',  
-                    'sum(balance_outs.credit) as credit_sum', 
-                    'sum(balance_outs.debit) - sum(balance_outs.credit) as balance')
+                  'users.balance_closed AS user_balance_closed',
+                  'COALESCE(sum(balance_outs.debit), 0) as debit_sum',  
+                  'COALESCE(sum(balance_outs.credit), 0) as credit_sum', 
+                  'COALESCE(sum(balance_outs.debit) - sum(balance_outs.credit), 0) as balance',
+                  "STRING_AGG(DISTINCT CASE WHEN houses.balance_closed THEN houses.code || ' (closed)' ELSE houses.code END, ', ') AS house_codes"
+                )
+
   end
 
   # @route GET /report/bookings (report_bookings)
