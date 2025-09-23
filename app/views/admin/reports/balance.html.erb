@@ -1,11 +1,43 @@
 <h1>Total client balances</h1>
+<% if @error.present? %>
+  <div class="alert alert-danger"><%= @error %></div>
+<% end %>
+<%= form_with url: report_balance_path, method: :get, local: true do |f| %>
+  <div class="form-row">
+    <div class="col-2">
+      <%= f.date_field :from, value: @from, class: "form-control" %>
+    </div>
+    <div class="col-2">
+      <%= f.date_field :to, value: @to, class: "form-control" %>
+    </div>
+    <div class="col-2">
+      <%= f.select :house_group_id, 
+        options_from_collection_for_select(@house_groups, :id, :name, params[:house_group_id]), 
+        {include_blank: 'All groups'}, 
+        {class: 'form-control'} %>
+    </div>
+  </div>
+  <div class="form-row mt-2">
+    <div class="col-3">
+      <%= f.check_box :ignore_users_with_closed_balance, {checked: @ignore_users_with_closed_balance} %>
+      <%= f.label :ignore_users_with_closed_balance, 'Ignore users with closed balance' %>
+    </div>
+    <div class="col3-3">
+      <%= f.check_box :ignore_houses_with_closed_balance, {checked: @ignore_houses_with_closed_balance} %>
+      <%= f.label :ignore_houses_with_closed_balance, 'Ignore houses with closed balance' %>
+    </div>
+  </div>
+  <%= f.submit 'Filter', class: 'btn btn-primary' %>
+  <%= link_to 'Reset', report_balance_path, class: 'btn btn-secondary' %>
+</div>
+<% end %>
 
 <% sum = 0 %>
-<table class="table table-striped table-sm table-responsive">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
-      <th width="200px">Name</th>
-      <th>Code</th>
+      <th width="200px">Client</th>
+      <th>Houses</th>
       <th>Debit</th>
       <th>Credit</th>
       <th>Balance</th>
@@ -14,13 +46,21 @@
   <tbody>
   <% @users.each do |u| %>
     <tr>
-      <td><%= "#{u.name} #{u.surname}"%></td>
-      <td><%= u.code %></td>
+      <td>
+        <%= "#{u.code}: #{u.name} #{u.surname}"%>
+        <% if u.user_balance_closed %>
+          (closed)
+        <% end %>
+      </td>
+      <td>
+        <% if u.house_codes.present? %>
+          <%= u.house_codes %>
+        <% end %>
+      </td>
       <td style="text-align: right;"><%= number_to_currency(u.debit_sum, unit:'') %></td>
       <td style="text-align: right;"><%= number_to_currency(u.credit_sum, unit:'') %></td>
-      <td style="text-align: right;"><%= number_to_currency(u.balance, unit:'') %></td>
+      <td style="text-align: right; <%= u.balance < 0 ? 'color: red;' : '' %>"><%= number_to_currency(u.balance, unit:'') %></td>
     </tr>
-  <% sum += u.balance %>
   <% end %>
   </tbody>
   <tfoot>

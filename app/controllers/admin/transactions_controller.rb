@@ -177,7 +177,7 @@ class Admin::TransactionsController < Admin::AdminController
     else
       @transaction = Transaction.new
     end
-    now = Time.current
+    # now = Time.current
     @s3_direct_post = S3_BUCKET.presigned_post(
       key: "transactions/${filename}",
       success_action_status: '201',
@@ -295,7 +295,7 @@ class Admin::TransactionsController < Admin::AdminController
   def update
     authorize! @transaction
     respond_to do |format|
-      state_before = @transaction
+      # state_before = @transaction
       if @transaction.update(transaction_params)
         @transaction.set_owner_and_house
         @transaction.save
