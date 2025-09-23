@@ -13,7 +13,11 @@ class Admin::ReportsController < Admin::AdminController
                   .where('roles.name':'Owner', 'users.balance_closed': false)
                   .where('transactions.for_acc': false)
                   .group(:id)
-                  .select('users.name, users.surname, users.code', '(sum(balance_outs.debit) - sum(balance_outs.credit)) as balance')
+                  .order('users.name', 'users.surname')
+                  .select('users.name, users.surname, users.code', 
+                    'sum(balance_outs.debit) as debit_sum',  
+                    'sum(balance_outs.credit) as credit_sum', 
+                    'sum(balance_outs.debit) - sum(balance_outs.credit) as balance')
   end
 
   # @route GET /report/bookings (report_bookings)
