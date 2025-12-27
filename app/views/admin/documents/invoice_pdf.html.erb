@@ -4,7 +4,7 @@
   <!-- Title -->
   <div>
     <% if Rails.env.production? %>
-      <img src="https://mstudio.dev/assets/mstudio_logo.png" alt="Logo" style="height: 50px;">
+      <img src="https://www.phuketmanage.com<%= asset_path("mstudio_logo.png") %>" alt="Logo" style="height: 50px;">
     <% else %>
       <img src="<%= asset_url('mstudio_logo.png') %>" alt="Logo" style="height: 50px;">
     <% end %>
