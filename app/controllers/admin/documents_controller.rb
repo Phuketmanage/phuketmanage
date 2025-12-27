@@ -1,11 +1,13 @@
 class Admin::DocumentsController < Admin::AdminController
 
+  # @route GET /documents (documents)
   def show
     authorize! with: Admin::DocumentsPolicy
     @clients = User.with_role('Owner').includes(:houses).order(:name, :surname)
   end
 
 
+  # @route GET /documents/prepare (prepare_documents)
   def prepare
     authorize! with: Admin::DocumentsPolicy
     
@@ -78,6 +80,7 @@ class Admin::DocumentsController < Admin::AdminController
     end
   end
 
+  # @route GET /documents/statement (statement_documents)
   def statement
     authorize! with: Admin::DocumentsPolicy
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
@@ -103,6 +106,7 @@ class Admin::DocumentsController < Admin::AdminController
     end
   end
 
+  # @route GET /documents/reimbersment (reimbersment_documents)
   def reimbersment
     authorize! with: Admin::DocumentsPolicy
     @t = Transaction.find(params[:trsc_id])
@@ -117,10 +121,12 @@ class Admin::DocumentsController < Admin::AdminController
     end
   end
 
+  # @route GET /documents/invoice (invoice_documents)
   def invoice
     authorize! with: Admin::DocumentsPolicy
   end
 
+  # @route GET /documents/receipt (receipt_documents)
   def receipt
     authorize! with: Admin::DocumentsPolicy
   end
