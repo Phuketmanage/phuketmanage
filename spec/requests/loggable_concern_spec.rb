@@ -75,7 +75,7 @@ RSpec.describe Loggable, type: :controller do
       expect(last_log.model_gid).to eq(user_model.to_global_id.to_s)
     end
     it 'saves before_values' do
-      expect(last_log.before_values.count).to eq(20)
+      expect(last_log.before_values.count).to eq(22)
     end
     it 'saves applied_changes' do
       expect(last_log.applied_changes.count).to eq(2)
@@ -102,7 +102,7 @@ RSpec.describe Loggable, type: :controller do
       expect(last_log.model_gid).to eq(user_model.to_global_id.to_s)
     end
     it 'saves before_values' do
-      expect(last_log.before_values.count).to eq(20)
+      expect(last_log.before_values.count).to eq(22)
     end
     it 'saves applied_changes' do
       expect(last_log.applied_changes.count).to eq(2)
