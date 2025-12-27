@@ -26,15 +26,15 @@ class Admin::ReportsController < Admin::AdminController
       end
     end
 
-    # Игнорировать пользователей с закрытым балансом 
-    if params[:ignore_users_with_closed_balance] == '1'
-      @ignore_users_with_closed_balance = true
+    # Показать пользователей с закрытым балансом
+    @show_users_with_closed_balance = params[:show_users_with_closed_balance]
+    unless @show_users_with_closed_balance == '1'
       base = base.where(users: {balance_closed: false})
     end
 
-    # Игнорировать дома с закрытым балансом
-    if params[:ignore_houses_with_closed_balance] == "1"
-      @ignore_houses_with_closed_balance = true
+    # Показать дома с закрытым балансом
+    @show_houses_with_closed_balance = params[:show_houses_with_closed_balance]
+    unless @show_houses_with_closed_balance == "1"
       base = base.where("houses.balance_closed = FALSE OR transactions.house_id IS NULL")
     end
 

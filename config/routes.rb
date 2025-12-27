@@ -26,8 +26,16 @@ Rails.application.routes.draw do
     resources :water_usages
     get 'users/get_houses', to: 'users#get_houses' # , as: 'get_houses'
     get 'users/inactive', to: 'users#inactive'
-    get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
-    get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
+    # get 'documents/reimbersment', to: 'documents#reimbersment', as: 'tmp_reimbersment'
+    # get 'documents/statement', to: 'documents#statement', as: 'tmp_statement'
+    resource :documents, only: [:show] do
+      get :prepare
+      get :design_agreement_preview
+      get :reimbersment
+      get :statement
+      get :invoice
+      get :receipt
+    end
     resources :house_groups
     delete 'transaction_file', to: 'transaction_files#destroy'
     delete 'transaction_file_tmp', to: 'transaction_files#destroy_tmp'

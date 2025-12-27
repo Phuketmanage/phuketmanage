@@ -1,0 +1,44 @@
+<%# app/views/admin/documents/agreement_pdf.html.erb %>
+
+<div class="grid">
+  <!-- Title -->
+  <div>
+    <img src="<%= asset_url('mstudio_logo.png') %>" alt="Logo" style="height: 50px;">
+  </div>
+  
+  <div class="title text-right">
+    INVOICE
+  </div>
+  
+  <!-- Parties and Meta -->
+  <div>
+    Contractor: Maryana Kotova<br>
+    Customer: <%= @document[:client] %>
+  </div>
+  <div class="text-right">
+    Number: <%= @document[:number] %><br>
+    Date: <%= (@document[:date].to_date).strftime("%d.%m.%Y") %>
+  </div>
+</div>
+
+<!-- Invoice Body -->
+<table class="table">
+  <thead>
+    <tr>
+      <th class="text-left">Description</th>
+      <th style="width: 150px;">Amount, THB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= simple_format(@document[:text].presence || "—") %></td>
+      <td class="text-right"><%= number_to_currency(@document[:amount], unit: "", precision: 2) %></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th class="text-right">Total:</th>
+      <th class="text-right"><%= number_to_currency(@document[:amount], unit: "", precision: 2) %></th>
+    </tr>
+  </tfoot>
+</table>

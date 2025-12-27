@@ -16,6 +16,7 @@
 #  details               :text
 #  google_map            :string
 #  hide_in_timeline      :boolean          default(FALSE), not null
+#  house_no              :string
 #  image                 :string
 #  kingBed               :integer
 #  maintenance           :boolean          default(FALSE)
