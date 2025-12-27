@@ -196,7 +196,8 @@ class Admin::HousesController < Admin::AdminController
       :water_reading,
       :balance_closed,
       :hide_in_timeline,
-      :photo_link
+      :photo_link,
+      :house_no
     )
   end
 end

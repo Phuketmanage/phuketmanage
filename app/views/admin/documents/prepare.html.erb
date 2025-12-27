@@ -1,0 +1,49 @@
+<h1>Document for <%= @client.name if @client %></h1>
+
+<%# Agreement %>
+<div class="shadow-sm mb-2 p-2 bg-white border rounded">
+  <b>Agreement</b>
+  <hr>
+  <%= form_with url: prepare_documents_path(format: :pdf),
+        method: :get,
+        local: true,
+        data: { turbo: false },
+        html: { target: "_blank" } do |f| %>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-2 form-group">
+          <label>Date</label>
+          <%= f.date_field :date, value: Date.current, class: "form-control" %>
+        </div>
+
+        <div class="col-2 form-group">
+          <label>Suffix</label>
+          <%= f.number_field :suffix, value: "1", class: "form-control" %>
+        </div>
+
+        <div class="col-2 form-group">
+          <label>Amount</label>
+          <%= f.number_field :amount, min: 0, class: "form-control" %>
+        </div>
+
+        <div class="col-2 form-group">
+          <label>House</label>
+          <%= f.select :house_id, @client.houses.map { |house| [house.code, house.id] }, {}, class: "form-control" %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col form-group">
+          <label>Text for invoice/receipt</label>
+          <%= f.text_area :text, value: "INDIVIDUAL FURNITURE PACKAGE AGREEMENT [ agreement number ]\nProject: [ Project name, house number ]" , rows: 3, class: "form-control" %>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mb-2">
+        <%= f.hidden_field :client_id, value: @client.id %>
+        <%= button_tag "Agreement", type: "submit", name: "doc_type", value: "agreement", class: "btn btn-primary mr-2" %>          
+        <%= button_tag "Invoice", type: "submit", name:"doc_type", value: "invoice", class: "btn btn-primary mr-2" %>          
+        <%= button_tag "Receipt", type: "submit", name:"doc_type", value: "receipt", class: "btn btn-primary" %>          
+      </div>
+    </div>
+  <% end %>
+</div>

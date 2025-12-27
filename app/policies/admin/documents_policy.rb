@@ -1,4 +1,9 @@
 class Admin::DocumentsPolicy < ApplicationPolicy
+  
+  def design_agreement?
+    allow! if user&.role? %w[Accounting]
+  end
+  
   def reimbersment?
     allow! if user&.role? %w[Accounting]
   end

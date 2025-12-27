@@ -27,21 +27,29 @@
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">
-    <strong>Details inner</strong>
-      <%= form.text_area :details, class: 'form-control', rows: 6 %>
-  </div>
-
-  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
     <strong>Location</strong>
     <hr>
-    <%= form.label 'Project' %>
-    <%= form.text_field :project, class: 'form-control' %>
+    <div class="row">
+      <div class="col-md-10 form-group">
+        <%= form.label :project %>
+        <%= form.text_field :project, class: 'form-control' %>
+      </div>
+      <div class="col-md-2 form-group">
+        <%= form.label :house_no %>
+        <%= form.text_field :house_no, class: 'form-control' %>
+      </div>
+    </div>
     <%= form.collection_check_boxes :location_ids, Location.order(:name_en).all, :id, :name_en do |l| %>
         <div class="form-check form-check-inline">
           <%= l.check_box(class: "form-check-input") %>
           <%= l.label(class: "form-check-label" ) %>
         </div>
     <% end %>
+  </div>
+
+  <div class="shadow-sm mb-2 p-2 bg-white border rounded">
+    <strong>Details inner</strong>
+      <%= form.text_area :details, class: 'form-control', rows: 6 %>
   </div>
 
   <div class="shadow-sm mb-2 p-2 bg-white border rounded">

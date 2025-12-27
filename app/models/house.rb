@@ -18,6 +18,7 @@
 #  details               :text
 #  google_map            :string
 #  hide_in_timeline      :boolean          default(FALSE), not null
+#  house_no              :string
 #  image                 :string
 #  kingBed               :integer
 #  maintenance           :boolean          default(FALSE)
@@ -94,7 +95,6 @@ class House < ApplicationRecord
   has_and_belongs_to_many :locations
   before_create :generate_number
 
-  validates :description_en, :description_ru, presence: true
   validates :rooms, presence: true, numericality: { greater_than: 0 }, on: %i[create update], if: :rental
 
   scope :active, -> { joins(:owner).where('users.balance_closed': false).where(balance_closed: false) }

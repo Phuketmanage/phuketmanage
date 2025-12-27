@@ -120,6 +120,8 @@ class Admin::UsersController < Admin::AdminController
                                  :code,
                                  :tax_no,
                                  :balance_closed,
-                                 :show_comm)
+                                 :show_comm, 
+                                 :passport,
+                                 :phone)
   end
 end

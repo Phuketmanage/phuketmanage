@@ -19,6 +19,8 @@
 #  invited_by_type        :string
 #  locale                 :string
 #  name                   :string
+#  passport               :string
+#  phone                  :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string

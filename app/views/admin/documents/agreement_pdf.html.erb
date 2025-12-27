@@ -1,0 +1,148 @@
+<%# app/views/admin/documents/agreement_pdf.html.erb %>
+
+<div class="grid">
+  <!-- Title -->
+  <div class="col-span-2 title text-center">
+    INDIVIDUAL FURNITURE PACKAGE AGREEMENT
+  </div>
+  
+  <!-- Meta -->
+  <div>
+    Kingdom of Thailand
+  </div>
+  <div class="text-right">
+    Agreement No:
+    <%= @document[:number] %>
+  </div>
+  
+  <!-- Parties -->
+  <div>
+    This Agreement is entered by and between
+  </div>
+  <div>
+    Настоящее Соглашение заключено между
+  </div>
+
+  <div class="col-span-2">
+    <span class="accent">Customer/Заказчик:</span> 
+    <%= @document[:client] %>, 
+    passport No.: <%= @document[:passport].presence || content_tag(:span, "Passport missing", class: "missing") %>, 
+    email <%= @document[:email].presence || content_tag(:span, "Email missing", class: "missing") %>
+    <br>
+    Contact numbers: <%= @document[:phone].presence || "—" %>
+  </div>
+  <div class="col-span-2">
+    <span class="accent">Contractor/Подрядчик:</span>
+    Mrs. Maryana Kotova, email info@maryana.design and any mail from domain maryana.design, contact numbers: +66805293353.
+  </div>
+  <div class="col-span-2">
+    Customer Property / Недвижимость Заказчика<br>
+    <%= @document[:property].presence || content_tag(:span, "Property missing", class: "missing") %><br>
+    Here and after <span class="accent">Property</span> / Здесь и далее <span class="accent">Недвижимость</span>.
+  </div>
+
+  <!-- Agreement body -->
+  <div>
+    <span class="agreement_block">Object of agreement</span>
+    Development and provision by Contractor of an individual furniture package for the Customer’s Property.
+  </div>
+  <div>
+    <span class="agreement_block">Предмет договора</span>
+    Разработка и предоставление Подрядчиком индивидуального пакета мебели для Недвижимости Заказчика. 
+  </div>
+
+  <div>
+    <span class="agreement_block">Article 1. Customer's responsibilities</span>
+    1.1. Explain his/her wishes and requirements.<br>
+    1.2. Provide Contractor with Property's layout if any.<br>
+    1.3. Provide access to the Property.<br>
+    1.4. Pay for Contractor according to article 3 of this Agreement.
+  </div>
+  <div>
+    <span class="agreement_block">§1. Обязанности Заказчика</span>
+    1.1. Объяснить свои пожелания и требования.<br>
+    1.2. Предоставить план помещений если имеется.<br>
+    1.3. Предоставить доступ к Недвижимости.<br>
+    1.4. Оплатить работу Подрядчика согласно параграфа 3 настоящего Договора.
+  </div>
+
+  <div>
+    <span class="agreement_block">Article 2. Contractor's responsibilities</span>
+    2.1. Develop the concept of Property renovation/decoration.<br>
+    2.2. Find contractors for work.<br>
+    2.3. Prepare and confirm style with the Customer.<br>
+    2.4. Consult and support of the Customer during discussing issues related to the agreement.<br>
+    2.5. Organize and control all necessary works.<br>
+    2.6. Buy furniture, organize delivery and control installation.<br>
+    2.7. Provide additional work details and cost if required.<br>
+    2.8. Send a photo report.
+  </div>
+  <div>
+    <span class="agreement_block">§2. Обязанности Подрядчика</span>
+    2.1. Разработка концепции.<br>
+    2.2. Подбор подрядчиков для проведения работ.<br>
+    2.3. Подготовка и согласование стиля с Заказчиком.<br>
+    2.4. Консультация и поддержка Заказчика в обсуждении вопросов по договору.<br>
+    2.5. Организация и авторский надзор необходимых работ.<br>
+    2.6. Подбор, закупка, доставка и контроль установки мебели.<br>
+    2.7. По мере необходимости предлагать варианты и стоимость дополнительных работ.<br>
+    2.8. Фотоотчет по факту выполненных работ.
+  </div>
+
+  <div>
+    <span class="agreement_block">Article 3. Payment and remuneration</span>
+    3.1. The total cost under the contract is <%= number_with_delimiter(@document[:amount]) %> THB.<br>
+    3.2. Customer pays 15% THB on the day the contract is signed.<br>
+    3.2. Customer pays the 50% four months before the Property handover.<br>
+    3.4. Customer pays the 35% one month before the Property handover.<br>
+    3.5. In case furniture already delivered to Phuket and property not ready to handover, the Customer pays for storage 30,000 THB per month.
+  </div>
+  <div>
+    <span class="agreement_block">§3. Оплата и вознаграждение</span>
+    3.1. Общая стоимость по договору составляет <%= number_with_delimiter(@document[:amount]) %> THB.<br>
+    3.2. Заказчик оплачивает 15% в день подписания договора.<br>
+    3.3. Заказчик оплачивает 50% за 4 месяца до сдачи Недвижимости в эксплуатацию.<br>
+    3.4. Заказчик оплачивает 35% за месяц до сдачи Недвижимости в эксплуатацию.<br>
+    3.5. В случае если мебель доставлена на Пхукет, а Недвижимость на тот момент еще не сдана в эксплуатацию, то заказчик оплачивает хранение из расчета 30,000 бат в месяц.
+  </div>
+
+  <div>
+    <span class="agreement_block">Article 4. Term</span>
+    4.1. The Agreement is considered executed after all main and additional works approved by Customer are done and all items approved by Customer are purchased and installed.
+  </div>
+  <div>
+    <span class="agreement_block">§4. Срок действия</span>
+    4.1. Договор считается выполненным после того как все одобренные Заказчиком основные и дополнительные работы проведены и товары одобренные Заказчиком закуплены и установлены.
+  </div>
+
+  <div>
+    <span class="agreement_block">Article 5. Miscellaneous</span>
+    5.1. All notices required under this agreement  must be provided in written form. Such notices may be delivered by hand, sent via phone messenger, transmitted through email, or dispatched through registered mail to the phone numbers, email addresses, or physical addresses previously specified or otherwise designated by the party in this Agreement.<br>
+    5.2. This Agreement may be amended or varied only following mutual agreement in writing signed by Customer and Contractor.<br>
+    5.3. This Agreement is made in English and Russian languages, both versions are equal to each other and have the same meanings and power.<br>
+    5.4. This Agreement and its attached Appendixes hereto is made in duplicate and both parties have thoroughly read and understood the entire substance of this Agreement and its attached Appendixes.<br>
+    5.5. This is a legally binding Agreement. Both sides acknowledge that they have had the right to secure this Agreement by independent legal counseling, have chosen to proceed with this Agreement and that they do understand the terms and conditions of the Agreement.<br>
+    5.6. The parties may terminate this agreement only when a prior written notice is served to the other party not less than 30 days before the effective date of termination.<br>
+    5.7. In case of termination of the agreement, funds already paid are not refundable but the Contractor is obliged to perform the work according to the paid volume, and the Customer is obliged to pay for the work according to the volume of work that has already completed.
+  </div>
+  <div>
+    <span class="agreement_block">§5. Дополнительные условия</span>
+    5.1. Все уведомления, требуемые по данному Договору, должны предоставляться в письменной форме. Такие уведомления могут быть доставлены лично, отправлены через мессенджер, переданы по электронной почте или отправлены заказной почтой на указанные в Договоре телефонные номера, адреса электронной почты или физические адреса сторон.<br>
+    5.2. Настоящий Договор может быть дополнен или изменен по обоюдному соглашению Сторон, подписанному Заказчиком и Подрядчиком.<br>
+    5.3. Настоящий Договор выполнен на английском и русском языках, оба перевода имеют одинаковое содержание и силу.<br>
+    5.4. Настоящий Договор и его Приложения сделаны в двух экземплярах, и обе Стороны внимательно прочитали и поняли его содержание и всех его Приложений.<br>
+    5.5. Настоящий Договор является полностью законным. Стороны понимают, что они имея возможность и право застраховать свои интересы, используя услуги независимых консультантов, выбрали для себя исполнение настоящего Договора, и Стороны согласны с тем, что они полностью понимают условия и сроки по нему. <br>
+    5.6. При отказе одной стороны от Договора другая сторона должна быть уведомлена об этом за 30 дней до прекращения договора.<br>
+    5.7. В случае расторжения Договора уже оплаченные средства не подлежат возврату при этом Подрядчик обязан выполнить работу согласно оплаченного объема, а Заказчик обязан оплатить работу согласно уже выполненного объема. 
+  </div>
+
+  <!-- Signatures -->
+  <div>
+    <p>Customer (Заказчик) ________________________</p>
+    <p>Date: ________________________</p>
+  </div>
+  <div>
+    <p>Contractor (Подрядчик) ________________________</p>
+    <p>Date: ________________________</p>
+  </div>
+<div>

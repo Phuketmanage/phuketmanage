@@ -19,12 +19,12 @@
   </div>
   <div class="form-row mt-2">
     <div class="col-3">
-      <%= f.check_box :ignore_users_with_closed_balance, {checked: @ignore_users_with_closed_balance} %>
-      <%= f.label :ignore_users_with_closed_balance, 'Ignore users with closed balance' %>
+      <%= f.check_box :show_users_with_closed_balance, {checked: @show_users_with_closed_balance} %>
+      <%= f.label :show_users_with_closed_balance, 'Show users with closed balance' %>
     </div>
-    <div class="col3-3">
-      <%= f.check_box :ignore_houses_with_closed_balance, {checked: @ignore_houses_with_closed_balance} %>
-      <%= f.label :ignore_houses_with_closed_balance, 'Ignore houses with closed balance' %>
+    <div class="col-3">
+      <%= f.check_box :show_houses_with_closed_balance, {checked: @show_houses_with_closed_balance} %>
+      <%= f.label :show_houses_with_closed_balance, 'Show houses with closed balance' %>
     </div>
   </div>
   <%= f.submit 'Filter', class: 'btn btn-primary' %>
