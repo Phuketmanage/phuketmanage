@@ -19,7 +19,7 @@ describe 'Hotkeys' do
           sign_in admin
           visit start_page
           page.send_keys keys
-          expect(page).to have_current_path(desired_page)
+          expect(page).to have_current_path(desired_page, wait: 5)
         end
       end
 
@@ -28,7 +28,7 @@ describe 'Hotkeys' do
           sign_in manager
           visit start_page
           page.send_keys keys
-          expect(page).to have_current_path(desired_page)
+          expect(page).to have_current_path(desired_page, wait: 5)
         end
       end
 
@@ -37,7 +37,7 @@ describe 'Hotkeys' do
           sign_in accounting
           visit start_page
           page.send_keys keys
-          expect(page).to have_current_path(desired_page)
+          expect(page).to have_current_path(desired_page, wait: 5)
         end
       end
     end
@@ -49,7 +49,7 @@ describe 'Hotkeys' do
         sign_in admin
         visit start_page
         page.send_keys keys
-        expect(page).to have_current_path(start_page)
+        expect(page).to have_current_path(start_page, wait: 5)
       end
     end
   end

@@ -2,7 +2,6 @@ class Admin::DocumentsController < Admin::AdminController
 
   def show
     authorize! with: Admin::DocumentsPolicy
-    # Set client with houses for selection
     @clients = User.with_role('Owner').includes(:houses).order(:name, :surname)
   end
 
@@ -10,25 +9,27 @@ class Admin::DocumentsController < Admin::AdminController
   def prepare
     authorize! with: Admin::DocumentsPolicy
     
-    @client = User.find_by(id: params[:client_id])
+    @client = User.find(params[:client_id])
 
     respond_to do |format|
       format.html { render :prepare }
       format.pdf do 
-        @house = House.find_by(id: params[:house_id])
-        doc_type = params[:doc_type]
+        @house = House.find(params[:house_id])
+        doc_type = params[:doc_type].to_s
+        
+        p = design_agreement_params
+        date = p[:date].present? ? p[:date] : Date.current
 
-        # @agreement = DesignAgreementForm.new(design_agreement_params)
         @document = {
-          date: params[:date],
+          date: date,
           client: "#{@client.name} #{@client.surname}",
           passport: @client.passport,
           email: @client.email,
           phone: @client.phone,
           property: "#{@house.project} #{@house.house_no}",
-          amount: params[:amount],
-          suffix: params[:suffix],
-          text: params[:text] || ""
+          amount: p[:amount],
+          suffix: p[:suffix],
+          text: p[:text] || ""
         }
         @document[:number] = "#{@document[:date].to_date.strftime('%Y%m%d')}-#{@document[:suffix].presence || "1" }"
 
@@ -60,6 +61,8 @@ class Admin::DocumentsController < Admin::AdminController
             formats: [:html],
             locals: { agreement_no: @document[:number] }
           )
+        else
+          footer_html = nil
         end
 
         pdf_bytes = PdfRenderer.call(
@@ -75,7 +78,6 @@ class Admin::DocumentsController < Admin::AdminController
     end
   end
 
-  # @route GET /documents/statement (tmp_statement)
   def statement
     authorize! with: Admin::DocumentsPolicy
     @usd = @settings['usd_rate'].present? ? @settings['usd_rate'].to_f : 30
@@ -101,7 +103,6 @@ class Admin::DocumentsController < Admin::AdminController
     end
   end
 
-  # @route GET /documents/reimbersment (tmp_reimbersment)
   def reimbersment
     authorize! with: Admin::DocumentsPolicy
     @t = Transaction.find(params[:trsc_id])
@@ -127,17 +128,11 @@ class Admin::DocumentsController < Admin::AdminController
   private
 
   def design_agreement_params
-    return {} unless params[:agreement].present?
-    params.require(:agreement).permit(
+    params.permit(
       :date,
       :suffix,
-      :name_prefix,
-      :name,
-      :passport,
-      :email,
-      :phone,
-      :property,
-      :amount
+      :amount,
+      :text
     )
   end
 end
