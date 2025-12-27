@@ -207,7 +207,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    job-iteration (1.10.0)
+    job-iteration (1.11.0)
       activejob (>= 6.1)
     jquery-rails (4.6.0)
       rails-dom-testing (>= 1, < 3)
