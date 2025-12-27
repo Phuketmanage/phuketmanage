@@ -9,7 +9,7 @@
     "bootstrap-icons": "^1.10.5",
     "esbuild": "^0.25.0",
     "flatpickr": "^4.6.13",
-    "puppeteer": "^24.34.0",
+    "puppeteer-core": "^24.34.0",
     "sortablejs": "^1.15.0",
     "stimulus-clipboard": "^4.0.1",
     "stimulus-flatpickr": "^3.0.0-0",
