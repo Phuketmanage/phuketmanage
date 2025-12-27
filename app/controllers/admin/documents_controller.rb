@@ -3,7 +3,7 @@ class Admin::DocumentsController < Admin::AdminController
   # @route GET /documents (documents)
   def show
     authorize! with: Admin::DocumentsPolicy
-    @clients = User.with_role('Owner').includes(:houses).order(:name, :surname)
+    @clients = User.with_role('Owner').where(balance_closed: false).includes(:houses).order(:name, :surname)
   end
 
 
