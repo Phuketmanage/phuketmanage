@@ -21,3 +21,6 @@ application.register("sortable", SortableController)
 
 import TranslateController from "./translate_controller"
 application.register("translate", TranslateController)
+
+import DocumentsController from "./documents_controller"
+application.register("documents", DocumentsController)

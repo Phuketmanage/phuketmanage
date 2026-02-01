@@ -35,14 +35,14 @@
   </thead>
   <tbody>
     <tr>
-      <td><%= simple_format(@document[:text].presence || "—") %></td>
-      <td class="text-right"><%= number_to_currency(@document[:amount], unit: "", precision: 2) %></td>
+      <td><%= simple_format(@document[:text_for_receipt].presence || "—") %></td>
+      <td class="text-right"><%= number_to_currency(@document[:amount_for_receipt], unit: "", precision: 2) %></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <th class="text-right">Total:</th>
-      <th class="text-right"><%= number_to_currency(@document[:amount], unit: "", precision: 2) %></th>
+      <th class="text-right"><%= number_to_currency(@document[:amount_for_receipt], unit: "", precision: 2) %></th>
     </tr>
   </tfoot>
 </table>

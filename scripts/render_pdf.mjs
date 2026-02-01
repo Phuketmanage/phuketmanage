@@ -56,6 +56,8 @@ const main = async () => {
       }
     });
 
+    await page.emulateMediaType("screen");
+
     // await page.setContent(payload.html, { waitUntil: "domcontentloaded" });
     await page.setContent(payload.html, { waitUntil: "networkidle2", timeout: 60_000 }); // wait up to 60 seconds for loading external resources
 

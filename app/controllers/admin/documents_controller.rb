@@ -16,10 +16,12 @@ class Admin::DocumentsController < Admin::AdminController
     respond_to do |format|
       format.html { render :prepare }
       format.pdf do 
+
+
         @house = House.find(params[:house_id]) if params[:house_id].present?
         doc_type = params[:doc_type].to_s
         
-        p = design_agreement_params
+        p = document_params
         date = p[:date].present? ? p[:date] : Date.current
 
         @document = {
@@ -33,7 +35,10 @@ class Admin::DocumentsController < Admin::AdminController
           property: "#{@house&.project} #{@house&.house_no}".strip.presence || "#{p[:project]} #{p[:house_no]}".strip.presence || "",
           amount: p[:amount],
           suffix: p[:suffix],
-          text: p[:text] || ""
+          text_for_receipt: p[:text_for_receipt] || "",
+          amount_for_receipt: p[:amount_for_receipt],
+          invoice_lines: (p[:invoice_lines] || []).map { |line| { description: line[:description], amount: line[:amount].to_f } },
+          invoice_total: (p[:invoice_lines] || []).sum { |line| line[:amount].to_f }
         }
         @document[:number] = "#{@document[:date].to_date.strftime('%Y%m%d')}-#{@document[:suffix].presence || "1" }"
 
@@ -59,6 +64,9 @@ class Admin::DocumentsController < Admin::AdminController
           formats: [:html],
         )
         
+        # For debugging PDF rendering, uncomment the line below to save the HTML and see how it looks in a browser
+        # File.write(Rails.root.join("tmp/pdf_debug.html"), html)
+        
         if template == :agreement_pdf
           footer_html = render_to_string(
             partial: "admin/documents/agreement_footer",
@@ -78,6 +86,7 @@ class Admin::DocumentsController < Admin::AdminController
                   filename: @document[:file_name],
                   type: 'application/pdf',
                   disposition: 'inline'
+
       end
     end
   end
@@ -135,7 +144,7 @@ class Admin::DocumentsController < Admin::AdminController
 
   private
 
-  def design_agreement_params
+  def document_params
     params.permit(
       :show_logo,
       :logo_path,
@@ -148,7 +157,9 @@ class Admin::DocumentsController < Admin::AdminController
       :phone,
       :project,
       :house_no,
-      :text
+      :text_for_receipt, 
+      :amount_for_receipt,
+      invoice_lines: [:description, :amount]
     )
   end
 end
