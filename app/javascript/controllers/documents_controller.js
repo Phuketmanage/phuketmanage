@@ -51,19 +51,19 @@ export default class extends Controller {
   }
 
   focusLastDescription() {
-    const areas = this.element.querySelectorAll('textarea[name="invoice_lines[][description]"]')
-    const last = areas[areas.length - 1]
+    const inputs = this.element.querySelectorAll('input[name="invoice_lines[][description]"]')
+    const last = inputs[inputs.length - 1]
     if (last) last.focus()
   }
 
   clearRow(row) {
-    const area = row.querySelector('textarea[name="invoice_lines[][description]"]')
+    const desc = row.querySelector('input[name="invoice_lines[][description]"]')
     const amount = row.querySelector('input[name="invoice_lines[][amount]"]')
-    if (area) area.value = ""
+    if (desc) desc.value = ""
     if (amount) amount.value = ""
   }
 
-  // --- house selection ---
+  // --- House selection ---
 
   changeHouse() {
     this.applySelectedHouseOption()
