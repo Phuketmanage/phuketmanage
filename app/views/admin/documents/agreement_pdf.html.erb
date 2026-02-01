@@ -25,7 +25,7 @@
 
   <div class="col-span-2">
     <span class="accent">Customer/Заказчик:</span> 
-    <%= @document[:client] %>, 
+    <%= @document[:client].presence || content_tag(:span, "Client name missing", class: "missing") %>, 
     passport No.: <%= @document[:passport].presence || content_tag(:span, "Passport missing", class: "missing") %>, 
     email <%= @document[:email].presence || content_tag(:span, "Email missing", class: "missing") %>
     <br>

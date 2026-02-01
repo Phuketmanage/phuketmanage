@@ -44,7 +44,35 @@ const main = async () => {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(payload.html, { waitUntil: "domcontentloaded" });
+
+    // Log network errors
+    page.on("requestfailed", (req) => {
+      console.error("request failed:", req.url(), req.failure()?.errorText);
+    });
+
+    page.on("response", (res) => {
+      if (res.status() >= 400) {
+        console.error("bad response:", res.status(), res.url());
+      }
+    });
+
+    // await page.setContent(payload.html, { waitUntil: "domcontentloaded" });
+    await page.setContent(payload.html, { waitUntil: "networkidle2", timeout: 60_000 }); // wait up to 60 seconds for loading external resources
+
+    // Wait until all <img> are loaded (or errored)
+    await page.evaluate(async () => {
+      const imgs = Array.from(document.images);
+
+      await Promise.all(
+        imgs.map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
+          });
+        })
+      );
+    });
 
     const pdf = await page.pdf({
       format: payload.format || "A4",
