@@ -1,7 +1,7 @@
-<h1>Document for <%= @client.name if @client.present? %></h1>
+<h1>Document for <%= @client.present? ? "#{@client.name} #{@client.surname}" : "New client" %></h1>
 
 <%# Agreement %>
-<div class="shadow-sm mb-2 p-2 bg-white border rounded">
+<div class="shadow-sm mb-2 p-2 bg-white border rounded" data-controller="documents">
   <b>Agreement</b>
   <hr>
   <%= form_with url: prepare_documents_path(format: :pdf),
@@ -11,6 +11,100 @@
         html: { target: "_blank" } do |f| %>
 
     <div class="container">
+      
+      <div class="row">
+        <div class="col-md-2 form-group">
+          <label>Date</label>
+          <%= f.date_field :date, value: Date.current, class: "form-control", required: true %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <label>Suffix</label>
+          <%= f.number_field :suffix, value: "1", class: "form-control", required: true %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <%# required %>
+          <label>Amount</label>
+          <%= f.number_field :amount, min: 0, class: "form-control", required: true %>
+        </div>
+
+        <% if @client.present? %>
+          <div class="col-md-2 form-group">
+            <label>House</label>
+            <%= f.select :house_id,
+                options_for_select(
+                  @client.houses.active.map { |house|
+                    [
+                      house.code,
+                      house.id,
+                      {
+                        "data-project"  => house.project.to_s,
+                        "data-house-no" => house.house_no.to_s
+                      }
+                    ]
+                  }
+                ),
+                {},
+                class: "form-control",
+                data: {
+                  action: "change->documents#changeHouse",
+                  "documents-target": "houseSelect"
+                } %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2 form-group">
+          <label>Client</label>
+          <%= f.text_field :name, value: @client.present? ? "#{@client.name} #{@client.surname}" : "", class: "form-control" %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <label>Passport No.</label>
+          <%= f.text_field :passport, value: @client.present? ? @client.passport : "", class: "form-control" %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <label>Email</label>
+          <%= f.text_field :email, value: @client.present? ? @client.email : "", class: "form-control" %>
+        </div>
+        
+        <div class="col-md-2 form-group">
+          <label>Phone</label>
+          <%= f.text_field :phone, value: @client.present? ? @client.phone : "", class: "form-control" %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <%# value = @client.present? && @client.houses.count == 1 ? @client.houses.first.project : "" %>
+          <label>Project</label>
+          <%= f.text_field :project, class: "form-control", data: { "documents-target": "project" } %>
+        </div>
+
+        <div class="col-md-2 form-group">
+          <%# value = @client.present? && @client.houses.count == 1 ? @client.houses.first.house_no : "" %>
+          <label>House</label>
+          <%= f.text_field :house_no, class: "form-control", data: { documents_target: "houseNo" } %>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mb-2">
+        <%= f.hidden_field :client_id, value: @client.id if @client.present? %>
+        <%= button_tag "Agreement", type: "submit", name: "doc_type", value: "agreement", class: "btn btn-primary" %>          
+      </div>
+
+    </div>
+  <% end %>
+
+  <b>Invoice/Receipt</b>
+  <hr>
+  <%= form_with url: prepare_documents_path(format: :pdf),
+        method: :get,
+        local: true,
+        data: { turbo: false },
+        html: { target: "_blank" } do |f| %>
+    <div class="container">     
       <div class="row">
 
         <div class="col-2 form-group">
@@ -24,71 +118,131 @@
 
       </div>
       <div class="row">
-        <div class="col-2 form-group">
+        <div class="col-md-2 form-group">
           <label>Date</label>
           <%= f.date_field :date, value: Date.current, class: "form-control", required: true %>
         </div>
 
-        <div class="col-2 form-group">
+        <div class="col-md-2 form-group">
           <label>Suffix</label>
           <%= f.number_field :suffix, value: "1", class: "form-control", required: true %>
         </div>
 
-        <div class="col-2 form-group">
-          <%# required %>
-          <label>Amount</label>
-          <%= f.number_field :amount, min: 0, class: "form-control", required: true %>
+        <div class="col-md-2 form-group">
+          <label>Client</label>
+          <%= f.text_field :name, value: @client.present? ? "#{@client.name} #{@client.surname}" : "", class: "form-control", required: true %>
         </div>
-
-        <% if @client.present? %>
-          <div class="col-2 form-group">
-            <label>House</label>
-            <%= f.select :house_id, @client.houses.map { |house| [house.code, house.id] }, {}, class: "form-control" %>
-          </div>
-        <% end %>
       </div>
-      <% if !@client.present? %>
-        <div class="row">
-          <div class="col-2 form-group">
-            <label>Name</label>
-            <%= f.text_field :name, class: "form-control" %>
-          </div>
-
-          <div class="col-2 form-group">
-            <label>Passport No.</label>
-            <%= f.text_field :passport, class: "form-control" %>
-          </div>
-
-          <div class="col-2 form-group">
-            <label>Email</label>
-            <%= f.text_field :email, class: "form-control" %>
-          </div>
-          
-          <div class="col-2 form-group">
-            <label>Phone</label>
-            <%= f.text_field :phone, class: "form-control" %>
-          </div>
-
-          <div class="col-2 form-group">
-            <label>Project</label>
-            <%= f.text_field :project, class: "form-control" %>
-          </div>
-
-          <div class="col-2 form-group">
-            <label>House</label>
-            <%= f.text_field :house_no, class: "form-control" %>
-          </div>
-        </div>
-      <% end %>
+      
       <div class="row">
         <div class="col form-group">
-          <label>Text for invoice/receipt</label>
-          <%= f.text_area :text, value: "INDIVIDUAL FURNITURE PACKAGE AGREEMENT [ agreement number ]\nProject: [ Project name, house number ]" , rows: 3, class: "form-control" %>
+          <% project = @client.present? && @client.houses.count == 1 ? "#{@client.houses.first.project} #{@client.houses.first.house_no}" : "[ Project name, house number ]" %>
+
+          <label>Invoice lines</label>
+
+          <!-- Rows container -->
+          <div data-documents-target="list" class="d-grid gap-2">
+            <!-- Row #1 (default) -->
+            <div class="row g-2 align-items-start" data-documents-target="row">
+              <div class="col-9">
+                <input
+                  type="text"
+                  name="invoice_lines[][description]"
+                  class="form-control"
+                  value="AGREEMENT [ agreement number ] PROJECT: <%= project %>"
+                  required
+                >  
+              </div>
+
+              <div class="col-2">
+                <input
+                  type="number"
+                  step="0.01" 
+                  min="0"
+                  name="invoice_lines[][amount]"
+                  class="form-control"
+                  placeholder="Amount"
+                  data-action="input->documents#recalc change->documents#recalc"
+                >
+              </div>
+
+              <div class="col-1 d-flex">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger rounded-circle"
+                  data-action="documents#remove"
+                  title="Remove line"
+                >╳</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Template for new rows -->
+          <template data-documents-target="template">
+            <div class="row g-2 align-items-start pt-2" data-documents-target="row">
+              <div class="col-9">
+                <input
+                  name="invoice_lines[][description]"
+                  rows="2"
+                  class="form-control"
+                  placeholder="Description"
+                  required
+                >
+              </div>
+
+              <div class="col-2">
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  name="invoice_lines[][amount]"
+                  class="form-control"
+                  placeholder="Amount"
+                  data-action="input->documents#recalc change->documents#recalc"
+                >
+              </div>
+
+              <div class="col-1 d-flex">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger rounded-circle"
+                  data-action="documents#remove"
+                  title="Remove line"
+                >╳</button>
+              </div>
+            </div>
+          </template>
+          <div class="row pt-2">
+            <div class="col-9"></div>
+            <div class="col-2 text-right font-weight-bold">
+              Total: <span data-documents-target="total">0.00</span>
+            </div>
+            <div class="col-1"></div>
+          </div>
+          <div class="mt-2 d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary" data-action="documents#add">
+              + Add line
+            </button>
+
+          </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-10 form-group">
+          <label>Text for receipt</label>
+          <%= f.text_field :text_for_receipt, class: "form-control" %>
+        </div>        
+
+        <div class="col-md-2 form-group">
+          <label>Amount for receipt</label>
+          <%= f.text_field :amount_for_receipt, class: "form-control" %>
+        </div>        
+
+      </div>
+
       <div class="d-flex justify-content-end mb-2">
         <%= f.hidden_field :client_id, value: @client.id if @client.present? %>
-        <%= button_tag "Agreement", type: "submit", name: "doc_type", value: "agreement", class: "btn btn-primary mr-2" %>          
         <%= button_tag "Invoice", type: "submit", name:"doc_type", value: "invoice", class: "btn btn-primary mr-2" %>          
         <%= button_tag "Receipt", type: "submit", name:"doc_type", value: "receipt", class: "btn btn-primary" %>          
       </div>
