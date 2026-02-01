@@ -2,11 +2,10 @@
 
 <div class="grid">
   <!-- Title -->
-  <div>
-    <% if Rails.env.production? %>
-      <img src="https://phuketmanage.s3.ap-southeast-1.amazonaws.com/images/about.jpg" alt="Logo" style="height: 50px;">
-    <% else %>
-      <img src="<%= asset_url('mstudio_logo.png') %>" alt="Logo" style="height: 50px;">
+  
+  <div>    
+    <% if @document[:show_logo] %>
+    <img src="<%= @document[:logo_path] %>" alt="Logo" style="height: 50px;">
     <% end %>
   </div>
   
@@ -17,7 +16,7 @@
   <!-- Parties and Meta -->
   <div>
     Contractor: Maryana Kotova<br>
-    Customer: <%= @document[:client] %>
+    Customer: <%= @document[:client].presence || content_tag(:span, "Client name missing", class: "missing")  %>
   </div>
   <div class="text-right">
     Number: <%= @document[:number] %><br>

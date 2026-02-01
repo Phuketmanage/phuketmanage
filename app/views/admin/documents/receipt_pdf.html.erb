@@ -3,7 +3,11 @@
 <div class="grid">
   <!-- Title -->
   <div>
-    <img src="<%= asset_url('mstudio_logo.png') %>" alt="Logo" style="height: 50px;">
+    <% if Rails.env.production? %>
+      <img src="<%= @document[:logo_path] %>" alt="Logo" style="height: 50px;">
+    <% else %>
+      <img src="<%= asset_url('mstudio_logo.png') %>" alt="Logo" style="height: 50px;">
+    <% end %>
   </div>
   
   <div class="title text-right">

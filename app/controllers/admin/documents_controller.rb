@@ -11,24 +11,26 @@ class Admin::DocumentsController < Admin::AdminController
   def prepare
     authorize! with: Admin::DocumentsPolicy
     
-    @client = User.find(params[:client_id])
+    @client = User.find(params[:client_id]) if params[:client_id].present?
 
     respond_to do |format|
       format.html { render :prepare }
       format.pdf do 
-        @house = House.find(params[:house_id])
+        @house = House.find(params[:house_id]) if params[:house_id].present?
         doc_type = params[:doc_type].to_s
         
         p = design_agreement_params
         date = p[:date].present? ? p[:date] : Date.current
 
         @document = {
+          show_logo: p[:show_logo] == "1",
+          logo_path: p[:logo_path].presence || nil,
           date: date,
-          client: "#{@client.name} #{@client.surname}",
-          passport: @client.passport,
-          email: @client.email,
-          phone: @client.phone,
-          property: "#{@house.project} #{@house.house_no}",
+          client: "#{@client&.name} #{@client&.surname}".strip.presence || p[:name] || "",
+          passport: @client&.passport || p[:passport] || "",
+          email: @client&.email || p[:email] || "",
+          phone: @client&.phone || p[:phone] || "",
+          property: "#{@house&.project} #{@house&.house_no}".strip.presence || "#{p[:project]} #{p[:house_no]}".strip.presence || "",
           amount: p[:amount],
           suffix: p[:suffix],
           text: p[:text] || ""
@@ -135,9 +137,17 @@ class Admin::DocumentsController < Admin::AdminController
 
   def design_agreement_params
     params.permit(
+      :show_logo,
+      :logo_path,
       :date,
       :suffix,
       :amount,
+      :name,
+      :passport,
+      :email,
+      :phone,
+      :project,
+      :house_no,
       :text
     )
   end

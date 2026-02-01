@@ -24,6 +24,8 @@ class PdfRenderer
 
     out, err, status = Open3.capture3(node, script_path, stdin_data: payload.to_json)
 
+    Rails.logger.error("[PdfRenderer] node stderr:\n#{err}") if err.present?
+
     unless status.success?
       raise "PDF render error: #{err.presence || "unknown error"}"
     end
